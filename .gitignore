@@ -1,0 +1,10 @@
+bin/
+target/
+build/
+RemoteSystemsTempFiles/
+.settings/
+.metadata/
+.classpath
+.project
+*.class
+*.war
