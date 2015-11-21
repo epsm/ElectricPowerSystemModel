@@ -2,7 +2,7 @@ package main.java.com.yvaleriy85.esm.model;
 
 import java.time.LocalTime;
 
-public class DailyPattern {
+public class DailyConsumptionPattern {
 	
 	private float[] loadingInPercentsForHours = new float[]{
 		64.88f,  59.54f,  55.72f,  51.9f,

@@ -6,11 +6,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 
-import main.java.com.yvaleriy85.esm.model.DailyPattern;
+import main.java.com.yvaleriy85.esm.model.DailyConsumptionPattern;
 
-public class DailyPatternTest {
+public class DailyConsumptionPatternTest {
 	
-	DailyPattern dailyPatern = new DailyPattern();
+	DailyConsumptionPattern dailyPatern = new DailyConsumptionPattern();
 	
 	private float[] loadingInPercentsForHours = new float[]{
 		64.88f,  59.54f,  55.72f,  51.9f,
@@ -29,7 +29,6 @@ public class DailyPatternTest {
 					dailyPatern.getPowerInPercentForCurrentHour(currentHour);
 
 			Assert.assertEquals(valueOnCurrentHour, loadingInPercentsForHours[i], 0);
-			
 		}
 	}
 	
