@@ -7,20 +7,39 @@ public class EnergySystem{
 
 	private List<PowerStation> powerStations = new ArrayList<PowerStation>();
 	private List<PowerConsumer> powerConsumers = new ArrayList<PowerConsumer>();
+	private static float frequencyInPowerSystem;
+	private final float TIME_CONASTNT = 20;
+	private final int NANOS_IN_SECOND = (int)Math.pow(10, 9);
 	
-	public float getBalance() {
-		float totalGenerations = 0;
-		float totalConsumption = 0;
+	public static float getFrequencyInPowerSystem(){
+		return frequencyInPowerSystem;
+	}
+
+	public void calculateNextStep() {
+		float totalGenerations = calculateTotalGenerationsInMW();
+		float totalConsumption = calculateTotalConsumptionsInMW();
+		frequencyInPowerSystem = frequencyInPowerSystem + (totalGenerations - totalConsumption) /
+				(TIME_CONASTNT * Simulation.SIMULATION_STEP_IN_NANOS / NANOS_IN_SECOND);
+	}
+	
+	private float calculateTotalGenerationsInMW(){
+		float generations = 0;
 		
 		for(PowerStation station: powerStations){
-			totalGenerations += station.getCurrentGeneration();
+			generations += station.getCurrentGenerationInMW();
 		}
 		
-		for(PowerConsumer consumer: powerConsumers){
-			totalGenerations += consumer.getCurrentConsumptionInMW();
+		return generations;
+	}
+	
+	private float calculateTotalConsumptionsInMW(){
+		float consumption = 0;
+		
+		for(PowerConsumer station: powerConsumers){
+			consumption += station.getCurrentConsumptionInMW();
 		}
 		
-		return totalGenerations - totalConsumption;
+		return consumption;
 	}
 
 	public void addPowerStation(PowerStation powerStation) {
@@ -30,4 +49,6 @@ public class EnergySystem{
 	public void addPowerConsumer(PowerConsumer powerConsumer) {
 		powerConsumers.add(powerConsumer);
 	}
+	
+	
 }

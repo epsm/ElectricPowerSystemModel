@@ -3,19 +3,20 @@ package main.java.com.yvaleriy85.esm.model;
 import java.time.LocalTime;
 
 public class Simulation{
-	private static LocalTime currentTimeInSimulation = setStartSimulationTime();
+	private static LocalTime currentTimeInEnergySystem = setStartSimulationTime();
+	static final int SIMULATION_STEP_IN_NANOS =  (int)Math.pow(10, 8);
+	static EnergySystem energySystem  = new EnergySystem();
 	
-	private static  LocalTime setStartSimulationTime(){
+	private static LocalTime setStartSimulationTime(){
 		int hour = 0;
 		int minute = 0;
-		return LocalTime.of(hour, minute);
+		int second = 0;
+		int nanoOfSecond = 0;
+		return LocalTime.of(hour, minute, second, nanoOfSecond);
 	}
-	
-	public static void nextState(){
-		currentTimeInSimulation = currentTimeInSimulation.plusHours(1);
-	}
-	
+
 	public static LocalTime getTime(){
-		return currentTimeInSimulation;
+		return currentTimeInEnergySystem;
 	}
+
 }
