@@ -1,24 +1,24 @@
 package main.java.com.yvaleriy85.esm.model;
 
 public class Generator{
-	private StaticControlUnit controlUnit;
+	private ControlUnit controlUnit;
 	private float nominalPowerInMW;
 	private float minimalTechnologyPower;
 	private boolean isTurnedOn;
-	
+		
 	public float getGenerationInMW(){
 		if(isTurnedOn){
-			return controlUnit.getGeneratorPower();
+			return controlUnit.getGeneratorPowerInMW();
 		}else{
 			return 0;
 		}
 	}
 
-	public StaticControlUnit getControlUnit() {
+	public ControlUnit getControlUnit() {
 		return controlUnit;
 	}
 	
-	public void setControlUnit(StaticControlUnit controlUnit) {
+	public void setControlUnit(ControlUnit controlUnit) {
 		this.controlUnit = controlUnit;
 	}
 
@@ -42,7 +42,11 @@ public class Generator{
 		return isTurnedOn;
 	}
 
-	public void setTurnedOn(boolean isTurnedOn) {
-		this.isTurnedOn = isTurnedOn;
+	public void turnOnGenerator(){
+		isTurnedOn = true;
+	}
+	
+	public void turnOffGenerator(){
+		isTurnedOn = false;
 	}
 }
