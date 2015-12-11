@@ -48,6 +48,8 @@ public class PowerConsumerWithCalmLoad extends PowerConsumer{
 		for(int hour = 0; hour < 24; hour++){
 			LocalTime necessaryTime = LocalTime.of(hour, 0);
 			consumptionOnThisDay[hour] = calculateConsumptionForHourInMW(necessaryTime);
+			
+			//System.out.println("for hour=" + hour + " cons=" + consumptionOnThisDay[hour]);
 		}
 	}
 	
@@ -76,19 +78,23 @@ public class PowerConsumerWithCalmLoad extends PowerConsumer{
 	
 	private float getConsumptionForThisMoment(){
 		float consumptionWithoutCountingFrequency =  interpolateConsumptionValueBetweenHours();
-		//System.out.println("consumptionWithoutCountingFrequency = " + consumptionWithoutCountingFrequency);
+		
 		return countConsumptionCountingFrequency(consumptionWithoutCountingFrequency);
 	}
 	
 	private float interpolateConsumptionValueBetweenHours(){
 		int currentHour = currentTime.getHour();
-		int nextHour = currentHour + 1;
-		float currentHourConsumption = consumptionOnThisDay[currentHour];
-		float nextHourConsumption = consumptionOnThisDay[nextHour];
-		float interpolizedValue = currentHourConsumption + (getNanosFromStartOfThisHour() /
-				(NANOS_IN_HOUR)) * (nextHourConsumption - currentHourConsumption);
+		int nextHour = currentTime.plusHours(1).getHour();
+		double currentHourConsumption = consumptionOnThisDay[currentHour];
+		double nextHourConsumption = consumptionOnThisDay[nextHour];
+		double interpolizedValue = currentHourConsumption + ((double)getNanosFromStartOfThisHour() /
+				NANOS_IN_HOUR) * (nextHourConsumption - currentHourConsumption);
 		
-		return interpolizedValue;
+		/*System.out.println("chc=" + currentHourConsumption + ", nhc=" + nextHourConsumption + 
+				", int=" + interpolizedValue + ", nanos from start=" + getNanosFromStartOfThisHour() +
+				", nanos in hour=" + NANOS_IN_HOUR + ", time=" + currentTime);*/
+		
+		return (float)interpolizedValue;
 	}
 	
 	private long getNanosFromStartOfThisHour(){

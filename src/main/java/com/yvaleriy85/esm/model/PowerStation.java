@@ -12,6 +12,7 @@ public class PowerStation{
 		
 		for(Generator generator: generators){
 			generationInMW += generator.getGenerationInMW();
+			System.out.println("gen-" + generator + " :" + generator.getGenerationInMW());
 		}
 		
 		return generationInMW;
