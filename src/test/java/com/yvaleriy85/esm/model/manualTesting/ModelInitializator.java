@@ -1,17 +1,23 @@
-package main.java.com.yvaleriy85.esm.model;
+package test.java.com.yvaleriy85.esm.model.manualTesting;
 
-public class SimpleModelInitialization {
-	EnergySystem energySystem = new EnergySystem();
+import main.java.com.yvaleriy85.esm.model.ControlUnit;
+import main.java.com.yvaleriy85.esm.model.DailyConsumptionPattern;
+import main.java.com.yvaleriy85.esm.model.ElectricPowerSystemSimulation;
+import main.java.com.yvaleriy85.esm.model.Generator;
+import main.java.com.yvaleriy85.esm.model.PowerConsumerWithCalmLoad;
+import main.java.com.yvaleriy85.esm.model.PowerStation;
+
+public class ModelInitializator {
+	private ElectricPowerSystemSimulation powerSystemSimulation;
 	
-	private void initialize(){
+	public void initialize(ElectricPowerSystemSimulation powerSystem){
+		this.powerSystemSimulation = powerSystem;
 		createAndBoundObjects();
-		Simulation.startSimulation();
 	}
 	
 	private void createAndBoundObjects(){
 		createConsumerAndAddItToEnergySystem();
 		createPowerStationAndAddToEnergySystem();
-		Simulation.setEnergySystem(energySystem);
 	}
 	
 	private void createConsumerAndAddItToEnergySystem(){
@@ -22,14 +28,19 @@ public class SimpleModelInitialization {
 		PowerConsumerWithCalmLoad powerConsumer = new PowerConsumerWithCalmLoad();
 		powerConsumer.setDailyPattern(pattern);
 		powerConsumer.setMaxConsumptionWithoutRandomInMW(100);
+		powerConsumer.setRandomComponentInPercent(10);
+		powerConsumer.setElectricalPowerSystemSimulation(powerSystemSimulation);
 		
 		//second
 		PowerConsumerWithCalmLoad powerConsumer_2 = new PowerConsumerWithCalmLoad();
 		powerConsumer_2.setDailyPattern(pattern);
 		powerConsumer_2.setMaxConsumptionWithoutRandomInMW(100);
+		powerConsumer_2.setRandomComponentInPercent(10);
+		powerConsumer_2.setElectricalPowerSystemSimulation(powerSystemSimulation);
 
-		energySystem.addPowerConsumer(powerConsumer);
-		energySystem.addPowerConsumer(powerConsumer_2);
+		//adding
+		powerSystemSimulation.addPowerConsumer(powerConsumer);
+		powerSystemSimulation.addPowerConsumer(powerConsumer_2);
 	}
 	
 	private void createPowerStationAndAddToEnergySystem(){
@@ -43,14 +54,13 @@ public class SimpleModelInitialization {
 		controlUnit.setPowerAtRequiredFrequency(100);
 		controlUnit.TurneOnAstaticRegulation();
 		controlUnit.setGenerator(generator);
+		controlUnit.setElectricPowerSystemSimulation(powerSystemSimulation);
 		
 		generator.setControlUnit(controlUnit);
 		generator.setMinimalTechnologyPower(1);
 		generator.setNominalPowerInMW(150);
 		generator.turnOnGenerator();
-		
-		powerStation.addGenerator(generator);
-		
+
 		//second
 		ControlUnit controlUnit_2 = new ControlUnit();
 		Generator generator_2 = new Generator();
@@ -60,18 +70,17 @@ public class SimpleModelInitialization {
 		controlUnit_2.setPowerAtRequiredFrequency(60);
 		//controlUnit_2.TurneOnAstaticRegulation();
 		controlUnit_2.setGenerator(generator_2);
+		controlUnit_2.setElectricPowerSystemSimulation(powerSystemSimulation);
 		
 		generator_2.setControlUnit(controlUnit_2);
 		generator_2.setMinimalTechnologyPower(1);
 		generator_2.setNominalPowerInMW(150);
 		generator_2.turnOnGenerator();
 		
+		//adding
+		powerStation.addGenerator(generator);
 		powerStation.addGenerator(generator_2);
 		
-		energySystem.addPowerStation(powerStation);
-	}
-	
-	public static void main(String[] args) {
-		new SimpleModelInitialization().initialize();
+		powerSystemSimulation.addPowerStation(powerStation);
 	}
 }

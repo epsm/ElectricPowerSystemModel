@@ -1,6 +1,7 @@
 package main.java.com.yvaleriy85.esm.model;
 
 public class ControlUnit {
+	private ElectricPowerSystemSimulation powerSystemSimulation;
 	private float coefficientOfStatism;
 	private float requiredFrequency;
 	private float powerAtRequiredFrequency;
@@ -11,7 +12,7 @@ public class ControlUnit {
 	private final float STANDART_FREQUENCY = 50;
 	
 	public float getGeneratorPowerInMW(){
-		frequencyInPowerSystem = EnergySystem.getFrequencyInPowerSystem();
+		frequencyInPowerSystem = powerSystemSimulation.getFrequencyInPowerSystem();
 		
 		if(isAstaticRegulationTurnedOn){
 			verifyAndAdjustPowerAtRequiredFrequency();
@@ -117,5 +118,9 @@ public class ControlUnit {
 	
 	public void TurneOffAstaticRegulation(){
 		isAstaticRegulationTurnedOn = false;
+	}
+
+	public void setElectricPowerSystemSimulation(ElectricPowerSystemSimulation powerSystemSimulation) {
+		this.powerSystemSimulation = powerSystemSimulation;
 	}
 }

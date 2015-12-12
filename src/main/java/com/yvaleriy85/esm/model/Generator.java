@@ -5,7 +5,7 @@ public class Generator{
 	private float nominalPowerInMW;
 	private float minimalTechnologyPower;
 	private boolean isTurnedOn;
-		
+	
 	public float getGenerationInMW(){
 		if(isTurnedOn){
 			return controlUnit.getGeneratorPowerInMW();

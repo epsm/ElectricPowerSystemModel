@@ -35,5 +35,4 @@ public class DailyConsumptionPatternTest {
 	private LocalTime prepareLocalTime(int hour){
 		return LocalTime.of(hour, 0);
 	}
-	
 }

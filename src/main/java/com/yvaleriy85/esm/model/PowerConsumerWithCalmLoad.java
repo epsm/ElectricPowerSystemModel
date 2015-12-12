@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.util.Random;
 
 public class PowerConsumerWithCalmLoad extends PowerConsumer{
-
+	private ElectricPowerSystemSimulation powerSystemSimulation;
 	private DailyConsumptionPattern dailyPattern;
 	private float maxConsumptionWithoutRandomInMW;
 	private float randomComponentInPercent = 10;
@@ -20,8 +20,8 @@ public class PowerConsumerWithCalmLoad extends PowerConsumer{
 	
 	@Override
 	public float getCurrentConsumptionInMW(){
-		currentTime = Simulation.getTime();
-		currentFrequency = EnergySystem.getFrequencyInPowerSystem();
+		currentTime = powerSystemSimulation.getTime();
+		currentFrequency = powerSystemSimulation.getFrequencyInPowerSystem();
 		
 		if(isStateRecalculationNecessary){
 			recalculateState();
@@ -48,13 +48,11 @@ public class PowerConsumerWithCalmLoad extends PowerConsumer{
 		for(int hour = 0; hour < 24; hour++){
 			LocalTime necessaryTime = LocalTime.of(hour, 0);
 			consumptionOnThisDay[hour] = calculateConsumptionForHourInMW(necessaryTime);
-			
-			//System.out.println("for hour=" + hour + " cons=" + consumptionOnThisDay[hour]);
 		}
 	}
 	
 	private float calculateConsumptionForHourInMW(LocalTime time){
-
+		//System.out.println("dailyPattern:" + dailyPattern);
 		float baseComponentInPercent = dailyPattern.getPowerInPercentForCurrentHour(time);
 		float baseComponentInMW = baseComponentInPercent * maxConsumptionWithoutRandomInMW / 100;
 		float randomComponentInPercent = calculateRandomComponentInPercent();
@@ -115,6 +113,10 @@ public class PowerConsumerWithCalmLoad extends PowerConsumer{
 		return randomComponentInPercent;
 	}
 
+	public void setRandomComponentInPercent(float randomComponentInPercent) {
+		this.randomComponentInPercent = randomComponentInPercent;
+	}
+
 	public void setDailyPattern(DailyConsumptionPattern dailyPattern) {
 		this.dailyPattern = dailyPattern;
 		isStateRecalculationNecessary = true;
@@ -127,5 +129,14 @@ public class PowerConsumerWithCalmLoad extends PowerConsumer{
 	public void setMaxConsumptionWithoutRandomInMW(float maxConsumptionWithoutRandomInMW) {
 		this.maxConsumptionWithoutRandomInMW = maxConsumptionWithoutRandomInMW;
 		isStateRecalculationNecessary = true;
+	}
+
+	public void setEnergySystem(ElectricPowerSystemSimulation energySystem) {
+		this.powerSystemSimulation = energySystem;
+	}
+
+	@Override
+	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation powerSystemSimulation) {
+		this.powerSystemSimulation = powerSystemSimulation;
 	}
 }
