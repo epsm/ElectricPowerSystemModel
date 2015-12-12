@@ -9,7 +9,7 @@ public class EnergySystem{
 	private List<PowerStation> powerStations = new ArrayList<PowerStation>();
 	private List<PowerConsumer> powerConsumers = new ArrayList<PowerConsumer>();
 	private static float frequencyInPowerSystem;
-	private final float TIME_CONASTNT = 2000;
+	private final float TIME_CONASTNT = 20;
 	private final int NANOS_IN_SECOND = (int)Math.pow(10, 9);
 	private int counter;
 	
@@ -20,8 +20,8 @@ public class EnergySystem{
 	public void calculateNextStep() {
 		float totalGenerations = calculateTotalGenerationsInMW();
 		float totalConsumption = calculateTotalConsumptionsInMW();
-		frequencyInPowerSystem = frequencyInPowerSystem + (totalGenerations - totalConsumption) /
-				(TIME_CONASTNT * Simulation.SIMULATION_STEP_IN_NANOS / NANOS_IN_SECOND);
+		frequencyInPowerSystem = frequencyInPowerSystem + ((totalGenerations - totalConsumption) /
+				TIME_CONASTNT) * ((float)Simulation.SIMULATION_STEP_IN_NANOS / NANOS_IN_SECOND);
 	
 		//if(counter % 1000 == 0){
 			Formatter fmt = new Formatter();
