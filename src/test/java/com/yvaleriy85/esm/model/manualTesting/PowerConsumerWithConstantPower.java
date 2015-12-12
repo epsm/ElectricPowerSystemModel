@@ -1,10 +1,10 @@
 package test.java.com.yvaleriy85.esm.model.manualTesting;
 
-import main.java.com.yvaleriy85.esm.model.ElectricPowerSystemSimulation;
-import main.java.com.yvaleriy85.esm.model.PowerConsumer;
+import main.java.com.yvaleriy85.esm.model.consumption.PowerConsumer;
+import main.java.com.yvaleriy85.esm.model.generalModel.ElectricPowerSystemSimulationImpl;
 
 public class PowerConsumerWithConstantPower extends PowerConsumer{
-	private ElectricPowerSystemSimulation powerSystemSimulation;
+	private ElectricPowerSystemSimulationImpl powerSystemSimulation;
 	private final float STANDART_FREQUENCY = 50;
 	private final int CONSTANT_CONSUMPTION = 100;
 	private final int DEGREE_OF_DEPENDING_OF_FREQUENCY = 2;
@@ -18,7 +18,7 @@ public class PowerConsumerWithConstantPower extends PowerConsumer{
 	}
 
 	@Override
-	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation powerSystemSimulation) {
+	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulationImpl powerSystemSimulation) {
 		this.powerSystemSimulation = powerSystemSimulation;		
 	}
 }

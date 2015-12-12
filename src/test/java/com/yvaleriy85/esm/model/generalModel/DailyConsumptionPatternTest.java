@@ -1,12 +1,11 @@
-package test.java.com.yvaleriy85.esm.model;
+package test.java.com.yvaleriy85.esm.model.generalModel;
 
 import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-
-import main.java.com.yvaleriy85.esm.model.DailyConsumptionPattern;
+import main.java.com.yvaleriy85.esm.model.generalModel.DailyConsumptionPattern;
 
 public class DailyConsumptionPatternTest {
 	

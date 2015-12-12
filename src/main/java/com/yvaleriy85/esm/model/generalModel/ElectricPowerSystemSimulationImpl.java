@@ -1,11 +1,14 @@
-package main.java.com.yvaleriy85.esm.model;
+package main.java.com.yvaleriy85.esm.model.generalModel;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
-public class ElectricPowerSystemSimulation{
+import main.java.com.yvaleriy85.esm.model.consumption.PowerConsumer;
+import main.java.com.yvaleriy85.esm.model.generation.PowerStation;
+
+public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
 
 	private List<PowerStation> powerStations;
 	private List<PowerConsumer> powerConsumers;
@@ -15,12 +18,13 @@ public class ElectricPowerSystemSimulation{
 	private final int NANOS_IN_SECOND = (int)Math.pow(10, 9);
 	private final int SIMULATION_STEP_IN_NANOS = (int)Math.pow(10, 8);
 	
-	public ElectricPowerSystemSimulation() {
+	public ElectricPowerSystemSimulationImpl() {
 		powerStations = new ArrayList<PowerStation>();
 		powerConsumers = new ArrayList<PowerConsumer>();
 		currentTimeInSimulation = LocalTime.of(0, 0);
 	}
 
+	@Override
 	public SimulationParameters calculateNextStep() {
 		float totalGenerations = calculateTotalGenerationsInMW();
 		float totalConsumption = calculateTotalConsumptionsInMW();
@@ -72,15 +76,13 @@ public class ElectricPowerSystemSimulation{
 		powerConsumers.add(powerConsumer);
 	}
 	
+	@Override
 	public float getFrequencyInPowerSystem(){
 		return frequencyInPowerSystem;
 	}
 	
+	@Override
 	public LocalTime getTime(){
 		return currentTimeInSimulation;
-	}
-	
-	public int getSimulationStepInNanos(){
-		return SIMULATION_STEP_IN_NANOS;
 	}
 }

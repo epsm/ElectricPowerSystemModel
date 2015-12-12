@@ -1,4 +1,4 @@
-package main.java.com.yvaleriy85.esm.model;
+package main.java.com.yvaleriy85.esm.model.generation;
 
 public class Generator{
 	private ControlUnit controlUnit;

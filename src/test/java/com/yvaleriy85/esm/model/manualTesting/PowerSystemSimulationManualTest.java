@@ -2,17 +2,18 @@ package test.java.com.yvaleriy85.esm.model.manualTesting;
 
 import java.util.Formatter;
 
-import main.java.com.yvaleriy85.esm.model.ElectricPowerSystemSimulation;
-import main.java.com.yvaleriy85.esm.model.SimulationParameters;
+import main.java.com.yvaleriy85.esm.model.generalModel.ElectricPowerSystemSimulationImpl;
+import main.java.com.yvaleriy85.esm.model.generalModel.SimulationParameters;
+
 
 public class PowerSystemSimulationManualTest {
 	private Formatter fmt;
-	private ElectricPowerSystemSimulation simulation;
+	private ElectricPowerSystemSimulationImpl powerSystemsimulation;
 	private SimulationParameters parameters;
 	private StringBuilder sb;
 	private int counter;
-	private final int INTERVAL_BETWEEN_PRINTS = 0;
-	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 5;
+	private final int INTERVAL_BETWEEN_PRINTS = 100;
+	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 0;
 	
 	public static void main(String[] args) {
 		PowerSystemSimulationManualTest test = new PowerSystemSimulationManualTest();
@@ -22,16 +23,16 @@ public class PowerSystemSimulationManualTest {
 	}
 	
 	private void initialize(){
-		simulation = new ElectricPowerSystemSimulation();
+		powerSystemsimulation = new ElectricPowerSystemSimulationImpl();
 		sb = new StringBuilder();
 		fmt = new Formatter(sb);
 		
-		new ModelInitializator().initialize(simulation);
+		new ModelInitializator().initialize(powerSystemsimulation);
 	}
 	
 	public void go(){
 		while(true){
-			parameters = simulation.calculateNextStep();
+			parameters = powerSystemsimulation.calculateNextStep();
 			
 			if(isItTimeToPrint()){
 				printState();

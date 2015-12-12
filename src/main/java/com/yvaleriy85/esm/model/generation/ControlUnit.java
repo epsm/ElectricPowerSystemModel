@@ -1,7 +1,9 @@
-package main.java.com.yvaleriy85.esm.model;
+package main.java.com.yvaleriy85.esm.model.generation;
+
+import main.java.com.yvaleriy85.esm.model.generalModel.ElectricPowerSystemSimulationImpl;
 
 public class ControlUnit {
-	private ElectricPowerSystemSimulation powerSystemSimulation;
+	private ElectricPowerSystemSimulationImpl powerSystemSimulation;
 	private float coefficientOfStatism;
 	private float requiredFrequency;
 	private float powerAtRequiredFrequency;
@@ -92,16 +94,8 @@ public class ControlUnit {
 		this.coefficientOfStatism = coefficientOfStatism;
 	}
 
-	public float getRequiredFrequency() {
-		return requiredFrequency;
-	}
-
 	public void setRequiredFrequency(float requiredFrequency) {
 		this.requiredFrequency = requiredFrequency;
-	}
-
-	public float getPowerAtRequiredFrequency() {
-		return powerAtRequiredFrequency;
 	}
 
 	public void setPowerAtRequiredFrequency(float powerAtRequiredFrequency) {
@@ -120,7 +114,7 @@ public class ControlUnit {
 		isAstaticRegulationTurnedOn = false;
 	}
 
-	public void setElectricPowerSystemSimulation(ElectricPowerSystemSimulation powerSystemSimulation) {
+	public void setElectricPowerSystemSimulation(ElectricPowerSystemSimulationImpl powerSystemSimulation) {
 		this.powerSystemSimulation = powerSystemSimulation;
 	}
 }
