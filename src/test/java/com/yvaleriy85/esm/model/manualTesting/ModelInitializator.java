@@ -25,7 +25,9 @@ public class ModelInitializator {
 		
 		//first
 		DailyConsumptionPattern pattern = new DailyConsumptionPattern();
+		
 		PowerConsumerWithScheduledLoad powerConsumer = new PowerConsumerWithScheduledLoad();
+		powerConsumer.setDegreeOfDependingOnFrequency(2);
 		powerConsumer.setDailyPattern(pattern);
 		powerConsumer.setMaxConsumptionWithoutRandomInMW(100);
 		powerConsumer.setRandomComponentInPercent(10);
@@ -33,6 +35,7 @@ public class ModelInitializator {
 		
 		//second
 		PowerConsumerWithScheduledLoad powerConsumer_2 = new PowerConsumerWithScheduledLoad();
+		powerConsumer_2.setDegreeOfDependingOnFrequency(2);
 		powerConsumer_2.setDailyPattern(pattern);
 		powerConsumer_2.setMaxConsumptionWithoutRandomInMW(100);
 		powerConsumer_2.setRandomComponentInPercent(10);

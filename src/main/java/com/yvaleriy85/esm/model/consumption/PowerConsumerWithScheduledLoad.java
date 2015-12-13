@@ -3,31 +3,26 @@ package main.java.com.yvaleriy85.esm.model.consumption;
 import java.time.LocalTime;
 
 import main.java.com.yvaleriy85.esm.model.generalModel.DailyConsumptionPattern;
-import main.java.com.yvaleriy85.esm.model.generalModel.ElectricPowerSystemSimulationImpl;
+import main.java.com.yvaleriy85.esm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvaleriy85.esm.model.generalModel.GlobalConstatnts;
 
 public class PowerConsumerWithScheduledLoad extends PowerConsumer{
-	private ElectricPowerSystemSimulationImpl powerSystemSimulation;
+	private ElectricPowerSystemSimulation powerSystemSimulation;
 	private ConsumptionScheduleCalculator calculator = new ConsumptionScheduleCalculator();
 	private DailyConsumptionPattern dailyPattern;
 	private float maxConsumptionWithoutRandomInMW;
 	private float randomComponentInPercent;
-	private float degreeOfDependingOfFrequency;
+	private float degreeOnDependingOfFrequency;
 	private ConsumptionSchedule dayConsumptionSchedule;
-	private LocalTime lastRequest = getLastMomentInDay();
+	private LocalTime lastRequest;
 	private LocalTime currentTime;
 	private float currentFrequency;
-	private boolean consumerParametersWereChanged = true;
-	
-	private LocalTime getLastMomentInDay(){
-		return LocalTime.of(23, 59, 59, 999_999_999);
-	}
 	
 	@Override
 	public float getCurrentConsumptionInMW(){
 		getNecessaryParametersFromPowerSystem();
 		
-		if(isItANewDay() || consumerParametersWereChanged){
+		if(isItANewDay()){
 			calculateConsumptionScheduleOnThisDay();
 		}
 		
@@ -42,7 +37,7 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 	}
 	
 	private boolean isItANewDay(){
-		return lastRequest.isBefore(currentTime);
+		return lastRequest == null || lastRequest.isBefore(currentTime);
 	}
 	
 	private void calculateConsumptionScheduleOnThisDay(){
@@ -59,31 +54,41 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 	
 	private float calculateConsumptionCountingCurrentFrequency(float consumption){
 		return (float)Math.pow((currentFrequency / GlobalConstatnts.STANDART_FREQUENCY),
-				degreeOfDependingOfFrequency) * consumption;
+				degreeOnDependingOfFrequency) * consumption;
+		
+		//return consumption;
 	}
 	
 	public void setRandomComponentInPercent(float randomComponentInPercent) {
 		this.randomComponentInPercent = randomComponentInPercent;
-		consumerParametersWereChanged = true;
+	}
+
+	public float getRandomComponentInPercent() {
+		return randomComponentInPercent;
 	}
 
 	public void setDailyPattern(DailyConsumptionPattern dailyPattern) {
 		this.dailyPattern = dailyPattern;
-		consumerParametersWereChanged = true;
 	}
 
 	public void setMaxConsumptionWithoutRandomInMW(float maxConsumptionWithoutRandomInMW) {
 		this.maxConsumptionWithoutRandomInMW = maxConsumptionWithoutRandomInMW;
-		consumerParametersWereChanged = true;
+	}
+
+	public float getMaxConsumptionWithoutRandomInMW() {
+		return maxConsumptionWithoutRandomInMW;
 	}
 
 	@Override
-	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulationImpl powerSystemSimulation) {
+	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation powerSystemSimulation) {
 		this.powerSystemSimulation = powerSystemSimulation;
-		consumerParametersWereChanged = true;
 	}
 
-	public void setDegreeOfDependingOfFrequency(float degreeOfDependingOfFrequency) {
-		this.degreeOfDependingOfFrequency = degreeOfDependingOfFrequency;
+	public void setDegreeOfDependingOnFrequency(float degreeOfDependingOfFrequency) {
+		this.degreeOnDependingOfFrequency = degreeOfDependingOfFrequency;
+	}
+
+	public float getDegreeOnDependingOfFrequency() {
+		return degreeOnDependingOfFrequency;
 	}
 }

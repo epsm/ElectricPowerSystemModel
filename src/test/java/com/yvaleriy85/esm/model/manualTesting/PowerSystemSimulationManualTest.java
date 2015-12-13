@@ -5,7 +5,6 @@ import java.util.Formatter;
 import main.java.com.yvaleriy85.esm.model.generalModel.ElectricPowerSystemSimulationImpl;
 import main.java.com.yvaleriy85.esm.model.generalModel.SimulationParameters;
 
-
 public class PowerSystemSimulationManualTest {
 	private Formatter fmt;
 	private ElectricPowerSystemSimulationImpl powerSystemsimulation;
