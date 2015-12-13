@@ -63,8 +63,9 @@ public class PowerConsumerWithScheduledLoadTest{
 		float minPermissibleValue = 0;
 		float maxPermissibleValue = 0;
 		float actualValue = 0;
+		int times = 2 * 24 * 60 * 60 * 10;
 		
-		do{
+		for(int i = 0; i < times; i++){
 			actualValue = consumer.getCurrentConsumptionInMW();
 			minPermissibleValue = calculateMinPermissibleValue(time);
 			maxPermissibleValue = calculateMaxPermissibleValue(time);
@@ -74,7 +75,9 @@ public class PowerConsumerWithScheduledLoadTest{
 		
 			simulation.calculateNextStep();
 			time = simulation.getTime();
-		}while(time.isAfter(LocalTime.MIDNIGHT));
+		}
+	
+		//System.out.println("last time=" + time);
 	}
 	
 	private float calculateMinPermissibleValue(LocalTime time){

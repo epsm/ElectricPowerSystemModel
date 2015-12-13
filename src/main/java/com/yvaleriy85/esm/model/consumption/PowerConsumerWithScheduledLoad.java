@@ -14,7 +14,7 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 	private float randomComponentInPercent;
 	private float degreeOnDependingOfFrequency;
 	private ConsumptionSchedule dayConsumptionSchedule;
-	private LocalTime lastRequest;
+	private LocalTime previousRequest;
 	private LocalTime currentTime;
 	private float currentFrequency;
 	
@@ -26,7 +26,7 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 			calculateConsumptionScheduleOnThisDay();
 		}
 		
-		lastRequest = currentTime;
+		previousRequest = currentTime;
 		
 		return getConsumptionForThisMoment();
 	}
@@ -37,7 +37,7 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 	}
 	
 	private boolean isItANewDay(){
-		return lastRequest == null || lastRequest.isBefore(currentTime);
+		return previousRequest == null || previousRequest.isAfter(currentTime);
 	}
 	
 	private void calculateConsumptionScheduleOnThisDay(){
@@ -55,8 +55,6 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 	private float calculateConsumptionCountingCurrentFrequency(float consumption){
 		return (float)Math.pow((currentFrequency / GlobalConstatnts.STANDART_FREQUENCY),
 				degreeOnDependingOfFrequency) * consumption;
-		
-		//return consumption;
 	}
 	
 	public void setRandomComponentInPercent(float randomComponentInPercent) {
