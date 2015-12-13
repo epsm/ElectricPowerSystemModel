@@ -14,18 +14,18 @@ public class ConsumptionScheduleCalculatorTest {
 	private float randomComponent = 10;
 	private ConsumptionSchedule schedule;
 	private LocalTime timeToTest;
+	private ConsumptionScheduleCalculator calculator = new ConsumptionScheduleCalculator();
 
 	@Test
 	public void conformityCalculatedPowerConsumptionToDailyConsumptionPattern(){
-		schedule = ConsumptionScheduleCalculator.calculateConsumptionScheduleInMW(
+		schedule = calculator.calculateConsumptionScheduleInMW(
 				dailyPattern, maxConsumptionWithoutRandomInMW, randomComponent);
 		
 		timeToTest = LocalTime.of(0, 0);
 		
 		for(int i = 0; i < 24; i++){
 			float expectedPowerConsumptionInMW = calculateExpectedConsumptionInMW();
-			float permissibleDelta = calculatePermissibleDeltaInMW(
-					expectedPowerConsumptionInMW);
+			float permissibleDelta = calculatePermissibleDeltaInMW(expectedPowerConsumptionInMW);
 			
 			Assert.assertEquals(expectedPowerConsumptionInMW, schedule.
 					getConsumptionOnTime(timeToTest), permissibleDelta);
@@ -51,9 +51,9 @@ public class ConsumptionScheduleCalculatorTest {
 	@Test
 	public void isGeneratedConsumptionSchedulesRandom(){
 		boolean atLeastOneUnique = false;
-		ConsumptionSchedule schedule_1 = ConsumptionScheduleCalculator.calculateConsumptionScheduleInMW(
+		ConsumptionSchedule schedule_1 = calculator.calculateConsumptionScheduleInMW(
 				dailyPattern, maxConsumptionWithoutRandomInMW, randomComponent);
-		ConsumptionSchedule schedule_2 = ConsumptionScheduleCalculator.calculateConsumptionScheduleInMW(
+		ConsumptionSchedule schedule_2 = calculator.calculateConsumptionScheduleInMW(
 				dailyPattern, maxConsumptionWithoutRandomInMW, randomComponent);
 		
 		timeToTest = LocalTime.of(0, 0);
@@ -68,8 +68,11 @@ public class ConsumptionScheduleCalculatorTest {
 			}
 			
 			timeToTest = timeToTest.plusHours(1);
+			
+			//System.out.println("v1=" + schedule_1 + ", v2=" + schedule_2);
+			System.out.println("v1=" + valueFromSchedule_1 + ", v2=" + valueFromSchedule_2);
 		}
-		
+
 		Assert.assertTrue(atLeastOneUnique);
 	}
 }

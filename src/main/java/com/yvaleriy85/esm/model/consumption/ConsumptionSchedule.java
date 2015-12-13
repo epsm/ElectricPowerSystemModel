@@ -2,31 +2,48 @@ package main.java.com.yvaleriy85.esm.model.consumption;
 
 import java.time.LocalTime;
 
-import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
-
 import main.java.com.yvaleriy85.esm.model.generalModel.GlobalConstatnts;
 
 public class ConsumptionSchedule{
-	private PolynomialSplineFunction dayConsumptionSchedule;
+	private float[] consumptionByHoursInMW;
+	private LocalTime requestedTime;
+	private float consumptionOnRequestedHour;
+	private float consumptionOnNextHour;
+	private int requestedHour;
+	private int nextHour;
+	private float nanosFromStartOfRequestedHour;
 	
-	public ConsumptionSchedule(PolynomialSplineFunction dayConsumptionSchedule) {
-		this.dayConsumptionSchedule = dayConsumptionSchedule;
+	public ConsumptionSchedule(float[] consumptionByHoursInMW) {
+		this.consumptionByHoursInMW = consumptionByHoursInMW;
 	}
 	
 	public float getConsumptionOnTime(LocalTime time){
-		double valueForRequest = convertDayTimeToDecimalValue(time);
+		this.requestedTime = time;
+		doCalculations();
 		
-		try{
-			return (float)dayConsumptionSchedule.value(valueForRequest);
-		}catch(Exception e){
-			System.out.println("value for request = " + valueForRequest);
-			System.out.println("double = " + (24d * time.toNanoOfDay() / GlobalConstatnts.NANOS_IN_DAY));
-			throw e;
-		}
+		return interpolateValuesWithinHour();
 	}
 	
-	private double convertDayTimeToDecimalValue(LocalTime time){
-		//System.out.println("nanos of day = " + time.toNanoOfDay());
-		return 24d * time.toNanoOfDay() / GlobalConstatnts.NANOS_IN_DAY;
+	private void doCalculations(){
+		requestedHour = requestedTime.getHour();
+		nextHour = requestedTime.plusHours(1).getHour();
+		consumptionOnRequestedHour = consumptionByHoursInMW[requestedHour];
+		consumptionOnNextHour = consumptionByHoursInMW[nextHour];
+		nanosFromStartOfRequestedHour = getNanosFromStartOfRequestedHour();
+	}
+	
+	private long getNanosFromStartOfRequestedHour(){
+		long minutes = requestedTime.getMinute();
+		long seconds = requestedTime.getSecond();
+		long nanos = requestedTime.getNano();
+		long totalSeconds = seconds + minutes * 60;
+		long totalNanos = nanos + totalSeconds * 1_000_000_000;
+		
+		return totalNanos;
+	}
+	
+	private float interpolateValuesWithinHour(){
+		return consumptionOnRequestedHour + (nanosFromStartOfRequestedHour / GlobalConstatnts.NANOS_IN_HOUR) *
+				(consumptionOnNextHour - consumptionOnRequestedHour);
 	}
 }
