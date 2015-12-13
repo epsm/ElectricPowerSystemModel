@@ -30,7 +30,8 @@ public class PowerSystemSimulationManualTest {
 	}
 	
 	public void go(){
-		while(true){
+		for(int i = 0; i < 1_000_000; i++){
+		//while(true){
 			parameters = powerSystemsimulation.calculateNextStep();
 			
 			if(isItTimeToPrint()){

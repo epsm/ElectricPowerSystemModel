@@ -3,6 +3,7 @@ package test.java.com.yvaleriy85.esm.model.manualTesting;
 import main.java.com.yvaleriy85.esm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvaleriy85.esm.model.generalModel.DailyConsumptionPattern;
 import main.java.com.yvaleriy85.esm.model.generalModel.ElectricPowerSystemSimulationImpl;
+import main.java.com.yvaleriy85.esm.model.generation.AstaticRegulatioUnit;
 import main.java.com.yvaleriy85.esm.model.generation.ControlUnit;
 import main.java.com.yvaleriy85.esm.model.generation.Generator;
 import main.java.com.yvaleriy85.esm.model.generation.PowerStation;
@@ -47,10 +48,16 @@ public class ModelInitializator {
 	}
 	
 	private void createPowerStationAndAddToEnergySystem(){
+		
+		PowerStation powerStation = new PowerStation();
+		
 		//first
+		AstaticRegulatioUnit regulationUnit = new AstaticRegulatioUnit();
 		ControlUnit controlUnit = new ControlUnit();
 		Generator generator = new Generator();
-		PowerStation powerStation = new PowerStation();
+			
+		regulationUnit.setControlUnit(controlUnit);
+		regulationUnit.setGenerator(generator);
 		
 		controlUnit.setCoefficientOfStatism(4);
 		controlUnit.setRequiredFrequency(50);
@@ -58,6 +65,7 @@ public class ModelInitializator {
 		controlUnit.TurneOnAstaticRegulation();
 		controlUnit.setGenerator(generator);
 		controlUnit.setElectricPowerSystemSimulation(powerSystemSimulation);
+		controlUnit.setRegulationUnit(regulationUnit);
 		
 		generator.setControlUnit(controlUnit);
 		generator.setMinimalTechnologyPower(1);
@@ -65,15 +73,20 @@ public class ModelInitializator {
 		generator.turnOnGenerator();
 
 		//second
+		AstaticRegulatioUnit regulationUnit_2 = new AstaticRegulatioUnit();
 		ControlUnit controlUnit_2 = new ControlUnit();
 		Generator generator_2 = new Generator();
-				
+			
+		regulationUnit_2.setControlUnit(controlUnit_2);
+		regulationUnit_2.setGenerator(generator_2);
+		
 		controlUnit_2.setCoefficientOfStatism(4);
 		controlUnit_2.setRequiredFrequency(50);
 		controlUnit_2.setPowerAtRequiredFrequency(95);
 		//controlUnit_2.TurneOnAstaticRegulation();
 		controlUnit_2.setGenerator(generator_2);
 		controlUnit_2.setElectricPowerSystemSimulation(powerSystemSimulation);
+		controlUnit_2.setRegulationUnit(regulationUnit);
 		
 		generator_2.setControlUnit(controlUnit_2);
 		generator_2.setMinimalTechnologyPower(1);
