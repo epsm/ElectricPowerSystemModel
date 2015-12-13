@@ -1,6 +1,6 @@
 package test.java.com.yvaleriy85.esm.model.manualTesting;
 
-import main.java.com.yvaleriy85.esm.model.consumption.PowerConsumerWithCalmLoad;
+import main.java.com.yvaleriy85.esm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvaleriy85.esm.model.generalModel.DailyConsumptionPattern;
 import main.java.com.yvaleriy85.esm.model.generalModel.ElectricPowerSystemSimulationImpl;
 import main.java.com.yvaleriy85.esm.model.generation.ControlUnit;
@@ -25,14 +25,14 @@ public class ModelInitializator {
 		
 		//first
 		DailyConsumptionPattern pattern = new DailyConsumptionPattern();
-		PowerConsumerWithCalmLoad powerConsumer = new PowerConsumerWithCalmLoad();
+		PowerConsumerWithScheduledLoad powerConsumer = new PowerConsumerWithScheduledLoad();
 		powerConsumer.setDailyPattern(pattern);
 		powerConsumer.setMaxConsumptionWithoutRandomInMW(100);
 		powerConsumer.setRandomComponentInPercent(10);
 		powerConsumer.setElectricalPowerSystemSimulation(powerSystemSimulation);
 		
 		//second
-		PowerConsumerWithCalmLoad powerConsumer_2 = new PowerConsumerWithCalmLoad();
+		PowerConsumerWithScheduledLoad powerConsumer_2 = new PowerConsumerWithScheduledLoad();
 		powerConsumer_2.setDailyPattern(pattern);
 		powerConsumer_2.setMaxConsumptionWithoutRandomInMW(100);
 		powerConsumer_2.setRandomComponentInPercent(10);
