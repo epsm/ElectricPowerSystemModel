@@ -114,9 +114,7 @@ public class ControlUnitTest {
 	@Test 
 	public void DoesPowerNotHigherThanGeneratorNomimalPower(){
 		prepareMockSimulationWithTooLowtFrequency();
-		
-		System.out.println(controlUnit.getGeneratorPowerInMW());
-		
+			
 		Assert.assertTrue(controlUnit.getGeneratorPowerInMW() <= generator.getNominalPowerInMW());
 	}
 	

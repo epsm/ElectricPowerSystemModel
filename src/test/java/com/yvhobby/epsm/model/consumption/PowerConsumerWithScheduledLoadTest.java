@@ -6,11 +6,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.generalModel.DailyConsumptionPattern;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 import main.java.com.yvhobby.epsm.model.generalModel.SimulationParameters;
+import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 
 
 public class PowerConsumerWithScheduledLoadTest{
@@ -55,6 +57,14 @@ public class PowerConsumerWithScheduledLoadTest{
 				
 				return null;
 			}
+
+			@Override
+			public void addPowerConsumer(PowerConsumer powerConsumer) {
+			}
+
+			@Override
+			public void addPowerStation(PowerStation powerStation) {
+			}
 		};
 	}
 	
@@ -77,8 +87,6 @@ public class PowerConsumerWithScheduledLoadTest{
 			simulation.calculateNextStep();
 			time = simulation.getTime();
 		}
-	
-		//System.out.println("last time=" + time);
 	}
 	
 	private float calculateMinPermissibleValue(LocalTime time){
