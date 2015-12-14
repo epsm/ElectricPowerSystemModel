@@ -2,7 +2,6 @@ package main.java.com.yvhobby.epsm.model.generalModel;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
 
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;

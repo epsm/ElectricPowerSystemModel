@@ -65,7 +65,7 @@ public class ModelInitializator {
 		controlUnit.TurneOnAstaticRegulation();
 		controlUnit.setGenerator(generator);
 		controlUnit.setElectricPowerSystemSimulation(powerSystemSimulation);
-		controlUnit.setRegulationUnit(regulationUnit);
+		controlUnit.setAstaticRegulationUnit(regulationUnit);
 		
 		generator.setControlUnit(controlUnit);
 		generator.setMinimalTechnologyPower(1);
@@ -86,7 +86,7 @@ public class ModelInitializator {
 		//controlUnit_2.TurneOnAstaticRegulation();
 		controlUnit_2.setGenerator(generator_2);
 		controlUnit_2.setElectricPowerSystemSimulation(powerSystemSimulation);
-		controlUnit_2.setRegulationUnit(regulationUnit);
+		controlUnit_2.setAstaticRegulationUnit(regulationUnit);
 		
 		generator_2.setControlUnit(controlUnit_2);
 		generator_2.setMinimalTechnologyPower(1);

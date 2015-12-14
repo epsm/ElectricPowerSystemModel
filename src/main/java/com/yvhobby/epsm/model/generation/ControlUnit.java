@@ -1,9 +1,9 @@
 package main.java.com.yvhobby.epsm.model.generation;
 
-import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulationImpl;
+import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 
 public class ControlUnit {
-	private ElectricPowerSystemSimulationImpl powerSystemSimulation;
+	private ElectricPowerSystemSimulation powerSystemSimulation;
 	private AstaticRegulatioUnit regulationUnit;
 	private float coefficientOfStatism;
 	private float requiredFrequency;
@@ -89,11 +89,11 @@ public class ControlUnit {
 		return powerAtRequiredFrequency;
 	}
 
-	public void setElectricPowerSystemSimulation(ElectricPowerSystemSimulationImpl powerSystemSimulation) {
+	public void setElectricPowerSystemSimulation(ElectricPowerSystemSimulation powerSystemSimulation) {
 		this.powerSystemSimulation = powerSystemSimulation;
 	}
 
-	public void setRegulationUnit(AstaticRegulatioUnit regulationUnit) {
+	public void setAstaticRegulationUnit(AstaticRegulatioUnit regulationUnit) {
 		this.regulationUnit = regulationUnit;
 	}
 }

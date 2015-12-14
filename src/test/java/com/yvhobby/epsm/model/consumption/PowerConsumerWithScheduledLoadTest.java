@@ -35,7 +35,7 @@ public class PowerConsumerWithScheduledLoadTest{
 		return new ElectricPowerSystemSimulation() {
 			LocalTime time = LocalTime.of(0, 0);
 			float possibleFluctuations = 1.1f;
-			float frequency = 0;
+			float frequency = 50;
 						
 			@Override
 			public LocalTime getTime() {
