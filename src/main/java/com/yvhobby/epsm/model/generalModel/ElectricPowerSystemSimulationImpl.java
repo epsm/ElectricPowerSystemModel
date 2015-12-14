@@ -2,24 +2,24 @@ package main.java.com.yvhobby.epsm.model.generalModel;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
 
-	private List<PowerStation> powerStations;
-	private List<PowerConsumer> powerConsumers;
-	private float frequencyInPowerSystem;
+	private Collection<PowerStation> powerStations;
+	private Collection<PowerConsumer> powerConsumers;
+	private float frequencyInPowerSystem = GlobalConstatnts.STANDART_FREQUENCY;
 	private LocalTime currentTimeInSimulation;
 	private final float TIME_CONASTNT = 20;
-	private final int NANOS_IN_SECOND = (int)Math.pow(10, 9);
-	private final int SIMULATION_STEP_IN_NANOS = (int)Math.pow(10, 8);
+	private final int SIMULATION_STEP_IN_NANOS = 100_000_000;
 	
 	public ElectricPowerSystemSimulationImpl() {
-		powerStations = new ArrayList<PowerStation>();
-		powerConsumers = new ArrayList<PowerConsumer>();
+		powerStations = new HashSet<PowerStation>();
+		powerConsumers = new HashSet<PowerConsumer>();
 		currentTimeInSimulation = LocalTime.of(0, 0);
 	}
 
@@ -48,8 +48,10 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private float calculateTotalConsumptionsInMW(){
 		float consumption = 0;
 		
-		for(PowerConsumer station: powerConsumers){
-			consumption += station.getCurrentConsumptionInMW();
+		for(PowerConsumer consumer: powerConsumers){
+			//System.out.print("c:" + consumer + "=" +  consumer.getCurrentConsumptionInMW() + ", ");
+			//System.out.println();
+			consumption += consumer.getCurrentConsumptionInMW();
 		}
 		
 		return consumption;
@@ -59,7 +61,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 			float totalConsumption){
 		frequencyInPowerSystem = frequencyInPowerSystem + ((totalGenerations - 
 				totalConsumption) /	TIME_CONASTNT) * ((float)SIMULATION_STEP_IN_NANOS /
-				NANOS_IN_SECOND);
+				GlobalConstatnts.NANOS_IN_SECOND);
 	}
 	
 	private void changeTimeForStep(){
@@ -67,10 +69,12 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 				plusNanos(SIMULATION_STEP_IN_NANOS);
 	}
 	
+	@Override
 	public void addPowerStation(PowerStation powerStation) {
 		powerStations.add(powerStation);
 	}
 
+	@Override
 	public void addPowerConsumer(PowerConsumer powerConsumer) {
 		powerConsumers.add(powerConsumer);
 	}

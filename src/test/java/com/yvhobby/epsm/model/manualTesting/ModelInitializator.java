@@ -1,5 +1,6 @@
 package test.java.com.yvhobby.epsm.model.manualTesting;
 
+import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.generalModel.DailyConsumptionPattern;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulationImpl;
@@ -22,16 +23,16 @@ public class ModelInitializator {
 	}
 	
 	private void createConsumerAndAddItToEnergySystem(){
-		//PowerConsumer powerConsumer = new PowerConsumerWithConstantPower();
+		PowerConsumer powerConsumer = new PowerConsumerWithConstantPower();
 		
 		//first
 		DailyConsumptionPattern pattern = new DailyConsumptionPattern();
 		
-		PowerConsumerWithScheduledLoad powerConsumer = new PowerConsumerWithScheduledLoad();
+		/*PowerConsumerWithScheduledLoad powerConsumer = new PowerConsumerWithScheduledLoad();
 		powerConsumer.setDegreeOfDependingOnFrequency(2);
 		powerConsumer.setDailyPattern(pattern);
 		powerConsumer.setMaxConsumptionWithoutRandomInMW(100);
-		powerConsumer.setRandomComponentInPercent(10);
+		powerConsumer.setRandomComponentInPercent(10);*/
 		powerConsumer.setElectricalPowerSystemSimulation(powerSystemSimulation);
 		
 		//second
@@ -43,7 +44,7 @@ public class ModelInitializator {
 		powerConsumer_2.setElectricalPowerSystemSimulation(powerSystemSimulation);
 
 		//adding
-		powerSystemSimulation.addPowerConsumer(powerConsumer);
+		//powerSystemSimulation.addPowerConsumer(powerConsumer);
 		powerSystemSimulation.addPowerConsumer(powerConsumer_2);
 	}
 	
@@ -51,7 +52,7 @@ public class ModelInitializator {
 		
 		PowerStation powerStation = new PowerStation();
 		
-		//first
+		//first(astatic)
 		AstaticRegulatioUnit regulationUnit = new AstaticRegulatioUnit();
 		ControlUnit controlUnit = new ControlUnit();
 		Generator generator = new Generator();
@@ -69,7 +70,7 @@ public class ModelInitializator {
 		
 		generator.setControlUnit(controlUnit);
 		generator.setMinimalTechnologyPower(1);
-		generator.setNominalPowerInMW(100);
+		generator.setNominalPowerInMW(150);
 		generator.turnOnGenerator();
 
 		//second
@@ -95,7 +96,7 @@ public class ModelInitializator {
 		
 		//adding
 		powerStation.addGenerator(generator);
-		powerStation.addGenerator(generator_2);
+		//powerStation.addGenerator(generator_2);
 		
 		powerSystemSimulation.addPowerStation(powerStation);
 	}

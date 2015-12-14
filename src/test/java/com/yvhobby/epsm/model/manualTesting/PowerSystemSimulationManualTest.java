@@ -3,6 +3,7 @@ package test.java.com.yvhobby.epsm.model.manualTesting;
 import java.util.Formatter;
 
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulationImpl;
+import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 import main.java.com.yvhobby.epsm.model.generalModel.SimulationParameters;
 
 public class PowerSystemSimulationManualTest {
@@ -11,7 +12,7 @@ public class PowerSystemSimulationManualTest {
 	private SimulationParameters parameters;
 	private StringBuilder sb;
 	private int counter;
-	private final int INTERVAL_BETWEEN_PRINTS = 100;
+	private final int INTERVAL_BETWEEN_PRINTS = 1000;
 	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 0;
 	
 	public static void main(String[] args) {
