@@ -3,23 +3,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.yvaleriy85</groupId>
-	<artifactId>esm</artifactId>
+	<groupId>com.yvhobby</groupId>
+	<artifactId>epsm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Energy system model</name>
-	<description>Very simple model of energy system</description>
+	<packaging>jar</packaging>
+	<name>Electric Power System Model</name>
+	<description>Very simple model of electric power system</description>
 	
 
 
 	<dependencies>
 	
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-			<version>3.5</version>
-		</dependency>
-	
-		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -29,10 +23,9 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-    	<finalName>EnegrySystemModel</finalName>
-
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
