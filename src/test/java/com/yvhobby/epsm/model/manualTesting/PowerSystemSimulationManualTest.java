@@ -12,8 +12,8 @@ public class PowerSystemSimulationManualTest {
 	private SimulationParameters parameters;
 	private StringBuilder sb;
 	private int counter;
-	private final int INTERVAL_BETWEEN_PRINTS = 1000;
-	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 0;
+	private final int INTERVAL_BETWEEN_PRINTS = 0;
+	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 5;
 	
 	public static void main(String[] args) {
 		PowerSystemSimulationManualTest test = new PowerSystemSimulationManualTest();
@@ -31,8 +31,8 @@ public class PowerSystemSimulationManualTest {
 	}
 	
 	public void go(){
-		for(int i = 0; i < 1_000_000; i++){
-		//while(true){
+		//for(int i = 0; i < 1_000_000; i++){
+		while(true){
 			parameters = powerSystemsimulation.calculateNextStep();
 			
 			if(isItTimeToPrint()){

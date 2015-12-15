@@ -35,7 +35,7 @@ public class ControlUnitTest {
 	}
 
 	@Test
-	public void DoesStaticDependenceWorkWithLowFrequency(){
+	public void PowerIncreasesWhenFrequencyIsLow(){
 		prepareMockSimulationWithLowFrequency();
 		
 		for(int i = 0; i < 3; i++){
@@ -51,7 +51,7 @@ public class ControlUnitTest {
 	}
 	
 	@Test
-	public void DoesStaticDependenceWorkFithHighFrequency(){
+	public void PowerDecreasesWhenFrequencyIsHight(){
 		prepareMockSimulationWithHighFrequency();
 		
 		for(int i = 0; i < 3; i++){
@@ -67,7 +67,7 @@ public class ControlUnitTest {
 	}
 	
 	@Test
-	public void DoesStaticDependenceWorkFithNormalFrequency(){
+	public void PowerIsEqualsToPowerAtRequiredFrequencyWhenFrequencyIsEqualToRequired(){
 		prepareMockSimulationWithNormalFrequency();
 		
 		for(int i = 0; i < 3; i++){
@@ -82,7 +82,7 @@ public class ControlUnitTest {
 	}
 	
 	@Test
-	public void DoesAstacicRegulationUnitMethodCallIsItTurnedOn(){
+	public void DoesAstacicRegulationUnitMethodCallIItTurnedOn(){
 		prepareMockSimulationAndAstaticRegulationUnit();
 		
 		controlUnit.TurneOnAstaticRegulation();

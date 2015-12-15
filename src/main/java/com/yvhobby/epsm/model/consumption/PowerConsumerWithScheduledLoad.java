@@ -82,6 +82,7 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 		this.powerSystemSimulation = powerSystemSimulation;
 	}
 
+	@Override
 	public void setDegreeOfDependingOnFrequency(float degreeOfDependingOfFrequency) {
 		this.degreeOnDependingOfFrequency = degreeOfDependingOfFrequency;
 	}

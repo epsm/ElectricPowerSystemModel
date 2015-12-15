@@ -1,7 +1,6 @@
 package main.java.com.yvhobby.epsm.model.generalModel;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -49,8 +48,6 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		float consumption = 0;
 		
 		for(PowerConsumer consumer: powerConsumers){
-			//System.out.print("c:" + consumer + "=" +  consumer.getCurrentConsumptionInMW() + ", ");
-			//System.out.println();
 			consumption += consumer.getCurrentConsumptionInMW();
 		}
 		

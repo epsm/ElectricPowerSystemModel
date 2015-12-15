@@ -6,4 +6,5 @@ public abstract class PowerConsumer{
 	public abstract float getCurrentConsumptionInMW();
 	public abstract void setElectricalPowerSystemSimulation(
 			ElectricPowerSystemSimulation powerSystemSimulation);
+	public abstract void setDegreeOfDependingOnFrequency(float degreeOnDependingOfFrequency);
 }
