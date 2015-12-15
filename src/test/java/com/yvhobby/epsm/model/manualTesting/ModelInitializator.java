@@ -1,6 +1,5 @@
 package test.java.com.yvhobby.epsm.model.manualTesting;
 
-import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithShockLoad;
 import main.java.com.yvhobby.epsm.model.generalModel.DailyConsumptionPattern;
@@ -30,8 +29,8 @@ public class ModelInitializator {
 		PowerConsumerWithShockLoad powerConsumer = new PowerConsumerWithShockLoad();
 		powerConsumer.setDegreeOfDependingOnFrequency(2);
 		powerConsumer.setMaxLoad(20f);
-		powerConsumer.setLoadDurationInSeconds(300);
-		powerConsumer.setPauseBetweenWorkInSeconds(200);
+		powerConsumer.setMaxLoadDurationInSeconds(300);
+		powerConsumer.setMaxPauseBetweenWorkInSeconds(200);
 		powerConsumer.setElectricalPowerSystemSimulation(powerSystemSimulation);
 		
 		//second(scheduled)

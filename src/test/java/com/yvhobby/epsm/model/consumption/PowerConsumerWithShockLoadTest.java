@@ -33,8 +33,8 @@ public class PowerConsumerWithShockLoadTest {
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstatnts.STANDART_FREQUENCY);
 		
 		consumer.setMaxLoad(100f);
-		consumer.setLoadDurationInSeconds(WORK_TIME);
-		consumer.setPauseBetweenWorkInSeconds(PAUSE_TIME);
+		consumer.setMaxLoadDurationInSeconds(WORK_TIME);
+		consumer.setMaxPauseBetweenWorkInSeconds(PAUSE_TIME);
 		consumer.setElectricalPowerSystemSimulation(simulation);
 		consumer.setDegreeOfDependingOnFrequency(2);
 	}

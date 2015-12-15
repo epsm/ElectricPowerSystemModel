@@ -1,6 +1,7 @@
 package test.java.com.yvhobby.epsm.model.consumption;
 
 import java.time.LocalTime;
+import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +20,7 @@ public class PowerConsumerWithScheduledLoadTest{
 	private PowerConsumerWithScheduledLoad consumer;
 	private ElectricPowerSystemSimulation simulation;
 	private DailyConsumptionPattern pattern;
+	private Random random = new Random(); 
 	
 	@Before
 	public void initialize(){
@@ -36,7 +38,7 @@ public class PowerConsumerWithScheduledLoadTest{
 	private ElectricPowerSystemSimulation createPowerSystemStub(){
 		return new ElectricPowerSystemSimulation() {
 			LocalTime time = LocalTime.of(0, 0);
-			float possibleFluctuations = 1.1f;
+			float possibleFluctuations = 1.2f;
 			float frequency = 50;
 						
 			@Override
@@ -52,7 +54,7 @@ public class PowerConsumerWithScheduledLoadTest{
 			@Override
 			public SimulationParameters calculateNextStep() {
 				time = time.plusNanos(100_000_000);
-				frequency = (float) (Math.random() * GlobalConstatnts.STANDART_FREQUENCY * 
+				frequency = (random.nextFloat() * GlobalConstatnts.STANDART_FREQUENCY * 
 						possibleFluctuations);
 				
 				return null;

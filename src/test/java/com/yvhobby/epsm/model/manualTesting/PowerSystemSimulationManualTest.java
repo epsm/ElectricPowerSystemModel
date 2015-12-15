@@ -3,7 +3,6 @@ package test.java.com.yvhobby.epsm.model.manualTesting;
 import java.util.Formatter;
 
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulationImpl;
-import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 import main.java.com.yvhobby.epsm.model.generalModel.SimulationParameters;
 
 public class PowerSystemSimulationManualTest {

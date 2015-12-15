@@ -1,6 +1,7 @@
 package main.java.com.yvhobby.epsm.model.consumption;
 
 import java.time.LocalTime;
+import java.util.Random;
 
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
@@ -8,8 +9,8 @@ import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 public class PowerConsumerWithShockLoad extends PowerConsumer{
 	private ElectricPowerSystemSimulation simulation;
 	private LocalTime currentTime;
-	private int loadDurationInSeconds;
-	private int pauseBetweenWorkInSeconds;
+	private int maxLoadDurationInSeconds;
+	private int maxPauseBetweenWorkInSeconds;
 	private float maxLoad;
 	private float currentLoad;
 	private float currentFrequency;
@@ -17,6 +18,7 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 	private LocalTime timeToTurnOn = LocalTime.MIDNIGHT;//for first time else NPE
 	private LocalTime timeToTurnOff;
 	private boolean isTurnedOn;
+	private Random random = new Random();
 	
 	@Override
 	public float getCurrentConsumptionInMW(){
@@ -49,14 +51,14 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 	
 	private void turnOnWithRandomLoadValue(){
 		float halfOfMaxLoad = maxLoad / 2;
-		currentLoad = halfOfMaxLoad + halfOfMaxLoad * (float)Math.random();
+		currentLoad = halfOfMaxLoad + halfOfMaxLoad * random.nextFloat();
 		isTurnedOn = true;
 	}
 	
 	private void setTimeToTurnOff(){
-		float halfOfTurnedOnDuration = loadDurationInSeconds / 2; 
+		float halfOfTurnedOnDuration = maxLoadDurationInSeconds / 2; 
 		timeToTurnOff = currentTime.plusSeconds(
-				(long)(halfOfTurnedOnDuration + halfOfTurnedOnDuration * Math.random()));
+				(long)(halfOfTurnedOnDuration + halfOfTurnedOnDuration * random.nextFloat()));
 	}
 	
 	private boolean IsItTimeToTurnOff(){
@@ -74,9 +76,9 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 	}
 	
 	private void setTimeToTurnOn(){
-		float halfOfTurnedOffDuration = pauseBetweenWorkInSeconds / 2; 
+		float halfOfTurnedOffDuration = maxPauseBetweenWorkInSeconds / 2; 
 		timeToTurnOn = currentTime.plusSeconds(
-				(long)(halfOfTurnedOffDuration + halfOfTurnedOffDuration * Math.random()));
+				(long)(halfOfTurnedOffDuration + halfOfTurnedOffDuration * random.nextFloat()));
 	}
 	
 	private float calculateConsumptionCountingCurrentFrequency(float consumption){
@@ -89,12 +91,12 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 		simulation = powerSystemSimulation;
 	}
 
-	public void setLoadDurationInSeconds(int loadDurationInSeconds) {
-		this.loadDurationInSeconds = loadDurationInSeconds;
+	public void setMaxLoadDurationInSeconds(int loadDurationInSeconds) {
+		this.maxLoadDurationInSeconds = loadDurationInSeconds;
 	}
 
-	public void setPauseBetweenWorkInSeconds(int durationBetweenWorkInSeconds) {
-		this.pauseBetweenWorkInSeconds = durationBetweenWorkInSeconds;
+	public void setMaxPauseBetweenWorkInSeconds(int durationBetweenWorkInSeconds) {
+		this.maxPauseBetweenWorkInSeconds = durationBetweenWorkInSeconds;
 	}
 		
 	public void setMaxLoad(float maxLoad) {
