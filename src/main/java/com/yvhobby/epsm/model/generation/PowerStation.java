@@ -1,11 +1,13 @@
 package main.java.com.yvhobby.epsm.model.generation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PowerStation{
 	
-	private List<Generator> generators = new ArrayList<Generator>();
+	private Set<Generator> generators = new HashSet<Generator>();
+	private int powerStationId;
 	
 	public float getCurrentGenerationInMW(){
 		float generationInMW = 0;
@@ -19,5 +21,17 @@ public class PowerStation{
 	
 	public void addGenerator(Generator generator){
 		generators.add(generator);
+	}
+	
+	public Set<Generator> getGenerators(){
+		return Collections.unmodifiableSet(generators);
+	}
+
+	public int getPowerStationid() {
+		return powerStationId;
+	}
+
+	public void setPowerStationid(int powerStationid) {
+		this.powerStationId = powerStationid;
 	}
 }

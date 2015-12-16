@@ -5,6 +5,7 @@ public class Generator{
 	private float nominalPowerInMW;
 	private float minimalTechnologyPower;
 	private boolean isTurnedOn;
+	private int id;
 	
 	public float getGenerationInMW(){
 		if(isTurnedOn){
@@ -48,5 +49,13 @@ public class Generator{
 	
 	public void turnOffGenerator(){
 		isTurnedOn = false;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
