@@ -3,25 +3,25 @@ package main.java.com.yvhobby.epsm.model.generalModel;
 import java.time.LocalTime;
 
 public class SimulationParameters {
-	private float totalGenerations;
-	private float totalConsumption;
+	private float totalGeneration;
+	private float totalLoad;
 	private float frequencyInPowerSystem;
 	private LocalTime currentTimeInSimulation;
 	
-	public SimulationParameters(float totalGenerations, float totalConsumption,
+	public SimulationParameters(float totalGeneration, float totalLoad,
 			float frequencyInPowerSystem, LocalTime currentTimeInSimulation) {
-		this.totalGenerations = totalGenerations;
-		this.totalConsumption = totalConsumption;
+		this.totalGeneration = totalGeneration;
+		this.totalLoad = totalLoad;
 		this.frequencyInPowerSystem = frequencyInPowerSystem;
 		this.currentTimeInSimulation = currentTimeInSimulation;
 	}
 
-	public float getTotalGenerations() {
-		return totalGenerations;
+	public float getTotalGeneration() {
+		return totalGeneration;
 	}
 
-	public float getTotalConsumption() {
-		return totalConsumption;
+	public float getTotalLoad() {
+		return totalLoad;
 	}
 
 	public float getFrequencyInPowerSystem() {

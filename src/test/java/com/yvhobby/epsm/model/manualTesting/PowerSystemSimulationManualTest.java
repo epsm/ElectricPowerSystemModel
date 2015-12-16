@@ -7,12 +7,12 @@ import main.java.com.yvhobby.epsm.model.generalModel.SimulationParameters;
 
 public class PowerSystemSimulationManualTest {
 	private Formatter fmt;
-	private ElectricPowerSystemSimulationImpl powerSystemsimulation;
+	private ElectricPowerSystemSimulationImpl simulation;
 	private SimulationParameters parameters;
 	private StringBuilder sb;
 	private int counter;
-	private final int INTERVAL_BETWEEN_PRINTS = 0;
-	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 5;
+	private final int INTERVAL_BETWEEN_PRINTS = 1000;
+	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 0;
 	
 	public static void main(String[] args) {
 		PowerSystemSimulationManualTest test = new PowerSystemSimulationManualTest();
@@ -22,17 +22,17 @@ public class PowerSystemSimulationManualTest {
 	}
 	
 	private void initialize(){
-		powerSystemsimulation = new ElectricPowerSystemSimulationImpl();
+		simulation = new ElectricPowerSystemSimulationImpl();
 		sb = new StringBuilder();
 		fmt = new Formatter(sb);
 		
-		new ModelInitializator().initialize(powerSystemsimulation);
+		new ModelInitializator().initialize(simulation);
 	}
 	
 	public void go(){
 		//for(int i = 0; i < 1_000_000; i++){
 		while(true){
-			parameters = powerSystemsimulation.calculateNextStep();
+			parameters = simulation.calculateNextStep();
 			
 			if(isItTimeToPrint()){
 				printState();
@@ -59,8 +59,8 @@ public class PowerSystemSimulationManualTest {
 		fmt.format(
 				"%12s"+ 
 				", totalGeneration= %10f, totalConsumption= %10f ,frequency= %10f", 
-				parameters.getCurrentTimeInSimulation(), parameters.getTotalGenerations(),
-				parameters.getTotalConsumption(), parameters.getFrequencyInPowerSystem());
+				parameters.getCurrentTimeInSimulation(), parameters.getTotalGeneration(),
+				parameters.getTotalLoad(), parameters.getFrequencyInPowerSystem());
 				
 		System.out.println(sb.toString());
 		sb.setLength(0);

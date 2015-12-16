@@ -10,19 +10,19 @@ import main.java.com.yvhobby.epsm.model.generation.Generator;
 public class GeneratorTest{
 	private ControlUnit controlUnit;
 	private Generator generator;
-	private final float ferificationNumber = 1000f; 
+	private final float generatorPower = 1000f; 
 	
 	@Before
 	public void initialize(){
 		generator = new Generator();
 		controlUnit = mock(ControlUnit.class);
 		
-		when(controlUnit.getGeneratorPowerInMW()).thenReturn(ferificationNumber);
+		when(controlUnit.getGeneratorPowerInMW()).thenReturn(generatorPower);
 		generator.setControlUnit(controlUnit);
 	}
 	
 	@Test
-	public void isGeneratorPowerIsZeroIfItTurnedOn(){
+	public void GeneratorPowerIsZeroIfItTurnedOff(){
 		generator.turnOffGenerator();
 		
 		Assert.assertEquals(0, generator.getGenerationInMW(), 0);

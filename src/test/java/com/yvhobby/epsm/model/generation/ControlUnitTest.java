@@ -85,7 +85,7 @@ public class ControlUnitTest {
 	public void DoesAstacicRegulationUnitMethodCallIItTurnedOn(){
 		prepareMockSimulationAndAstaticRegulationUnit();
 		
-		controlUnit.TurneOnAstaticRegulation();
+		controlUnit.TurnOnAstaticRegulation();
 		controlUnit.getGeneratorPowerInMW();
 		
 		verify(regulationUnit, times(1)).verifyAndAdjustPowerAtRequiredFrequency(0f);

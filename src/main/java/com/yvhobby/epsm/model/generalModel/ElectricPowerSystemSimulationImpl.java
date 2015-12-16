@@ -1,16 +1,16 @@
 package main.java.com.yvhobby.epsm.model.generalModel;
 
 import java.time.LocalTime;
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
 
-	private Collection<PowerStation> powerStations;
-	private Collection<PowerConsumer> powerConsumers;
+	private Set<PowerStation> powerStations;
+	private Set<PowerConsumer> powerConsumers;
 	private float frequencyInPowerSystem = GlobalConstatnts.STANDART_FREQUENCY;
 	private LocalTime currentTimeInSimulation;
 	private final float TIME_CONASTNT = 20;
@@ -19,51 +19,50 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	public ElectricPowerSystemSimulationImpl() {
 		powerStations = new HashSet<PowerStation>();
 		powerConsumers = new HashSet<PowerConsumer>();
-		currentTimeInSimulation = LocalTime.of(0, 0);
+		currentTimeInSimulation = LocalTime.MIDNIGHT;
 	}
 
 	@Override
 	public SimulationParameters calculateNextStep() {
-		float totalGenerations = calculateTotalGenerationsInMW();
-		float totalConsumption = calculateTotalConsumptionsInMW();
+		float totalGeneration = calculateTotalGenerationsInMW();
+		float totalLoad = calculateTotalLoadInMW();
 		
-		calculateFrequencyInPowerSystem(totalGenerations, totalConsumption);
+		calculateFrequencyInPowerSystem(totalGeneration, totalLoad);
 		changeTimeForStep();
 		
-		return new SimulationParameters(totalGenerations, totalConsumption,
+		return new SimulationParameters(totalGeneration, totalLoad,
 				frequencyInPowerSystem, currentTimeInSimulation);
 	}
 	
 	private float calculateTotalGenerationsInMW(){
-		float generations = 0;
+		float generation = 0;
 		
 		for(PowerStation station: powerStations){
-			generations += station.getCurrentGenerationInMW();
+			generation += station.getCurrentGenerationInMW();
 		}
 		
-		return generations;
+		return generation;
 	}
 	
-	private float calculateTotalConsumptionsInMW(){
-		float consumption = 0;
+	private float calculateTotalLoadInMW(){
+		float load = 0;
 		
 		for(PowerConsumer consumer: powerConsumers){
-			consumption += consumer.getCurrentLoadInMW();
+			load += consumer.getCurrentLoadInMW();
 		}
 		
-		return consumption;
+		return load;
 	}
 	
-	private void calculateFrequencyInPowerSystem(float totalGenerations,
-			float totalConsumption){
-		frequencyInPowerSystem = frequencyInPowerSystem + ((totalGenerations - 
-				totalConsumption) /	TIME_CONASTNT) * ((float)SIMULATION_STEP_IN_NANOS /
+	private void calculateFrequencyInPowerSystem(float totalGeneration,
+			float totalLoad){
+		frequencyInPowerSystem = frequencyInPowerSystem + ((totalGeneration - 
+				totalLoad) / TIME_CONASTNT) * ((float)SIMULATION_STEP_IN_NANOS /
 				GlobalConstatnts.NANOS_IN_SECOND);
 	}
 	
 	private void changeTimeForStep(){
-		currentTimeInSimulation = currentTimeInSimulation.
-				plusNanos(SIMULATION_STEP_IN_NANOS);
+		currentTimeInSimulation = currentTimeInSimulation.plusNanos(SIMULATION_STEP_IN_NANOS);
 	}
 	
 	@Override

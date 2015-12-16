@@ -3,7 +3,7 @@ package main.java.com.yvhobby.epsm.model.generation;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 
 public class ControlUnit {
-	private ElectricPowerSystemSimulation powerSystemSimulation;
+	private ElectricPowerSystemSimulation simulation;
 	private AstaticRegulatioUnit regulationUnit;
 	private float coefficientOfStatism;
 	private float requiredFrequency;
@@ -13,7 +13,7 @@ public class ControlUnit {
 	private float frequencyInPowerSystem;
 	
 	public float getGeneratorPowerInMW(){
-		frequencyInPowerSystem = powerSystemSimulation.getFrequencyInPowerSystem();
+		frequencyInPowerSystem = simulation.getFrequencyInPowerSystem();
 		
 		if(isAstaticRegulationTurnedOn){
 			regulationUnit.verifyAndAdjustPowerAtRequiredFrequency(frequencyInPowerSystem);
@@ -41,12 +41,12 @@ public class ControlUnit {
 				frequencyInPowerSystem) / coefficientOfStatism;
 	}
 	
-	private boolean isPowerMoreThanGeneratorNominal(float countetPower){
-		return countetPower > generator.getNominalPowerInMW();
+	private boolean isPowerMoreThanGeneratorNominal(float power){
+		return power > generator.getNominalPowerInMW();
 	}
 	
-	private boolean isPowerLessThanGeneratorMinimalTechnology(float countetPower){
-		return countetPower < generator.getMinimalTechnologyPower();
+	private boolean isPowerLessThanGeneratorMinimalTechnology(float power){
+		return power < generator.getMinimalTechnologyPower();
 	}
 
 	public void setGenerator(Generator generator) {
@@ -61,10 +61,18 @@ public class ControlUnit {
 		this.coefficientOfStatism = coefficientOfStatism;
 	}
 
+	public float getRequiredFrequency() {
+		return requiredFrequency;
+	}
+	
 	public void setRequiredFrequency(float requiredFrequency) {
 		this.requiredFrequency = requiredFrequency;
 	}
 
+	public float getPowerAtRequiredFrequency() {
+		return powerAtRequiredFrequency;
+	}
+	
 	public void setPowerAtRequiredFrequency(float powerAtRequiredFrequency) {
 		this.powerAtRequiredFrequency = powerAtRequiredFrequency;
 	}
@@ -73,24 +81,16 @@ public class ControlUnit {
 		return isAstaticRegulationTurnedOn;
 	}
 
-	public void TurneOnAstaticRegulation(){
+	public void TurnOnAstaticRegulation(){
 		isAstaticRegulationTurnedOn = true;
 	}
 	
-	public void TurneOffAstaticRegulation(){
+	public void TurnOffAstaticRegulation(){
 		isAstaticRegulationTurnedOn = false;
 	}
 
-	public float getRequiredFrequency() {
-		return requiredFrequency;
-	}
-
-	public float getPowerAtRequiredFrequency() {
-		return powerAtRequiredFrequency;
-	}
-
-	public void setElectricPowerSystemSimulation(ElectricPowerSystemSimulation powerSystemSimulation) {
-		this.powerSystemSimulation = powerSystemSimulation;
+	public void setElectricPowerSystemSimulation(ElectricPowerSystemSimulation simulation) {
+		this.simulation = simulation;
 	}
 
 	public void setAstaticRegulationUnit(AstaticRegulatioUnit regulationUnit) {

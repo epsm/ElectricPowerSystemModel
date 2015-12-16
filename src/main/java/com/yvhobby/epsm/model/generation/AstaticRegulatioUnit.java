@@ -5,11 +5,11 @@ import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 public class AstaticRegulatioUnit {
 	private ControlUnit controlUnit;
 	private Generator generator;
-	private float frequencyInPowerSystem;
+	private float currentFrequency;
 	private final float ASTATIC_REGULATION_SENSIVITY = 0.03f;
 
-	public void verifyAndAdjustPowerAtRequiredFrequency(float frequencyInPowerSystem){
-		this.frequencyInPowerSystem = frequencyInPowerSystem;
+	public void verifyAndAdjustPowerAtRequiredFrequency(float currentFrequency){
+		this.currentFrequency = currentFrequency;
 		
 		if(! isFrequencyInNonSensivityLimit()){
 			adjustPowerAtRequiredFrequency();
@@ -17,13 +17,13 @@ public class AstaticRegulatioUnit {
 	}
 
 	private boolean isFrequencyInNonSensivityLimit(){
-		float deviation = Math.abs(frequencyInPowerSystem - GlobalConstatnts.STANDART_FREQUENCY);
+		float deviation = Math.abs(currentFrequency - GlobalConstatnts.STANDART_FREQUENCY);
 		
 		return deviation <= ASTATIC_REGULATION_SENSIVITY;
 	}
 
 	private void adjustPowerAtRequiredFrequency(){
-		if(frequencyInPowerSystem < GlobalConstatnts.STANDART_FREQUENCY){
+		if(currentFrequency < GlobalConstatnts.STANDART_FREQUENCY){
 			increasePowerAtRequiredFrequency();
 		}else{
 			decreasePowerAtRequiredFrequency();

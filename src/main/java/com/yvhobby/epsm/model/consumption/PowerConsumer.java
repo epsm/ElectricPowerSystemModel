@@ -5,6 +5,6 @@ import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulati
 public abstract class PowerConsumer{
 	public abstract float getCurrentLoadInMW();
 	public abstract void setElectricalPowerSystemSimulation(
-			ElectricPowerSystemSimulation powerSystemSimulation);
+			ElectricPowerSystemSimulation simulation);
 	public abstract void setDegreeOfDependingOnFrequency(float degreeOnDependingOfFrequency);
 }

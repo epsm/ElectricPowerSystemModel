@@ -20,7 +20,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	private PowerConsumer consumer_2;
 	private SimulationParameters parameters;
 	private float previousFrequency;
-	private float nextFrequency;
+	private float currentFrequency;
 	
 	@Before
 	public void initialize(){
@@ -33,7 +33,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	}
 	
 	@Test
-	public void TimeGoesInTheSimulation(){
+	public void timeGoesInTheSimulation(){
 		LocalTime previousTime;
 		LocalTime nextTime;
 		
@@ -47,55 +47,55 @@ public class ElectricPowerSystemSimulationImplTest {
 	}
 	
 	@Test
-	public void FrequencyDecreasesIfConsumptionHigherThanGeneration(){
+	public void FrequencyDecreasesIfLoadHigherThanGeneration(){
 		when(station_1.getCurrentGenerationInMW()).thenReturn(99f);
 		when(consumer_1.getCurrentLoadInMW()).thenReturn(100f);
 
 		for(int i = 0; i < 1000; i++){			
-			getPreviousAndNextFrequency();
+			rememberOldFrequencyAndDoNextStep();
 			
-			Assert.assertTrue(previousFrequency > nextFrequency);
+			Assert.assertTrue(previousFrequency > currentFrequency);
 		}
 	}
 	
-	private void getPreviousAndNextFrequency(){
+	private void rememberOldFrequencyAndDoNextStep(){
 		previousFrequency = simulation.getFrequencyInPowerSystem();
-		SimulationParameters parameters = simulation.calculateNextStep();
-		nextFrequency = simulation.getFrequencyInPowerSystem();
+		simulation.calculateNextStep();
+		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 	
 	@Test
-	public void FrequencyIncreasesIfConsumptionLessThanGeneration(){
+	public void FrequencyIncreasesIfLoadLessThanGeneration(){
 		when(station_1.getCurrentGenerationInMW()).thenReturn(100f);
 		when(consumer_1.getCurrentLoadInMW()).thenReturn(99f);
 		
 		for(int i = 0; i < 1000; i++){			
-			getPreviousAndNextFrequency();
+			rememberOldFrequencyAndDoNextStep();
 			
-			Assert.assertTrue(previousFrequency < nextFrequency);
+			Assert.assertTrue(previousFrequency < currentFrequency);
 		}
 	}
 	
 	@Test
-	public void FrequencyIsConstantIfConsumptionEqualsGeneration(){
+	public void FrequencyIsConstantIfLoadEqualsToGeneration(){
 		when(station_1.getCurrentGenerationInMW()).thenReturn(100f);
 		when(consumer_1.getCurrentLoadInMW()).thenReturn(100f);
 		
 		for(int i = 0; i < 1000; i++){			
-			getPreviousAndNextFrequency();
+			rememberOldFrequencyAndDoNextStep();
 			
-			Assert.assertTrue(previousFrequency == nextFrequency);
+			Assert.assertTrue(previousFrequency == currentFrequency);
 		}
 	}
 	
 	@Test
-	public void SummaryPowerGenerationByPowerStationEqualsToShownByModel(){
+	public void SummaryPowerGenerationFromPowerStationEqualsToShownByModel(){
 		prepareSecondConsumerAndSecondPowerStation();
 		float generation = station_1.getCurrentGenerationInMW() + station_2.getCurrentGenerationInMW();
 		
 		parameters = simulation.calculateNextStep();
 		
-		Assert.assertEquals(generation, parameters.getTotalGenerations(), 0);
+		Assert.assertEquals(generation, parameters.getTotalGeneration(), 0);
 	}
 	
 	private void prepareSecondConsumerAndSecondPowerStation(){
@@ -112,12 +112,12 @@ public class ElectricPowerSystemSimulationImplTest {
 	}
 	
 	@Test
-	public void SummaryPowerConsumptionByConsumerEqualsToShownByModel(){
+	public void SummaryPowerLoadFromConsumerEqualsToShownByModel(){
 		prepareSecondConsumerAndSecondPowerStation();
-		float consumption = consumer_1.getCurrentLoadInMW() + consumer_2.getCurrentLoadInMW();
+		float load = consumer_1.getCurrentLoadInMW() + consumer_2.getCurrentLoadInMW();
 		
 		parameters = simulation.calculateNextStep();
 		
-		Assert.assertEquals(consumption, parameters.getTotalConsumption(), 0);
+		Assert.assertEquals(load, parameters.getTotalLoad(), 0);
 	}
 }

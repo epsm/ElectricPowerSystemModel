@@ -6,8 +6,8 @@ import java.util.Set;
 
 public class PowerStation{
 	
+	private int id;
 	private Set<Generator> generators = new HashSet<Generator>();
-	private int powerStationId;
 	
 	public float getCurrentGenerationInMW(){
 		float generationInMW = 0;
@@ -27,11 +27,11 @@ public class PowerStation{
 		return Collections.unmodifiableSet(generators);
 	}
 
-	public int getPowerStationid() {
-		return powerStationId;
+	public int getId() {
+		return id;
 	}
 
-	public void setPowerStationid(int powerStationid) {
-		this.powerStationId = powerStationid;
+	public void setId(int id) {
+		this.id = id;
 	}
 }

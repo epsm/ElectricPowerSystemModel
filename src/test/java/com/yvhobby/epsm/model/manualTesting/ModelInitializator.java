@@ -65,7 +65,7 @@ public class ModelInitializator {
 		
 		controlUnit.setCoefficientOfStatism(4);
 		controlUnit.setRequiredFrequency(50);
-		controlUnit.TurneOnAstaticRegulation();
+		controlUnit.TurnOnAstaticRegulation();
 		controlUnit.setGenerator(generator);
 		controlUnit.setElectricPowerSystemSimulation(powerSystemSimulation);
 		controlUnit.setAstaticRegulationUnit(regulationUnit);

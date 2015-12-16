@@ -14,7 +14,7 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 	private float randomFluctuationsInPercent;
 	private float degreeOnDependingOfFrequency;
 	private LoadCurve loadCurveOnDay;
-	private LocalTime previousLoadRequest;
+	private LocalTime previousLoadRequestTime;
 	private LocalTime currentTime;
 	private float currentFrequency;
 	
@@ -26,7 +26,7 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 			calculateLoadCurveOnThisDay();
 		}
 		
-		previousLoadRequest = currentTime;
+		previousLoadRequestTime = currentTime;
 		
 		return getLoadForThisMoment();
 	}
@@ -37,7 +37,7 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 	}
 	
 	private boolean isItANewDay(){
-		return previousLoadRequest == null || previousLoadRequest.isAfter(currentTime);
+		return previousLoadRequestTime == null || previousLoadRequestTime.isAfter(currentTime);
 	}
 	
 	private void calculateLoadCurveOnThisDay(){

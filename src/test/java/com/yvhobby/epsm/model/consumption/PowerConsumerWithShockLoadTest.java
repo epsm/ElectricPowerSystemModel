@@ -44,10 +44,10 @@ public class PowerConsumerWithShockLoadTest {
 		boolean loadChangedAfterTurnOn = true;
 		
 		for(int i = 0; i < 1_000_000; i++){
-			nextStep();
+			rememberCurrentLoadAsPreviousAndDoNextStep();
 			
 			if(wasLoadTurnedOn()){
-				nextStep();
+				rememberCurrentLoadAsPreviousAndDoNextStep();
 				loadChangedAfterTurnOn = wasLoadChanged();
 				break;
 			}
@@ -57,14 +57,14 @@ public class PowerConsumerWithShockLoadTest {
 	}
 	
 	private boolean wasLoadTurnedOn(){
-		return previousLoad == 0 && previousLoad != currentLoad;
+		return previousLoad == 0 && currentLoad > 0;
 	}
 	
 	private boolean wasLoadChanged(){
 		return currentLoad != previousLoad;
 	}
 	
-	private void nextStep(){
+	private void rememberCurrentLoadAsPreviousAndDoNextStep(){
 		previousLoad = currentLoad;
 		simulation.calculateNextStep();
 		currentLoad = consumer.getCurrentLoadInMW();
@@ -75,10 +75,10 @@ public class PowerConsumerWithShockLoadTest {
 		boolean loadChangedAfterTurnOff = true;
 		
 		for(int i = 0; i < 1_000_000; i++){
-			nextStep();
+			rememberCurrentLoadAsPreviousAndDoNextStep();
 			
 			if(wasLoadTurnedOff()){
-				nextStep();
+				rememberCurrentLoadAsPreviousAndDoNextStep();
 				loadChangedAfterTurnOff = wasLoadChanged();
 				break;
 			}
@@ -92,7 +92,7 @@ public class PowerConsumerWithShockLoadTest {
 	}
 	
 	@Test
-	public void loadDurationMatchesfromHalfToTheWholeOfSet(){
+	public void WorkDurationConformsfromHalfToTheWholeOfSet(){
 		for(int i = 0; i < 2; i++){//too much time if more
 			findTurnOnTime();
 			findTurnOffTime();
@@ -105,7 +105,7 @@ public class PowerConsumerWithShockLoadTest {
 	
 	private void findTurnOnTime(){
 		for(int i = 0; i < 1_000_000; i++){
-			nextStep();
+			rememberCurrentLoadAsPreviousAndDoNextStep();
 			if(wasLoadTurnedOn()){
 				turnOnTime = simulation.getTime();
 				break;
@@ -115,7 +115,7 @@ public class PowerConsumerWithShockLoadTest {
 	
 	private void findTurnOffTime(){
 		for(int i = 0; i < 1_000_000; i++){
-			nextStep();
+			rememberCurrentLoadAsPreviousAndDoNextStep();
 			if(wasLoadTurnedOff()){
 				turnOffTime = simulation.getTime();
 				break;
@@ -130,7 +130,7 @@ public class PowerConsumerWithShockLoadTest {
 	}
 	
 	@Test
-	public void pauseBetweenLoadsMatchesFromHalfToWholeOfSet(){
+	public void pauseBetweenWorksConformsFromHalfToWholeOfSet(){
 		for(int i = 0; i < 2; i++){//too much time if more
 			findTurnOffTime();
 			findTurnOnTime();
@@ -142,10 +142,10 @@ public class PowerConsumerWithShockLoadTest {
 	}
 	
 	@Test
-	public void dependencyConsumptionOnFrequency(){
+	public void LoadDependsOnFrequency(){
 		findTurnOnTime();
 		prepareMockSimulationWithDecreasingFrequency();
-		nextStep();
+		rememberCurrentLoadAsPreviousAndDoNextStep();
 		
 		Assert.assertTrue(turnOnTime != null);
 		Assert.assertTrue(previousLoad > currentLoad);
