@@ -7,33 +7,34 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.PowerOnHoursPattern;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 import main.java.com.yvhobby.epsm.model.generalModel.SimulationParameters;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
+import test.java.com.yvhobby.epsm.model.constantsForTests.TestsConstants;
 
 public class PowerConsumerWithScheduledLoadTest{
 	private PowerConsumerWithScheduledLoad consumer;
 	private ElectricPowerSystemSimulation simulation;
-	private PowerOnHoursPattern pattern;
+	private float[] approximateLoadByHoursInPercent;
 	private Random random = new Random(); 
 	
 	@Before
 	public void initialize(){
 		simulation = createPowerSystemStub();
 		consumer = new PowerConsumerWithScheduledLoad();
-		pattern = new PowerOnHoursPattern();
+		approximateLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 		
-		consumer.setDailyPattern(pattern);
-		consumer.setMaxConsumptionWithoutRandomInMW(100);
-		consumer.setRandomComponentInPercent(10);
+		consumer.setApproximateLoadByHoursOnDayInPercent(approximateLoadByHoursInPercent);
+		consumer.setMaxLoadWithoutRandomInMW(100);
+		consumer.setRandomFluctuationsInPercent(10);
 		consumer.setDegreeOfDependingOnFrequency(2);
 		consumer.setElectricalPowerSystemSimulation(simulation);
 	}
 	
+	//realization with Mock works too slow
 	private ElectricPowerSystemSimulation createPowerSystemStub(){
 		return new ElectricPowerSystemSimulation() {
 			LocalTime time = LocalTime.of(0, 0);
@@ -70,15 +71,16 @@ public class PowerConsumerWithScheduledLoadTest{
 	}
 	
 	@Test
-	public void isConsumerConsumptionIsInExpectingRange(){
-		LocalTime time = simulation.getTime();
+	public void ConsumerLoadIsInExpectingRange(){
+		LocalTime time = null;
 		float minPermissibleValue = 0;
 		float maxPermissibleValue = 0;
 		float actualValue = 0;
-		int times = 2 * 24 * 60 * 60 * 10;
+		int repeats = 2 * 24 * 60 * 60 * 10;//two days with step 0.1s
 		
-		for(int i = 0; i < times; i++){
-			actualValue = consumer.getCurrentConsumptionInMW();
+		for(int i = 0; i < repeats; i++){
+			time = simulation.getTime();
+			actualValue = consumer.getCurrentLoadInMW();
 			minPermissibleValue = calculateMinPermissibleValue(time);
 			maxPermissibleValue = calculateMaxPermissibleValue(time);
 			
@@ -86,7 +88,6 @@ public class PowerConsumerWithScheduledLoadTest{
 			Assert.assertTrue(actualValue <= maxPermissibleValue);
 		
 			simulation.calculateNextStep();
-			time = simulation.getTime();
 		}
 	}
 	
@@ -94,50 +95,50 @@ public class PowerConsumerWithScheduledLoadTest{
 		float minValueWithoutRandom = findMinValueWithoutRandomInMW(time);
 		float minValueWithRandom = substractRandomPartInMw(minValueWithoutRandom);
 		float minValueWithRandomAndCountingFrequency = 
-				calculateConsumptionCountingFrequencyInMW(minValueWithRandom);
+				calculateLoadCountingFrequencyInMW(minValueWithRandom);
 		
 		return minValueWithRandomAndCountingFrequency;
 	}
 	
 	private float findMinValueWithoutRandomInMW(LocalTime time){
-		float valueOnRequestedHour = pattern.getPowerInPercentForCurrentHour(time);
-		float valueOnNextHour = pattern.getPowerInPercentForCurrentHour(time.plusHours(1));
+		float valueOnRequestedHour = approximateLoadByHoursInPercent[time.getHour()];
+		float valueOnNextHour = approximateLoadByHoursInPercent[time.plusHours(1).getHour()];
 		
 		return Math.min(valueOnRequestedHour, valueOnNextHour) *
-				consumer.getMaxConsumptionWithoutRandomInMW() / 100;
+				consumer.getMaxLoadWithoutRandomInMW() / 100;
 	}
 	
-	private float substractRandomPartInMw(float consumption){
-		return consumption - consumption * consumer.getRandomComponentInPercent() / 100;
+	private float substractRandomPartInMw(float load){
+		return load - load * consumer.getRandomFluctuationsInPercent() / 100;
 	}
 	
-	private float calculateConsumptionCountingFrequencyInMW(float consumption){
+	private float calculateLoadCountingFrequencyInMW(float load){
 		float currentFrequency = simulation.getFrequencyInPowerSystem();
 		float standartFrequency = GlobalConstatnts.STANDART_FREQUENCY;
 		float degreeOfDepending = consumer.getDegreeOnDependingOfFrequency();
 		
 		return (float)Math.pow(
-				(currentFrequency / standartFrequency),	degreeOfDepending) * consumption;
+				(currentFrequency / standartFrequency),	degreeOfDepending) * load;
 	}
 	
 	private float calculateMaxPermissibleValue(LocalTime time){
 		float maxValueWithoutRandom = findMaxValueWithoutRandomInMW(time);
 		float maxValueWithRandom = addRandomPartInMw(maxValueWithoutRandom);
 		float maxValueWithRandomAndCountingFrequency = 
-				calculateConsumptionCountingFrequencyInMW(maxValueWithRandom);
+				calculateLoadCountingFrequencyInMW(maxValueWithRandom);
 		
 		return maxValueWithRandomAndCountingFrequency;
 	}
 	
 	private float findMaxValueWithoutRandomInMW(LocalTime time){
-		float valueOnRequestedHour = pattern.getPowerInPercentForCurrentHour(time);
-		float valueOnNextHour = pattern.getPowerInPercentForCurrentHour(time.plusHours(1));
+		float valueOnRequestedHour = approximateLoadByHoursInPercent[time.getHour()];
+		float valueOnNextHour = approximateLoadByHoursInPercent[time.plusHours(1).getHour()];
 		
 		return Math.max(valueOnRequestedHour, valueOnNextHour) *
-				consumer.getMaxConsumptionWithoutRandomInMW() / 100;
+				consumer.getMaxLoadWithoutRandomInMW() / 100;
 	}
 	
-	private float addRandomPartInMw(float consumption){
-		return consumption + consumption * consumer.getRandomComponentInPercent() / 100;
+	private float addRandomPartInMw(float load){
+		return load + load * consumer.getRandomFluctuationsInPercent() / 100;
 	}
 }

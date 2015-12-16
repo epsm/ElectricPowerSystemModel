@@ -9,7 +9,7 @@ import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 public class PowerConsumerWithShockLoad extends PowerConsumer{
 	private ElectricPowerSystemSimulation simulation;
 	private LocalTime currentTime;
-	private int maxLoadDurationInSeconds;
+	private int maxWorkDurationInSeconds;
 	private int maxPauseBetweenWorkInSeconds;
 	private float maxLoad;
 	private float currentLoad;
@@ -21,9 +21,8 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 	private Random random = new Random();
 	
 	@Override
-	public float getCurrentConsumptionInMW(){
-		currentTime = simulation.getTime();
-		currentFrequency = simulation.getFrequencyInPowerSystem();
+	public float getCurrentLoadInMW(){
+		getNecessaryParametersFromPowerSystem();
 
 		if(isTurnedOn){
 			if(IsItTimeToTurnOff()){
@@ -37,7 +36,12 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 			}
 		}
 		
-		return calculateConsumptionCountingCurrentFrequency(currentLoad);
+		return calculateLoadCountingFrequency(currentLoad);
+	}
+	
+	private void getNecessaryParametersFromPowerSystem(){
+		currentTime = simulation.getTime();
+		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 
 	private boolean IsItTimeToTurnOn(){
@@ -56,7 +60,7 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 	}
 	
 	private void setTimeToTurnOff(){
-		float halfOfTurnedOnDuration = maxLoadDurationInSeconds / 2; 
+		float halfOfTurnedOnDuration = maxWorkDurationInSeconds / 2; 
 		timeToTurnOff = currentTime.plusSeconds(
 				(long)(halfOfTurnedOnDuration + halfOfTurnedOnDuration * random.nextFloat()));
 	}
@@ -81,18 +85,18 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 				(long)(halfOfTurnedOffDuration + halfOfTurnedOffDuration * random.nextFloat()));
 	}
 	
-	private float calculateConsumptionCountingCurrentFrequency(float consumption){
+	private float calculateLoadCountingFrequency(float load){
 		return (float)Math.pow((currentFrequency / GlobalConstatnts.STANDART_FREQUENCY),
-				degreeOnDependingOnFrequency) * consumption;
+				degreeOnDependingOnFrequency) * load;
 	}
 	
 	@Override
-	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation powerSystemSimulation) {
-		simulation = powerSystemSimulation;
+	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation simulation) {
+		this.simulation = simulation;
 	}
 
-	public void setMaxLoadDurationInSeconds(int loadDurationInSeconds) {
-		this.maxLoadDurationInSeconds = loadDurationInSeconds;
+	public void setMaxWorkDurationInSeconds(int WorkDurationInSeconds) {
+		this.maxWorkDurationInSeconds = WorkDurationInSeconds;
 	}
 
 	public void setMaxPauseBetweenWorkInSeconds(int durationBetweenWorkInSeconds) {

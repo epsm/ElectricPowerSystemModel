@@ -48,7 +48,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		float consumption = 0;
 		
 		for(PowerConsumer consumer: powerConsumers){
-			consumption += consumer.getCurrentConsumptionInMW();
+			consumption += consumer.getCurrentLoadInMW();
 		}
 		
 		return consumption;

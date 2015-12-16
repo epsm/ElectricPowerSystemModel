@@ -2,84 +2,83 @@ package main.java.com.yvhobby.epsm.model.consumption;
 
 import java.time.LocalTime;
 
-import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.PowerOnHoursPattern;
+import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 
 public class PowerConsumerWithScheduledLoad extends PowerConsumer{
-	private ElectricPowerSystemSimulation powerSystemSimulation;
-	private ConsumptionScheduleCalculator calculator = new ConsumptionScheduleCalculator();
-	private PowerOnHoursPattern dailyPattern;
-	private float maxConsumptionWithoutRandomInMW;
-	private float randomComponentInPercent;
+	private ElectricPowerSystemSimulation simulation;
+	private RandomLoadCurveFactory factory = new RandomLoadCurveFactory();
+	private float[] approximateLoadByHoursOnDayInPercent;
+	private float maxLoadWithoutFluctuationsInMW;
+	private float randomFluctuationsInPercent;
 	private float degreeOnDependingOfFrequency;
-	private ConsumptionSchedule dayConsumptionSchedule;
-	private LocalTime previousRequest;
+	private LoadCurve loadCurveOnDay;
+	private LocalTime previousLoadRequest;
 	private LocalTime currentTime;
 	private float currentFrequency;
 	
 	@Override
-	public float getCurrentConsumptionInMW(){
+	public float getCurrentLoadInMW(){
 		getNecessaryParametersFromPowerSystem();
 		
 		if(isItANewDay()){
-			calculateConsumptionScheduleOnThisDay();
+			calculateLoadCurveOnThisDay();
 		}
 		
-		previousRequest = currentTime;
+		previousLoadRequest = currentTime;
 		
-		return getConsumptionForThisMoment();
+		return getLoadForThisMoment();
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){
-		currentTime = powerSystemSimulation.getTime();
-		currentFrequency = powerSystemSimulation.getFrequencyInPowerSystem();
+		currentTime = simulation.getTime();
+		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 	
 	private boolean isItANewDay(){
-		return previousRequest == null || previousRequest.isAfter(currentTime);
+		return previousLoadRequest == null || previousLoadRequest.isAfter(currentTime);
 	}
 	
-	private void calculateConsumptionScheduleOnThisDay(){
-		dayConsumptionSchedule = calculator.calculateConsumptionScheduleInMW(
-				dailyPattern, maxConsumptionWithoutRandomInMW, randomComponentInPercent);
+	private void calculateLoadCurveOnThisDay(){
+		loadCurveOnDay = factory.calculateLoadCurve(
+				approximateLoadByHoursOnDayInPercent, maxLoadWithoutFluctuationsInMW, randomFluctuationsInPercent);
 	}
 
-	private float getConsumptionForThisMoment(){
-		float consumptionWithoutCountingFrequency =
-				dayConsumptionSchedule.getConsumptionOnTime(currentTime);
+	private float getLoadForThisMoment(){
+		float loadWithoutCountingFrequency = loadCurveOnDay.getPowerOnTimeInMW(currentTime);
 		
-		return calculateConsumptionCountingCurrentFrequency(consumptionWithoutCountingFrequency);
+		return calculateLoadCountingFrequency(loadWithoutCountingFrequency);
 	}
 	
-	private float calculateConsumptionCountingCurrentFrequency(float consumption){
+	private float calculateLoadCountingFrequency(float loadWithoutCountingFrequency){
 		return (float)Math.pow((currentFrequency / GlobalConstatnts.STANDART_FREQUENCY),
-				degreeOnDependingOfFrequency) * consumption;
+				degreeOnDependingOfFrequency) * loadWithoutCountingFrequency;
 	}
 	
-	public void setRandomComponentInPercent(float randomComponentInPercent) {
-		this.randomComponentInPercent = randomComponentInPercent;
+	public void setRandomFluctuationsInPercent(float randomFluctuationsInPercent) {
+		this.randomFluctuationsInPercent = randomFluctuationsInPercent;
 	}
 
-	public float getRandomComponentInPercent() {
-		return randomComponentInPercent;
+	public float getRandomFluctuationsInPercent() {
+		return randomFluctuationsInPercent;
 	}
 
-	public void setDailyPattern(PowerOnHoursPattern dailyPattern) {
-		this.dailyPattern = dailyPattern;
+	public void setApproximateLoadByHoursOnDayInPercent(float[] approximateLoadByHoursOnDayInPercent) {
+		this.approximateLoadByHoursOnDayInPercent = approximateLoadByHoursOnDayInPercent;
 	}
 
-	public void setMaxConsumptionWithoutRandomInMW(float maxConsumptionWithoutRandomInMW) {
-		this.maxConsumptionWithoutRandomInMW = maxConsumptionWithoutRandomInMW;
+	public void setMaxLoadWithoutRandomInMW(float maxLoadWithoutRandomInMW) {
+		this.maxLoadWithoutFluctuationsInMW = maxLoadWithoutRandomInMW;
 	}
 
-	public float getMaxConsumptionWithoutRandomInMW() {
-		return maxConsumptionWithoutRandomInMW;
+	public float getMaxLoadWithoutRandomInMW() {
+		return maxLoadWithoutFluctuationsInMW;
 	}
 
 	@Override
-	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation powerSystemSimulation) {
-		this.powerSystemSimulation = powerSystemSimulation;
+	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation simulation) {
+		this.simulation = simulation;
 	}
 
 	@Override

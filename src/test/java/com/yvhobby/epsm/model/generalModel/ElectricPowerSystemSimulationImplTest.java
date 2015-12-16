@@ -49,7 +49,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	@Test
 	public void FrequencyDecreasesIfConsumptionHigherThanGeneration(){
 		when(station_1.getCurrentGenerationInMW()).thenReturn(99f);
-		when(consumer_1.getCurrentConsumptionInMW()).thenReturn(100f);
+		when(consumer_1.getCurrentLoadInMW()).thenReturn(100f);
 
 		for(int i = 0; i < 1000; i++){			
 			getPreviousAndNextFrequency();
@@ -67,7 +67,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	@Test
 	public void FrequencyIncreasesIfConsumptionLessThanGeneration(){
 		when(station_1.getCurrentGenerationInMW()).thenReturn(100f);
-		when(consumer_1.getCurrentConsumptionInMW()).thenReturn(99f);
+		when(consumer_1.getCurrentLoadInMW()).thenReturn(99f);
 		
 		for(int i = 0; i < 1000; i++){			
 			getPreviousAndNextFrequency();
@@ -79,7 +79,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	@Test
 	public void FrequencyIsConstantIfConsumptionEqualsGeneration(){
 		when(station_1.getCurrentGenerationInMW()).thenReturn(100f);
-		when(consumer_1.getCurrentConsumptionInMW()).thenReturn(100f);
+		when(consumer_1.getCurrentLoadInMW()).thenReturn(100f);
 		
 		for(int i = 0; i < 1000; i++){			
 			getPreviousAndNextFrequency();
@@ -104,8 +104,8 @@ public class ElectricPowerSystemSimulationImplTest {
 		
 		when(station_1.getCurrentGenerationInMW()).thenReturn(60f);
 		when(station_2.getCurrentGenerationInMW()).thenReturn(70f);
-		when(consumer_1.getCurrentConsumptionInMW()).thenReturn(80f);
-		when(consumer_2.getCurrentConsumptionInMW()).thenReturn(40f);
+		when(consumer_1.getCurrentLoadInMW()).thenReturn(80f);
+		when(consumer_2.getCurrentLoadInMW()).thenReturn(40f);
 		
 		simulation.addPowerStation(station_2);
 		simulation.addPowerConsumer(consumer_2);
@@ -114,7 +114,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	@Test
 	public void SummaryPowerConsumptionByConsumerEqualsToShownByModel(){
 		prepareSecondConsumerAndSecondPowerStation();
-		float consumption = consumer_1.getCurrentConsumptionInMW() + consumer_2.getCurrentConsumptionInMW();
+		float consumption = consumer_1.getCurrentLoadInMW() + consumer_2.getCurrentLoadInMW();
 		
 		parameters = simulation.calculateNextStep();
 		

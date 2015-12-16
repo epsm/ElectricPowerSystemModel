@@ -1,6 +1,5 @@
 package test.java.com.yvhobby.epsm.model.manualTesting;
 
-import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.PowerOnHoursPattern;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithShockLoad;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulationImpl;
@@ -23,22 +22,27 @@ public class ModelInitializator {
 	}
 	
 	private void createConsumerAndAddItToEnergySystem(){
-		PowerOnHoursPattern pattern = new PowerOnHoursPattern();
+		float[] pattern = new float[]{
+				64.88f,  59.54f,  55.72f,  51.90f, 	48.47f,  48.85f,
+				48.09f,  57.25f,  76.35f,  91.60f,  100.0f,  99.23f,
+				91.60f,  91.60f,  91.22f,  90.83f,  90.83f,  90.83f,
+				90.83f,  90.83f,  90.83f,  90.83f,  90.83f,  83.96f 
+		};
 		
 		//first(shock)
 		PowerConsumerWithShockLoad powerConsumer = new PowerConsumerWithShockLoad();
 		powerConsumer.setDegreeOfDependingOnFrequency(2);
 		powerConsumer.setMaxLoad(20f);
-		powerConsumer.setMaxLoadDurationInSeconds(300);
+		powerConsumer.setMaxWorkDurationInSeconds(300);
 		powerConsumer.setMaxPauseBetweenWorkInSeconds(200);
 		powerConsumer.setElectricalPowerSystemSimulation(powerSystemSimulation);
 		
 		//second(scheduled)
 		PowerConsumerWithScheduledLoad powerConsumer_2 = new PowerConsumerWithScheduledLoad();
 		powerConsumer_2.setDegreeOfDependingOnFrequency(2);
-		powerConsumer_2.setDailyPattern(pattern);
-		powerConsumer_2.setMaxConsumptionWithoutRandomInMW(100);
-		powerConsumer_2.setRandomComponentInPercent(10);
+		powerConsumer_2.setApproximateLoadByHoursOnDayInPercent(pattern);
+		powerConsumer_2.setMaxLoadWithoutRandomInMW(100);
+		powerConsumer_2.setRandomFluctuationsInPercent(10);
 		powerConsumer_2.setElectricalPowerSystemSimulation(powerSystemSimulation);
 
 		//adding

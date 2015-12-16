@@ -1,23 +1,23 @@
-package main.java.com.yvhobby.epsm.model.consumption;
+package main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration;
 
 import java.time.LocalTime;
 
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 
-public class ConsumptionSchedule{
-	private float[] consumptionByHoursInMW;
+public class LoadCurve{
+	private float[] loadByHoursInMW;
 	private LocalTime requestedTime;
-	private float consumptionOnRequestedHour;
-	private float consumptionOnNextHour;
+	private float loadOnRequestedHour;
+	private float loadOnNextHour;
 	private int requestedHour;
 	private int nextHour;
 	private float nanosFromStartOfRequestedHour;
 	
-	public ConsumptionSchedule(float[] consumptionByHoursInMW) {
-		this.consumptionByHoursInMW = consumptionByHoursInMW;
+	public LoadCurve(float[] loadByHoursInMW) {
+		this.loadByHoursInMW = loadByHoursInMW;
 	}
 	
-	public float getConsumptionOnTime(LocalTime time){
+	public float getPowerOnTimeInMW(LocalTime time){
 		this.requestedTime = time;
 		doCalculations();
 		
@@ -27,8 +27,8 @@ public class ConsumptionSchedule{
 	private void doCalculations(){
 		requestedHour = requestedTime.getHour();
 		nextHour = requestedTime.plusHours(1).getHour();
-		consumptionOnRequestedHour = consumptionByHoursInMW[requestedHour];
-		consumptionOnNextHour = consumptionByHoursInMW[nextHour];
+		loadOnRequestedHour = loadByHoursInMW[requestedHour];
+		loadOnNextHour = loadByHoursInMW[nextHour];
 		nanosFromStartOfRequestedHour = getNanosFromStartOfRequestedHour();
 	}
 	
@@ -43,7 +43,7 @@ public class ConsumptionSchedule{
 	}
 	
 	private float interpolateValuesWithinHour(){
-		return consumptionOnRequestedHour + (nanosFromStartOfRequestedHour / GlobalConstatnts.NANOS_IN_HOUR) *
-				(consumptionOnNextHour - consumptionOnRequestedHour);
+		return loadOnRequestedHour + (nanosFromStartOfRequestedHour / GlobalConstatnts.NANOS_IN_HOUR) *
+				(loadOnNextHour - loadOnRequestedHour);
 	}
 }
