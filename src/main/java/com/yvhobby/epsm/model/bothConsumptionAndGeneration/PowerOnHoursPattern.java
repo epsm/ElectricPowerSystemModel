@@ -1,8 +1,8 @@
-package main.java.com.yvhobby.epsm.model.generalModel;
+package main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration;
 
 import java.time.LocalTime;
 
-public class DailyConsumptionPattern {
+public class PowerOnHoursPattern {
 	
 	private float[] loadingInPercentsForHours = new float[]{
 		64.88f,  59.54f,  55.72f,  51.90f,

@@ -2,14 +2,14 @@ package main.java.com.yvhobby.epsm.model.consumption;
 
 import java.time.LocalTime;
 
-import main.java.com.yvhobby.epsm.model.generalModel.DailyConsumptionPattern;
+import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.PowerOnHoursPattern;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 
 public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 	private ElectricPowerSystemSimulation powerSystemSimulation;
 	private ConsumptionScheduleCalculator calculator = new ConsumptionScheduleCalculator();
-	private DailyConsumptionPattern dailyPattern;
+	private PowerOnHoursPattern dailyPattern;
 	private float maxConsumptionWithoutRandomInMW;
 	private float randomComponentInPercent;
 	private float degreeOnDependingOfFrequency;
@@ -65,7 +65,7 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 		return randomComponentInPercent;
 	}
 
-	public void setDailyPattern(DailyConsumptionPattern dailyPattern) {
+	public void setDailyPattern(PowerOnHoursPattern dailyPattern) {
 		this.dailyPattern = dailyPattern;
 	}
 

@@ -1,15 +1,15 @@
-package test.java.com.yvhobby.epsm.model.generalModel;
+package test.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration;
 
 import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import main.java.com.yvhobby.epsm.model.generalModel.DailyConsumptionPattern;
+import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.PowerOnHoursPattern;
 
-public class DailyConsumptionPatternTest {
+public class PowerOnHoursPatternTest {
 	
-	DailyConsumptionPattern dailyPatern = new DailyConsumptionPattern();
+	PowerOnHoursPattern dailyPatern = new PowerOnHoursPattern();
 	
 	private float[] loadingInPercentsForHours = new float[]{
 		64.88f,  59.54f,  55.72f,  51.90f,

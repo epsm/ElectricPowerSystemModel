@@ -6,12 +6,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.PowerOnHoursPattern;
 import main.java.com.yvhobby.epsm.model.consumption.ConsumptionSchedule;
 import main.java.com.yvhobby.epsm.model.consumption.ConsumptionScheduleCalculator;
-import main.java.com.yvhobby.epsm.model.generalModel.DailyConsumptionPattern;
 
 public class ConsumptionScheduleTest{
-	private DailyConsumptionPattern dailyPattern = new DailyConsumptionPattern();
+	private PowerOnHoursPattern dailyPattern = new PowerOnHoursPattern();
 	private float maxConsumptionWithoutRandomInMW = 100;
 	private float randomComponent = 10;
 	private ConsumptionSchedule schedule;

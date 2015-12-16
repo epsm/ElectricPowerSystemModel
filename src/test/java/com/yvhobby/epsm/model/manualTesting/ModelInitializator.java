@@ -1,8 +1,8 @@
 package test.java.com.yvhobby.epsm.model.manualTesting;
 
+import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.PowerOnHoursPattern;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithShockLoad;
-import main.java.com.yvhobby.epsm.model.generalModel.DailyConsumptionPattern;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulationImpl;
 import main.java.com.yvhobby.epsm.model.generation.AstaticRegulatioUnit;
 import main.java.com.yvhobby.epsm.model.generation.ControlUnit;
@@ -23,7 +23,7 @@ public class ModelInitializator {
 	}
 	
 	private void createConsumerAndAddItToEnergySystem(){
-		DailyConsumptionPattern pattern = new DailyConsumptionPattern();
+		PowerOnHoursPattern pattern = new PowerOnHoursPattern();
 		
 		//first(shock)
 		PowerConsumerWithShockLoad powerConsumer = new PowerConsumerWithShockLoad();

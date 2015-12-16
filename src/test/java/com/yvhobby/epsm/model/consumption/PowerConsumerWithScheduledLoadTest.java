@@ -7,26 +7,25 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.PowerOnHoursPattern;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
-import main.java.com.yvhobby.epsm.model.generalModel.DailyConsumptionPattern;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 import main.java.com.yvhobby.epsm.model.generalModel.SimulationParameters;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 
-
 public class PowerConsumerWithScheduledLoadTest{
 	private PowerConsumerWithScheduledLoad consumer;
 	private ElectricPowerSystemSimulation simulation;
-	private DailyConsumptionPattern pattern;
+	private PowerOnHoursPattern pattern;
 	private Random random = new Random(); 
 	
 	@Before
 	public void initialize(){
 		simulation = createPowerSystemStub();
 		consumer = new PowerConsumerWithScheduledLoad();
-		pattern = new DailyConsumptionPattern();
+		pattern = new PowerOnHoursPattern();
 		
 		consumer.setDailyPattern(pattern);
 		consumer.setMaxConsumptionWithoutRandomInMW(100);

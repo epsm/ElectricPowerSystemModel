@@ -4,16 +4,16 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Random;
 
-import main.java.com.yvhobby.epsm.model.generalModel.DailyConsumptionPattern;
+import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.PowerOnHoursPattern;
 
 public class ConsumptionScheduleCalculator {
 	private Random random = new Random();
 	private float[] consumptionsByHours = new float[24];
-	private DailyConsumptionPattern pattern;
+	private PowerOnHoursPattern pattern;
 	private float maxConsumptionWithoutRandomInMW;
 	private float randComponentInPercent;
 	
-	public ConsumptionSchedule calculateConsumptionScheduleInMW(DailyConsumptionPattern
+	public ConsumptionSchedule calculateConsumptionScheduleInMW(PowerOnHoursPattern
 			dailyConsumptionPattern, float maximalConsumptionWithoutRandomInMW,
 			float randomComponentInPercent){
 		
