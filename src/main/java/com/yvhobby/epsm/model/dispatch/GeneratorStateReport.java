@@ -1,11 +1,11 @@
 package main.java.com.yvhobby.epsm.model.dispatch;
 
-public class GeneratorState {
+public class GeneratorStateReport {
 	private  int generatorId;
 	boolean isTurnedOn;
 	private float generationInWM;
 	
-	public GeneratorState(int generatorId, boolean isTurnedOn, float generationInWM) {
+	public GeneratorStateReport(int generatorId, boolean isTurnedOn, float generationInWM) {
 		super();
 		this.generatorId = generatorId;
 		this.isTurnedOn = isTurnedOn;
