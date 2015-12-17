@@ -25,18 +25,15 @@ public class PowerStationTest{
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		station = new PowerStation();
-		generator_1 = new Generator(1);
-		generator_2 = new Generator(2);
-		generator_3 = new Generator(3);
-		controlUnit_1 = new ControlUnit();
-		controlUnit_2 = new ControlUnit();
-		controlUnit_3 = new ControlUnit();
+		generator_1 = new Generator();
+		generator_2 = new Generator();
+		generator_3 = new Generator();
+		controlUnit_1 = new ControlUnit(simulation, generator_1);
+		controlUnit_2 = new ControlUnit(simulation, generator_1);
+		controlUnit_3 = new ControlUnit(simulation, generator_1);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstatnts.STANDART_FREQUENCY);
 		
-		controlUnit_1.setElectricPowerSystemSimulation(simulation);
-		controlUnit_2.setElectricPowerSystemSimulation(simulation);
-		controlUnit_3.setElectricPowerSystemSimulation(simulation);
 		controlUnit_1.setPowerAtRequiredFrequency(100f);
 		controlUnit_2.setPowerAtRequiredFrequency(50f);
 		controlUnit_3.setPowerAtRequiredFrequency(20f);
@@ -47,10 +44,10 @@ public class PowerStationTest{
 		station.addGenerator(generator_2);
 		station.addGenerator(generator_3);
 		
-		controlUnit_1.turnOnGenerator();
-		controlUnit_2.turnOnGenerator();
+		generator_1.turnOnGenerator();
+		generator_2.turnOnGenerator();
 		
-		controlUnit_3.turnOffGenerator();
+		generator_3.turnOffGenerator();
 	}
 	
 	@Test

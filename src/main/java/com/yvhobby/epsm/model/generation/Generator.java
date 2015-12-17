@@ -1,29 +1,38 @@
 package main.java.com.yvhobby.epsm.model.generation;
 
-import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
-
 public class Generator{
 	private ControlUnit controlUnit;
-	private AstaticRegulatioUnit regulationUnit;
+	private AstaticRegulationUnit regulationUnit;
 	private float nominalPowerInMW;
 	private float minimalTechnologyPower;
-	private boolean isTurnedOn;
+	private float currentGeneration;
+	private boolean generatorTurnedOn;
+	private boolean astaticRegulationTurnedOn;
 	private int id;
 	
 	public float getGenerationInMW(){
-		if(isTurnedOn){
-			return controlUnit.getGeneratorPowerInMW();
+		if(generatorTurnedOn){
+			calculateCurrentGeneration();
+			return currentGeneration;
 		}else{
 			return 0;
 		}
 	}
-
-	public ControlUnit getControlUnit() {
-		return controlUnit;
+	
+	private void calculateCurrentGeneration(){
+		if(astaticRegulationTurnedOn){
+			regulationUnit.verifyAndAdjustPowerAtRequiredFrequency();
+		}
+		
+		currentGeneration = controlUnit.getGeneratorPowerInMW();
 	}
 	
 	public void setControlUnit(ControlUnit controlUnit) {
 		this.controlUnit = controlUnit;
+	}
+	
+	public void setAstaticRegulationUnit(AstaticRegulationUnit regulationUnit) {
+		this.regulationUnit = regulationUnit;
 	}
 
 	public float getNominalPowerInMW() {
@@ -43,26 +52,46 @@ public class Generator{
 	}
 
 	public boolean isTurnedOn() {
-		return isTurnedOn;
+		return generatorTurnedOn;
 	}
 
 	public void turnOnGenerator(){
-		isTurnedOn = true;
+		generatorTurnedOn = true;
 	}
 	
 	public void turnOffGenerator(){
-		isTurnedOn = false;
+		generatorTurnedOn = false;
 	}
 
+	public boolean isAstaticRegulationTurnedOn() {
+		return astaticRegulationTurnedOn;
+	}
+
+	public void TurnOnAstaticRegulation(){
+		astaticRegulationTurnedOn = true;
+	}
+	
+	public void TurnOffAstaticRegulation(){
+		astaticRegulationTurnedOn = false;
+	}
+	
 	public int getId() {
 		return id;
 	}
-
+	
 	public void setId(int id) {
 		this.id = id;
 	}
 
-	public void setAstaticRegulationUnit(AstaticRegulatioUnit regulationUnit) {
-		this.regulationUnit = regulationUnit;
+	public float getPowerAtRequiredFrequency() {
+		return controlUnit.getPowerAtRequiredFrequency();
+	}
+
+	public void setPowerAtRequiredFrequency(float powerAtRequiredFrequency) {
+		controlUnit.setPowerAtRequiredFrequency(powerAtRequiredFrequency);
+	}
+
+	public void setCoefficientOfStatism(float coefficientOfStatism) {
+		controlUnit.setCoefficientOfStatism(coefficientOfStatism);
 	}
 }

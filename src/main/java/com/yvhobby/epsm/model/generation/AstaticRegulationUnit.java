@@ -3,16 +3,20 @@ package main.java.com.yvhobby.epsm.model.generation;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 
-public class AstaticRegulatioUnit {
+public class AstaticRegulationUnit {
 	private ElectricPowerSystemSimulation simulation;
-	private ControlUnit controlUnit;
 	private Generator generator;
 	private float currentFrequency;
 	private final float ASTATIC_REGULATION_SENSIVITY = 0.03f;
 
+	public AstaticRegulationUnit(ElectricPowerSystemSimulation simulation, Generator generator) {
+		this.simulation = simulation;
+		this.generator = generator;
+	}
+	
 	public void verifyAndAdjustPowerAtRequiredFrequency(){
 		currentFrequency = simulation.getFrequencyInPowerSystem();
-		
+
 		if(! isFrequencyInNonSensivityLimit()){
 			adjustPowerAtRequiredFrequency();
 		}
@@ -33,31 +37,18 @@ public class AstaticRegulatioUnit {
 	}
 	
 	private void increasePowerAtRequiredFrequency(){
-		float powerAtRequiredFrequency = controlUnit.getPowerAtRequiredFrequency();
-		
+		float powerAtRequiredFrequency = generator.getPowerAtRequiredFrequency();
 		if(powerAtRequiredFrequency < generator.getNominalPowerInMW()){
-			controlUnit.setPowerAtRequiredFrequency(++powerAtRequiredFrequency);
+			generator.setPowerAtRequiredFrequency(++powerAtRequiredFrequency);
 		}
 	}
 	
 	private void decreasePowerAtRequiredFrequency(){
-		float powerAtRequiredFrequency = controlUnit.getPowerAtRequiredFrequency();
+		float powerAtRequiredFrequency = generator.getPowerAtRequiredFrequency();
 		
 		if(powerAtRequiredFrequency > generator.getMinimalTechnologyPower()){
-			controlUnit.setPowerAtRequiredFrequency(--powerAtRequiredFrequency);
+			generator.setPowerAtRequiredFrequency(--powerAtRequiredFrequency);
 		}
 	}
-	
-	public void setGenerator(Generator generator) {
-		this.generator = generator;
-	}
-	
-	public void setControlUnit(ControlUnit controlUnit) {
-		this.controlUnit = controlUnit;
-	}
-	
-	public void setElectricPowerSystemSimulation(ElectricPowerSystemSimulation simulation) {
-		this.simulation = simulation;
-	}
-}
 
+}

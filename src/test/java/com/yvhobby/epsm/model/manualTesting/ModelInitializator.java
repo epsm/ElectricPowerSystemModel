@@ -3,16 +3,17 @@ package test.java.com.yvhobby.epsm.model.manualTesting;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithShockLoad;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulationImpl;
-import main.java.com.yvhobby.epsm.model.generation.AstaticRegulatioUnit;
+import main.java.com.yvhobby.epsm.model.generation.AstaticRegulationUnit;
 import main.java.com.yvhobby.epsm.model.generation.ControlUnit;
 import main.java.com.yvhobby.epsm.model.generation.Generator;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
+import test.java.com.yvhobby.epsm.model.constantsForTests.TestsConstants;
 
 public class ModelInitializator {
-	private ElectricPowerSystemSimulationImpl powerSystemSimulation;
+	private ElectricPowerSystemSimulationImpl simulation;
 	
 	public void initialize(ElectricPowerSystemSimulationImpl powerSystem){
-		this.powerSystemSimulation = powerSystem;
+		this.simulation = powerSystem;
 		createAndBoundObjects();
 	}
 	
@@ -22,12 +23,7 @@ public class ModelInitializator {
 	}
 	
 	private void createConsumerAndAddItToEnergySystem(){
-		float[] pattern = new float[]{
-				64.88f,  59.54f,  55.72f,  51.90f, 	48.47f,  48.85f,
-				48.09f,  57.25f,  76.35f,  91.60f,  100.0f,  99.23f,
-				91.60f,  91.60f,  91.22f,  90.83f,  90.83f,  90.83f,
-				90.83f,  90.83f,  90.83f,  90.83f,  90.83f,  83.96f 
-		};
+		float[] pattern = TestsConstants.LOAD_BY_HOURS;
 		
 		//first(shock)
 		PowerConsumerWithShockLoad powerConsumer = new PowerConsumerWithShockLoad();
@@ -35,7 +31,7 @@ public class ModelInitializator {
 		powerConsumer.setMaxLoad(20f);
 		powerConsumer.setMaxWorkDurationInSeconds(300);
 		powerConsumer.setMaxPauseBetweenWorkInSeconds(200);
-		powerConsumer.setElectricalPowerSystemSimulation(powerSystemSimulation);
+		powerConsumer.setElectricalPowerSystemSimulation(simulation);
 		
 		//second(scheduled)
 		PowerConsumerWithScheduledLoad powerConsumer_2 = new PowerConsumerWithScheduledLoad();
@@ -43,60 +39,47 @@ public class ModelInitializator {
 		powerConsumer_2.setApproximateLoadByHoursOnDayInPercent(pattern);
 		powerConsumer_2.setMaxLoadWithoutRandomInMW(100);
 		powerConsumer_2.setRandomFluctuationsInPercent(10);
-		powerConsumer_2.setElectricalPowerSystemSimulation(powerSystemSimulation);
+		powerConsumer_2.setElectricalPowerSystemSimulation(simulation);
 
 		//adding
-		powerSystemSimulation.addPowerConsumer(powerConsumer);
-		powerSystemSimulation.addPowerConsumer(powerConsumer_2);
+		simulation.addPowerConsumer(powerConsumer);
+		simulation.addPowerConsumer(powerConsumer_2);
 	}
 	
 	private void createPowerStationAndAddToEnergySystem(){
 		
 		PowerStation powerStation = new PowerStation();
-		powerSystemSimulation.addPowerStation(powerStation);
+		simulation.addPowerStation(powerStation);
 		
 		//first(astatic)
-		AstaticRegulatioUnit regulationUnit = new AstaticRegulatioUnit();
-		ControlUnit controlUnit = new ControlUnit();
-		Generator generator = new Generator();
-			
-		regulationUnit.setControlUnit(controlUnit);
-		regulationUnit.setGenerator(generator);
+		Generator generator_1 = new Generator();
+		AstaticRegulationUnit regulationUnit_1 = new AstaticRegulationUnit(simulation, generator_1);
+		ControlUnit controlUnit_1 = new ControlUnit(simulation, generator_1);
 		
-		controlUnit.setCoefficientOfStatism(4);
-		controlUnit.setRequiredFrequency(50);
-		controlUnit.TurnOnAstaticRegulation();
-		controlUnit.setGenerator(generator);
-		controlUnit.setElectricPowerSystemSimulation(powerSystemSimulation);
-		controlUnit.setAstaticRegulationUnit(regulationUnit);
+		generator_1.setAstaticRegulationUnit(regulationUnit_1);
+		generator_1.setControlUnit(controlUnit_1);
+		generator_1.setMinimalTechnologyPower(5);
+		generator_1.setNominalPowerInMW(95);
+		generator_1.turnOnGenerator();
+		generator_1.TurnOnAstaticRegulation();
+		generator_1.setId(1);
 		
-		generator.setControlUnit(controlUnit);
-		generator.setMinimalTechnologyPower(5);
-		generator.setNominalPowerInMW(95);
-		generator.turnOnGenerator();
-
 		//second(static)
-		AstaticRegulatioUnit regulationUnit_2 = new AstaticRegulatioUnit();
-		ControlUnit controlUnit_2 = new ControlUnit();
 		Generator generator_2 = new Generator();
-			
-		regulationUnit_2.setControlUnit(controlUnit_2);
-		regulationUnit_2.setGenerator(generator_2);
+		AstaticRegulationUnit regulationUnit_2 = new AstaticRegulationUnit(simulation, generator_2);
+		ControlUnit controlUnit_2 = new ControlUnit(simulation, generator_2);
 		
-		controlUnit_2.setCoefficientOfStatism(4);
-		controlUnit_2.setRequiredFrequency(50);
 		controlUnit_2.setPowerAtRequiredFrequency(30);
-		controlUnit_2.setGenerator(generator_2);
-		controlUnit_2.setElectricPowerSystemSimulation(powerSystemSimulation);
-		controlUnit_2.setAstaticRegulationUnit(regulationUnit);
 		
+		generator_2.setAstaticRegulationUnit(regulationUnit_2);
 		generator_2.setControlUnit(controlUnit_2);
 		generator_2.setMinimalTechnologyPower(1);
 		generator_2.setNominalPowerInMW(35);
 		generator_2.turnOnGenerator();
+		generator_2.setId(2);
 		
 		//adding
-		powerStation.addGenerator(1, generator);
-		powerStation.addGenerator(2, generator_2);
+		powerStation.addGenerator(generator_1);
+		powerStation.addGenerator(generator_2);
 	}
 }
