@@ -30,4 +30,8 @@ public class PowerStation{
 	public int getId() {
 		return id;
 	}
+
+	public void setId(int stationId) {
+		id = stationId;
+	}
 }

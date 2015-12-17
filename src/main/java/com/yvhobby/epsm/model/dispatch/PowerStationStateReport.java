@@ -1,6 +1,7 @@
 package main.java.com.yvhobby.epsm.model.dispatch;
 
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.Set;
 
 public class PowerStationStateReport {
@@ -8,10 +9,11 @@ public class PowerStationStateReport {
 	private LocalTime timeStamp;
 	private Set<GeneratorStateReport> generatorsStatesReports;
 
-	public PowerStationStateReport(int id, LocalTime timeStamp, Set<GeneratorStateReport> generatorsStatesReports) {
+	public PowerStationStateReport(int id, LocalTime timeStamp,
+			Set<GeneratorStateReport> generatorsStatesReports) {
 		this.id = id;
 		this.timeStamp = timeStamp;
-		this.generatorsStatesReports = generatorsStatesReports;
+		this.generatorsStatesReports = Collections.unmodifiableSet(generatorsStatesReports);
 	}
 
 	public int getId() {

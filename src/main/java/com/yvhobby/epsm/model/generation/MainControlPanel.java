@@ -22,82 +22,98 @@ public class MainControlPanel {
 	private PowerStation station;
 	private PowerStationGenerationSchedule stationGenerationSchedule;
 	private Timer stateReportTransferTimer;
-	private TransferStationStateReportToDispatcherTask stateTransferTask = new TransferStationStateReportToDispatcherTask();
+	private TransferStationStateReportToDispatcherTask stateTransferTask = 
+			new TransferStationStateReportToDispatcherTask();
 	private LocalTime lastMessageFromDispatcher;
 	
 	public void setGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
 		this.stationGenerationSchedule = generationSchedule;
 	}
 	
-	public void sendReportsToDispatcher(){
+	public void subscribeOnReports(){
 		stateReportTransferTimer = new Timer();
 		stateReportTransferTimer.schedule(
 				stateTransferTask, GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS);
 	}
 	
 	private class TransferStationStateReportToDispatcherTask extends TimerTask{
-		private Set<GeneratorStateReport> generatorsStates = new HashSet<GeneratorStateReport>();
-		private PowerStationStateReport stationStateReport;
-		private LocalTime currentTime;
+		private Set<GeneratorStateReport> generatorsReports = new HashSet<GeneratorStateReport>();
 		
 		@Override
 		public void run(){
-			generatorsStates.clear();
-			currentTime = simulation.getTime();
-			int stationId = station.getId();
-						
+			clearPreviousGeneratorsReports();
+			prepareGeneratorsStatesReports();
+			PowerStationStateReport stationReport = prepareStationStateReport();
+			sendStationReport(stationReport);
+		}
+		
+		private void clearPreviousGeneratorsReports(){
+			generatorsReports.clear();
+		}
+		
+		private void prepareGeneratorsStatesReports(){
 			for(Generator generator: station.getGenerators()){
-				int generatorId = generator.getId();
-				boolean isTurnedOn = generator.isTurnedOn();
-				float generationInWM = generator.getGenerationInMW();
-				GeneratorStateReport generatorStateReport = 
-						new GeneratorStateReport(generatorId, isTurnedOn, generationInWM);
-				generatorsStates.add(generatorStateReport);
+				GeneratorStateReport generatorReport = prepareGeneratorStateReport(generator);
+				addGeneratorStateReportToGeneratorsStatesReport(generatorReport);
 			}
+		}
+		
+		private GeneratorStateReport prepareGeneratorStateReport(Generator generator){
+			int generatorId = generator.getId();
+			boolean isTurnedOn = generator.isTurnedOn();
+			float generationInWM = generator.getGenerationInMW();
 			
-			stationStateReport = new PowerStationStateReport(
-					stationId, currentTime,Collections.unmodifiableSet(generatorsStates));
-			dispatcher.acceptPowerStationState(stationStateReport);
+			return new GeneratorStateReport(generatorId, isTurnedOn, generationInWM);
+		}
+		
+		private void addGeneratorStateReportToGeneratorsStatesReport(GeneratorStateReport report){
+			generatorsReports.add(report);
+		}
+		
+		private PowerStationStateReport prepareStationStateReport(){
+			int stationId = station.getId();
+			LocalTime currentTime = simulation.getTime();
+			
+			return new PowerStationStateReport(stationId, currentTime, generatorsReports);
+		}
+		
+		private void sendStationReport(PowerStationStateReport stationReport){
+			dispatcher.acceptPowerStationState(stationReport);
 		}
 	}
 
-	private class SetPowerForGeneratorsTask extends TimerTask{
-		private GeneratorGenerationSchedule generationSchedule;
+	private class SetGenerationForGeneratorsAccordingToScheduleTask extends TimerTask{
+		private GeneratorGenerationSchedule generatorGenerationSchedule;
 		private ControlUnit controlUnit;
 		private LoadCurve generationCurve;
 		private LocalTime currentTime;
 		private int generatorId;
 		private float generationPower;
 		
-		
 		@Override
 		public void run() {
 			for(Generator generator: station.getGenerators()){
-				getGeneratorParameters(generator);
-				getGenerationParametersOnCurrentTime();
+				generatorId = generator.getId();
+				getGenerationParametersForCurrentTime();
 				adjustGenerationParameters(generator);
 			}
 		}
 		
-		private void getGeneratorParameters(Generator generator){
-			generatorId = generator.getId();
-			controlUnit = generator.getControlUnit();
-		}
-		
-		private void getGenerationParametersOnCurrentTime(){
-			generationSchedule = stationGenerationSchedule.getGeneratorGenerationSchedule(generatorId);
-			generationCurve = generationSchedule.getCurve();
+		private void getGenerationParametersForCurrentTime(int generatorId){
+			generatorGenerationSchedule = 
+					stationGenerationSchedule.getGeneratorGenerationSchedule(generatorId);
+			generationCurve = generatorGenerationSchedule.getCurve();
 			currentTime = simulation.getTime();
 		}
 		
 		private void adjustGenerationParameters(Generator generator){
-			if(generationSchedule.isGeneratorTurnedOn()){
+			if(generatorGenerationSchedule.isGeneratorTurnedOn()){
 				generator.turnOnGenerator();
 			}else{
 				generator.turnOffGenerator();
 			}
 			
-			if(generationSchedule.isAstaticRegulatorTurnedOn()){
+			if(generatorGenerationSchedule.isAstaticRegulatorTurnedOn()){
 				generator.turnOnAstaticRegulation();
 				return;
 			}else{

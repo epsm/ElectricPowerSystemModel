@@ -2,6 +2,7 @@ package test.java.com.yvhobby.epsm.model.generation;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -49,8 +50,8 @@ public class MainControlPanelTest {
 		stationControlPanel.setDispatcher(dispatcher);
 		stationControlPanel.setStation(station);
 		station.setId(STATION_ID);
-		station.addGenerator(1, generator_1);
-		station.addGenerator(2, generator_2);
+		station.addGenerator(generator_1);
+		station.addGenerator(generator_2);
 	}
 	
 	@Test
@@ -60,7 +61,7 @@ public class MainControlPanelTest {
 		float firstGeneratorGeneration = 0;
 		float secondGeneratorGeneration = 0;
 		
-		stationControlPanel.sendReportsToDispatcher();
+		stationControlPanel.subscribeOnReports();
 		doPauseUntilStateReportBeTransferedToDispatcher();
 		obtainReportFromDispatcher();
 		
@@ -94,7 +95,7 @@ public class MainControlPanelTest {
 	
 	@Test
 	public void stationSendsRequestsEverySecond() throws InterruptedException{
-		stationControlPanel.sendReportsToDispatcher();
+		stationControlPanel.subscribeOnReports();
 		doPauseUntilStateReportBeTransferedToDispatcher();
 		hasReportBeenSentOnce();
 		doPauseUntilStateReportBeTransferedToDispatcher();
