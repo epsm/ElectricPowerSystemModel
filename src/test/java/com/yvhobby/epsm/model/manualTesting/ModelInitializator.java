@@ -96,7 +96,7 @@ public class ModelInitializator {
 		generator_2.turnOnGenerator();
 		
 		//adding
-		powerStation.addGenerator(generator);
-		powerStation.addGenerator(generator_2);
+		powerStation.addGenerator(1, generator);
+		powerStation.addGenerator(2, generator_2);
 	}
 }

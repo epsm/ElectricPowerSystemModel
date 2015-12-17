@@ -49,8 +49,8 @@ public class MainControlPanelTest {
 		stationControlPanel.setDispatcher(dispatcher);
 		stationControlPanel.setStation(station);
 		station.setId(STATION_ID);
-		station.addGenerator(generator_1);
-		station.addGenerator(generator_2);
+		station.addGenerator(1, generator_1);
+		station.addGenerator(2, generator_2);
 	}
 	
 	@Test
@@ -61,8 +61,8 @@ public class MainControlPanelTest {
 		float secondGeneratorGeneration = 0;
 		
 		stationControlPanel.sendReportsToDispatcher();
-		doPauseUntilFirstStateReportBeTransferedToDispatcher();
-		obtainFirstReportFromDispatcher();
+		doPauseUntilStateReportBeTransferedToDispatcher();
+		obtainReportFromDispatcher();
 		
 		for(GeneratorStateReport generatorStateReport: stationStateReport.getGeneratorsStatesReports()){
 			if(generatorStateReport.getGeneratorId() == 1){
@@ -83,12 +83,26 @@ public class MainControlPanelTest {
 		Assert.assertEquals(200, secondGeneratorGeneration, 0);
 	}
 	
-	private void obtainFirstReportFromDispatcher() throws InterruptedException{
+	private void obtainReportFromDispatcher(){
 		verify(dispatcher).acceptPowerStationState(stationStateReportCaptor.capture());
 		stationStateReport = stationStateReportCaptor.getValue();
 	}
 	
-	private void doPauseUntilFirstStateReportBeTransferedToDispatcher() throws InterruptedException{
+	private void doPauseUntilStateReportBeTransferedToDispatcher() throws InterruptedException{
 		Thread.sleep((long)(GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS * 1.2));
+	}
+	
+	@Test
+	public void stationSendsRequestsEverySecond() throws InterruptedException{
+		stationControlPanel.sendReportsToDispatcher();
+		doPauseUntilStateReportBeTransferedToDispatcher();
+		hasReportBeenSentOnce();
+		doPauseUntilStateReportBeTransferedToDispatcher();
+		hasReportBeenSentOnce();
+	}
+	
+	private void hasReportBeenSentOnce(){
+		obtainReportFromDispatcher();
+		verify(dispatcher, times(1)).acceptPowerStationState(stationStateReport);
 	}
 }

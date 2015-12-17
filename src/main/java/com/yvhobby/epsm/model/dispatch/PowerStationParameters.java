@@ -9,7 +9,7 @@ public class PowerStationParameters {
 		this.generatorParameters = generatorsStates;
 	}
 
-	public Set<GeneratorParameters> getGeneratorsStates() {
+	public Set<GeneratorParameters> getGeneratorsParameters() {
 		return generatorParameters;
 	}
 }

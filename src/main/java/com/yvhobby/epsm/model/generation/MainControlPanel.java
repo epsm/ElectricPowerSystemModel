@@ -9,6 +9,8 @@ import java.util.TimerTask;
 
 import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.yvhobby.epsm.model.dispatch.Dispatcher;
+import main.java.com.yvhobby.epsm.model.dispatch.GeneratorGenerationSchedule;
+import main.java.com.yvhobby.epsm.model.dispatch.PowerStationGenerationSchedule;
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorStateReport;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationStateReport;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
@@ -18,12 +20,13 @@ public class MainControlPanel {
 	private ElectricPowerSystemSimulation simulation;
 	private Dispatcher dispatcher;
 	private PowerStation station;
-	private LoadCurve generationCurve;
+	private PowerStationGenerationSchedule stationGenerationSchedule;
 	private Timer stateReportTransferTimer;
 	private TransferStationStateReportToDispatcherTask stateTransferTask = new TransferStationStateReportToDispatcherTask();
+	private LocalTime lastMessageFromDispatcher;
 	
-	public void setGenerationCurve(LoadCurve generationCurve){
-		this.generationCurve = generationCurve;
+	public void setGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
+		this.stationGenerationSchedule = generationSchedule;
 	}
 	
 	public void sendReportsToDispatcher(){
@@ -37,6 +40,7 @@ public class MainControlPanel {
 		private PowerStationStateReport stationStateReport;
 		private LocalTime currentTime;
 		
+		@Override
 		public void run(){
 			generatorsStates.clear();
 			currentTime = simulation.getTime();
@@ -57,6 +61,55 @@ public class MainControlPanel {
 		}
 	}
 
+	private class SetPowerForGeneratorsTask extends TimerTask{
+		private GeneratorGenerationSchedule generationSchedule;
+		private ControlUnit controlUnit;
+		private LoadCurve generationCurve;
+		private LocalTime currentTime;
+		private int generatorId;
+		private float generationPower;
+		
+		
+		@Override
+		public void run() {
+			for(Generator generator: station.getGenerators()){
+				getGeneratorParameters(generator);
+				getGenerationParametersOnCurrentTime();
+				adjustGenerationParameters(generator);
+			}
+		}
+		
+		private void getGeneratorParameters(Generator generator){
+			generatorId = generator.getId();
+			controlUnit = generator.getControlUnit();
+		}
+		
+		private void getGenerationParametersOnCurrentTime(){
+			generationSchedule = stationGenerationSchedule.getGeneratorGenerationSchedule(generatorId);
+			generationCurve = generationSchedule.getCurve();
+			currentTime = simulation.getTime();
+		}
+		
+		private void adjustGenerationParameters(Generator generator){
+			if(generationSchedule.isGeneratorTurnedOn()){
+				generator.turnOnGenerator();
+			}else{
+				generator.turnOffGenerator();
+			}
+			
+			if(generationSchedule.isAstaticRegulatorTurnedOn()){
+				generator.turnOnAstaticRegulation();
+				return;
+			}else{
+				generator.turnOffAstaticRegulation();
+			}
+			
+			generationPower = generationCurve.getPowerOnTimeInMW(currentTime);
+			
+			controlUnit.setPowerAtRequiredFrequency(generationPower);
+		}
+	}
+	
 	public void setSimulation(ElectricPowerSystemSimulation simulation) {
 		this.simulation = simulation;
 	}

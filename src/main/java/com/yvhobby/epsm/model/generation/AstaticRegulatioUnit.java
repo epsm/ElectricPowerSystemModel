@@ -1,15 +1,17 @@
 package main.java.com.yvhobby.epsm.model.generation;
 
+import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 
 public class AstaticRegulatioUnit {
+	private ElectricPowerSystemSimulation simulation;
 	private ControlUnit controlUnit;
 	private Generator generator;
 	private float currentFrequency;
 	private final float ASTATIC_REGULATION_SENSIVITY = 0.03f;
 
-	public void verifyAndAdjustPowerAtRequiredFrequency(float currentFrequency){
-		this.currentFrequency = currentFrequency;
+	public void verifyAndAdjustPowerAtRequiredFrequency(){
+		currentFrequency = simulation.getFrequencyInPowerSystem();
 		
 		if(! isFrequencyInNonSensivityLimit()){
 			adjustPowerAtRequiredFrequency();
@@ -52,6 +54,10 @@ public class AstaticRegulatioUnit {
 	
 	public void setControlUnit(ControlUnit controlUnit) {
 		this.controlUnit = controlUnit;
+	}
+	
+	public void setElectricPowerSystemSimulation(ElectricPowerSystemSimulation simulation) {
+		this.simulation = simulation;
 	}
 }
 

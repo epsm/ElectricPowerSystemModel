@@ -1,7 +1,10 @@
 package main.java.com.yvhobby.epsm.model.generation;
 
+import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
+
 public class Generator{
 	private ControlUnit controlUnit;
+	private AstaticRegulatioUnit regulationUnit;
 	private float nominalPowerInMW;
 	private float minimalTechnologyPower;
 	private boolean isTurnedOn;
@@ -57,5 +60,9 @@ public class Generator{
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public void setAstaticRegulationUnit(AstaticRegulatioUnit regulationUnit) {
+		this.regulationUnit = regulationUnit;
 	}
 }
