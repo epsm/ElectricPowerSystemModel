@@ -76,7 +76,7 @@ public class MainControlPanelSubscribeOnTestTest {
 		}
 		
 		Assert.assertEquals(2, stationStateReport.getGeneratorsStatesReports().size());
-		Assert.assertEquals(STATION_ID, stationStateReport.getId());
+		Assert.assertEquals(STATION_ID, stationStateReport.getPowerStationId());
 		Assert.assertEquals(CONSTANT_TIME_IN_MOCK_SIMULATION, stationStateReport.getTimeStamp());
 		Assert.assertTrue(firstGeneratorTurnedOn);
 		Assert.assertTrue(secondGeneratorTurnedOn);

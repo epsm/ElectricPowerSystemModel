@@ -8,17 +8,18 @@ import main.java.com.yvhobby.epsm.model.generalModel.SimulationParameters;
 public class PowerSystemSimulationManualTest {
 	private Formatter fmt;
 	private ElectricPowerSystemSimulationImpl simulation;
+	private DispatcherTestImpl dispatcher = new DispatcherTestImpl(); 
 	private SimulationParameters parameters;
 	private StringBuilder sb;
 	private int counter;
-	private final int INTERVAL_BETWEEN_PRINTS = 1000;
-	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 0;
+	private final int INTERVAL_BETWEEN_PRINTS = 10;
+	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 100;
 	
 	public static void main(String[] args) {
-		PowerSystemSimulationManualTest test = new PowerSystemSimulationManualTest();
+		PowerSystemSimulationManualTest simulation = new PowerSystemSimulationManualTest();
 		
-		test.initialize();
-		test.go();
+		simulation.initialize();
+		simulation.go();
 	}
 	
 	private void initialize(){
@@ -26,7 +27,7 @@ public class PowerSystemSimulationManualTest {
 		sb = new StringBuilder();
 		fmt = new Formatter(sb);
 		
-		new ModelInitializator().initialize(simulation);
+		new ModelInitializator().initialize(simulation, dispatcher);
 	}
 	
 	public void go(){
@@ -35,7 +36,8 @@ public class PowerSystemSimulationManualTest {
 			parameters = simulation.calculateNextStep();
 			
 			if(isItTimeToPrint()){
-				printState();
+				System.out.println(getSimulationMessage());
+				System.out.println(dispatcher.getMessage());
 			}
 			
 			pause();
@@ -55,15 +57,15 @@ public class PowerSystemSimulationManualTest {
 		}
 	}
 	
-	private void printState(){
+	private String getSimulationMessage(){
+		sb.setLength(0);
 		fmt.format(
 				"%12s"+ 
 				", totalGeneration= %10f, totalConsumption= %10f ,frequency= %10f", 
 				parameters.getCurrentTimeInSimulation(), parameters.getTotalGeneration(),
 				parameters.getTotalLoad(), parameters.getFrequencyInPowerSystem());
 				
-		System.out.println(sb.toString());
-		sb.setLength(0);
+		return sb.toString();
 	}
 	
 	private void pause(){
