@@ -51,7 +51,7 @@ public class PowerStation{
 	}
 	
 	public void createStationParametersReport(){
-		stationParameters = new PowerStationParameters(generatorParameters);
+		stationParameters = new PowerStationParameters(id, generatorParameters);
 	}
 	
 	public void addGenerator(Generator generator){
