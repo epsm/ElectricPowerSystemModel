@@ -1,25 +1,25 @@
-package test.java.com.yvhobby.epsm.model.generation;
+package test.java.com.yvhobby.epsm.model.dispatch;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalTime;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+
 import main.java.com.yvhobby.epsm.model.dispatch.Dispatcher;
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorStateReport;
+import main.java.com.yvhobby.epsm.model.dispatch.MainControlPanel;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationStateReport;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 import main.java.com.yvhobby.epsm.model.generation.Generator;
-import main.java.com.yvhobby.epsm.model.generation.MainControlPanel;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 
-public class MainControlPanelTest {
+public class MainControlPanelSubscribeOnTestTest {
 	private ArgumentCaptor<PowerStationStateReport> stationStateReportCaptor;
 	private ElectricPowerSystemSimulation simulation;
 	private Dispatcher dispatcher;
@@ -62,7 +62,7 @@ public class MainControlPanelTest {
 		float secondGeneratorGeneration = 0;
 		
 		stationControlPanel.subscribeOnReports();
-		doPauseUntilStateReportBeTransferedToDispatcher();
+		doPauseUntilFirstStateReportBeTransferedToDispatcher();
 		obtainReportFromDispatcher();
 		
 		for(GeneratorStateReport generatorStateReport: stationStateReport.getGeneratorsStatesReports()){
@@ -85,25 +85,26 @@ public class MainControlPanelTest {
 	}
 	
 	private void obtainReportFromDispatcher(){
-		verify(dispatcher).acceptPowerStationState(stationStateReportCaptor.capture());
+		verify(dispatcher).acceptPowerStationStateReport(stationStateReportCaptor.capture());
 		stationStateReport = stationStateReportCaptor.getValue();
 	}
 	
-	private void doPauseUntilStateReportBeTransferedToDispatcher() throws InterruptedException{
-		Thread.sleep((long)(GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS * 1.2));
+	private void doPauseUntilFirstStateReportBeTransferedToDispatcher() throws InterruptedException{
+		Thread.sleep(100);
 	}
 	
 	@Test
 	public void stationSendsRequestsEverySecond() throws InterruptedException{
 		stationControlPanel.subscribeOnReports();
-		doPauseUntilStateReportBeTransferedToDispatcher();
-		hasReportBeenSentOnce();
-		doPauseUntilStateReportBeTransferedToDispatcher();
-		hasReportBeenSentOnce();
+		doPauseUntilStateReportBeTransferedToDispatcherTwice();
+		hasReportBeenSentTwice();
 	}
 	
-	private void hasReportBeenSentOnce(){
-		obtainReportFromDispatcher();
-		verify(dispatcher, times(1)).acceptPowerStationState(stationStateReport);
+	private void doPauseUntilStateReportBeTransferedToDispatcherTwice() throws InterruptedException{
+		Thread.sleep((long)(GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS * 1.1));
+	}
+	
+	private void hasReportBeenSentTwice(){
+		verify(dispatcher, times(2)).acceptPowerStationStateReport(any());
 	}
 }

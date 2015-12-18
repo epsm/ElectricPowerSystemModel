@@ -51,7 +51,7 @@ public class Generator{
 		this.minimalTechnologyPower = minimalTechnologyPower;
 	}
 
-	public boolean isTurnedOn() {
+	public boolean isTurnedOn(){
 		return generatorTurnedOn;
 	}
 
