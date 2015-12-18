@@ -8,6 +8,7 @@ public class AstaticRegulationUnit {
 	private Generator generator;
 	private float currentFrequency;
 	private final float ASTATIC_REGULATION_SENSIVITY = 0.03f;
+	private final float REGULATION_STEP = 0.05f;
 
 	public AstaticRegulationUnit(ElectricPowerSystemSimulation simulation, Generator generator) {
 		this.simulation = simulation;
@@ -39,7 +40,7 @@ public class AstaticRegulationUnit {
 	private void increasePowerAtRequiredFrequency(){
 		float powerAtRequiredFrequency = generator.getPowerAtRequiredFrequency();
 		if(powerAtRequiredFrequency < generator.getNominalPowerInMW()){
-			generator.setPowerAtRequiredFrequency(++powerAtRequiredFrequency);
+			generator.setPowerAtRequiredFrequency(powerAtRequiredFrequency + REGULATION_STEP);
 		}
 	}
 	
@@ -47,7 +48,7 @@ public class AstaticRegulationUnit {
 		float powerAtRequiredFrequency = generator.getPowerAtRequiredFrequency();
 		
 		if(powerAtRequiredFrequency > generator.getMinimalTechnologyPower()){
-			generator.setPowerAtRequiredFrequency(--powerAtRequiredFrequency);
+			generator.setPowerAtRequiredFrequency(powerAtRequiredFrequency - REGULATION_STEP);
 		}
 	}
 
