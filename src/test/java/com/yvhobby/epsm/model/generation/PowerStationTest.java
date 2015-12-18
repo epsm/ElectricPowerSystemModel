@@ -19,6 +19,9 @@ public class PowerStationTest{
 	private ControlUnit controlUnit_1;
 	private ControlUnit controlUnit_2;
 	private ControlUnit controlUnit_3;
+	private final float FIRST_GENERATOR_POWER = 20;
+	private final float SECOND_GENERATOR_POWER = 50;
+	private final float THIRD_GENERATOR_POWER = 100;
 	
 	
 	@Before
@@ -34,12 +37,18 @@ public class PowerStationTest{
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstatnts.STANDART_FREQUENCY);
 		
-		controlUnit_1.setPowerAtRequiredFrequency(100f);
-		controlUnit_2.setPowerAtRequiredFrequency(50f);
-		controlUnit_3.setPowerAtRequiredFrequency(20f);
+		controlUnit_1.setPowerAtRequiredFrequency(FIRST_GENERATOR_POWER);
+		controlUnit_2.setPowerAtRequiredFrequency(SECOND_GENERATOR_POWER);
+		controlUnit_3.setPowerAtRequiredFrequency(THIRD_GENERATOR_POWER);
 		generator_1.setControlUnit(controlUnit_1);
 		generator_2.setControlUnit(controlUnit_2);
 		generator_3.setControlUnit(controlUnit_3);
+		generator_1.setId(1);
+		generator_2.setId(2);
+		generator_3.setId(3);
+		generator_1.setNominalPowerInMW(200);
+		generator_2.setNominalPowerInMW(200);
+		generator_3.setNominalPowerInMW(200);
 		station.addGenerator(generator_1);
 		station.addGenerator(generator_2);
 		station.addGenerator(generator_3);
@@ -52,10 +61,14 @@ public class PowerStationTest{
 	
 	@Test
 	public void PowerOfElectricStationMustBeEqualToSumOfAllTurnedOnGenerators(){
-		float summaryGenerationForStation = station.getCurrentGenerationInMW();
-		float sumOfPowerTwoTurnedOnGenerators = 
-				generator_1.getGenerationInMW() + generator_2.getGenerationInMW();
+		float sumOfPowerTwoTurnedOnGenerators = FIRST_GENERATOR_POWER + SECOND_GENERATOR_POWER;
+		float stationGeneration = station.getCurrentGenerationInMW();
 		
-		Assert.assertEquals(sumOfPowerTwoTurnedOnGenerators, summaryGenerationForStation, 0);
+		Assert.assertEquals(sumOfPowerTwoTurnedOnGenerators, stationGeneration, 0);
+	}
+	
+	@Test
+	public void powerStationParametersContainsCorrectData(){
+		
 	}
 }

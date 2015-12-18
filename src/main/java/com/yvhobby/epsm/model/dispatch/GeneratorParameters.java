@@ -10,11 +10,6 @@ public class GeneratorParameters {
 		this.nominalPowerInMW = nominalPowerInMW;
 		this.minimalTechnologyPower = minimalTechnologyPower;
 	}
-	
-	public GeneratorParameters(float nominalPowerInMW, float minimalTechnologyPower) {
-		this.nominalPowerInMW = nominalPowerInMW;
-		this.minimalTechnologyPower = minimalTechnologyPower;
-	}
 
 	public int getGeneratorId() {
 		return generatorId;

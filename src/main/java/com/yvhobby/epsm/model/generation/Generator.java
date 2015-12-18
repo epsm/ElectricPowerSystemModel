@@ -23,6 +23,7 @@ public class Generator{
 		if(astaticRegulationTurnedOn){
 			regulationUnit.verifyAndAdjustPowerAtRequiredFrequency();
 		}
+		System.out.println("here");
 		
 		currentGeneration = controlUnit.getGeneratorPowerInMW();
 	}
