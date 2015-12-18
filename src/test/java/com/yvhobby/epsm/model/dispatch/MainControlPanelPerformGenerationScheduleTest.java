@@ -79,8 +79,8 @@ public class MainControlPanelPerformGenerationScheduleTest {
 	}
 	
 	private void prepareGenerationScheduleWithTurnedOnGenerators(){
-		genrationSchedule_1 = new GeneratorGenerationSchedule(true, false, generationCurve);
-		genrationSchedule_2 = new GeneratorGenerationSchedule(true, false, generationCurve);
+		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, false, generationCurve);
+		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
 		createStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);
 	}
 	
@@ -113,8 +113,8 @@ public class MainControlPanelPerformGenerationScheduleTest {
 	}
 	
 	private void prepareGenerationScheduleWithTurnedOffGenerator(){
-		genrationSchedule_1 = new GeneratorGenerationSchedule(false, false, generationCurve);
-		genrationSchedule_2 = new GeneratorGenerationSchedule(false, false, generationCurve);
+		genrationSchedule_1 = new GeneratorGenerationSchedule(1, false, false, generationCurve);
+		genrationSchedule_2 = new GeneratorGenerationSchedule(2, false, false, generationCurve);
 		createStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);
 	}
 	
@@ -132,8 +132,8 @@ public class MainControlPanelPerformGenerationScheduleTest {
 	}
 	
 	private void prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOnAstaticRegulation(){
-		genrationSchedule_1 = new GeneratorGenerationSchedule(true, true, generationCurve);
-		genrationSchedule_2 = new GeneratorGenerationSchedule(true, true, generationCurve);
+		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, true, generationCurve);
+		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, true, generationCurve);
 		createStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);;
 	}
 	
@@ -159,8 +159,8 @@ public class MainControlPanelPerformGenerationScheduleTest {
 	}
 	
 	private void prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOffAstaticRegulation(){
-		genrationSchedule_1 = new GeneratorGenerationSchedule(true, false, generationCurve);
-		genrationSchedule_2 = new GeneratorGenerationSchedule(true, false, generationCurve);
+		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, false, generationCurve);
+		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
 		createStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);;
 	}
 	

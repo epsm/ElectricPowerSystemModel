@@ -101,7 +101,7 @@ public class MainControlPanelSubscribeOnTestTest {
 	}
 	
 	private void doPauseUntilStateReportBeTransferedToDispatcherTwice() throws InterruptedException{
-		Thread.sleep((long)(GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS * 1.1));
+		Thread.sleep((long)(GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS * 1.3));
 	}
 	
 	private void hasReportBeenSentTwice(){

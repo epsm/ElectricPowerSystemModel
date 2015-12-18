@@ -2,7 +2,6 @@ package main.java.com.yvhobby.epsm.model.generation;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorParameters;
@@ -12,7 +11,8 @@ public class PowerStation{
 	private int id;
 	private Map<Integer, Generator> generators = new HashMap<Integer, Generator>();
 	private PowerStationParameters stationParameters;
-	private HashSet<GeneratorParameters> generatorParameters = new HashSet<GeneratorParameters>();
+	private Map<Integer, GeneratorParameters> generatorParameters =
+			new HashMap<Integer, GeneratorParameters>();
 
 	public float getCurrentGenerationInMW(){
 		float generationInMW = 0;
@@ -38,7 +38,9 @@ public class PowerStation{
 	
 	private void createAndSaveParametersForEveryGenerator(){
 		for(Generator generator: generators.values()){
-			generatorParameters.add(getGeneratorParameters(generator));
+			int generatorId = generator.getId();
+			GeneratorParameters parameters = getGeneratorParameters(generator);
+			generatorParameters.put(generatorId, parameters);
 		}
 	}
 	

@@ -106,8 +106,8 @@ public class ModelInitializator {
 		
 		generatorSchedule = new HashMap<Integer, GeneratorGenerationSchedule>();
 		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
-		genrationSchedule_1 = new GeneratorGenerationSchedule(true, true, null);
-		genrationSchedule_2 = new GeneratorGenerationSchedule(true, false, generationCurve);
+		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, true, null);
+		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
 		
 		generatorSchedule.put(1, genrationSchedule_1);
 		generatorSchedule.put(2, genrationSchedule_2);

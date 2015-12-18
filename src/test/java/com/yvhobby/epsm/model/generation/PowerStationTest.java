@@ -3,8 +3,8 @@ package test.java.com.yvhobby.epsm.model.generation;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -131,7 +131,7 @@ public class PowerStationTest{
 	}
 
 	private GeneratorParameters obtainSoleParametersObject() {
-		Set<GeneratorParameters> parameters = stationParameters.getGeneratorsParameters();
+		Collection<GeneratorParameters> parameters = stationParameters.getGeneratorsParameters();
 		
 		Assert.assertEquals(1, parameters.size());
 		return parameters.iterator().next();

@@ -1,5 +1,6 @@
 package main.java.com.yvhobby.epsm.model.dispatch;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,5 +15,13 @@ public class PowerStationGenerationSchedule {
 
 	public GeneratorGenerationSchedule getGeneratorGenerationSchedule(int generatorId) {
 		return generatorSchedule.get(generatorId);
+	}
+	
+	public int getNumbersOfGenerators(){
+		return generatorSchedule.size();
+	}
+	
+	public Collection<Integer> getGeneratorsId(){
+		return generatorSchedule.keySet();
 	}
 }
