@@ -18,6 +18,7 @@ import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 import main.java.com.yvhobby.epsm.model.generation.ControlUnit;
 import main.java.com.yvhobby.epsm.model.generation.Generator;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
+import main.java.com.yvhobby.epsm.model.generation.PowerStationException;
 
 public class PowerStationTest{
 	private ElectricPowerSystemSimulation simulation;
@@ -134,5 +135,11 @@ public class PowerStationTest{
 		
 		Assert.assertEquals(1, parameters.size());
 		return parameters.iterator().next();
+	}
+	
+	@Test(expected = PowerStationException.class)
+	public void stationsThrowsExceptionIfTryToAddGeneratorWithTheSameIdAsPreviouslyInstalled(){
+		prepareAndInstallFirstGenerator();
+		prepareAndInstallFirstGenerator();
 	}
 }
