@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PowerStationGenerationSchedule {
-	private Map<Integer, GeneratorGenerationSchedule> generatorSchedule = new HashMap<Integer, GeneratorGenerationSchedule>();
+	private Map<Integer, GeneratorGenerationSchedule> generatorSchedule = 
+			new HashMap<Integer, GeneratorGenerationSchedule>();
 
 	public PowerStationGenerationSchedule(Map<Integer, GeneratorGenerationSchedule> schedule) {
 		this.generatorSchedule = Collections.unmodifiableMap(schedule);

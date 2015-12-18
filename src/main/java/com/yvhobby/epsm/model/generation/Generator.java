@@ -67,11 +67,11 @@ public class Generator{
 		return astaticRegulationTurnedOn;
 	}
 
-	public void TurnOnAstaticRegulation(){
+	public void turnOnAstaticRegulation(){
 		astaticRegulationTurnedOn = true;
 	}
 	
-	public void TurnOffAstaticRegulation(){
+	public void turnOffAstaticRegulation(){
 		astaticRegulationTurnedOn = false;
 	}
 	

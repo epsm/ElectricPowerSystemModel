@@ -43,7 +43,7 @@ public class GeneratorTest{
 	@Test
 	public void DoesAstacicRegulationUnitUsesIfItTurnedOn(){
 		prepareMockAstaticRegulationUnit();
-		generator.TurnOnAstaticRegulation();
+		generator.turnOnAstaticRegulation();
 		generator.getGenerationInMW();
 		
 		verify(regulationUnit, times(1)).verifyAndAdjustPowerAtRequiredFrequency();

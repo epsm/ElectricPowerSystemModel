@@ -61,7 +61,7 @@ public class ModelInitializator {
 		generator_1.setMinimalTechnologyPower(5);
 		generator_1.setNominalPowerInMW(95);
 		generator_1.turnOnGenerator();
-		generator_1.TurnOnAstaticRegulation();
+		generator_1.turnOnAstaticRegulation();
 		generator_1.setId(1);
 		
 		//second(static)

@@ -83,45 +83,73 @@ public class MainControlPanel {
 	}
 
 	private class SetGenerationForGeneratorsAccordingToScheduleTask extends TimerTask{
-		private GeneratorGenerationSchedule generatorGenerationSchedule;
-		private ControlUnit controlUnit;
+		private Generator generator;
 		private LoadCurve generationCurve;
-		private LocalTime currentTime;
-		private int generatorId;
-		private float generationPower;
+		private boolean generatorTurnedOn;
+		private boolean astaticRegulationTurnedOn;
 		
 		@Override
 		public void run() {
 			for(Generator generator: station.getGenerators()){
-				generatorId = generator.getId();
-				getGenerationParametersForCurrentTime();
-				adjustGenerationParameters(generator);
+				GeneratorGenerationSchedule generatorSchedule = getGeneratorGenerationSchedule(generator);
+				adjustGenerationAccordingToSchedule(generatorSchedule);
+			}
+		}
+
+		private GeneratorGenerationSchedule getGeneratorGenerationSchedule(Generator generator){
+			int generatorId = generator.getId();
+			return stationGenerationSchedule.getGeneratorGenerationSchedule(generatorId);
+		}
+		
+		private void adjustGenerationAccordingToSchedule(GeneratorGenerationSchedule generatorSchedule){
+			getGenerationParametersForCurrentTime(generatorSchedule);
+			adjustNecessaryParameters();
+		}
+
+		private void getGenerationParametersForCurrentTime(GeneratorGenerationSchedule generatorSchedule){
+			generatorTurnedOn = generatorSchedule.isGeneratorTurnedOn();
+			astaticRegulationTurnedOn = generatorSchedule.isAstaticRegulatorTurnedOn();
+			generationCurve = generatorSchedule.getCurve();
+		}
+		
+		private void adjustNecessaryParameters() {
+			if(generatorTurnedOn){
+				vefifyAndTurnOnGenerator();
 			}
 		}
 		
-		private void getGenerationParametersForCurrentTime(int generatorId){
-			generatorGenerationSchedule = 
-					stationGenerationSchedule.getGeneratorGenerationSchedule(generatorId);
-			generationCurve = generatorGenerationSchedule.getCurve();
-			currentTime = simulation.getTime();
+		private void vefifyAndTurnOnGenerator() {
+			// TODO Auto-generated method stub
+			
 		}
-		
+
 		private void adjustGenerationParameters(Generator generator){
-			if(generatorGenerationSchedule.isGeneratorTurnedOn()){
+			if(generatorGenerationSchedule.isGeneratorTurnedOn() && !generator.isTurnedOn()){
 				generator.turnOnGenerator();
 			}else{
-				generator.turnOffGenerator();
+				if(generator.isTurnedOn()){
+					generator.turnOffGenerator();
+				}
+				return;
 			}
 			
-			if(generatorGenerationSchedule.isAstaticRegulatorTurnedOn()){
+			
+			
+			adjustGenerationPower();
+		}
+		
+		private void adjustAstaticRegulation(){
+			if(generatorGenerationSchedule.isAstaticRegulatorTurnedOn() && 
+					!generator.isAstaticRegulationTurnedOn()){
 				generator.turnOnAstaticRegulation();
 				return;
-			}else{
+			}else if(generator.isAstaticRegulationTurnedOn()){
 				generator.turnOffAstaticRegulation();
 			}
-			
-			generationPower = generationCurve.getPowerOnTimeInMW(currentTime);
-			
+		}
+		
+		private void adjustGenerationPower(){
+			float generationPower = generationCurve.getPowerOnTimeInMW(currentTime);
 			controlUnit.setPowerAtRequiredFrequency(generationPower);
 		}
 	}
