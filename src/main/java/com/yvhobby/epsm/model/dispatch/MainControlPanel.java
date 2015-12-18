@@ -1,10 +1,10 @@
 package main.java.com.yvhobby.epsm.model.dispatch;
 
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
@@ -36,7 +36,7 @@ public class MainControlPanel {
 	}
 	
 	private class StationReportTaskTask extends TimerTask{
-		private Set<GeneratorStateReport> generatorsReports = new HashSet<GeneratorStateReport>();
+		private Set<GeneratorStateReport> generatorsReports = new TreeSet<GeneratorStateReport>();
 		
 		@Override
 		public void run(){
