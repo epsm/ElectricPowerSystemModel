@@ -5,29 +5,47 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
 import main.java.com.yvhobby.epsm.model.dispatch.GenerationScheduleValidator;
+import main.java.com.yvhobby.epsm.model.dispatch.GeneratorGenerationSchedule;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationGenerationSchedule;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationParameters;
 import main.java.com.yvhobby.epsm.model.generation.PowerStationException;
 
 public class GenerationScheduleValidatorTest {
 	private GenerationScheduleValidator validator = new GenerationScheduleValidator();
-	private PowerStationGenerationSchedule schedule;
+	private PowerStationGenerationSchedule stationSchedule;
 	private PowerStationParameters stationParameters;
+	private Map<Integer, GeneratorGenerationSchedule> generatorSchedules;
 	
 	@Test(expected = PowerStationException.class)
-	public void numbersOfGeneratorsOnStationConformsToTheirNubersInSchedule(){
+	public void stationParameterIsNullAndScheduleIsNotNull(){
+		stationSchedule = mock(PowerStationGenerationSchedule.class);
+		stationParameters = null;
+		validator.validate(stationSchedule, stationParameters);
+	}
+	
+	@Test(expected = PowerStationException.class)
+	public void scheduleIsNullAndStationParameterIsNull(){
+		stationSchedule = null;
+		stationParameters = mock(PowerStationParameters.class);
+		validator.validate(stationSchedule, stationParameters);
+	}
+	
+	@Test(expected = PowerStationException.class)
+	public void numbersOfGeneratorsOnStationDoesNotConformToTheirNubersInSchedule(){
 		prepareScheduleWithThreeGenerators();
 		prepareStationWithTwoGenerators();
-		validator.validate(schedule, stationParameters);
+		validator.validate(stationSchedule, stationParameters);
 	}
 	
 	private void prepareScheduleWithThreeGenerators(){
-		schedule = mock(PowerStationGenerationSchedule.class);
-		when(schedule.getNumbersOfGenerators()).thenReturn(3);
+		stationSchedule = mock(PowerStationGenerationSchedule.class);
+		when(stationSchedule.getNumbersOfGenerators()).thenReturn(3);
 	}
 	
 	private void prepareStationWithTwoGenerators(){
@@ -36,16 +54,16 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	@Test(expected = PowerStationException.class)
-	public void scheduleContainsTheSameGeneratorsIdAsPowerStation(){
+	public void scheduleAndPowerStationContainsDifferentGeneratorsId(){
 		prepareSchedulesWithSecondAndThirdGenerators();
 		prepareStationWithFirstAndSecondGenerators();
-		validator.validate(schedule, stationParameters);
+		validator.validate(stationSchedule, stationParameters);
 	}
 	
 	private void prepareSchedulesWithSecondAndThirdGenerators(){
 		Collection<Integer> idNumbers = Arrays.asList(new Integer[] {2, 3}); 
-		schedule = mock(PowerStationGenerationSchedule.class);
-		when(schedule.getGeneratorsId()).thenReturn(idNumbers);
+		stationSchedule = mock(PowerStationGenerationSchedule.class);
+		when(stationSchedule.getGeneratorsId()).thenReturn(idNumbers);
 	}
 	
 	private void prepareStationWithFirstAndSecondGenerators(){
@@ -54,8 +72,40 @@ public class GenerationScheduleValidatorTest {
 		when(stationParameters.getGeneratorsId()).thenReturn(idNumbers);
 	}
 	
-	public void astaticRegulationTurnedOffAndThereIsNoGenerationCurve(){
+	@Test(expected = PowerStationException.class)
+	public void generatorSchedulesContainerIsNull(){
+		prepareNullGeneratorSchedulesContainerAndNormalStationParameters();
+		validator.validate(stationSchedule, stationParameters);
+	}
+	
+	private void prepareNullGeneratorSchedulesContainerAndNormalStationParameters(){
+		stationParameters = mock(PowerStationParameters.class);
+		stationSchedule = mock(PowerStationGenerationSchedule.class);
+		when(stationSchedule.getGeneratorGenerationSchedules()).thenReturn(null);
+	}
+	
+	@Test(expected = PowerStationException.class)
+	public void oneScheduleIsNull(){
+		createStationScheduleWithGivenSingleGeneratorSchedule(null);
+		stationParameters = mock(PowerStationParameters.class);
+		validator.validate(stationSchedule, stationParameters);
+	}
+	
+	private void createStationScheduleWithGivenSingleGeneratorSchedule(
+			GeneratorGenerationSchedule generatorSchedule){
 		
+		generatorSchedules = new HashMap<Integer, GeneratorGenerationSchedule>();
+		generatorSchedules.put(1, generatorSchedule);
+		stationSchedule = new PowerStationGenerationSchedule(generatorSchedules);
+	}
+
+	@Test
+	public void astaticRegulationTurnedOffAndThereIsNoGenerationCurveStationScheduleSizeOne(){
+		GeneratorGenerationSchedule generatorSchedule = new GeneratorGenerationSchedule(1, true, false, null);
+		createStationScheduleWithGivenSingleGeneratorSchedule(generatorSchedule);
+		stationParameters = mock(PowerStationParameters.class);
+		when(stationParameters.getNumbersOfGenerators()).thenReturn(1);
+		validator.validate(stationSchedule, stationParameters);
 	}
 	
 	public void powerInGenerationCurveTooHighForGenerator(){

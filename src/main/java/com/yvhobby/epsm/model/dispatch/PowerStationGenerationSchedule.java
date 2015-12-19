@@ -24,4 +24,8 @@ public class PowerStationGenerationSchedule {
 	public Collection<Integer> getGeneratorsId(){
 		return generatorSchedule.keySet();
 	}
+	
+	public Collection<GeneratorGenerationSchedule> getGeneratorGenerationSchedules(){
+		return generatorSchedule.values();
+	}
 }
