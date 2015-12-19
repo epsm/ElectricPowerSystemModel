@@ -101,7 +101,7 @@ public class PowerStationTest{
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallSecondAndThirdGenerators();
 		getPowerStationParameters();
-		int numberOfGeneratorsInParameters = stationParameters.getGeneratorsParameters().size();
+		int numberOfGeneratorsInParameters = stationParameters.getGeneratorsNumbers().size();
 		
 		Assert.assertEquals(3, numberOfGeneratorsInParameters);
 	}
@@ -118,7 +118,7 @@ public class PowerStationTest{
 	}
 	
 	private void compareDataFromParametersWithReal(){
-		GeneratorParameters parameters = obtainSoleParametersObject();
+		GeneratorParameters parameters = stationParameters.getGeneratorParameters(1);
 		int generatorNumber = parameters.getGeneratorNumber();
 		float minimalPower = parameters.getMinimalTechnologyPower();
 		float nominalPower = parameters.getNominalPowerInMW();
@@ -126,13 +126,6 @@ public class PowerStationTest{
 		Assert.assertEquals(1, generatorNumber);
 		Assert.assertEquals(FIRST_GENERATOR_MIN_POWER, minimalPower, 0);
 		Assert.assertEquals(FIRST_GENERATOR_NOMINAL_POWER, nominalPower, 0);
-	}
-
-	private GeneratorParameters obtainSoleParametersObject() {
-		Collection<GeneratorParameters> parameters = stationParameters.getGeneratorsParameters();
-		
-		Assert.assertEquals(1, parameters.size());
-		return parameters.iterator().next();
 	}
 	
 	@Test

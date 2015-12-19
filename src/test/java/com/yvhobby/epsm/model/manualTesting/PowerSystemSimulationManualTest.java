@@ -13,7 +13,7 @@ public class PowerSystemSimulationManualTest {
 	private StringBuilder sb;
 	private int counter;
 	private final int INTERVAL_BETWEEN_PRINTS = 10;
-	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 100;
+	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 10;
 	
 	public static void main(String[] args) {
 		PowerSystemSimulationManualTest simulation = new PowerSystemSimulationManualTest();

@@ -17,7 +17,6 @@ public class PowerStation{
 	public PowerStation(int number) {
 		this.number = number;
 		generators = new HashMap<Integer, Generator>();
-		generatorParameters = new HashMap<Integer, GeneratorParameters>();
 	}
 
 	public float getCurrentGenerationInMW(){
@@ -31,15 +30,15 @@ public class PowerStation{
 	}
 	
 	public PowerStationParameters getPowerStationParameters(){
-		clearPreviousParameters();
+		createNewContainerForGeneratorsParameters();
 		createAndSaveParametersForEveryGenerator();
 		createStationParametersReport();
 
 		return stationParameters;
 	}
 	
-	private void clearPreviousParameters(){
-		generatorParameters.clear();
+	private void createNewContainerForGeneratorsParameters(){
+		generatorParameters = new HashMap<Integer, GeneratorParameters>();
 	}
 	
 	private void createAndSaveParametersForEveryGenerator(){

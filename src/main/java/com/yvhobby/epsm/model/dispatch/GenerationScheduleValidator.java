@@ -1,5 +1,6 @@
 package main.java.com.yvhobby.epsm.model.dispatch;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,7 +14,10 @@ public class GenerationScheduleValidator {
 	private Collection<Integer> stationGeneratorsNumbers;
 	private Collection<Integer> scheduleGeneratorsNumbers;
 	private GeneratorGenerationSchedule currentGeneratorSchedule;
+	private GeneratorParameters generatorParameters;
 	private ArrayList<Integer> turnedOnGeneratorsNumbers;
+	private float maxGenerationPower;
+	private float minGenerationPower;
 	private final String HEADER = "Wrong schedule: ";
 	
 	public void validate(PowerStationGenerationSchedule schedule,
@@ -116,27 +120,93 @@ public class GenerationScheduleValidator {
 	
 	private void validateGenerationScheduleOnCorectness(){
 		thereIsGenerationCurvesIfAstaticRegulationTurnedOff();
+		powerInGenerationCurveWithinGeneratorCapabilities();
 	}
 	
 	private void thereIsGenerationCurvesIfAstaticRegulationTurnedOff(){
 		for(Integer generatorNumber: scheduleGeneratorsNumbers){
-			verifyEveryGeneratorIsCurvePresentIfAstaticRegulationTurnedOff(generatorNumber);
+			verifyGeneratorIsCurvePresentIfAstaticRegulationTurnedOff(generatorNumber);
 		}
 	}
 	
-	private void verifyEveryGeneratorIsCurvePresentIfAstaticRegulationTurnedOff(int generatorNumber){
+	private void verifyGeneratorIsCurvePresentIfAstaticRegulationTurnedOff(int generatorNumber){
 		currentGeneratorSchedule = stationSchedule.getGeneratorGenerationSchedule(generatorNumber);
-		if(isAstaticRegulationTurnedOffAndThereIsGenerationCurve(currentGeneratorSchedule)){
+		if(isAstaticRegulationTurnedOffAndThereIsNotGenerationCurve(currentGeneratorSchedule)){
 			String message = HEADER + "there is no necessary generation curve for generator "
 					+ generatorNumber + ".";
 			throw new PowerStationException(message);
 		}
 	}
 	
-	private boolean isAstaticRegulationTurnedOffAndThereIsGenerationCurve(GeneratorGenerationSchedule schedule){
+	private boolean isAstaticRegulationTurnedOffAndThereIsNotGenerationCurve(GeneratorGenerationSchedule schedule){
 		boolean astaticRegulationTurnedOff = !currentGeneratorSchedule.isAstaticRegulatorTurnedOn();
 		LoadCurve curve = currentGeneratorSchedule.getCurve();
 		
 		return astaticRegulationTurnedOff && curve == null;
+	}
+	
+	private void powerInGenerationCurveWithinGeneratorCapabilities(){
+		for(Integer generatorNumber: scheduleGeneratorsNumbers){
+			verifyEveryGeneratorIsPowerInGenerationCurveWithinGeneratorCapabilities(generatorNumber);
+		}
+	}
+	
+	private void verifyEveryGeneratorIsPowerInGenerationCurveWithinGeneratorCapabilities(
+			int generatorNumber){
+		currentGeneratorSchedule = stationSchedule.getGeneratorGenerationSchedule(generatorNumber);
+		generatorParameters = stationParameters.getGeneratorParameters(generatorNumber);
+		
+		if(isAstaticRegulationTurnedOffAndThereIsGenerationCurve(currentGeneratorSchedule)){
+			findMinAndMaxPowerInGenerationCurve();
+			verifyIsPowerInGenerationCurveNotHigherThanGeneratorNominalPower(generatorNumber);
+			verifyIsPowerInGenerationCurveNotLowerThanGeneratorNominalPower(generatorNumber);
+		}
+	}
+	
+	private boolean isAstaticRegulationTurnedOffAndThereIsGenerationCurve(
+			GeneratorGenerationSchedule schedule){
+		boolean astaticRegulationTurnedOff = !currentGeneratorSchedule.isAstaticRegulatorTurnedOn();
+		LoadCurve curve = currentGeneratorSchedule.getCurve();
+		
+		return astaticRegulationTurnedOff && curve != null;
+	}
+	
+	private void findMinAndMaxPowerInGenerationCurve(){
+		LoadCurve generationCurve = currentGeneratorSchedule.getCurve();
+		LocalTime pointer = LocalTime.MIDNIGHT;
+		maxGenerationPower = Float.MIN_VALUE;
+		minGenerationPower = Float.MAX_VALUE;
+		do{
+			float currentPower = generationCurve.getPowerOnTimeInMW(pointer);
+			
+			if(currentPower > maxGenerationPower){
+				maxGenerationPower = currentPower;
+			}
+			if(currentPower < minGenerationPower){
+				minGenerationPower = currentPower;
+			}
+			
+			pointer = pointer.plusHours(1);
+		}while(pointer.isAfter(LocalTime.MIDNIGHT));
+	}
+	
+	private void verifyIsPowerInGenerationCurveNotHigherThanGeneratorNominalPower(int generatorNumber){
+		float generatorNominalPower = generatorParameters.getNominalPowerInMW();
+
+		if(maxGenerationPower > generatorNominalPower){
+			String message = HEADER + "scheduled generation power for generator " + generatorNumber
+					+ " is more than nominal.";
+			throw new PowerStationException(message);
+		}
+	}
+
+	private void verifyIsPowerInGenerationCurveNotLowerThanGeneratorNominalPower(int generatorNumber){
+		float minimalGeneratorTechnologyPower = generatorParameters.getMinimalTechnologyPower();
+
+		if(minGenerationPower < minimalGeneratorTechnologyPower){
+			String message = HEADER + "scheduled generation power for generator " + generatorNumber
+					+ " is less than minimal technology.";
+			throw new PowerStationException(message);
+		}
 	}
 }

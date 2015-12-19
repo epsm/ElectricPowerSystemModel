@@ -13,8 +13,8 @@ public class PowerStationParameters{
 		this.generatorParameters = Collections.unmodifiableMap(generatorsParameters);
 	}
 
-	public Collection <GeneratorParameters> getGeneratorsParameters() {
-		return generatorParameters.values();
+	public GeneratorParameters getGeneratorParameters(int generatorNumber){
+		return generatorParameters.get(generatorNumber);
 	}
 
 	public int getPowerStationNumber() {

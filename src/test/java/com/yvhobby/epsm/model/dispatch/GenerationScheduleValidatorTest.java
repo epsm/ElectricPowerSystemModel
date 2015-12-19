@@ -1,5 +1,6 @@
 package test.java.com.yvhobby.epsm.model.dispatch;
 
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -7,16 +8,18 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.yvhobby.epsm.model.dispatch.GenerationScheduleValidator;
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorGenerationSchedule;
+import main.java.com.yvhobby.epsm.model.dispatch.GeneratorParameters;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationGenerationSchedule;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationParameters;
 import main.java.com.yvhobby.epsm.model.generation.PowerStationException;
+import test.java.com.yvhobby.epsm.model.constantsForTests.TestsConstants;
 
 public class GenerationScheduleValidatorTest {
 	private GenerationScheduleValidator validator;
@@ -122,21 +125,91 @@ public class GenerationScheduleValidatorTest {
 		when(stationParameters.getGeneratorsNumbers()).thenReturn(Arrays.asList(new Integer[] {1}));
 	}
 	
-	@Ignore
 	@Test
 	public void powerInGenerationCurveTooHighForGenerator(){
+		expectedEx.expect(PowerStationException.class);
+	    expectedEx.expectMessage("Wrong schedule: scheduled generation power for generator 1 is"
+	    		+ " more than nominal.");
 		
+		GeneratorParameters parameters = prepareGeneratorParametersForTooWeakGenerator();
+		preparePowerStation(parameters);
+		prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNotNull();
+		
+		validator.validate(stationSchedule, stationParameters);
 	}
 	
-	@Ignore
+	private GeneratorParameters prepareGeneratorParametersForTooWeakGenerator(){
+		int generatorNumber = 1;
+		float minimalPower = 1;
+		float nominalPower = 1;
+		
+		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);
+	}
+	
+	private void preparePowerStation(GeneratorParameters parameters){
+		stationParameters = mock(PowerStationParameters.class);
+		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
+		when(stationParameters.getGeneratorsNumbers()).thenReturn(Arrays.asList(new Integer[] {1}));
+		when(stationParameters.getGeneratorParameters(anyInt())).thenReturn(parameters);
+	}
+	
+	private void prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNotNull(){
+		LoadCurve generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
+		GeneratorGenerationSchedule generatorSchedule = 
+				new GeneratorGenerationSchedule(1, true, false, generationCurve);
+		createStationScheduleWithFirstGenerator(generatorSchedule);
+	} 
+	
 	@Test
 	public void powerInGenerationCurveTooLowForGenerator(){
+		expectedEx.expect(PowerStationException.class);
+	    expectedEx.expectMessage("Wrong schedule: scheduled generation power for generator 1 is"
+	    		+ " less than minimal technology.");
 		
+		GeneratorParameters parameters = prepareGeneratorParametersForTooPowerfullGenerator();
+		preparePowerStation(parameters);
+		prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNotNull();
+		
+		validator.validate(stationSchedule, stationParameters);
 	}
 	
-	@Ignore
-	@Test
-	public void doNothingIfScheduleCorrect(){
+	private GeneratorParameters prepareGeneratorParametersForTooPowerfullGenerator(){
+		int generatorNumber = 1;
+		float minimalPower = 100;
+		float nominalPower = 1000;
 		
+		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);
 	}
+	
+	@Test
+	public void noExceptionIfAstaticRegulationOffAndCurveConformsToGenerator(){
+		GeneratorParameters parameters = 
+				prepareGeneratorParametersThatConformsTestsConstants_LOAD_BY_HOURSCurve();
+		preparePowerStation(parameters);
+		prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNotNull();
+		
+		validator.validate(stationSchedule, stationParameters);
+	}
+	
+	private GeneratorParameters prepareGeneratorParametersThatConformsTestsConstants_LOAD_BY_HOURSCurve(){
+		int generatorNumber = 1;
+		float minimalPower = 10;
+		float nominalPower = 200;
+		
+		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);
+	}
+	
+	@Test
+	public void noExceptionIfAstaticRegulationOnCurveIsNull(){
+		prepareStationSchedule_FirstGeneratorOnAstaticRegulationOnCurveNull();
+		preparePowerStation(null);
+		
+		validator.validate(stationSchedule, stationParameters);
+	}
+	
+	private void prepareStationSchedule_FirstGeneratorOnAstaticRegulationOnCurveNull(){
+		GeneratorGenerationSchedule generatorSchedule = 
+				new GeneratorGenerationSchedule(1, true, true, null);
+		createStationScheduleWithFirstGenerator(generatorSchedule);
+	} 
 }
