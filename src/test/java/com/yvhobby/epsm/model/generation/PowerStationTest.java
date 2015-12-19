@@ -135,4 +135,22 @@ public class PowerStationTest{
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallFirstGenerator();
 	}
+	
+	@Test
+	public void generatorNumberIsEqualToRequested(){
+		prepareAndInstallFirstGenerator();
+		prepareAndInstallSecondAndThirdGenerators();
+		compareGeneratorNumbersWithRequested();
+	}
+	
+	private void compareGeneratorNumbersWithRequested(){
+		Collection<Integer> requestedGeneratorNumbers = station.getGeneratorsNumbers();
+		
+		for(Integer requestedGeneratorNumber: requestedGeneratorNumbers){
+			Generator generator = station.getGenerator(requestedGeneratorNumber);
+			Integer generatorNumber = generator.getNumber();
+			
+			Assert.assertEquals(generatorNumber, requestedGeneratorNumber);
+		}
+	}
 }

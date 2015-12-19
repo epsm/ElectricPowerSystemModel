@@ -70,8 +70,12 @@ public class PowerStation{
 		}
 	}
 	
-	public Collection<Generator> getGenerators(){
-		return generators.values();
+	public Generator getGenerator(int generatorNumber){
+		return generators.get(generatorNumber);
+	}
+	
+	public Collection<Integer> getGeneratorsNumbers(){
+		return generators.keySet();
 	}
 
 	public int getNumber(){

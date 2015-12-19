@@ -1,6 +1,7 @@
 package main.java.com.yvhobby.epsm.model.dispatch;
 
 import java.time.LocalTime;
+import java.util.Collection;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -55,7 +56,9 @@ public class MainControlPanel {
 		}
 		
 		private void prepareGeneratorsStatesReports(){
-			for(Generator generator: station.getGenerators()){
+			Collection<Integer> generatorNumbers = station.getGeneratorsNumbers();
+			for(Integer generatorNumber: generatorNumbers){
+				Generator generator = station.getGenerator(generatorNumber);
 				GeneratorStateReport generatorReport = prepareGeneratorStateReport(generator);
 				addGeneratorStateReportToGeneratorsStatesReport(generatorReport);
 			}
@@ -97,7 +100,9 @@ public class MainControlPanel {
 		}
 		
 		private void processEveryGenerationSchedule(){
-			for(Generator generator: station.getGenerators()){
+			Collection<Integer> generatorNumbers = station.getGeneratorsNumbers();
+			for(Integer generatorNumber: generatorNumbers){
+				Generator generator = station.getGenerator(generatorNumber);
 				rememberCurrentGenerator(generator);
 				GeneratorGenerationSchedule generatorSchedule = getGeneratorGenerationSchedule(generator);
 				adjustGenerationAccordingToSchedule(generatorSchedule);
