@@ -1,19 +1,19 @@
 package main.java.com.yvhobby.epsm.model.dispatch;
 
 public class GeneratorStateReport implements Comparable<GeneratorStateReport>{
-	private  int generatorId;
+	private  int generatorNumber;
 	boolean isTurnedOn;
 	private float generationInWM;
 	
-	public GeneratorStateReport(int generatorId, boolean isTurnedOn, float generationInWM) {
+	public GeneratorStateReport(int generatorNumber, boolean isTurnedOn, float generationInWM) {
 		super();
-		this.generatorId = generatorId;
+		this.generatorNumber = generatorNumber;
 		this.isTurnedOn = isTurnedOn;
 		this.generationInWM = generationInWM;
 	}
 
-	public int getGeneratorId() {
-		return generatorId;
+	public int getGeneratorNumber() {
+		return generatorNumber;
 	}
 
 	public boolean isTurnedOn() {
@@ -26,9 +26,9 @@ public class GeneratorStateReport implements Comparable<GeneratorStateReport>{
 
 	@Override
 	public int compareTo(GeneratorStateReport o) {
-		if(generationInWM - o.generatorId < 0){
+		if(generationInWM - o.generatorNumber < 0){
 			return -1;
-		}else if(generationInWM - o.generatorId > 0){
+		}else if(generationInWM - o.generatorNumber > 0){
 			return + 1;
 		}
 		
@@ -39,7 +39,7 @@ public class GeneratorStateReport implements Comparable<GeneratorStateReport>{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + generatorId;
+		result = prime * result + generatorNumber;
 		return result;
 	}
 
@@ -57,11 +57,9 @@ public class GeneratorStateReport implements Comparable<GeneratorStateReport>{
 		
 		GeneratorStateReport other = (GeneratorStateReport) obj;
 		
-		if(generatorId != other.generatorId){
+		if(generatorNumber != other.generatorNumber){
 			return false;
 		}
 		return true;
 	}
-	
-	
 }

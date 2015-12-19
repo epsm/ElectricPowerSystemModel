@@ -78,7 +78,7 @@ public class Generator{
 		astaticRegulationTurnedOn = false;
 	}
 	
-	public int getId() {
+	public int getNumber(){
 		return number;
 	}
 

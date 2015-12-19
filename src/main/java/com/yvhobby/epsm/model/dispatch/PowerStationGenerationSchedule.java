@@ -13,15 +13,15 @@ public class PowerStationGenerationSchedule {
 		this.generatorSchedule = Collections.unmodifiableMap(schedule);
 	}
 
-	public GeneratorGenerationSchedule getGeneratorGenerationSchedule(int generatorId) {
-		return generatorSchedule.get(generatorId);
+	public GeneratorGenerationSchedule getGeneratorGenerationSchedule(int generatorNumber) {
+		return generatorSchedule.get(generatorNumber);
 	}
 	
-	public int getNumbersOfGenerators(){
+	public int getQuantityOfGener(){
 		return generatorSchedule.size();
 	}
 	
-	public Collection<Integer> getGeneratorsId(){
+	public Collection<Integer> getGeneratorsNumbers(){
 		return generatorSchedule.keySet();
 	}
 	

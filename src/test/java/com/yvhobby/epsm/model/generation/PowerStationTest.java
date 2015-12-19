@@ -4,8 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,16 +35,14 @@ public class PowerStationTest{
 	private final float SECOND_GENERATOR_NOMINAL_POWER = 300;
 	private final float THIRD_GENERATOR_NOMINAL_POWER = 400;
 	private final float FIRST_GENERATOR_MIN_POWER = 5;
-	private final int POWER_STATION_ID = 4458;
+	private final int POWER_STATION_NUMBER = 4458;
 	
 	@Before
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
-		station = new PowerStation();
+		station = new PowerStation(POWER_STATION_NUMBER);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstatnts.STANDART_FREQUENCY);
-		
-		station.setId(POWER_STATION_ID);
 	}
 	
 	void prepareAndInstallFirstGenerator(){
@@ -118,11 +114,11 @@ public class PowerStationTest{
 	
 	private void compareDataFromParametersWithReal(){
 		GeneratorParameters parameters = obtainSoleParametersObject();
-		int generatorId = parameters.getGeneratorId();
+		int generatorNumber = parameters.getGeneratorNumber();
 		float minimalPower = parameters.getMinimalTechnologyPower();
 		float nominalPower = parameters.getNominalPowerInMW();
 		
-		Assert.assertEquals(1, generatorId);
+		Assert.assertEquals(1, generatorNumber);
 		Assert.assertEquals(FIRST_GENERATOR_MIN_POWER, minimalPower, 0);
 		Assert.assertEquals(FIRST_GENERATOR_NOMINAL_POWER, nominalPower, 0);
 	}
@@ -135,7 +131,7 @@ public class PowerStationTest{
 	}
 	
 	@Test(expected = PowerStationException.class)
-	public void stationsThrowsExceptionIfTryToAddGeneratorWithTheSameIdAsPreviouslyInstalled(){
+	public void stationsThrowsExceptionIfTryToAddGeneratorWithTheSameNumberAsPreviouslyInstalled(){
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallFirstGenerator();
 	}

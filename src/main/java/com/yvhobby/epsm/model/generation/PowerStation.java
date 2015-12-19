@@ -8,11 +8,15 @@ import main.java.com.yvhobby.epsm.model.dispatch.GeneratorParameters;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationParameters;
 
 public class PowerStation{
-	private int id;
+	private int number;//must not be changed after creation
 	private Map<Integer, Generator> generators = new HashMap<Integer, Generator>();
 	private PowerStationParameters stationParameters;
 	private Map<Integer, GeneratorParameters> generatorParameters =
 			new HashMap<Integer, GeneratorParameters>();
+	
+	public PowerStation(int number) {
+		this.number = number;
+	}
 
 	public float getCurrentGenerationInMW(){
 		float generationInMW = 0;
@@ -38,30 +42,30 @@ public class PowerStation{
 	
 	private void createAndSaveParametersForEveryGenerator(){
 		for(Generator generator: generators.values()){
-			int generatorId = generator.getId();
+			int generatorNumber = generator.getNumber();
 			GeneratorParameters parameters = getGeneratorParameters(generator);
-			generatorParameters.put(generatorId, parameters);
+			generatorParameters.put(generatorNumber, parameters);
 		}
 	}
 	
 	private GeneratorParameters getGeneratorParameters(Generator generator){
-		int generatorId = generator.getId();
+		int generatorNumber = generator.getNumber();
 		float minimalPower = generator.getMinimalTechnologyPower();
 		float nominalPower = generator.getNominalPowerInMW(); 
 		
-		return new GeneratorParameters(generatorId, nominalPower, minimalPower);
+		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);
 	}
 	
 	public void createStationParametersReport(){
-		stationParameters = new PowerStationParameters(id, generatorParameters);
+		stationParameters = new PowerStationParameters(number, generatorParameters);
 	}
 	
 	public void addGenerator(Generator generator){
-		int generatorId = generator.getId();
-		Generator existGenerator = generators.put(generatorId, generator);
+		int generatorNumber = generator.getNumber();
+		Generator existGenerator = generators.put(generatorNumber, generator);
 		
 		if(existGenerator != null){
-			String message = "Generator with id " + generatorId + " already installed";
+			String message = "Generator with nunber " + generatorNumber + " already installed";
 			throw new PowerStationException(message);
 		}
 	}
@@ -70,11 +74,7 @@ public class PowerStation{
 		return generators.values();
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int stationId) {
-		id = stationId;
+	public int getNumber(){
+		return number;
 	}
 }

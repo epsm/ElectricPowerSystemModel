@@ -43,7 +43,7 @@ public class MainControlPanelPerformGenerationScheduleTest {
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		dispatcher = mock(Dispatcher.class);
 		stationControlPanel = new MainControlPanel();
-		PowerStation station = new PowerStation();
+		PowerStation station = new PowerStation(1);
 		generatorSchedule = new HashMap<Integer, GeneratorGenerationSchedule>();
 		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		Generator g_1 = new Generator(1);

@@ -5,19 +5,19 @@ import java.util.Collections;
 import java.util.Set;
 
 public class PowerStationStateReport {
-	private int powerStationId;
+	private int powerStationNumber;
 	private LocalTime timeStamp;
 	private Set<GeneratorStateReport> generatorsStatesReports;
 
-	public PowerStationStateReport(int powerStationId, LocalTime timeStamp,
+	public PowerStationStateReport(int powerStationNumber, LocalTime timeStamp,
 			Set<GeneratorStateReport> generatorsStatesReports) {
-		this.powerStationId = powerStationId;
+		this.powerStationNumber = powerStationNumber;
 		this.timeStamp = timeStamp;
 		this.generatorsStatesReports = Collections.unmodifiableSet(generatorsStatesReports);
 	}
 
-	public int getPowerStationId() {
-		return powerStationId;
+	public int getPowerStationNumber() {
+		return powerStationNumber;
 	}
 	
 	public LocalTime getTimeStamp() {

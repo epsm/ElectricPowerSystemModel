@@ -26,7 +26,7 @@ public class MainControlPanelSubscribeOnTestTest {
 	private MainControlPanel stationControlPanel;
 	private PowerStationStateReport stationStateReport;
 	private LocalTime CONSTANT_TIME_IN_MOCK_SIMULATION = LocalTime.NOON;
-	private final int STATION_ID = 158;
+	private final int STATION_NUMBER = 158;
 	
 	@Before
 	public void initialize(){
@@ -34,14 +34,14 @@ public class MainControlPanelSubscribeOnTestTest {
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		dispatcher = mock(Dispatcher.class);
 		stationControlPanel = new MainControlPanel();
-		PowerStation station = new PowerStation();
+		PowerStation station = new PowerStation(STATION_NUMBER);
 		Generator generator_1 = mock(Generator.class);
 		Generator generator_2 = mock(Generator.class);
 		
-		when(generator_1.getId()).thenReturn(1);
+		when(generator_1.getNumber()).thenReturn(1);
 		when(generator_1.isTurnedOn()).thenReturn(true);
 		when(generator_1.getGenerationInMW()).thenReturn(100f);
-		when(generator_2.getId()).thenReturn(2);
+		when(generator_2.getNumber()).thenReturn(2);
 		when(generator_2.isTurnedOn()).thenReturn(true);
 		when(generator_2.getGenerationInMW()).thenReturn(200f);
 		when(simulation.getTime()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
@@ -49,7 +49,6 @@ public class MainControlPanelSubscribeOnTestTest {
 		stationControlPanel.setSimulation(simulation);
 		stationControlPanel.setDispatcher(dispatcher);
 		stationControlPanel.setStation(station);
-		station.setId(STATION_ID);
 		station.addGenerator(generator_1);
 		station.addGenerator(generator_2);
 	}
@@ -66,17 +65,17 @@ public class MainControlPanelSubscribeOnTestTest {
 		obtainReportFromDispatcher();
 		
 		for(GeneratorStateReport generatorStateReport: stationStateReport.getGeneratorsStatesReports()){
-			if(generatorStateReport.getGeneratorId() == 1){
+			if(generatorStateReport.getGeneratorNumber() == 1){
 				firstGeneratorTurnedOn = generatorStateReport.isTurnedOn();
 				firstGeneratorGeneration = generatorStateReport.getGenerationInWM();
-			}else if(generatorStateReport.getGeneratorId() == 2){
+			}else if(generatorStateReport.getGeneratorNumber() == 2){
 				secondGeneratorTurnedOn = generatorStateReport.isTurnedOn();
 				secondGeneratorGeneration = generatorStateReport.getGenerationInWM();
 			}
 		}
 		
 		Assert.assertEquals(2, stationStateReport.getGeneratorsStatesReports().size());
-		Assert.assertEquals(STATION_ID, stationStateReport.getPowerStationId());
+		Assert.assertEquals(STATION_NUMBER, stationStateReport.getPowerStationNumber());
 		Assert.assertEquals(CONSTANT_TIME_IN_MOCK_SIMULATION, stationStateReport.getTimeStamp());
 		Assert.assertTrue(firstGeneratorTurnedOn);
 		Assert.assertTrue(secondGeneratorTurnedOn);

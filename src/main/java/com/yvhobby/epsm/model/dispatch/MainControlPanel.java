@@ -62,11 +62,11 @@ public class MainControlPanel {
 		}
 		
 		private GeneratorStateReport prepareGeneratorStateReport(Generator generator){
-			int generatorId = generator.getId();
+			int generatorNumber = generator.getNumber();
 			boolean isTurnedOn = generator.isTurnedOn();
 			float generationInWM = generator.getGenerationInMW();
 			
-			return new GeneratorStateReport(generatorId, isTurnedOn, generationInWM);
+			return new GeneratorStateReport(generatorNumber, isTurnedOn, generationInWM);
 		}
 		
 		private void addGeneratorStateReportToGeneratorsStatesReport(GeneratorStateReport report){
@@ -74,10 +74,10 @@ public class MainControlPanel {
 		}
 		
 		private PowerStationStateReport prepareStationStateReport(){
-			int stationId = station.getId();
+			int stationNumber = station.getNumber();
 			LocalTime currentTime = simulation.getTime();
 			
-			return new PowerStationStateReport(stationId, currentTime, generatorsReports);
+			return new PowerStationStateReport(stationNumber, currentTime, generatorsReports);
 		}
 		
 		private void sendStationReport(PowerStationStateReport stationReport){
@@ -109,8 +109,8 @@ public class MainControlPanel {
 		}
 		
 		private GeneratorGenerationSchedule getGeneratorGenerationSchedule(Generator generator){
-			int generatorId = generator.getId();
-			return stationGenerationSchedule.getGeneratorGenerationSchedule(generatorId);
+			int generatorNumber = generator.getNumber();
+			return stationGenerationSchedule.getGeneratorGenerationSchedule(generatorNumber);
 		}
 		
 		private void adjustGenerationAccordingToSchedule(GeneratorGenerationSchedule generatorSchedule){

@@ -24,8 +24,8 @@ public class DispatcherTestImpl implements Dispatcher{
 		for(GeneratorStateReport GReport: PSReport.getGeneratorsStatesReports()){
 			fmt.format(
 					"%12s"+ ", PS=%1d, G=%1d , generation=%10f",
-					PSReport.getTimeStamp(), PSReport.getPowerStationId(),
-					GReport.getGeneratorId(), GReport.getGenerationInWM());
+					PSReport.getTimeStamp(), PSReport.getPowerStationNumber(),
+					GReport.getGeneratorNumber(), GReport.getGenerationInWM());
 		}
 		
 		sb.append("\n-------------------------------------------------------------"

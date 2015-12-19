@@ -9,8 +9,8 @@ import main.java.com.yvhobby.epsm.model.generation.PowerStationException;
 public class GenerationScheduleValidator {
 	private PowerStationGenerationSchedule stationSchedule;
 	private PowerStationParameters stationParameters;
-	private Collection<Integer> stationGeneratorsId;
-	private Collection<Integer> scheduleGeneratorsId;
+	private Collection<Integer> stationGeneratorsNumbers;
+	private Collection<Integer> scheduleGeneratorsNumbers;
 	private Collection<GeneratorGenerationSchedule> turnedOnGeneratorsSchedules;
 	private final String HEADER = "Wrong schedule: ";
 	
@@ -26,8 +26,8 @@ public class GenerationScheduleValidator {
 		
 		getNecessaryDataFromStationScheduleAndStationParameters();
 		
-		numbersOfGeneratorsOnStationConformsToTheirNubersInSchedule();
-		scheduleContainsTheSameGeneratorsIdAsPowerStation();
+		quantityOfGeneratorsOnStationConformsToTheirQuantityInSchedule();
+		scheduleContainsTheSameGeneratorsNumbersAsPowerStation();
 	}
 	
 	public void stationParametersIsNotNull(){
@@ -61,13 +61,13 @@ public class GenerationScheduleValidator {
 	}
 	
 	private void getNecessaryDataFromStationScheduleAndStationParameters(){
-		getStationAndScheduledGeneraorIdNumbers();
+		getStationAndScheduledGeneraorNumbers();
 		getTurnedOnGeneratorsSchedules();
 	}
 	
-	private void getStationAndScheduledGeneraorIdNumbers(){
-		stationGeneratorsId = stationParameters.getGeneratorsId();
-		scheduleGeneratorsId = stationSchedule.getGeneratorsId();
+	private void getStationAndScheduledGeneraorNumbers(){
+		stationGeneratorsNumbers = stationParameters.getGeneratorsNumbers();
+		scheduleGeneratorsNumbers = stationSchedule.getGeneratorsNumbers();
 	}
 	
 	private void getTurnedOnGeneratorsSchedules(){
@@ -83,9 +83,9 @@ public class GenerationScheduleValidator {
 		}
 	}
 	
-	private void numbersOfGeneratorsOnStationConformsToTheirNubersInSchedule(){
-		int generatorsInStation =  stationParameters.getNumbersOfGenerators();
-		int generatorsInSchedule = stationSchedule.getNumbersOfGenerators();
+	private void quantityOfGeneratorsOnStationConformsToTheirQuantityInSchedule(){
+		int generatorsInStation =  stationParameters.getQuantityOfGenerators();
+		int generatorsInSchedule = stationSchedule.getQuantityOfGener();
 		
 		if(generatorsInSchedule != generatorsInStation){
 			String message = HEADER + "station has + " + generatorsInStation + 
@@ -94,13 +94,13 @@ public class GenerationScheduleValidator {
 		}
 	}
 	
-	private void scheduleContainsTheSameGeneratorsIdAsPowerStation(){
-		//collections with the same elements added in different order can be not equal
-		HashSet<Integer> stationGeneratorsIdSet = new HashSet<Integer>(stationGeneratorsId);
-		HashSet<Integer> scheduleGeneratorsIdSet = new HashSet<Integer>(scheduleGeneratorsId); 
+	private void scheduleContainsTheSameGeneratorsNumbersAsPowerStation(){
+		//collections with the same elements but added in different order can be not equal
+		HashSet<Integer> stationGeneratorsNumbersSet = new HashSet<Integer>(stationGeneratorsNumbers);
+		HashSet<Integer> scheduleGeneratorsNumbersSet = new HashSet<Integer>(scheduleGeneratorsNumbers); 
 		
-		if(!stationGeneratorsIdSet.equals(scheduleGeneratorsIdSet)){
-			String message = HEADER + "station and schedule has different generator id numbers.";
+		if(!stationGeneratorsNumbersSet.equals(scheduleGeneratorsNumbersSet)){
+			String message = HEADER + "station and schedule has different generator numbers.";
 			throw new PowerStationException(message);
 		}
 	}
@@ -109,7 +109,7 @@ public class GenerationScheduleValidator {
 		for(GeneratorGenerationSchedule schedule: turnedOnGeneratorsSchedules){
 			if(!schedule.isAstaticRegulatorTurnedOn() && schedule.getCurve() == null){
 				String message = HEADER + "there is no generation curve for generator " + 
-						schedule.getGeneratorId() + ".";
+						schedule.getGeneratorNumbers() + ".";
 				throw new PowerStationException(message);
 			}
 		}

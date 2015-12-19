@@ -5,11 +5,11 @@ import java.util.Collections;
 import java.util.Map;
 
 public class PowerStationParameters{
-	private int powerStationId;
+	private int powerStationNumber;
 	private Map<Integer, GeneratorParameters> generatorParameters;
 	
-	public PowerStationParameters(int powerStationId, Map<Integer, GeneratorParameters> generatorsParameters) {
-		this.powerStationId = powerStationId;
+	public PowerStationParameters(int powerStationNumber, Map<Integer, GeneratorParameters> generatorsParameters) {
+		this.powerStationNumber = powerStationNumber;
 		this.generatorParameters = Collections.unmodifiableMap(generatorsParameters);
 	}
 
@@ -17,15 +17,15 @@ public class PowerStationParameters{
 		return generatorParameters.values();
 	}
 
-	public int getPowerStationId() {
-		return powerStationId;
+	public int getPowerStationNumber() {
+		return powerStationNumber;
 	}
 	
-	public int getNumbersOfGenerators(){
+	public int getQuantityOfGenerators(){
 		return generatorParameters.size();
 	}
 	
-	public Collection<Integer> getGeneratorsId(){
+	public Collection<Integer> getGeneratorsNumbers(){
 		return generatorParameters.keySet();
 	}
 }

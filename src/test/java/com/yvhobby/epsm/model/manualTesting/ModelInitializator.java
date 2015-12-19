@@ -61,7 +61,7 @@ public class ModelInitializator {
 	}
 	
 	private void createPowerStationAndAddToEnergySystem(){
-		PowerStation powerStation = new PowerStation();
+		PowerStation powerStation = new PowerStation(1);
 		simulation.addPowerStation(powerStation);
 		
 		controlPanel = new MainControlPanel();
