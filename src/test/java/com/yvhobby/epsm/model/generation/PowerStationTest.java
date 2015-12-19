@@ -50,11 +50,10 @@ public class PowerStationTest{
 	}
 	
 	void prepareAndInstallFirstGenerator(){
-		generator_1 = new Generator();
+		generator_1 = new Generator(1);
 		controlUnit_1 = new ControlUnit(simulation, generator_1);
 		
 		generator_1.setControlUnit(controlUnit_1);
-		generator_1.setId(1);
 		generator_1.setMinimalTechnologyPower(FIRST_GENERATOR_MIN_POWER);
 		generator_1.setNominalPowerInMW(FIRST_GENERATOR_NOMINAL_POWER);
 		generator_1.setPowerAtRequiredFrequency(FIRST_GENERATOR_RQUIRED_POWER);
@@ -63,15 +62,13 @@ public class PowerStationTest{
 	}
 	
 	void prepareAndInstallSecondAndThirdGenerators(){
-		generator_2 = new Generator();
-		generator_3 = new Generator();
+		generator_2 = new Generator(2);
+		generator_3 = new Generator(3);
 		controlUnit_2 = new ControlUnit(simulation, generator_1);
 		controlUnit_3 = new ControlUnit(simulation, generator_1);
 		
 		generator_2.setControlUnit(controlUnit_2);
 		generator_3.setControlUnit(controlUnit_3);
-		generator_2.setId(2);
-		generator_3.setId(3);
 		generator_2.setNominalPowerInMW(SECOND_GENERATOR_NOMINAL_POWER);
 		generator_3.setNominalPowerInMW(THIRD_GENERATOR_NOMINAL_POWER);
 		generator_2.setPowerAtRequiredFrequency(SECOND_GENERATOR_RQUIRED_POWER);

@@ -21,7 +21,7 @@ public class ControlUnitTest {
 	@Before
 	public void init(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
-		generator = new Generator();
+		generator = new Generator(1);
 		controlUnit = new ControlUnit(simulation, generator);
 		
 		controlUnit.setCoefficientOfStatism(0.1f);

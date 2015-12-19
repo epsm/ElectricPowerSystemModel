@@ -18,7 +18,7 @@ public class GeneratorTest{
 	
 	@Before
 	public void initialize(){
-		generator = new Generator();
+		generator = new Generator(1);
 		controlUnit = mock(ControlUnit.class);
 		
 		when(controlUnit.getGeneratorPowerInMW()).thenReturn(GENERATION);

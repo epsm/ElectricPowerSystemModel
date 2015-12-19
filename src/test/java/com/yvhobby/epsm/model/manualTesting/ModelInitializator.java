@@ -70,7 +70,7 @@ public class ModelInitializator {
 		controlPanel.setDispatcher(dispatcher);
 		
 		//first(astatic)
-		Generator generator_1 = new Generator();
+		Generator generator_1 = new Generator(1);
 		AstaticRegulationUnit regulationUnit_1 = new AstaticRegulationUnit(simulation, generator_1);
 		ControlUnit controlUnit_1 = new ControlUnit(simulation, generator_1);
 		
@@ -78,10 +78,9 @@ public class ModelInitializator {
 		generator_1.setControlUnit(controlUnit_1);
 		generator_1.setMinimalTechnologyPower(1);
 		generator_1.setNominalPowerInMW(20);
-		generator_1.setId(1);
 		
 		//second(static)
-		Generator generator_2 = new Generator();
+		Generator generator_2 = new Generator(2);
 		AstaticRegulationUnit regulationUnit_2 = new AstaticRegulationUnit(simulation, generator_2);
 		ControlUnit controlUnit_2 = new ControlUnit(simulation, generator_2);
 		
@@ -91,7 +90,6 @@ public class ModelInitializator {
 		generator_2.setControlUnit(controlUnit_2);
 		generator_2.setMinimalTechnologyPower(25);
 		generator_2.setNominalPowerInMW(100);
-		generator_2.setId(2);
 		
 		//adding
 		powerStation.addGenerator(generator_1);

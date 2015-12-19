@@ -8,7 +8,11 @@ public class Generator{
 	private float currentGeneration;
 	private boolean generatorTurnedOn;
 	private boolean astaticRegulationTurnedOn;
-	private int id;
+	private int number;//must not be changed after construction
+	
+	public Generator(int number){
+		this.number = number;
+	}
 	
 	public float getGenerationInMW(){
 		if(generatorTurnedOn){
@@ -75,11 +79,7 @@ public class Generator{
 	}
 	
 	public int getId() {
-		return id;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
+		return number;
 	}
 
 	public float getPowerAtRequiredFrequency() {

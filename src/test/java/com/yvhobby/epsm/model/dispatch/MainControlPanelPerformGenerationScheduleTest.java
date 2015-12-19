@@ -46,15 +46,15 @@ public class MainControlPanelPerformGenerationScheduleTest {
 		PowerStation station = new PowerStation();
 		generatorSchedule = new HashMap<Integer, GeneratorGenerationSchedule>();
 		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
-		generator_1 = spy(Generator.class);
-		generator_2 = spy(Generator.class);
+		Generator g_1 = new Generator(1);
+		Generator g_2 = new Generator(2);
+		generator_1 = spy(g_1);
+		generator_2 = spy(g_2);
 		ControlUnit controlUnit_1 = new ControlUnit(simulation, generator_1);
 		ControlUnit controlUnit_2 = new ControlUnit(simulation, generator_2);
 		
 		when(simulation.getTime()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 		
-		generator_1.setId(1);
-		generator_2.setId(2);
 		generator_1.setNominalPowerInMW(200);
 		generator_2.setNominalPowerInMW(200);
 		generator_1.setControlUnit(controlUnit_1);
@@ -119,7 +119,7 @@ public class MainControlPanelPerformGenerationScheduleTest {
 	}
 	
 	@Test
-	public void mainControlPanelTurnsOnAstaticRegulationIfItIsScheduledIndependentIsItTurnedOnOrOff() 
+	public void mainAstaticRegulationWillBeTurnedOnIfItIsScheduledIndependentIsItTurnedOnOrOff() 
 			throws InterruptedException{
 		prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOnAstaticRegulation();
 		turnOnBothGenerators();
@@ -137,36 +137,33 @@ public class MainControlPanelPerformGenerationScheduleTest {
 		createStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);;
 	}
 	
-	private void turnOnAstaticRegulationOnfirstAndTurnOffItOnSecondGenerators(){
-		generator_1.turnOnAstaticRegulation();
-		generator_2.turnOffAstaticRegulation();
-	}
-	
 	private void turnOnBothGenerators(){
 		generator_1.turnOnGenerator();
 		generator_2.turnOnGenerator();
 	}
 	
+	private void turnOnAstaticRegulationOnfirstAndTurnOffItOnSecondGenerators(){
+		generator_1.turnOnAstaticRegulation();
+		generator_2.turnOffAstaticRegulation();
+	}
+	
 	@Test
-	public void mainControlPanelTurnsOffAstaticRegulationIfItIsScheduledAIndependentIsItTurnedOnOrOff() 
+	public void mainAstaticRegulationWillBeTurnedOffIfItIsScheduledIndependentIsItTurnedOnOrOff() 
 			throws InterruptedException{
 		prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOffAstaticRegulation();
 		turnOnBothGenerators();
 		turnOnAstaticRegulationOnfirstAndTurnOffItOnSecondGenerators();
 		stationControlPanel.performGenerationSchedule(stationGenerationSchedule);
 		doPauseUntilMainControlPanellAdjustGenerators();
-		hasAstaticRegulationBeenTurnedOff();
+
+		Assert.assertFalse(generator_1.isAstaticRegulationTurnedOn());
+		Assert.assertFalse(generator_2.isAstaticRegulationTurnedOn());
 	}
 	
 	private void prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOffAstaticRegulation(){
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, false, generationCurve);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
 		createStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);;
-	}
-	
-	private void hasAstaticRegulationBeenTurnedOff(){
-		verify(generator_1).turnOffAstaticRegulation();
-		verify(generator_2).turnOffAstaticRegulation();
 	}
 	
 	@Test
