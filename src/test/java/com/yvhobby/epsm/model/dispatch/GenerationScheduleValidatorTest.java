@@ -26,6 +26,7 @@ public class GenerationScheduleValidatorTest {
 	public void stationParameterIsNullAndScheduleIsNotNull(){
 		stationSchedule = mock(PowerStationGenerationSchedule.class);
 		stationParameters = null;
+		
 		validator.validate(stationSchedule, stationParameters);
 	}
 	
@@ -33,6 +34,7 @@ public class GenerationScheduleValidatorTest {
 	public void scheduleIsNullAndStationParameterIsNull(){
 		stationSchedule = null;
 		stationParameters = mock(PowerStationParameters.class);
+		
 		validator.validate(stationSchedule, stationParameters);
 	}
 	
@@ -40,6 +42,7 @@ public class GenerationScheduleValidatorTest {
 	public void quantityOfGeneratorsOnStationDoesNotConformToTheirQuantityInSchedule(){
 		prepareScheduleWithThreeGenerators();
 		prepareStationWithTwoGenerators();
+		
 		validator.validate(stationSchedule, stationParameters);
 	}
 	
@@ -57,6 +60,7 @@ public class GenerationScheduleValidatorTest {
 	public void scheduleAndPowerStationContainsDifferentGeneratorsNumbers(){
 		prepareSchedulesWithSecondAndThirdGenerators();
 		prepareStationWithFirstAndSecondGenerators();
+		
 		validator.validate(stationSchedule, stationParameters);
 	}
 	
@@ -75,6 +79,7 @@ public class GenerationScheduleValidatorTest {
 	@Test(expected = PowerStationException.class)
 	public void generatorSchedulesContainerIsNull(){
 		prepareNullGeneratorSchedulesContainerAndNormalStationParameters();
+		
 		validator.validate(stationSchedule, stationParameters);
 	}
 	
@@ -99,13 +104,25 @@ public class GenerationScheduleValidatorTest {
 		stationSchedule = new PowerStationGenerationSchedule(generatorSchedules);
 	}
 
-	@Test
-	public void astaticRegulationTurnedOffAndThereIsNoGenerationCurveStationScheduleSizeOne(){
-		GeneratorGenerationSchedule generatorSchedule = new GeneratorGenerationSchedule(1, true, false, null);
+	@Test(expected = PowerStationException.class)
+	public void generationCurveIsAbsentWhenAstaticRegulationTurnedOff(){
+		GeneratorGenerationSchedule generatorSchedule = 
+				prepareScheduleGeneratorOnAstaticRegulationOffGenerationCurveNull();
+		
 		createStationScheduleWithGivenSingleGeneratorSchedule(generatorSchedule);
+		prepareMockedStationParametrsWithOneGenerator();
+		
+		validator.validate(stationSchedule, stationParameters);
+	}
+	
+	private GeneratorGenerationSchedule prepareScheduleGeneratorOnAstaticRegulationOffGenerationCurveNull(){
+		return new GeneratorGenerationSchedule(1, true, false, null);
+	}
+	
+	private void prepareMockedStationParametrsWithOneGenerator(){
 		stationParameters = mock(PowerStationParameters.class);
 		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
-		validator.validate(stationSchedule, stationParameters);
+		when(stationParameters.getGeneratorsNumbers()).thenReturn(Arrays.asList(new Integer[] {1}));
 	}
 	
 	public void powerInGenerationCurveTooHighForGenerator(){
@@ -125,6 +142,10 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	public void doNothingIfScheduleCorrect(){
+		
+	}
+	
+	public void generatorNumbersInScheduleWasSetWrong(){
 		
 	}
 }

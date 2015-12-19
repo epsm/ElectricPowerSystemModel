@@ -28,6 +28,7 @@ public class GenerationScheduleValidator {
 		
 		quantityOfGeneratorsOnStationConformsToTheirQuantityInSchedule();
 		scheduleContainsTheSameGeneratorsNumbersAsPowerStation();
+		thereIsGenerationCurveIfAstaticRegulationTurnedOff();
 	}
 	
 	public void stationParametersIsNotNull(){
@@ -105,10 +106,10 @@ public class GenerationScheduleValidator {
 		}
 	}
 	
-	public void ifAstaticRegulationTurnedOffThereIsGenerationCurve(){
+	public void thereIsGenerationCurveIfAstaticRegulationTurnedOff(){
 		for(GeneratorGenerationSchedule schedule: turnedOnGeneratorsSchedules){
 			if(!schedule.isAstaticRegulatorTurnedOn() && schedule.getCurve() == null){
-				String message = HEADER + "there is no generation curve for generator " + 
+				String message = HEADER + "there is no necessary generation curve for generator " + 
 						schedule.getGeneratorNumbers() + ".";
 				throw new PowerStationException(message);
 			}
