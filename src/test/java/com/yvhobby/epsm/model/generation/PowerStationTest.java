@@ -131,7 +131,7 @@ public class PowerStationTest{
 	}
 	
 	@Test(expected = PowerStationException.class)
-	public void stationsThrowsExceptionIfTryToAddGeneratorWithTheSameNumberAsPreviouslyInstalled(){
+	public void exceptionIfTryToAddGeneratorWithTheSameNumberAsPreviouslyInstalled(){
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallFirstGenerator();
 	}

@@ -62,9 +62,9 @@ public class PowerStation{
 	
 	public void addGenerator(Generator generator){
 		int generatorNumber = generator.getNumber();
-		Generator existGenerator = generators.put(generatorNumber, generator);
+		Generator existingGenerator = generators.put(generatorNumber, generator);
 		
-		if(existGenerator != null){
+		if(existingGenerator != null){
 			String message = "Generator with nunber " + generatorNumber + " already installed";
 			throw new PowerStationException(message);
 		}

@@ -31,7 +31,6 @@ public class GenerationScheduleValidator {
 	private void validateOnNullValues(){
 		stationParametersIsNotNull();
 		generationScheduleIsNotNull();
-		anyScheduleIsNotNull();
 	}
 	
 	public void stationParametersIsNotNull(){
@@ -48,21 +47,6 @@ public class GenerationScheduleValidator {
 		}
 	}
 	
-	private void anyScheduleIsNotNull(){
-		Collection<Integer> generatorNumbers = stationSchedule.getGeneratorsNumbers();
-		for(Integer generatorNumber: generatorNumbers){
-			currentGeneratorSchedule = stationSchedule.getGeneratorGenerationSchedule(generatorNumber);
-			verifyScheduleIsNotNull();
-		}
-	}
-	
-	private void verifyScheduleIsNotNull(){
-		if(currentGeneratorSchedule == null){
-			String message = HEADER + "one of schedules for generator is null.";
-			throw new PowerStationException(message);
-		}
-	}
-	
 	private void getNecessaryDataFromStationScheduleAndStationParameters(){
 		getStationAndScheduledGeneraorNumbers();
 	}
@@ -73,25 +57,8 @@ public class GenerationScheduleValidator {
 	}
 	
 	private void validateOnConformityGeneratorsNumberInStationAndInSchedule(){
-		scheduleReturnsGeneratorsWithNumberAsRequested();
 		quantityOfGeneratorsOnStationConformsToTheirQuantityInSchedule();
 		scheduleContainsTheSameGeneratorsNumbersAsPowerStation();
-	}
-	
-	private void scheduleReturnsGeneratorsWithNumberAsRequested(){
-		for(Integer generatorNumber: scheduleGeneratorsNumbers){
-			verifyIsReturndGeneratorNumberConformsRequested(generatorNumber);
-		}
-	}
-	
-	private void verifyIsReturndGeneratorNumberConformsRequested(int requestedGeneratorNumber){
-		currentGeneratorSchedule = stationSchedule.getGeneratorGenerationSchedule(requestedGeneratorNumber);
-		int generatorNumberInSchedule = currentGeneratorSchedule.getGeneratorNumber();
-		
-		if(generatorNumberInSchedule != requestedGeneratorNumber){
-			String message = HEADER + "numbers of requested and received generator doesn't match.";
-			throw new PowerStationException(message);
-		}
 	}
 	
 	private void quantityOfGeneratorsOnStationConformsToTheirQuantityInSchedule(){
@@ -172,6 +139,4 @@ public class GenerationScheduleValidator {
 		
 		return astaticRegulationTurnedOff && curve == null;
 	}
-	
-	
 }

@@ -3,7 +3,7 @@ package main.java.com.yvhobby.epsm.model.dispatch;
 import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
 
 public class GeneratorGenerationSchedule {
-	private int generatorNumber;
+	private int generatorNumber;//must not be changed after construction
 	private boolean GeneratorTurnedOn;
 	private boolean AstaticRegulatorTurnedOn;
 	private LoadCurve curve;
