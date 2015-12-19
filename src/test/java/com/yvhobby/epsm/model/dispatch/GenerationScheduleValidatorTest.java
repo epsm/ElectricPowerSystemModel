@@ -14,6 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.yvhobby.epsm.model.dispatch.GenerationScheduleValidator;
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorGenerationSchedule;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationGenerationSchedule;
@@ -156,18 +157,6 @@ public class GenerationScheduleValidatorTest {
 		prepareMockedStationParametersWithFirstGenerator();
 		
 		validator.validate(stationSchedule, stationParameters);
-	}
-	
-	@Ignore
-	@Test
-	public void generationCurveHasLessThan24hours(){
-		
-	}
-	
-	@Ignore
-	@Test
-	public void generationCurveHasMoreThan24hours(){
-		
 	}
 	
 	@Ignore

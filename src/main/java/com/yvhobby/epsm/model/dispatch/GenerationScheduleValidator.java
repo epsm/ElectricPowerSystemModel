@@ -99,8 +99,8 @@ public class GenerationScheduleValidator {
 		int generatorsInSchedule = stationSchedule.getQuantityOfGenerators();
 		
 		if(generatorsInSchedule != generatorsInStation){
-			String message = HEADER + "station has " + generatorsInStation + 
-					" generator(s) but schedule has " + generatorsInSchedule + " generator(s).";
+			String message = HEADER + "station has " + generatorsInStation 
+					+ " generator(s) but schedule has " + generatorsInSchedule + " generator(s).";
 			throw new PowerStationException(message);
 		}
 	}
@@ -159,10 +159,9 @@ public class GenerationScheduleValidator {
 	
 	private void verifyEveryGeneratorIsCurvePresentIfAstaticRegulationTurnedOff(int generatorNumber){
 		currentGeneratorSchedule = stationSchedule.getGeneratorGenerationSchedule(generatorNumber);
-		
 		if(isAstaticRegulationTurnedOffAndThereIsGenerationCurve(currentGeneratorSchedule)){
-			String message = HEADER + "there is no necessary generation curve for generator " + 
-					currentGeneratorSchedule.getGeneratorNumber() + ".";
+			String message = HEADER + "there is no necessary generation curve for generator "
+					+ generatorNumber + ".";
 			throw new PowerStationException(message);
 		}
 	}
@@ -173,4 +172,6 @@ public class GenerationScheduleValidator {
 		
 		return astaticRegulationTurnedOff && curve == null;
 	}
+	
+	
 }

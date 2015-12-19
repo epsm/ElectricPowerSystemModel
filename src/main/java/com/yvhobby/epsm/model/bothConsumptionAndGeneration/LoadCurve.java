@@ -3,6 +3,7 @@ package main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration;
 import java.time.LocalTime;
 
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
+import main.java.com.yvhobby.epsm.model.generation.PowerStationException;
 
 public class LoadCurve{
 	private float[] loadByHoursInMW;
@@ -13,7 +14,15 @@ public class LoadCurve{
 	private int nextHour;
 	private float nanosFromStartOfRequestedHour;
 	
-	public LoadCurve(float[] loadByHoursInMW) {
+	public LoadCurve(float[] loadByHoursInMW){
+		if(loadByHoursInMW == null){
+			String message = "There is null instead incoming values.";
+			throw new PowerStationException(message);
+		}else if(loadByHoursInMW.length != 24){
+			String message = "Incoming array length must be 24.";
+			throw new PowerStationException(message);
+		}
+		
 		this.loadByHoursInMW = loadByHoursInMW;
 	}
 	

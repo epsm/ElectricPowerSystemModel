@@ -3,14 +3,20 @@ package test.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration;
 import java.time.LocalTime;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
+import main.java.com.yvhobby.epsm.model.generation.PowerStationException;
 import test.java.com.yvhobby.epsm.model.constantsForTests.TestsConstants;
 
 public class LoadCurveTest{
 	private float[] loadByHours = TestsConstants.LOAD_BY_HOURS;
 	private LoadCurve curve = new LoadCurve(loadByHours);
+	
+	@Rule
+	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Test
 	public void loadByHoursEqualsToOriginal(){
@@ -67,5 +73,21 @@ public class LoadCurveTest{
 		maxlDelta = (maxLoadValue - minLoadValue) / (secondsInHour);
 		
 		return maxlDelta;
+	}
+	
+	@Test
+	public void constructorThrowsExceptionIfIncomingArrayIsNull(){
+		expectedEx.expect(PowerStationException.class);
+	    expectedEx.expectMessage("There is null instead incoming values.");
+	    
+		new LoadCurve(null);
+	}
+	
+	@Test
+	public void constructorThrowsExceptionIfIncomingArrayLenghtIsNot24(){
+		expectedEx.expect(PowerStationException.class);
+	    expectedEx.expectMessage("Incoming array length must be 24.");
+	    
+	    new LoadCurve(new float[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11});
 	}
 }
