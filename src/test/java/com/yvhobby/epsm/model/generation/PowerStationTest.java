@@ -137,7 +137,7 @@ public class PowerStationTest{
 	}
 	
 	@Test
-	public void generatorNumberIsEqualToRequested(){
+	public void generatorNumbersAreEqualToRequested(){
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallSecondAndThirdGenerators();
 		compareGeneratorNumbersWithRequested();

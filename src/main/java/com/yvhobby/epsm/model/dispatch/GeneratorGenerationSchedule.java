@@ -28,7 +28,7 @@ public class GeneratorGenerationSchedule {
 		return curve;
 	}
 
-	public int getGeneratorNumbers() {
+	public int getGeneratorNumber() {
 		return generatorNumber;
 	}
 }

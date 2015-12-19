@@ -17,15 +17,11 @@ public class PowerStationGenerationSchedule {
 		return generatorSchedule.get(generatorNumber);
 	}
 	
-	public int getQuantityOfGener(){
+	public int getQuantityOfGenerators(){
 		return generatorSchedule.size();
 	}
 	
 	public Collection<Integer> getGeneratorsNumbers(){
 		return generatorSchedule.keySet();
-	}
-	
-	public Collection<GeneratorGenerationSchedule> getGeneratorGenerationSchedules(){
-		return generatorSchedule.values();
 	}
 }
