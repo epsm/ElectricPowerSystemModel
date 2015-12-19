@@ -9,13 +9,15 @@ import main.java.com.yvhobby.epsm.model.dispatch.PowerStationParameters;
 
 public class PowerStation{
 	private int number;//must not be changed after creation
-	private Map<Integer, Generator> generators = new HashMap<Integer, Generator>();
+	private Map<Integer, Generator> generators;
 	private PowerStationParameters stationParameters;
-	private Map<Integer, GeneratorParameters> generatorParameters =
-			new HashMap<Integer, GeneratorParameters>();
+	private Map<Integer, GeneratorParameters> generatorParameters;
+	private Generator generator;
 	
 	public PowerStation(int number) {
 		this.number = number;
+		generators = new HashMap<Integer, Generator>();
+		generatorParameters = new HashMap<Integer, GeneratorParameters>();
 	}
 
 	public float getCurrentGenerationInMW(){
@@ -61,13 +63,32 @@ public class PowerStation{
 	}
 	
 	public void addGenerator(Generator generator){
-		int generatorNumber = generator.getNumber();
-		Generator existingGenerator = generators.put(generatorNumber, generator);
-		
-		if(existingGenerator != null){
-			String message = "Generator with nunber " + generatorNumber + " already installed";
+		this.generator = generator;
+		verifyIsGeneratorNotNull();
+		verifyIfGeneartorWithTheSameNumberExists();
+		addGenerator();
+	}
+	
+	private void verifyIsGeneratorNotNull(){
+		if(generator == null){
+			String message = "Generator must not be null.";
 			throw new PowerStationException(message);
 		}
+	}
+	
+	private void verifyIfGeneartorWithTheSameNumberExists(){
+		int generatorNumber = generator.getNumber();
+		Generator existingGenerator = generators.get(generatorNumber);
+		
+		if(existingGenerator != null){
+			String message = "Generator with number " + generatorNumber + " already installed.";
+			throw new PowerStationException(message);
+		}
+	}
+	
+	private void addGenerator(){
+		int generatorNumber = generator.getNumber();
+		generators.put(generatorNumber, generator);
 	}
 	
 	public Generator getGenerator(int generatorNumber){

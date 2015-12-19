@@ -13,12 +13,12 @@ public class PowerStationGenerationSchedule {
 	
 	public void addGeneratorGenerationSchedule(GeneratorGenerationSchedule generatorSchedule){
 		this.generatorSchedule = generatorSchedule;
-		verifyScheduleOnNull();
+		verifyIsScheduleNotNull();
 		verifyIfScheduleWithTheSameGeneratorNumberExists();
 		addSchedule();
 	}
 	
-	private void verifyScheduleOnNull(){
+	private void verifyIsScheduleNotNull(){
 		if(generatorSchedule == null){
 			String message = "Generation schedule must not be null.";
 			throw new PowerStationException(message);
@@ -27,9 +27,9 @@ public class PowerStationGenerationSchedule {
 	
 	private void verifyIfScheduleWithTheSameGeneratorNumberExists(){
 		int generatorNumber = generatorSchedule.getGeneratorNumber();
-		GeneratorGenerationSchedule schedule = getGeneratorGenerationSchedule(generatorNumber);
+		GeneratorGenerationSchedule existingSchedule = getGeneratorGenerationSchedule(generatorNumber);
 		
-		if(schedule != null){
+		if(existingSchedule != null){
 			String message = "Generation schedule for generator number "
 					+ generatorSchedule.getGeneratorNumber() + " already exists.";
 			throw new PowerStationException(message);

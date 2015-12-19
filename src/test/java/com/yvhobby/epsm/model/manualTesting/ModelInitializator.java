@@ -1,7 +1,5 @@
 package test.java.com.yvhobby.epsm.model.manualTesting;
 
-import java.util.HashMap;
-
 import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithShockLoad;
@@ -97,19 +95,16 @@ public class ModelInitializator {
 	}
 	
 	private void createGenerationSchedule(){
-		HashMap<Integer, GeneratorGenerationSchedule> generatorSchedule = null;
 		LoadCurve generationCurve = null;
 		GeneratorGenerationSchedule genrationSchedule_1 = null;
 		GeneratorGenerationSchedule genrationSchedule_2 = null;
 		
-		generatorSchedule = new HashMap<Integer, GeneratorGenerationSchedule>();
+		generationSchedule = new PowerStationGenerationSchedule();
 		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, true, null);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
-		
-		generatorSchedule.put(1, genrationSchedule_1);
-		generatorSchedule.put(2, genrationSchedule_2);
-		generationSchedule = new PowerStationGenerationSchedule(generatorSchedule);
+		generationSchedule.addGeneratorGenerationSchedule(genrationSchedule_1);
+		generationSchedule.addGeneratorGenerationSchedule(genrationSchedule_2);
 	}
 	
 	private void turnOnPowerStationAutoControl(){

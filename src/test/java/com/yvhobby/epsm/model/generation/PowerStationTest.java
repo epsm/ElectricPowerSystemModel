@@ -7,7 +7,9 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorParameters;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationParameters;
@@ -36,6 +38,9 @@ public class PowerStationTest{
 	private final float THIRD_GENERATOR_NOMINAL_POWER = 400;
 	private final float FIRST_GENERATOR_MIN_POWER = 5;
 	private final int POWER_STATION_NUMBER = 4458;
+	
+	@Rule
+	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Before
 	public void initialize(){
@@ -130,12 +135,6 @@ public class PowerStationTest{
 		return parameters.iterator().next();
 	}
 	
-	@Test(expected = PowerStationException.class)
-	public void exceptionIfTryToAddGeneratorWithTheSameNumberAsPreviouslyInstalled(){
-		prepareAndInstallFirstGenerator();
-		prepareAndInstallFirstGenerator();
-	}
-	
 	@Test
 	public void generatorNumbersAreEqualToRequested(){
 		prepareAndInstallFirstGenerator();
@@ -152,5 +151,22 @@ public class PowerStationTest{
 			
 			Assert.assertEquals(generatorNumber, requestedGeneratorNumber);
 		}
+	}
+	
+	@Test
+	public void exceptionIfTryToAddNull(){
+		expectedEx.expect(PowerStationException.class);
+	    expectedEx.expectMessage("Generator must not be null.");
+		
+		station.addGenerator(null);
+	}
+	
+	@Test
+	public void exceptionIfTryToAddGeneratorWithTheSameNumberAsPreviouslyInstalled(){
+		expectedEx.expect(PowerStationException.class);
+	    expectedEx.expectMessage("Generator with number 1 already installed.");
+		
+		prepareAndInstallFirstGenerator();
+		prepareAndInstallFirstGenerator();
 	}
 }
