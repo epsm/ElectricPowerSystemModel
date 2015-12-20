@@ -15,7 +15,7 @@ public class ControlUnit {
 		this.simulation = simulation;
 		this.generator = generator;
 		requiredFrequency = GlobalConstatnts.STANDART_FREQUENCY;
-		coefficientOfStatism = 4;
+		coefficientOfStatism = 0.01f;
 	}
 
 	public float getGeneratorPowerInMW(){

@@ -74,15 +74,13 @@ public class ModelInitializator {
 		
 		generator_1.setAstaticRegulationUnit(regulationUnit_1);
 		generator_1.setControlUnit(controlUnit_1);
-		generator_1.setMinimalTechnologyPower(1);
-		generator_1.setNominalPowerInMW(20);
+		generator_1.setMinimalTechnologyPower(5);
+		generator_1.setNominalPowerInMW(40);
 		
 		//second(static)
 		Generator generator_2 = new Generator(2);
 		AstaticRegulationUnit regulationUnit_2 = new AstaticRegulationUnit(simulation, generator_2);
 		ControlUnit controlUnit_2 = new ControlUnit(simulation, generator_2);
-		
-		controlUnit_2.setPowerAtRequiredFrequency(30);
 		
 		generator_2.setAstaticRegulationUnit(regulationUnit_2);
 		generator_2.setControlUnit(controlUnit_2);
@@ -100,11 +98,22 @@ public class ModelInitializator {
 		GeneratorGenerationSchedule genrationSchedule_2 = null;
 		
 		generationSchedule = new PowerStationGenerationSchedule();
-		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
+		generationCurve = 
+				new LoadCurve(prepareArrayWithFifteenPercentLessValues(TestsConstants.LOAD_BY_HOURS));
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, true, null);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
 		generationSchedule.addGeneratorGenerationSchedule(genrationSchedule_1);
 		generationSchedule.addGeneratorGenerationSchedule(genrationSchedule_2);
+	}
+	
+	private float[] prepareArrayWithFifteenPercentLessValues(float[] array){
+		float[] newArray = new float[array.length];
+		
+		for(int i= 0; i < array.length; i++){
+			newArray[i] = array[i] * 0.85f; 
+		}
+		
+		return newArray;
 	}
 	
 	private void turnOnPowerStationAutoControl(){

@@ -13,7 +13,7 @@ public class PowerSystemSimulationManualTest {
 	private StringBuilder sb;
 	private int counter;
 	private final int INTERVAL_BETWEEN_PRINTS = 10;
-	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 10;
+	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 100;
 	
 	public static void main(String[] args) {
 		PowerSystemSimulationManualTest simulation = new PowerSystemSimulationManualTest();
@@ -61,7 +61,7 @@ public class PowerSystemSimulationManualTest {
 		sb.setLength(0);
 		fmt.format(
 				"%12s"+ 
-				", totalGeneration= %10f, totalConsumption= %10f ,frequency= %10f", 
+				", totalGeneration= %6.2f, totalConsumption= %6.2f ,frequency= %5.2f", 
 				parameters.getCurrentTimeInSimulation(), parameters.getTotalGeneration(),
 				parameters.getTotalLoad(), parameters.getFrequencyInPowerSystem());
 				

@@ -13,13 +13,13 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private Set<PowerConsumer> powerConsumers;
 	private float frequencyInPowerSystem = GlobalConstatnts.STANDART_FREQUENCY;
 	private LocalTime currentTimeInSimulation;
-	private final float TIME_CONASTNT = 20;
+	private final float TIME_CONASTNT = 2_000;
 	private final int SIMULATION_STEP_IN_NANOS = 100_000_000;
 	
 	public ElectricPowerSystemSimulationImpl() {
 		powerStations = new HashSet<PowerStation>();
 		powerConsumers = new HashSet<PowerConsumer>();
-		currentTimeInSimulation = LocalTime.MIDNIGHT;
+		currentTimeInSimulation = LocalTime.NOON;
 	}
 
 	@Override

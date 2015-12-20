@@ -23,13 +23,13 @@ public class DispatcherTestImpl implements Dispatcher{
 	public void acceptPowerStationStateReport(PowerStationStateReport PSReport) {
 		for(GeneratorStateReport GReport: PSReport.getGeneratorsStatesReports()){
 			fmt.format(
-					"%12s"+ ", PS=%1d, G=%1d , generation=%10f",
+					"%12s"+ ", PS=%1d, G=%1d , generation=%6.2f ",
 					PSReport.getTimeStamp(), PSReport.getPowerStationNumber(),
 					GReport.getGeneratorNumber(), GReport.getGenerationInWM());
 		}
 		
-		sb.append("\n-------------------------------------------------------------"
-				+ "---------------------------------");
+		sb.append("\n-------------------------------------------------------"
+				+ "--------------------------------");
 		message =sb.toString();
 		sb.setLength(0);
 	}
