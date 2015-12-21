@@ -8,24 +8,70 @@ import java.util.TimerTask;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 import main.java.com.yvhobby.epsm.model.generation.Generator;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
+import main.java.com.yvhobby.epsm.model.generation.PowerStationException;
 
 public class MainControlPanel {
 	private ElectricPowerSystemSimulation simulation;
 	private Dispatcher dispatcher;
 	private PowerStation station;
-	private PowerStationGenerationSchedule stationGenerationSchedule;
+	private PowerStationGenerationSchedule curentSchedule;
+	private PowerStationGenerationSchedule receivedSchedule;
+	private PowerStationParameters parameters;
 	private Timer stateReportTransferTimer;
 	private Timer generatorControlTimer;
 	private StationReportTaskTask stateTransferTask = new StationReportTaskTask();
 	private GeneratorsControlTaskTask generatorControlTask = new GeneratorsControlTaskTask();
+	private GenerationScheduleValidator validator = new GenerationScheduleValidator();
+	private Logger logger = (Logger) LoggerFactory.getLogger(MainControlPanel.class);
 	
 	public void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
-		this.stationGenerationSchedule = generationSchedule;
+		receivedSchedule = generationSchedule;
+		
+		getStationParameters();
+		
+		if(isReceivedScheduleValid()){
+			replaceCurrentSchedule();
+			executeSchedule();
+		}else if(isThereValidSchedule()){
+			executeSchedule();
+		}
+	}
+	
+	private void getStationParameters(){
+		if(parameters == null){
+			parameters = station.getPowerStationParameters();
+		}
+	}
+	
+	private boolean isReceivedScheduleValid(){
+		try{
+			validator.validate(receivedSchedule, parameters);
+			logger.info("Schedule was received.");
+			return true;
+		}catch (PowerStationException exception){
+			//TODO send request to dispatcher
+			logger.warn("Received ", exception);
+			return false;
+		}
+	}
+	
+	private void replaceCurrentSchedule(){
+		curentSchedule = receivedSchedule;
+	}
+	
+	private boolean isThereValidSchedule(){
+		return curentSchedule != null;
+	}
+	
+	public void executeSchedule(){
 		generatorControlTimer = new Timer();
 		generatorControlTimer.schedule(generatorControlTask, 0, TimeUnit.SECONDS.toMillis(1));
 	}
@@ -34,6 +80,8 @@ public class MainControlPanel {
 		stateReportTransferTimer = new Timer();
 		stateReportTransferTimer.schedule(stateTransferTask, 0,
 				GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS);
+		
+		logger.info("Station will be sending reports to diapatcher.");
 	}
 	
 	private class StationReportTaskTask extends TimerTask{
@@ -115,7 +163,7 @@ public class MainControlPanel {
 		
 		private GeneratorGenerationSchedule getGeneratorGenerationSchedule(Generator generator){
 			int generatorNumber = generator.getNumber();
-			return stationGenerationSchedule.getGeneratorGenerationSchedule(generatorNumber);
+			return curentSchedule.getGeneratorGenerationSchedule(generatorNumber);
 		}
 		
 		private void adjustGenerationAccordingToSchedule(GeneratorGenerationSchedule generatorSchedule){

@@ -18,7 +18,7 @@ public class GenerationScheduleValidator {
 	private ArrayList<Integer> turnedOnGeneratorsNumbers;
 	private float maxGenerationPower;
 	private float minGenerationPower;
-	private final String HEADER = "Wrong schedule: ";
+	private final String HEADER = "Rwrong schedule: ";
 	
 	public void validate(PowerStationGenerationSchedule schedule,
 			PowerStationParameters stationParameters) throws PowerStationException{
@@ -39,14 +39,14 @@ public class GenerationScheduleValidator {
 	
 	public void stationParametersIsNotNull(){
 		if(stationParameters == null){
-			String message = "Station parameters is null.";
+			String message = "station parameters is null.";
 			throw new PowerStationException(message);
 		}
 	}
 	
 	public void generationScheduleIsNotNull(){
 		if(stationSchedule == null){
-			String message = "Station schedule is null.";
+			String message = "station schedule is null.";
 			throw new PowerStationException(message);
 		}
 	}
