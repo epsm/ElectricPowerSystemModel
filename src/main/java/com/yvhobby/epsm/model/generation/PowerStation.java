@@ -7,7 +7,6 @@ import java.util.Map;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorParameters;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationParameters;
 

@@ -1,15 +1,20 @@
 package main.java.com.yvhobby.epsm.model.dispatch;
 
+import java.text.DecimalFormat;
+
 public class GeneratorStateReport implements Comparable<GeneratorStateReport>{
 	private  int generatorNumber;
 	boolean isTurnedOn;
 	private float generationInWM;
+	private StringBuilder stringBuilder;
 	
 	public GeneratorStateReport(int generatorNumber, boolean isTurnedOn, float generationInWM) {
 		super();
 		this.generatorNumber = generatorNumber;
 		this.isTurnedOn = isTurnedOn;
 		this.generationInWM = generationInWM;
+		
+		stringBuilder = new StringBuilder();
 	}
 
 	public int getGeneratorNumber() {
@@ -61,5 +66,20 @@ public class GeneratorStateReport implements Comparable<GeneratorStateReport>{
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		DecimalFormat formatter = new DecimalFormat("0000.000");
+		
+		stringBuilder.setLength(0);
+		stringBuilder.append("GeneratorStateReport ");
+		stringBuilder.append("[generatorNumber=");
+		stringBuilder.append(generatorNumber);
+		stringBuilder.append(", generationInWM=");
+		stringBuilder.append(formatter.format(generationInWM));
+		stringBuilder.append("]");
+
+		return stringBuilder.toString();
 	}
 }

@@ -67,13 +67,13 @@ public class MainControlPanel {
 		curentSchedule = receivedSchedule;
 	}
 	
-	private boolean isThereValidSchedule(){
-		return curentSchedule != null;
-	}
-	
-	public void executeSchedule(){
+	private void executeSchedule(){
 		generatorControlTimer = new Timer();
 		generatorControlTimer.schedule(generatorControlTask, 0, TimeUnit.SECONDS.toMillis(1));
+	}
+	
+	private boolean isThereValidSchedule(){
+		return curentSchedule != null;
 	}
 	
 	public void subscribeOnReports(){
@@ -89,7 +89,12 @@ public class MainControlPanel {
 		
 		@Override
 		public void run(){
+			setNameToThread();
 			processStateOfEveryGenerator();
+		}
+		
+		private void setNameToThread(){
+			Thread.currentThread().setName("report timer");
 		}
 		
 		private void processStateOfEveryGenerator(){
@@ -133,6 +138,8 @@ public class MainControlPanel {
 		
 		private void sendStationReport(PowerStationStateReport stationReport){
 			dispatcher.acceptPowerStationStateReport(stationReport);
+			
+			logger.info("Station sent report to dispatcher: {}", stationReport);
 		}
 	}
 
