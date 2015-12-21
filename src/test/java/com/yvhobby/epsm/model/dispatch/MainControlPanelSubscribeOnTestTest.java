@@ -89,7 +89,7 @@ public class MainControlPanelSubscribeOnTestTest {
 	}
 	
 	private void doPauseUntilFirstStateReportBeTransferedToDispatcher() throws InterruptedException{
-		Thread.sleep(300);
+		Thread.sleep(100);
 	}
 	
 	@Test

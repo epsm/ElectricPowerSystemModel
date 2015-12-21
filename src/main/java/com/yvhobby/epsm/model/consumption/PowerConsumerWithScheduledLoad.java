@@ -2,6 +2,9 @@ package main.java.com.yvhobby.epsm.model.consumption;
 
 import java.time.LocalTime;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
@@ -17,6 +20,7 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 	private LocalTime previousLoadRequestTime;
 	private LocalTime currentTime;
 	private float currentFrequency;
+	private Logger logger = (Logger) LoggerFactory.getLogger(PowerConsumerWithScheduledLoad.class);
 	
 	@Override
 	public float getCurrentLoadInMW(){
@@ -79,6 +83,8 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 	@Override
 	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation simulation) {
 		this.simulation = simulation;
+		
+		logger.info("Power consumer with scheduled load was added to simulation.");
 	}
 
 	@Override

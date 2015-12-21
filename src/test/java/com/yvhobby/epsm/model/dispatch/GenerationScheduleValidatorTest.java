@@ -38,7 +38,7 @@ public class GenerationScheduleValidatorTest {
 	@Test
 	public void exceptionIfStationParameterIsNull(){
 		expectedEx.expect(PowerStationException.class);
-	    expectedEx.expectMessage("Station parameters is null.");
+	    expectedEx.expectMessage("station parameters is null.");
 		
 		stationSchedule = mock(PowerStationGenerationSchedule.class);
 		stationParameters = null;
@@ -49,7 +49,7 @@ public class GenerationScheduleValidatorTest {
 	@Test
 	public void exceptionIfStationScheduleIsNull(){
 		expectedEx.expect(PowerStationException.class);
-	    expectedEx.expectMessage("Station schedule is null.");
+	    expectedEx.expectMessage("station schedule is null.");
 		
 		stationSchedule = null;
 		stationParameters = mock(PowerStationParameters.class);
@@ -60,7 +60,7 @@ public class GenerationScheduleValidatorTest {
 	@Test
 	public void exceptionIfStationParametersAndScheduleHaveDifferentAmountOfGenerators(){
 		expectedEx.expect(PowerStationException.class);
-	    expectedEx.expectMessage("Wrong schedule: station has 2 generator(s) but schedule has "
+	    expectedEx.expectMessage("wrong schedule: station has 2 generator(s) but schedule has "
 	    		+ "3 generator(s).");
 		
 		prepareScheduleWithThreeGenerators();
@@ -82,7 +82,7 @@ public class GenerationScheduleValidatorTest {
 	@Test
 	public void exceptionIfStationParametersAndScheduleHaveGeneratorsWithDifferentNumbers(){
 		expectedEx.expect(PowerStationException.class);
-	    expectedEx.expectMessage("Wrong schedule: station and schedule has different generator numbers.");
+	    expectedEx.expectMessage("wrong schedule: station and schedule has different generator numbers.");
 	    
 		prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNull();
 		prepareStationWithOnlyOneSecondGenerator();
@@ -111,7 +111,7 @@ public class GenerationScheduleValidatorTest {
 	@Test
 	public void exceptionIfgenerationCurveIsAbsentWhenAstaticRegulationTurnedOff(){
 		expectedEx.expect(PowerStationException.class);
-	    expectedEx.expectMessage("Wrong schedule: there is no necessary generation curve for generator 1.");
+	    expectedEx.expectMessage("wrong schedule: there is no necessary generation curve for generator 1.");
 		
 	    prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNull();
 		prepareMockedStationParametersWithFirstGenerator();
@@ -128,7 +128,7 @@ public class GenerationScheduleValidatorTest {
 	@Test
 	public void powerInGenerationCurveTooHighForGenerator(){
 		expectedEx.expect(PowerStationException.class);
-	    expectedEx.expectMessage("Wrong schedule: scheduled generation power for generator 1 is"
+	    expectedEx.expectMessage("wrong schedule: scheduled generation power for generator 1 is"
 	    		+ " more than nominal.");
 		
 		GeneratorParameters parameters = prepareGeneratorParametersForTooWeakGenerator();
@@ -163,7 +163,7 @@ public class GenerationScheduleValidatorTest {
 	@Test
 	public void powerInGenerationCurveTooLowForGenerator(){
 		expectedEx.expect(PowerStationException.class);
-	    expectedEx.expectMessage("Wrong schedule: scheduled generation power for generator 1 is"
+	    expectedEx.expectMessage("wrong schedule: scheduled generation power for generator 1 is"
 	    		+ " less than minimal technology.");
 		
 		GeneratorParameters parameters = prepareGeneratorParametersForTooPowerfullGenerator();

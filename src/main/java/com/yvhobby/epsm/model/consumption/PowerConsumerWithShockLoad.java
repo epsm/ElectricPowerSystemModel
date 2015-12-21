@@ -3,6 +3,9 @@ package main.java.com.yvhobby.epsm.model.consumption;
 import java.time.LocalTime;
 import java.util.Random;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 
@@ -19,6 +22,7 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 	private LocalTime timeToTurnOff;
 	private boolean isTurnedOn;
 	private Random random = new Random();
+	private Logger logger = (Logger) LoggerFactory.getLogger(PowerConsumerWithShockLoad.class);
 	
 	@Override
 	public float getCurrentLoadInMW(){
@@ -93,6 +97,8 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 	@Override
 	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation simulation) {
 		this.simulation = simulation;
+		
+		logger.info("Power consumer with shock load was added to simulation.");
 	}
 
 	public void setMaxWorkDurationInSeconds(int WorkDurationInSeconds) {

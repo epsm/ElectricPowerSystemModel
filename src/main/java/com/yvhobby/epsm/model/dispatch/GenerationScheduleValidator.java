@@ -15,10 +15,10 @@ public class GenerationScheduleValidator {
 	private Collection<Integer> scheduleGeneratorsNumbers;
 	private GeneratorGenerationSchedule currentGeneratorSchedule;
 	private GeneratorParameters generatorParameters;
-	private ArrayList<Integer> turnedOnGeneratorsNumbers;
+	private HashSet<Integer> turnedOnGeneratorsNumbers;
 	private float maxGenerationPower;
 	private float minGenerationPower;
-	private final String HEADER = "Rwrong schedule: ";
+	private final String HEADER = "wrong schedule: ";
 	
 	public void validate(PowerStationGenerationSchedule schedule,
 			PowerStationParameters stationParameters) throws PowerStationException{
@@ -93,8 +93,8 @@ public class GenerationScheduleValidator {
 		leaveInScheduleGeneratorsNumbersOnlyGeneratorsScheduledBeTurnedOn();
 	}
 	
-	private ArrayList<Integer> suggestAllGeneratorsTurnedOn(){
-		return new ArrayList<Integer>(stationGeneratorsNumbers);
+	private HashSet<Integer> suggestAllGeneratorsTurnedOn(){
+		return new HashSet<Integer>(stationGeneratorsNumbers);
 	}
 	
 	private void verifyEveryGeneratorIfItScheduledBeTurnedOff(){

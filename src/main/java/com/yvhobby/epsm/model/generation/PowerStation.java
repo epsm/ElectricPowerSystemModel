@@ -4,6 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
+import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorParameters;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationParameters;
 
@@ -13,10 +17,13 @@ public class PowerStation{
 	private PowerStationParameters stationParameters;
 	private Map<Integer, GeneratorParameters> generatorParameters;
 	private Generator generator;
+	private Logger logger = (Logger) LoggerFactory.getLogger(PowerStation.class);
 	
 	public PowerStation(int number) {
 		this.number = number;
 		generators = new HashMap<Integer, Generator>();
+		
+		logger.info("Power station was created.");
 	}
 
 	public float getCurrentGenerationInMW(){

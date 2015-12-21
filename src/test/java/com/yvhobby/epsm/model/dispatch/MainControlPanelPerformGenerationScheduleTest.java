@@ -94,13 +94,13 @@ public class MainControlPanelPerformGenerationScheduleTest {
 	}
 	
 	private void doPauseUntilMainControlPanellAdjustGenerators() throws InterruptedException{
-		Thread.sleep(100);
+		Thread.sleep(300);
 	}
 	
 	@Test
 	public void mainControlPanelTurnsOffGeneratorIfItIsScheduledIndependentAreTheyTurnedNoOrOff()
 			throws InterruptedException{
-		prepareGenerationScheduleWithTurnedOffGenerator();
+		prepareGenerationScheduleWithTwoTurnedOffGenerators();
 		turnOnfirstAndTurnOffsecondGenerators();
 		stationControlPanel.performGenerationSchedule(stationGenerationSchedule);
 		doPauseUntilMainControlPanellAdjustGenerators();
@@ -109,7 +109,7 @@ public class MainControlPanelPerformGenerationScheduleTest {
 		Assert.assertFalse(generator_2.isTurnedOn());
 	}
 	
-	private void prepareGenerationScheduleWithTurnedOffGenerator(){
+	private void prepareGenerationScheduleWithTwoTurnedOffGenerators(){
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, false, false, generationCurve);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, false, false, generationCurve);
 		fillStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);

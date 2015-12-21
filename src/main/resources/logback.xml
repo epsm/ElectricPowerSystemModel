@@ -42,11 +42,11 @@
 		</triggeringPolicy>
 	</appender>
 
-	<logger name="main.java.com.yvhobby.epsm.model">
+	<logger name="main.java.com.yvhobby.epsm.model" level="INFO" additivity="false">
 		<appender-ref ref="Model" />
 	</logger>
 	
-	<logger name="main.java.com.yvhobby.epsm.model.dispatch.MainControlPanel" additivity="false">
+	<logger name="main.java.com.yvhobby.epsm.model.dispatch.MainControlPanel" level="INFO" additivity="false">
 		<appender-ref ref="InteractionWithDispatcher" />
 	</logger>
 
