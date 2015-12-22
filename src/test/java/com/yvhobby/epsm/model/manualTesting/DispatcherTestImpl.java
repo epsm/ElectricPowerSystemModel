@@ -2,10 +2,12 @@ package test.java.com.yvhobby.epsm.model.manualTesting;
 
 import java.util.Formatter;
 
+import main.java.com.yvhobby.epsm.model.dispatch.ConsumerReport;
 import main.java.com.yvhobby.epsm.model.dispatch.Dispatcher;
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorStateReport;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationParameters;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationStateReport;
+import main.java.com.yvhobby.epsm.model.dispatch.SimulationReport;
 
 public class DispatcherTestImpl implements Dispatcher{
 	
@@ -36,5 +38,17 @@ public class DispatcherTestImpl implements Dispatcher{
 	
 	public String getMessage(){
 		return message;
+	}
+
+	@Override
+	public void acceptSimulationParameters(SimulationReport report) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void acceptConsumerReport(ConsumerReport report) {
+		// TODO Auto-generated method stub
+		
 	}
 }

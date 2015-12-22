@@ -9,9 +9,9 @@ import org.junit.Test;
 
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
+import main.java.com.yvhobby.epsm.model.dispatch.SimulationReport;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
-import main.java.com.yvhobby.epsm.model.generalModel.SimulationParameters;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 import test.java.com.yvhobby.epsm.model.constantsForTests.TestsConstants;
 
@@ -52,7 +52,7 @@ public class PowerConsumerWithScheduledLoadTest{
 			}
 			
 			@Override
-			public SimulationParameters calculateNextStep() {
+			public SimulationReport calculateNextStep() {
 				time = time.plusNanos(100_000_000);
 				frequency = (random.nextFloat() * GlobalConstatnts.STANDART_FREQUENCY * 
 						possibleFluctuations);

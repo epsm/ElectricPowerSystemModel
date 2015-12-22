@@ -1,19 +1,19 @@
-package main.java.com.yvhobby.epsm.model.generalModel;
+package main.java.com.yvhobby.epsm.model.dispatch;
 
 import java.time.LocalTime;
 
-public class SimulationParameters {
+public class SimulationReport {
 	private float totalGeneration;
 	private float totalLoad;
 	private float frequencyInPowerSystem;
-	private LocalTime currentTimeInSimulation;
+	private LocalTime timeStamp;
 	
-	public SimulationParameters(float totalGeneration, float totalLoad,
-			float frequencyInPowerSystem, LocalTime currentTimeInSimulation) {
+	public SimulationReport(float totalGeneration, float totalLoad,
+			float frequencyInPowerSystem, LocalTime timeStamp) {
 		this.totalGeneration = totalGeneration;
 		this.totalLoad = totalLoad;
 		this.frequencyInPowerSystem = frequencyInPowerSystem;
-		this.currentTimeInSimulation = currentTimeInSimulation;
+		this.timeStamp = timeStamp;
 	}
 
 	public float getTotalGeneration() {
@@ -29,6 +29,6 @@ public class SimulationParameters {
 	}
 
 	public LocalTime getCurrentTimeInSimulation() {
-		return currentTimeInSimulation;
+		return timeStamp;
 	}
 }

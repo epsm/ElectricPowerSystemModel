@@ -2,14 +2,14 @@ package test.java.com.yvhobby.epsm.model.manualTesting;
 
 import java.util.Formatter;
 
+import main.java.com.yvhobby.epsm.model.dispatch.SimulationReport;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulationImpl;
-import main.java.com.yvhobby.epsm.model.generalModel.SimulationParameters;
 
 public class PowerSystemSimulationManualTest {
 	private Formatter fmt;
 	private ElectricPowerSystemSimulationImpl simulation;
 	private DispatcherTestImpl dispatcher = new DispatcherTestImpl(); 
-	private SimulationParameters parameters;
+	private SimulationReport report;
 	private StringBuilder sb;
 	private int counter;
 	private final int INTERVAL_BETWEEN_PRINTS = 10;
@@ -33,7 +33,7 @@ public class PowerSystemSimulationManualTest {
 	public void go(){
 		//for(int i = 0; i < 1_000_000; i++){
 		while(true){
-			parameters = simulation.calculateNextStep();
+			report = simulation.calculateNextStep();
 			
 			if(isItTimeToPrint()){
 				System.out.println(getSimulationMessage());
@@ -62,8 +62,8 @@ public class PowerSystemSimulationManualTest {
 		fmt.format(
 				"%12s"+ 
 				", totalGeneration= %6.2f, totalConsumption= %6.2f ,frequency= %5.2f", 
-				parameters.getCurrentTimeInSimulation(), parameters.getTotalGeneration(),
-				parameters.getTotalLoad(), parameters.getFrequencyInPowerSystem());
+				report.getCurrentTimeInSimulation(), report.getTotalGeneration(),
+				report.getTotalLoad(), report.getFrequencyInPowerSystem());
 				
 		return sb.toString();
 	}

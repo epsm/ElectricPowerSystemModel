@@ -7,9 +7,9 @@ import java.time.LocalTime;
 import org.junit.*;
 
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
+import main.java.com.yvhobby.epsm.model.dispatch.SimulationReport;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulationImpl;
-import main.java.com.yvhobby.epsm.model.generalModel.SimulationParameters;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImplTest {
@@ -18,7 +18,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	private PowerStation station_2;
 	private PowerConsumer consumer_1;
 	private PowerConsumer consumer_2;
-	private SimulationParameters parameters;
+	private SimulationReport report;
 	private float previousFrequency;
 	private float currentFrequency;
 	
@@ -93,9 +93,9 @@ public class ElectricPowerSystemSimulationImplTest {
 		prepareSecondConsumerAndSecondPowerStation();
 		float generation = station_1.getCurrentGenerationInMW() + station_2.getCurrentGenerationInMW();
 		
-		parameters = simulation.calculateNextStep();
+		report = simulation.calculateNextStep();
 		
-		Assert.assertEquals(generation, parameters.getTotalGeneration(), 0);
+		Assert.assertEquals(generation, report.getTotalGeneration(), 0);
 	}
 	
 	private void prepareSecondConsumerAndSecondPowerStation(){
@@ -116,8 +116,8 @@ public class ElectricPowerSystemSimulationImplTest {
 		prepareSecondConsumerAndSecondPowerStation();
 		float load = consumer_1.getCurrentLoadInMW() + consumer_2.getCurrentLoadInMW();
 		
-		parameters = simulation.calculateNextStep();
+		report = simulation.calculateNextStep();
 		
-		Assert.assertEquals(load, parameters.getTotalLoad(), 0);
+		Assert.assertEquals(load, report.getTotalLoad(), 0);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
+import main.java.com.yvhobby.epsm.model.dispatch.SimulationReport;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
@@ -23,14 +24,14 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 
 	@Override
-	public SimulationParameters calculateNextStep() {
+	public SimulationReport calculateNextStep() {
 		float totalGeneration = calculateTotalGenerationsInMW();
 		float totalLoad = calculateTotalLoadInMW();
 		
 		calculateFrequencyInPowerSystem(totalGeneration, totalLoad);
 		changeTimeForStep();
 		
-		return new SimulationParameters(totalGeneration, totalLoad,
+		return new SimulationReport(totalGeneration, totalLoad,
 				frequencyInPowerSystem, currentTimeInSimulation);
 	}
 	

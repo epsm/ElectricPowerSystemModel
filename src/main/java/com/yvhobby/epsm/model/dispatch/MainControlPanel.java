@@ -94,7 +94,7 @@ public class MainControlPanel {
 		}
 		
 		private void setNameToThread(){
-			Thread.currentThread().setName("report timer");
+			Thread.currentThread().setName("station report timer");
 		}
 		
 		private void processStateOfEveryGenerator(){
