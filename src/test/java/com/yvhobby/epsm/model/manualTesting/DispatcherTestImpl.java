@@ -6,10 +6,11 @@ import main.java.com.yvhobby.epsm.model.dispatch.ConsumerReport;
 import main.java.com.yvhobby.epsm.model.dispatch.Dispatcher;
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorStateReport;
 import main.java.com.yvhobby.epsm.model.dispatch.PowerStationParameters;
-import main.java.com.yvhobby.epsm.model.dispatch.PowerStationStateReport;
+import main.java.com.yvhobby.epsm.model.dispatch.PowerStationReport;
+import main.java.com.yvhobby.epsm.model.dispatch.Report;
 import main.java.com.yvhobby.epsm.model.dispatch.SimulationReport;
 
-public class DispatcherTestImpl implements Dispatcher{
+/*public class DispatcherTestImpl implements Dispatcher{
 	
 	private String message;
 	private StringBuilder sb = new StringBuilder();
@@ -22,7 +23,7 @@ public class DispatcherTestImpl implements Dispatcher{
 	}
 
 	@Override
-	public void acceptPowerStationStateReport(PowerStationStateReport PSReport) {
+	public void acceptReport(Report PSReport) {
 		for(GeneratorStateReport GReport: PSReport.getGeneratorsStatesReports()){
 			fmt.format(
 					"%12s"+ ", PS=%1d, G=%1d , generation=%6.2f ",
@@ -39,16 +40,4 @@ public class DispatcherTestImpl implements Dispatcher{
 	public String getMessage(){
 		return message;
 	}
-
-	@Override
-	public void acceptSimulationParameters(SimulationReport report) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void acceptConsumerReport(ConsumerReport report) {
-		// TODO Auto-generated method stub
-		
-	}
-}
+}*/

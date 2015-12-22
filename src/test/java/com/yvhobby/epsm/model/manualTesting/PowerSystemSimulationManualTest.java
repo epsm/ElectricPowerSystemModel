@@ -6,7 +6,7 @@ import main.java.com.yvhobby.epsm.model.dispatch.SimulationReport;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulationImpl;
 
 public class PowerSystemSimulationManualTest {
-	private Formatter fmt;
+	/*private Formatter fmt;
 	private ElectricPowerSystemSimulationImpl simulation;
 	private DispatcherTestImpl dispatcher = new DispatcherTestImpl(); 
 	private SimulationReport report;
@@ -76,5 +76,5 @@ public class PowerSystemSimulationManualTest {
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 }

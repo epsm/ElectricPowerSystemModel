@@ -29,7 +29,7 @@ public class PowerStation{
 		float generationInMW = 0;
 		
 		for(Generator generator: generators.values()){
-			generationInMW += generator.getGenerationInMW();
+			generationInMW += generator.calculateGeneration();
 		}
 		
 		return generationInMW;

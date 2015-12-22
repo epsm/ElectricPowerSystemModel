@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
-import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
+import main.java.com.yvhobby.epsm.model.consumption.ConsumerWithScheduledLoad;
 import main.java.com.yvhobby.epsm.model.dispatch.SimulationReport;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
@@ -16,7 +16,7 @@ import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 import test.java.com.yvhobby.epsm.model.constantsForTests.TestsConstants;
 
 public class PowerConsumerWithScheduledLoadTest{
-	private PowerConsumerWithScheduledLoad consumer;
+	private ConsumerWithScheduledLoad consumer;
 	private ElectricPowerSystemSimulation simulation;
 	private float[] approximateLoadByHoursInPercent;
 	private Random random = new Random(); 
@@ -24,7 +24,7 @@ public class PowerConsumerWithScheduledLoadTest{
 	@Before
 	public void initialize(){
 		simulation = createPowerSystemStub();
-		consumer = new PowerConsumerWithScheduledLoad();
+		consumer = new ConsumerWithScheduledLoad(1);
 		approximateLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 		
 		consumer.setApproximateLoadByHoursOnDayInPercent(approximateLoadByHoursInPercent);
@@ -80,7 +80,7 @@ public class PowerConsumerWithScheduledLoadTest{
 		
 		for(int i = 0; i < repeats; i++){
 			time = simulation.getTime();
-			actualValue = consumer.getCurrentLoadInMW();
+			actualValue = consumer.calculateCurrentLoadInMW();
 			minPermissibleValue = calculateMinPermissibleValue(time);
 			maxPermissibleValue = calculateMaxPermissibleValue(time);
 			

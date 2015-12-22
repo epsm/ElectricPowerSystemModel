@@ -30,21 +30,21 @@ public class GeneratorTest{
 	public void GeneratorPowerIsZeroIfItTurnedOff(){
 		generator.turnOffGenerator();
 		
-		Assert.assertEquals(0, generator.getGenerationInMW(), 0);
+		Assert.assertEquals(0, generator.calculateGeneration(), 0);
 	}
 	
 	@Test
 	public void isGeneratorPowerEqualsToControlUnitIfItTurnedOn(){
 		generator.turnOnGenerator();
 		
-		Assert.assertEquals(controlUnit.getGeneratorPowerInMW(), generator.getGenerationInMW(), 0);
+		Assert.assertEquals(controlUnit.getGeneratorPowerInMW(), generator.calculateGeneration(), 0);
 	}
 	
 	@Test
 	public void DoesAstacicRegulationUnitUsesIfItTurnedOn(){
 		prepareMockAstaticRegulationUnit();
 		generator.turnOnAstaticRegulation();
-		generator.getGenerationInMW();
+		generator.calculateGeneration();
 		
 		verify(regulationUnit, times(1)).verifyAndAdjustPowerAtRequiredFrequency();
 	}

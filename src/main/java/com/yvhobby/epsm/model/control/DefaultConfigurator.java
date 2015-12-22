@@ -1,9 +1,10 @@
 package main.java.com.yvhobby.epsm.model.control;
 
-import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithScheduledLoad;
-import main.java.com.yvhobby.epsm.model.consumption.PowerConsumerWithShockLoad;
+import main.java.com.yvhobby.epsm.model.consumption.ConsumerWithScheduledLoad;
+import main.java.com.yvhobby.epsm.model.consumption.ConsumerWithShockLoad;
 import main.java.com.yvhobby.epsm.model.dispatch.Dispatcher;
 import main.java.com.yvhobby.epsm.model.dispatch.MainControlPanel;
+import main.java.com.yvhobby.epsm.model.dispatch.ReportSender;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generation.AstaticRegulationUnit;
 import main.java.com.yvhobby.epsm.model.generation.ControlUnit;
@@ -31,14 +32,14 @@ public class DefaultConfigurator {
 	private void createConsumerAndAddItToEnergySystem(){
 		float[] pattern = TestsConstants.LOAD_BY_HOURS;
 		
-		PowerConsumerWithShockLoad powerConsumer_scheduled = new PowerConsumerWithShockLoad();
+		ConsumerWithShockLoad powerConsumer_scheduled = new ConsumerWithShockLoad(1);
 		powerConsumer_scheduled.setDegreeOfDependingOnFrequency(2);
 		powerConsumer_scheduled.setMaxLoad(10f);
 		powerConsumer_scheduled.setMaxWorkDurationInSeconds(300);
 		powerConsumer_scheduled.setMaxPauseBetweenWorkInSeconds(200);
 		powerConsumer_scheduled.setElectricalPowerSystemSimulation(simulation);
 		
-		PowerConsumerWithScheduledLoad powerConsumer_shock = new PowerConsumerWithScheduledLoad();
+		ConsumerWithScheduledLoad powerConsumer_shock = new ConsumerWithScheduledLoad(2);
 		powerConsumer_shock.setDegreeOfDependingOnFrequency(2);
 		powerConsumer_shock.setApproximateLoadByHoursOnDayInPercent(pattern);
 		powerConsumer_shock.setMaxLoadWithoutRandomInMW(100);
@@ -56,7 +57,8 @@ public class DefaultConfigurator {
 		controlPanel = new MainControlPanel();
 		controlPanel.setSimulation(simulation);
 		controlPanel.setStation(powerStation);
-		controlPanel.setDispatcher(dispatcher);
+		
+		ReportSender sender = new ReportSender(controlPanel);
 		
 		Generator generator_1 = new Generator(1);
 		AstaticRegulationUnit regulationUnit_1 = new AstaticRegulationUnit(simulation, generator_1);

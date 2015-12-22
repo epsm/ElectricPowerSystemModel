@@ -3,16 +3,19 @@ package main.java.com.yvhobby.epsm.model.dispatch;
 import java.text.DecimalFormat;
 import java.time.LocalTime;
 
-public class ConsumerReport {
+public class ConsumerReport extends Report{
 	private int consumerNumber;
-	private float totalLoad;
+	private float load;
 	private LocalTime timeStamp;
 	private StringBuilder stringBuilder;
+	private DecimalFormat formatter;
 	
-	public ConsumerReport(int consumerId, float totalLoad, LocalTime timeStamp) {
-		this.consumerNumber = consumerId;
-		this.totalLoad = totalLoad;
+	public ConsumerReport(int consumerNumber, float load, LocalTime timeStamp) {
+		this.consumerNumber = consumerNumber;
+		this.load = load;
 		this.timeStamp = timeStamp;
+		
+		formatter = new DecimalFormat("0000.000");
 	}
 
 	public int getConsumerId() {
@@ -20,7 +23,7 @@ public class ConsumerReport {
 	}
 
 	public float getTotalLoad() {
-		return totalLoad;
+		return load;
 	}
 
 	public LocalTime getTimeStamp() {
@@ -29,14 +32,12 @@ public class ConsumerReport {
 	
 	@Override
 	public String toString() {
-		DecimalFormat formatter = new DecimalFormat("0000.000");
-		
 		stringBuilder.setLength(0);
 		stringBuilder.append("ConsumerReport ");
 		stringBuilder.append("[consumerNumber=");
 		stringBuilder.append(consumerNumber);
 		stringBuilder.append(", load=");
-		stringBuilder.append(formatter.format(totalLoad));
+		stringBuilder.append(formatter.format(load));
 		stringBuilder.append("]");
 
 		return stringBuilder.toString();

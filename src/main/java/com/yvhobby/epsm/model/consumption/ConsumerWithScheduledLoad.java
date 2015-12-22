@@ -6,33 +6,35 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
-import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 
-public class PowerConsumerWithScheduledLoad extends PowerConsumer{
-	private ElectricPowerSystemSimulation simulation;
+public class ConsumerWithScheduledLoad extends PowerConsumer{
 	private RandomLoadCurveFactory factory = new RandomLoadCurveFactory();
 	private float[] approximateLoadByHoursOnDayInPercent;
 	private float maxLoadWithoutFluctuationsInMW;
 	private float randomFluctuationsInPercent;
-	private float degreeOnDependingOfFrequency;
 	private LoadCurve loadCurveOnDay;
 	private LocalTime previousLoadRequestTime;
-	private LocalTime currentTime;
 	private float currentFrequency;
-	private Logger logger = (Logger) LoggerFactory.getLogger(PowerConsumerWithScheduledLoad.class);
+	private Logger logger = (Logger) LoggerFactory.getLogger(ConsumerWithScheduledLoad.class);
+	
+	public ConsumerWithScheduledLoad(int consumerNumber) {
+		super(consumerNumber);
+		logger.info("Consumer ¹" + consumerNumber + " with scheduled load created");
+	}
 	
 	@Override
-	public float getCurrentLoadInMW(){
+	public float calculateCurrentLoadInMW(){
 		getNecessaryParametersFromPowerSystem();
 		
 		if(isItANewDay()){
 			calculateLoadCurveOnThisDay();
 		}
 		
-		previousLoadRequestTime = currentTime;
+		saveRequestTime();
+		calculateLoadForThisMoment();
 		
-		return getLoadForThisMoment();
+		return currentLoad;
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){
@@ -49,10 +51,13 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 				approximateLoadByHoursOnDayInPercent, maxLoadWithoutFluctuationsInMW, randomFluctuationsInPercent);
 	}
 
-	private float getLoadForThisMoment(){
+	private void saveRequestTime(){
+		previousLoadRequestTime = currentTime;
+	}
+	
+	private void calculateLoadForThisMoment(){
 		float loadWithoutCountingFrequency = loadCurveOnDay.getPowerOnTimeInMW(currentTime);
-		
-		return calculateLoadCountingFrequency(loadWithoutCountingFrequency);
+		currentLoad =  calculateLoadCountingFrequency(loadWithoutCountingFrequency);
 	}
 	
 	private float calculateLoadCountingFrequency(float loadWithoutCountingFrequency){
@@ -78,21 +83,5 @@ public class PowerConsumerWithScheduledLoad extends PowerConsumer{
 
 	public float getMaxLoadWithoutRandomInMW() {
 		return maxLoadWithoutFluctuationsInMW;
-	}
-
-	@Override
-	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation simulation) {
-		this.simulation = simulation;
-		
-		logger.info("Power consumer with scheduled load was added to simulation.");
-	}
-
-	@Override
-	public void setDegreeOfDependingOnFrequency(float degreeOfDependingOfFrequency) {
-		this.degreeOnDependingOfFrequency = degreeOfDependingOfFrequency;
-	}
-
-	public float getDegreeOnDependingOfFrequency() {
-		return degreeOnDependingOfFrequency;
 	}
 }

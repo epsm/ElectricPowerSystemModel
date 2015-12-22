@@ -6,26 +6,27 @@ import java.util.Random;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 
-public class PowerConsumerWithShockLoad extends PowerConsumer{
-	private ElectricPowerSystemSimulation simulation;
-	private LocalTime currentTime;
+public class ConsumerWithShockLoad extends PowerConsumer{
 	private int maxWorkDurationInSeconds;
 	private int maxPauseBetweenWorkInSeconds;
 	private float maxLoad;
-	private float currentLoad;
+	private float currentLoadWithoutFrequencyCounting;
 	private float currentFrequency;
-	private float degreeOnDependingOnFrequency;
 	private LocalTime timeToTurnOn = LocalTime.MIDNIGHT;//for first time else NPE
 	private LocalTime timeToTurnOff;
 	private boolean isTurnedOn;
 	private Random random = new Random();
-	private Logger logger = (Logger) LoggerFactory.getLogger(PowerConsumerWithShockLoad.class);
+	private Logger logger = (Logger) LoggerFactory.getLogger(ConsumerWithShockLoad.class);
+	
+	public ConsumerWithShockLoad(int consumerNumber) {
+		super(consumerNumber);
+		logger.info("Consumer ¹" + consumerNumber + " with shock load created");
+	}
 	
 	@Override
-	public float getCurrentLoadInMW(){
+	public float calculateCurrentLoadInMW(){
 		getNecessaryParametersFromPowerSystem();
 
 		if(isTurnedOn){
@@ -40,7 +41,9 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 			}
 		}
 		
-		return calculateLoadCountingFrequency(currentLoad);
+		calculateLoadCountingFrequency(currentLoadWithoutFrequencyCounting);
+		
+		return currentLoad;
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){
@@ -59,7 +62,7 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 	
 	private void turnOnWithRandomLoadValue(){
 		float halfOfMaxLoad = maxLoad / 2;
-		currentLoad = halfOfMaxLoad + halfOfMaxLoad * random.nextFloat();
+		currentLoadWithoutFrequencyCounting = halfOfMaxLoad + halfOfMaxLoad * random.nextFloat();
 		isTurnedOn = true;
 	}
 	
@@ -89,16 +92,9 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 				(long)(halfOfTurnedOffDuration + halfOfTurnedOffDuration * random.nextFloat()));
 	}
 	
-	private float calculateLoadCountingFrequency(float load){
-		return (float)Math.pow((currentFrequency / GlobalConstatnts.STANDART_FREQUENCY),
-				degreeOnDependingOnFrequency) * load;
-	}
-	
-	@Override
-	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation simulation) {
-		this.simulation = simulation;
-		
-		logger.info("Power consumer with shock load was added to simulation.");
+	private void calculateLoadCountingFrequency(float load){
+		currentLoad = (float)Math.pow((currentFrequency / GlobalConstatnts.STANDART_FREQUENCY),
+				degreeOnDependingOfFrequency) * load;
 	}
 
 	public void setMaxWorkDurationInSeconds(int WorkDurationInSeconds) {
@@ -111,10 +107,5 @@ public class PowerConsumerWithShockLoad extends PowerConsumer{
 		
 	public void setMaxLoad(float maxLoad) {
 		this.maxLoad = maxLoad;
-	}
-
-	@Override
-	public void setDegreeOfDependingOnFrequency(float degreeOnDependingOfFrequency) {
-		this.degreeOnDependingOnFrequency = degreeOnDependingOfFrequency;
 	}
 }

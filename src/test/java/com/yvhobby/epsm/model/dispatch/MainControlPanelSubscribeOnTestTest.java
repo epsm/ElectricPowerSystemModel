@@ -13,24 +13,24 @@ import org.mockito.ArgumentCaptor;
 import main.java.com.yvhobby.epsm.model.dispatch.Dispatcher;
 import main.java.com.yvhobby.epsm.model.dispatch.GeneratorStateReport;
 import main.java.com.yvhobby.epsm.model.dispatch.MainControlPanel;
-import main.java.com.yvhobby.epsm.model.dispatch.PowerStationStateReport;
+import main.java.com.yvhobby.epsm.model.dispatch.PowerStationReport;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 import main.java.com.yvhobby.epsm.model.generation.Generator;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 
 public class MainControlPanelSubscribeOnTestTest {
-	private ArgumentCaptor<PowerStationStateReport> stationStateReportCaptor;
+	private ArgumentCaptor<PowerStationReport> stationStateReportCaptor;
 	private ElectricPowerSystemSimulation simulation;
 	private Dispatcher dispatcher;
 	private MainControlPanel stationControlPanel;
-	private PowerStationStateReport stationStateReport;
+	private PowerStationReport stationStateReport;
 	private LocalTime CONSTANT_TIME_IN_MOCK_SIMULATION = LocalTime.NOON;
 	private final int STATION_NUMBER = 158;
 	
 	@Before
 	public void initialize(){
-		stationStateReportCaptor = ArgumentCaptor.forClass(PowerStationStateReport.class);
+		stationStateReportCaptor = ArgumentCaptor.forClass(PowerStationReport.class);
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		dispatcher = mock(Dispatcher.class);
 		stationControlPanel = new MainControlPanel();
@@ -40,10 +40,10 @@ public class MainControlPanelSubscribeOnTestTest {
 		
 		when(generator_1.getNumber()).thenReturn(1);
 		when(generator_1.isTurnedOn()).thenReturn(true);
-		when(generator_1.getGenerationInMW()).thenReturn(100f);
+		when(generator_1.calculateGeneration()).thenReturn(100f);
 		when(generator_2.getNumber()).thenReturn(2);
 		when(generator_2.isTurnedOn()).thenReturn(true);
-		when(generator_2.getGenerationInMW()).thenReturn(200f);
+		when(generator_2.calculateGeneration()).thenReturn(200f);
 		when(simulation.getTime()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 		
 		stationControlPanel.setSimulation(simulation);

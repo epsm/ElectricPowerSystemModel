@@ -5,19 +5,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Set;
 
-public class PowerStationStateReport {
+public class PowerStationReport extends Report{
 	private int powerStationNumber;
 	private LocalTime timeStamp;
 	private Set<GeneratorStateReport> generatorsStatesReports;
 	private StringBuilder stringBuilder;
+	private DateTimeFormatter formatter;
 
-	public PowerStationStateReport(int powerStationNumber, LocalTime timeStamp,
+	public PowerStationReport(int powerStationNumber, LocalTime timeStamp,
 			Set<GeneratorStateReport> generatorsStatesReports) {
 		this.powerStationNumber = powerStationNumber;
 		this.timeStamp = timeStamp;
 		this.generatorsStatesReports = Collections.unmodifiableSet(generatorsStatesReports);
 		
 		stringBuilder = new StringBuilder();
+		formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 	}
 
 	public int getPowerStationNumber() {
@@ -34,15 +36,12 @@ public class PowerStationStateReport {
 
 	@Override
 	public String toString() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-		String time = timeStamp.format(formatter);
-		
 		stringBuilder.setLength(0);
 		stringBuilder.append("PowerStationStateReport ");
-		stringBuilder.append("[powerStationNumber=");
+		stringBuilder.append("[time in simulation= ");
+		stringBuilder.append(timeStamp.format(formatter));
+		stringBuilder.append(", powerStationNumber=");
 		stringBuilder.append(powerStationNumber);
-		stringBuilder.append(", time in simulation=");
-		stringBuilder.append(time);
 		stringBuilder.append(", generatorsStatesReports ");
 		stringBuilder.append(generatorsStatesReports);
 		stringBuilder.append("]");

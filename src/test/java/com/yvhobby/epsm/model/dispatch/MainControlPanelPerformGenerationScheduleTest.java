@@ -60,7 +60,6 @@ public class MainControlPanelPerformGenerationScheduleTest {
 		station.addGenerator(generator_1);
 		station.addGenerator(generator_2);
 		stationControlPanel.setSimulation(simulation);
-		stationControlPanel.setDispatcher(dispatcher);
 		stationControlPanel.setStation(station);
 	}
 	

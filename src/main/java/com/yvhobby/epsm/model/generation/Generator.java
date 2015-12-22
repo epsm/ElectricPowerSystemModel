@@ -14,7 +14,7 @@ public class Generator{
 		this.number = number;
 	}
 	
-	public float getGenerationInMW(){
+	public float calculateGeneration(){
 		if(generatorTurnedOn){
 			calculateCurrentGeneration();
 			return currentGeneration;
@@ -54,6 +54,11 @@ public class Generator{
 		this.minimalTechnologyPower = minimalTechnologyPower;
 	}
 
+	//Only this method must be used for report making to avoid recalculation and changing state of object 
+	public float getGenerationInMW(){
+		return currentGeneration;
+	}
+	
 	public boolean isTurnedOn(){
 		return generatorTurnedOn;
 	}

@@ -13,23 +13,22 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import main.java.com.yvhobby.epsm.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
 import main.java.com.yvhobby.epsm.model.generation.Generator;
 import main.java.com.yvhobby.epsm.model.generation.PowerStation;
 import main.java.com.yvhobby.epsm.model.generation.PowerStationException;
 
-public class MainControlPanel {
+public class MainControlPanel implements ReportSource, ReportSenderSource{
 	private ElectricPowerSystemSimulation simulation;
-	private Dispatcher dispatcher;
 	private PowerStation station;
 	private PowerStationGenerationSchedule curentSchedule;
 	private PowerStationGenerationSchedule receivedSchedule;
-	private PowerStationParameters parameters;
-	private Timer stateReportTransferTimer;
 	private Timer generatorControlTimer;
-	private StationReportTaskTask stateTransferTask = new StationReportTaskTask();
-	private GeneratorsControlTaskTask generatorControlTask = new GeneratorsControlTaskTask();
+	private GeneratorsControlTask generatorControlTask = new GeneratorsControlTask();
 	private GenerationScheduleValidator validator = new GenerationScheduleValidator();
+	private ReportSender sender;
+	private PowerStationParameters parameters;
+	private PowerStationReport stationReport;
+	private Set<GeneratorStateReport> generatorsReports = new TreeSet<GeneratorStateReport>();
 	private Logger logger = (Logger) LoggerFactory.getLogger(MainControlPanel.class);
 	
 	public void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
@@ -76,74 +75,68 @@ public class MainControlPanel {
 		return curentSchedule != null;
 	}
 	
+	@Override
 	public void subscribeOnReports(){
-		stateReportTransferTimer = new Timer();
-		stateReportTransferTimer.schedule(stateTransferTask, 0,
-				GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS);
-		
-		logger.info("Station will be sending reports to diapatcher.");
+		sender.sendReports();
 	}
 	
-	private class StationReportTaskTask extends TimerTask{
-		private Set<GeneratorStateReport> generatorsReports = new TreeSet<GeneratorStateReport>();
+	@Override
+	public Report getReport() {
+		processStateOfEveryGenerator();
+		prepareStationStateReport();
+		return stationReport;
+	}
 		
-		@Override
-		public void run(){
-			setNameToThread();
-			processStateOfEveryGenerator();
-		}
-		
-		private void setNameToThread(){
-			Thread.currentThread().setName("station report timer");
-		}
-		
-		private void processStateOfEveryGenerator(){
-			clearPreviousGeneratorsReports();
-			prepareGeneratorsStatesReports();
-			PowerStationStateReport stationReport = prepareStationStateReport();
-			sendStationReport(stationReport);
-		}
-		
-		private void clearPreviousGeneratorsReports(){
-			generatorsReports.clear();
-		}
-		
-		private void prepareGeneratorsStatesReports(){
-			Collection<Integer> generatorNumbers = station.getGeneratorsNumbers();
-			for(Integer generatorNumber: generatorNumbers){
-				Generator generator = station.getGenerator(generatorNumber);
-				GeneratorStateReport generatorReport = prepareGeneratorStateReport(generator);
-				addGeneratorStateReportToGeneratorsStatesReport(generatorReport);
-			}
-		}
-		
-		private GeneratorStateReport prepareGeneratorStateReport(Generator generator){
-			int generatorNumber = generator.getNumber();
-			boolean isTurnedOn = generator.isTurnedOn();
-			float generationInWM = generator.getGenerationInMW();
-			
-			return new GeneratorStateReport(generatorNumber, isTurnedOn, generationInWM);
-		}
-		
-		private void addGeneratorStateReportToGeneratorsStatesReport(GeneratorStateReport report){
-			generatorsReports.add(report);
-		}
-		
-		private PowerStationStateReport prepareStationStateReport(){
-			int stationNumber = station.getNumber();
-			LocalTime currentTime = simulation.getTime();
-			
-			return new PowerStationStateReport(stationNumber, currentTime, generatorsReports);
-		}
-		
-		private void sendStationReport(PowerStationStateReport stationReport){
-			dispatcher.acceptPowerStationStateReport(stationReport);
-			
-			logger.info("Station sent report to dispatcher: {}", stationReport);
+	private void processStateOfEveryGenerator(){
+		clearPreviousGeneratorsReports();
+		prepareGeneratorsStatesReports();
+	}
+	
+	private void clearPreviousGeneratorsReports(){
+		generatorsReports.clear();
+	}
+	
+	private void prepareGeneratorsStatesReports(){
+		Collection<Integer> generatorNumbers = station.getGeneratorsNumbers();
+		for(Integer generatorNumber: generatorNumbers){
+			Generator generator = station.getGenerator(generatorNumber);
+			GeneratorStateReport generatorReport = prepareGeneratorStateReport(generator);
+			addGeneratorStateReportToGeneratorsStatesReport(generatorReport);
 		}
 	}
+	
+	private GeneratorStateReport prepareGeneratorStateReport(Generator generator){
+		int generatorNumber = generator.getNumber();
+		boolean isTurnedOn = generator.isTurnedOn();
+		float generationInWM = generator.getGenerationInMW();
+		
+		return new GeneratorStateReport(generatorNumber, isTurnedOn, generationInWM);
+	}
+	
+	private void addGeneratorStateReportToGeneratorsStatesReport(GeneratorStateReport report){
+		generatorsReports.add(report);
+	}
+	
+	private void prepareStationStateReport(){
+		int stationNumber = station.getNumber();
+		LocalTime currentTime = simulation.getTime();
+		stationReport = new PowerStationReport(stationNumber, currentTime, generatorsReports);
+	}
 
-	private class GeneratorsControlTaskTask extends TimerTask{
+	public void setSimulation(ElectricPowerSystemSimulation simulation) {
+		this.simulation = simulation;
+	}
+
+	public void setStation(PowerStation station) {
+		this.station = station;
+	}
+	
+	@Override
+	public void setReportSender(ReportSender sender) {
+		this.sender = sender;
+	}
+	
+	private class GeneratorsControlTask extends TimerTask{
 		private Generator generator;
 		private LoadCurve generationCurve;
 		private boolean shouldGeneratorBeTurnedOn;
@@ -231,17 +224,5 @@ public class MainControlPanel {
 			float newGenerationPower = generationCurve.getPowerOnTimeInMW(currentTime);
 			generator.setPowerAtRequiredFrequency(newGenerationPower);
 		}
-	}
-	
-	public void setSimulation(ElectricPowerSystemSimulation simulation) {
-		this.simulation = simulation;
-	}
-
-	public void setStation(PowerStation station) {
-		this.station = station;
-	}
-
-	public void setDispatcher(Dispatcher dispatcher) {
-		this.dispatcher = dispatcher;
 	}
 }
