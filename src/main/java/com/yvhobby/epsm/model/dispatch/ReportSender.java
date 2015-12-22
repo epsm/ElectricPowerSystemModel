@@ -6,10 +6,7 @@ import java.util.TimerTask;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import main.java.com.yvhobby.epsm.model.consumption.PowerConsumer;
-import main.java.com.yvhobby.epsm.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.yvhobby.epsm.model.generalModel.GlobalConstatnts;
-import main.java.com.yvhobby.epsm.model.generation.PowerStationException;
 
 public class ReportSender {
 	private Dispatcher dispatcher;
@@ -28,15 +25,7 @@ public class ReportSender {
 	}
 
 	private void determineSourceType(){
-		if(source instanceof MainControlPanel){
-			sourceType = "Station";
-		}else if(source instanceof PowerConsumer){
-			sourceType = "Consumer";
-		}else if(source instanceof ElectricPowerSystemSimulation){
-			sourceType = "Simulation";
-		}else{
-			throw new PowerStationException("ReportSender: unknown source type.");
-		}
+		sourceType = source.getClass().getName();
 	}
 	
 	public void sendReports(){
@@ -52,10 +41,6 @@ public class ReportSender {
 	private void startSending(){
 		reportTimer.schedule(task, DELAY_BEFORE_SENDING_REPORTS,
 				GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS);
-	}
-
-	public void setSource(ReportSenderSource source) {
-		this.source = source;
 	}
 
 	public void setDispatcher(Dispatcher dispatcher) {
