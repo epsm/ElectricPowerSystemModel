@@ -12,22 +12,21 @@ import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalCons
 import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 
-public class ControlUnitTest {
+public class StaticRegulatorTest {
 	private ElectricPowerSystemSimulation simulation;
 	private Generator generator;
-	private StaticRegulator controlUnit;
+	private StaticRegulator staticRegulator;
 	private final float GENERATOR_POWER_AT_REQUAIRED_FREQUENCY = 100;
 	
 	@Before
 	public void init(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		generator = new Generator(1);
-		controlUnit = new StaticRegulator(simulation, generator);
+		staticRegulator = new StaticRegulator(simulation, generator);
 		
-		controlUnit.setCoefficientOfStatism(0.1f);
-		controlUnit.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+		staticRegulator.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 		
-		generator.setStaticRegulator(controlUnit);
+		generator.setStaticRegulator(staticRegulator);
 		generator.setMinimalPowerInMW(50);
 		generator.setNominalPowerInMW(150);
 	}
@@ -37,7 +36,7 @@ public class ControlUnitTest {
 		prepareMockSimulationWithLowFrequency();
 		
 		for(int i = 0; i < 3; i++){
-			Assert.assertTrue(controlUnit.getGeneratorPowerInMW() > GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+			Assert.assertTrue(staticRegulator.getGeneratorPowerInMW() > GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 		}
 	}
 	
@@ -50,7 +49,7 @@ public class ControlUnitTest {
 		prepareMockSimulationWithHighFrequency();
 		
 		for(int i = 0; i < 3; i++){
-			Assert.assertTrue(controlUnit.getGeneratorPowerInMW() < GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+			Assert.assertTrue(staticRegulator.getGeneratorPowerInMW() < GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 		}
 	}
 	
@@ -62,7 +61,7 @@ public class ControlUnitTest {
 	public void PowerIsEqualsToPowerAtRequiredFrequencyWhenFrequencyIsEqualToRequired(){
 		prepareMockSimulationWithNormalFrequency();
 		
-		Assert.assertTrue(controlUnit.getGeneratorPowerInMW() == GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+		Assert.assertTrue(staticRegulator.getGeneratorPowerInMW() == GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
 	
 	private void prepareMockSimulationWithNormalFrequency(){
@@ -73,7 +72,7 @@ public class ControlUnitTest {
 	public void DoesPowerNotLessThanGeneratorMinimalTechnilogyPower(){
 		prepareMockSimulationWithTooHightFrequency();
 		
-		Assert.assertTrue(controlUnit.getGeneratorPowerInMW() >= generator.getMinimalPowerInMW());
+		Assert.assertTrue(staticRegulator.getGeneratorPowerInMW() >= generator.getMinimalPowerInMW());
 	}
 	
 	private void prepareMockSimulationWithTooHightFrequency(){
@@ -84,7 +83,7 @@ public class ControlUnitTest {
 	public void DoesPowerNotHigherThanGeneratorNomimalPower(){
 		prepareMockSimulationWithTooLowtFrequency();
 			
-		Assert.assertTrue(controlUnit.getGeneratorPowerInMW() <= generator.getNominalPowerInMW());
+		Assert.assertTrue(staticRegulator.getGeneratorPowerInMW() <= generator.getNominalPowerInMW());
 	}
 	
 	private void prepareMockSimulationWithTooLowtFrequency(){
