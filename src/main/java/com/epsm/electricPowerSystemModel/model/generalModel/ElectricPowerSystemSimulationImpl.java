@@ -39,7 +39,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		float generation = 0;
 		
 		for(PowerStation station: powerStations){
-			generation += station.getCurrentGenerationInMW();
+			generation += station.calculateGenerationInMW();
 		}
 		
 		return generation;

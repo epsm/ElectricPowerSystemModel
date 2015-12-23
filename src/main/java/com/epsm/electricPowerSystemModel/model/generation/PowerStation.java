@@ -25,7 +25,7 @@ public class PowerStation{
 		logger.info("Power station was created.");
 	}
 
-	public float getCurrentGenerationInMW(){
+	public float calculateGenerationInMW(){
 		float generationInMW = 0;
 		
 		for(Generator generator: generators.values()){

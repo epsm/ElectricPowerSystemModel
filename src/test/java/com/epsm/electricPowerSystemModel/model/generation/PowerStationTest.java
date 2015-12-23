@@ -85,7 +85,7 @@ public class PowerStationTest{
 		prepareAndInstallSecondAndThirdGenerators();
 		turnOnFirstAndSecondGeneratorsAndTurnOffThird();
 		float sumOfPowerTwoTurnedOnGenerators = FIRST_GENERATOR_RQUIRED_POWER + SECOND_GENERATOR_RQUIRED_POWER;
-		float stationGeneration = station.getCurrentGenerationInMW();
+		float stationGeneration = station.calculateGenerationInMW();
 		
 		Assert.assertEquals(sumOfPowerTwoTurnedOnGenerators, stationGeneration, 0);
 	}

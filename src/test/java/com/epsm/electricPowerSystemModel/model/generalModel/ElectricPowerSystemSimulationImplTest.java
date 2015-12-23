@@ -48,7 +48,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	
 	@Test
 	public void FrequencyDecreasesIfLoadHigherThanGeneration(){
-		when(station_1.getCurrentGenerationInMW()).thenReturn(99f);
+		when(station_1.calculateGenerationInMW()).thenReturn(99f);
 		when(consumer_1.calculateCurrentLoadInMW()).thenReturn(100f);
 
 		for(int i = 0; i < 1000; i++){			
@@ -66,7 +66,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	
 	@Test
 	public void FrequencyIncreasesIfLoadLessThanGeneration(){
-		when(station_1.getCurrentGenerationInMW()).thenReturn(100f);
+		when(station_1.calculateGenerationInMW()).thenReturn(100f);
 		when(consumer_1.calculateCurrentLoadInMW()).thenReturn(99f);
 		
 		for(int i = 0; i < 1000; i++){			
@@ -78,7 +78,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	
 	@Test
 	public void FrequencyIsConstantIfLoadEqualsToGeneration(){
-		when(station_1.getCurrentGenerationInMW()).thenReturn(100f);
+		when(station_1.calculateGenerationInMW()).thenReturn(100f);
 		when(consumer_1.calculateCurrentLoadInMW()).thenReturn(100f);
 		
 		for(int i = 0; i < 1000; i++){			
@@ -91,7 +91,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	@Test
 	public void SummaryPowerGenerationFromPowerStationEqualsToShownByModel(){
 		prepareSecondConsumerAndSecondPowerStation();
-		float generation = station_1.getCurrentGenerationInMW() + station_2.getCurrentGenerationInMW();
+		float generation = station_1.calculateGenerationInMW() + station_2.calculateGenerationInMW();
 		
 		report = simulation.calculateNextStep();
 		
@@ -102,8 +102,8 @@ public class ElectricPowerSystemSimulationImplTest {
 		station_2 = mock(PowerStation.class);
 		consumer_2 = mock(PowerConsumer.class);
 		
-		when(station_1.getCurrentGenerationInMW()).thenReturn(60f);
-		when(station_2.getCurrentGenerationInMW()).thenReturn(70f);
+		when(station_1.calculateGenerationInMW()).thenReturn(60f);
+		when(station_2.calculateGenerationInMW()).thenReturn(70f);
 		when(consumer_1.calculateCurrentLoadInMW()).thenReturn(80f);
 		when(consumer_2.calculateCurrentLoadInMW()).thenReturn(40f);
 		
