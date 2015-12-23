@@ -6,23 +6,28 @@ import java.util.Random;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
+import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class ShockLoadConsumer extends Consumer{
 	private int maxWorkDurationInSeconds;
 	private int maxPauseBetweenWorkInSeconds;
 	private float maxLoad;
-	private float currentLoadWithoutFrequencyCounting;
-	private float currentFrequency;
-	private LocalTime timeToTurnOn = LocalTime.MIDNIGHT;//for first time else NPE
+	private LocalTime timeToTurnOn;
 	private LocalTime timeToTurnOff;
 	private boolean isTurnedOn;
+	private LocalTime currentTime;
+	private float currentLoad;
+	private float currentFrequency;
+	private ConsumerState state;
 	private Random random = new Random();
 	private Logger logger = (Logger) LoggerFactory.getLogger(ShockLoadConsumer.class);
 	
-	public ShockLoadConsumer(int consumerNumber) {
-		super(consumerNumber);
-		logger.info("Consumer ¹" + consumerNumber + " with shock load created");
+	public ShockLoadConsumer(int consumerNumber, ElectricPowerSystemSimulation simulation) {
+		super(consumerNumber, simulation);
+		
+		logger.info("Shock load Consumer ¹" + consumerNumber + " created");
 	}
 	
 	@Override
@@ -41,18 +46,28 @@ public class ShockLoadConsumer extends Consumer{
 			}
 		}
 		
-		calculateLoadCountingFrequency(currentLoadWithoutFrequencyCounting);
+		currentLoad = calculateLoadCountingFrequency(currentLoad, currentFrequency);
+		state = prepareState(currentTime, currentLoad);
 		
 		return currentLoad;
 	}
-	
+
 	private void getNecessaryParametersFromPowerSystem(){
 		currentTime = simulation.getTime();
 		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
-
+	
 	private boolean IsItTimeToTurnOn(){
-		return timeToTurnOn.isBefore(currentTime);
+		if(isItFirstTurnOn()){
+			setTimeToTurnOn();
+			return false;
+		}else{
+			return timeToTurnOn.isBefore(currentTime);
+		}
+	}
+	
+	private boolean isItFirstTurnOn(){
+		return timeToTurnOn == null;
 	}
 	
 	private void turnOnAndSetTimeToTurnOff(){
@@ -62,7 +77,7 @@ public class ShockLoadConsumer extends Consumer{
 	
 	private void turnOnWithRandomLoadValue(){
 		float halfOfMaxLoad = maxLoad / 2;
-		currentLoadWithoutFrequencyCounting = halfOfMaxLoad + halfOfMaxLoad * random.nextFloat();
+		currentLoad = halfOfMaxLoad + halfOfMaxLoad * random.nextFloat();
 		isTurnedOn = true;
 	}
 	
@@ -92,11 +107,11 @@ public class ShockLoadConsumer extends Consumer{
 				(long)(halfOfTurnedOffDuration + halfOfTurnedOffDuration * random.nextFloat()));
 	}
 	
-	private void calculateLoadCountingFrequency(float load){
-		currentLoad = (float)Math.pow((currentFrequency / GlobalConstatnts.STANDART_FREQUENCY),
-				degreeOnDependingOfFrequency) * load;
+	@Override
+	public PowerObjectState getState() {
+		return state;
 	}
-
+	
 	public void setMaxWorkDurationInSeconds(int WorkDurationInSeconds) {
 		this.maxWorkDurationInSeconds = WorkDurationInSeconds;
 	}

@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
@@ -20,13 +21,17 @@ public class ShockLoadTestConsumerTest {
 	float currentLoad;
 	private LocalTime turnOnTime;
 	private LocalTime turnOffTime;
+	private float expectedLoad;
+	private LocalTime expectedTime;
+	private ConsumerState state;
 	private final int WORK_TIME = 300; 
-	private final int PAUSE_TIME = 500; 
+	private final int PAUSE_TIME = 500;
+	private final int CONSUMER_NUMBER = 664;
 	
 	@Before
 	public void initialize(){
 		simulation = spy(new ElectricPowerSystemSimulationImpl());
-		consumer = new ShockLoadConsumer(1);
+		consumer = new ShockLoadConsumer(CONSUMER_NUMBER, simulation);
 		turnOnTime = null;
 		turnOffTime = null;
 		
@@ -35,7 +40,6 @@ public class ShockLoadTestConsumerTest {
 		consumer.setMaxLoad(100f);
 		consumer.setMaxWorkDurationInSeconds(WORK_TIME);
 		consumer.setMaxPauseBetweenWorkInSeconds(PAUSE_TIME);
-		consumer.setElectricalPowerSystemSimulation(simulation);
 		consumer.setDegreeOfDependingOnFrequency(2);
 	}
 	
@@ -153,5 +157,32 @@ public class ShockLoadTestConsumerTest {
 	
 	public void prepareMockSimulationWithDecreasingFrequency(){
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(49.99f);
+	}
+	
+	@Test
+	public void consumerStateContainsCorrectData(){
+		findTurnOnTime();
+		getExpectedValues();
+		getState();
+		compareValues();
+	}
+	
+	private void getExpectedValues(){
+		expectedLoad = consumer.calculateCurrentLoadInMW();
+		expectedTime = simulation.getTime();
+	}
+	
+	private void getState(){
+		state = (ConsumerState) consumer.getState();
+	}
+	
+	private void compareValues(){
+		int actualConsumerNumber = state.getConsumerNumber();
+		LocalTime actualInState = state.getTimeStamp();
+		float actualLoad = state.getTotalLoad();
+		
+		Assert.assertEquals(CONSUMER_NUMBER, actualConsumerNumber, 0);
+		Assert.assertEquals(expectedTime, actualInState);
+		Assert.assertEquals(expectedLoad, actualLoad, 0);
 	}
 }

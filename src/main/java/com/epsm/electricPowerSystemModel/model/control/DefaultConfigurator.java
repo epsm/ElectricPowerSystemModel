@@ -28,19 +28,17 @@ public class DefaultConfigurator {
 	private void createConsumerAndAddItToEnergySystem(){
 		float[] pattern = TestsConstants.LOAD_BY_HOURS;
 		
-		ShockLoadConsumer powerConsumer_scheduled = new ShockLoadConsumer(1);
+		ShockLoadConsumer powerConsumer_scheduled = new ShockLoadConsumer(1, simulation);
 		powerConsumer_scheduled.setDegreeOfDependingOnFrequency(2);
 		powerConsumer_scheduled.setMaxLoad(10f);
 		powerConsumer_scheduled.setMaxWorkDurationInSeconds(300);
 		powerConsumer_scheduled.setMaxPauseBetweenWorkInSeconds(200);
-		powerConsumer_scheduled.setElectricalPowerSystemSimulation(simulation);
 		
-		ScheduledLoadConsumer powerConsumer_shock = new ScheduledLoadConsumer(2);
+		ScheduledLoadConsumer powerConsumer_shock = new ScheduledLoadConsumer(2, simulation);
 		powerConsumer_shock.setDegreeOfDependingOnFrequency(2);
 		powerConsumer_shock.setApproximateLoadByHoursOnDayInPercent(pattern);
 		powerConsumer_shock.setMaxLoadWithoutRandomInMW(100);
 		powerConsumer_shock.setRandomFluctuationsInPercent(10);
-		powerConsumer_shock.setElectricalPowerSystemSimulation(simulation);
 
 		simulation.addPowerConsumer(powerConsumer_scheduled);
 		simulation.addPowerConsumer(powerConsumer_shock);

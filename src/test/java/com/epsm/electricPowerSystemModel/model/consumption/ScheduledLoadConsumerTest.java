@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
@@ -18,25 +19,28 @@ public class ScheduledLoadConsumerTest{
 	private ScheduledLoadConsumer consumer;
 	private ElectricPowerSystemSimulation simulation;
 	private float[] approximateLoadByHoursInPercent;
-	private Random random = new Random(); 
+	private float expectedLoad;
+	private LocalTime expectedTime;
+	private ConsumerState state;
+	private Random random = new Random();
+	private final int CONSUMER_NUMBER = 664;
 	
 	@Before
 	public void initialize(){
 		simulation = createPowerSystemStub();
-		consumer = new ScheduledLoadConsumer(1);
+		consumer = new ScheduledLoadConsumer(CONSUMER_NUMBER, simulation);
 		approximateLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 		
 		consumer.setApproximateLoadByHoursOnDayInPercent(approximateLoadByHoursInPercent);
 		consumer.setMaxLoadWithoutRandomInMW(100);
 		consumer.setRandomFluctuationsInPercent(10);
 		consumer.setDegreeOfDependingOnFrequency(2);
-		consumer.setElectricalPowerSystemSimulation(simulation);
 	}
 	
 	//realization with Mock works too slow
 	private ElectricPowerSystemSimulation createPowerSystemStub(){
 		return new ElectricPowerSystemSimulation() {
-			LocalTime time = LocalTime.of(0, 0);
+			LocalTime time = LocalTime.MIDNIGHT;
 			float possibleFluctuations = 1.2f;
 			float frequency = 50;
 						
@@ -137,5 +141,31 @@ public class ScheduledLoadConsumerTest{
 	
 	private float addRandomPartInMw(float load){
 		return load + load * consumer.getRandomFluctuationsInPercent() / 100;
+	}
+	
+	@Test
+	public void consumerStateContainsCorrectData(){
+		getExpectedValues();
+		getState();
+		compareValues();
+	}
+	
+	private void getExpectedValues(){
+		expectedLoad = consumer.calculateCurrentLoadInMW();
+		expectedTime = simulation.getTime();
+	}
+	
+	private void getState(){
+		state = (ConsumerState) consumer.getState();
+	}
+	
+	private void compareValues(){
+		int actualConsumerNumber = state.getConsumerNumber();
+		LocalTime actualInState = state.getTimeStamp();
+		float actualLoad = state.getTotalLoad();
+		
+		Assert.assertEquals(CONSUMER_NUMBER, actualConsumerNumber, 0);
+		Assert.assertEquals(expectedTime, actualInState);
+		Assert.assertEquals(expectedLoad, actualLoad, 0);
 	}
 }

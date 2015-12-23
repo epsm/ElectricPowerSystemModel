@@ -18,7 +18,7 @@ public class ConsumerState extends PowerObjectState{
 		formatter = new DecimalFormat("0000.000");
 	}
 
-	public int getConsumerId() {
+	public int getConsumerNumber() {
 		return consumerNumber;
 	}
 

@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
+import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class ScheduledLoadConsumer extends Consumer{
 	private LoadCurveFactory factory = new LoadCurveFactory();
@@ -15,12 +17,15 @@ public class ScheduledLoadConsumer extends Consumer{
 	private float randomFluctuationsInPercent;
 	private LoadCurve loadCurveOnDay;
 	private LocalTime previousLoadRequestTime;
+	private ConsumerState state;
+	private LocalTime currentTime;
+	private float currentLoad;
 	private float currentFrequency;
 	private Logger logger = (Logger) LoggerFactory.getLogger(ScheduledLoadConsumer.class);
 	
-	public ScheduledLoadConsumer(int consumerNumber) {
-		super(consumerNumber);
-		logger.info("Consumer ¹" + consumerNumber + " with scheduled load created");
+	public ScheduledLoadConsumer(int consumerNumber, ElectricPowerSystemSimulation simulation) {
+		super(consumerNumber, simulation);
+		logger.info("Scheduled load consumer ¹" + consumerNumber + " created");
 	}
 	
 	@Override
@@ -33,6 +38,8 @@ public class ScheduledLoadConsumer extends Consumer{
 		
 		saveRequestTime();
 		calculateLoadForThisMoment();
+		currentLoad = calculateLoadCountingFrequency(currentLoad, currentFrequency);
+		state = prepareState(currentTime, currentLoad);
 		
 		return currentLoad;
 	}
@@ -56,13 +63,12 @@ public class ScheduledLoadConsumer extends Consumer{
 	}
 	
 	private void calculateLoadForThisMoment(){
-		float loadWithoutCountingFrequency = loadCurveOnDay.getPowerOnTimeInMW(currentTime);
-		currentLoad =  calculateLoadCountingFrequency(loadWithoutCountingFrequency);
+		currentLoad = loadCurveOnDay.getPowerOnTimeInMW(currentTime);
 	}
 	
-	private float calculateLoadCountingFrequency(float loadWithoutCountingFrequency){
-		return (float)Math.pow((currentFrequency / GlobalConstatnts.STANDART_FREQUENCY),
-				degreeOnDependingOfFrequency) * loadWithoutCountingFrequency;
+	@Override
+	public PowerObjectState getState() {
+		return state;
 	}
 	
 	public void setRandomFluctuationsInPercent(float randomFluctuationsInPercent) {
