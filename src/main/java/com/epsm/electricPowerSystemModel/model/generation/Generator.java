@@ -3,7 +3,7 @@ package main.java.com.epsm.electricPowerSystemModel.model.generation;
 public class Generator {
 	private int number;
 	private StaticRegulator staticRegulator;
-	private AstaticRegulatort astaticRegulator;
+	private AstaticRegulator astaticRegulator;
 	private float nominalPowerInMW;
 	private float minimalPowerInMW;
 	private float currentGeneration;
@@ -38,7 +38,7 @@ public class Generator {
 		this.staticRegulator = staticRegulator;
 	}
 	
-	public void setAstaticRegulator(AstaticRegulatort astaticRegulator) {
+	public void setAstaticRegulator(AstaticRegulator astaticRegulator) {
 		this.astaticRegulator = astaticRegulator;
 	}
 	

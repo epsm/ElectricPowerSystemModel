@@ -8,14 +8,14 @@ import static org.mockito.Mockito.*;
 
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulatort;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 
-public class AstaticRegulationUnitTest {
+public class AstaticRegulatorTest {
 	private ElectricPowerSystemSimulation simulation;
-	private AstaticRegulatort regulationUnit;
-	private StaticRegulator controlUnit;
+	private AstaticRegulator astaticRegulator;
+	private StaticRegulator staticRegulator;
 	private Generator generator;
 	private final float GENERATOR_POWER_AT_REQUAIRED_FREQUENCY = 100;
 	
@@ -23,22 +23,22 @@ public class AstaticRegulationUnitTest {
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		generator = new Generator(1);
-		regulationUnit = new AstaticRegulatort(simulation, generator);
-		controlUnit = new StaticRegulator(simulation, generator);
+		astaticRegulator = new AstaticRegulator(simulation, generator);
+		staticRegulator = new StaticRegulator(simulation, generator);
 		
-		generator.setAstaticRegulator(regulationUnit);
-		generator.setStaticRegulator(controlUnit);
+		generator.setAstaticRegulator(astaticRegulator);
+		generator.setStaticRegulator(staticRegulator);
 		generator.setNominalPowerInMW(200);
-		controlUnit.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+		staticRegulator.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
 	
 	@Test
 	public void increasePowerIfFrequencyIsLow(){
 		prepareMockSimulationWithLowFrequency();
-		regulationUnit.verifyAndAdjustPowerAtRequiredFrequency();
+		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 		
 		Assert.assertTrue(
-				controlUnit.getPowerAtRequiredFrequency() > GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+				staticRegulator.getPowerAtRequiredFrequency() > GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
 	
 	private void prepareMockSimulationWithLowFrequency(){
@@ -49,10 +49,10 @@ public class AstaticRegulationUnitTest {
 	@Test
 	public void decreasePowerIfFrequencyIsHight(){
 		prepareMockSimulationWithHighFrequency();
-		regulationUnit.verifyAndAdjustPowerAtRequiredFrequency();
+		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 		
 		Assert.assertTrue(
-				controlUnit.getPowerAtRequiredFrequency() < GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+				staticRegulator.getPowerAtRequiredFrequency() < GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
 	
 	private void prepareMockSimulationWithHighFrequency(){
@@ -63,10 +63,10 @@ public class AstaticRegulationUnitTest {
 	@Test
 	public void doNothingIfFrequencyInNonSensivityRangeAndLessThanZero(){
 		prepareMockSimulationWithLittleLowerButPermissibleFrequency();
-		regulationUnit.verifyAndAdjustPowerAtRequiredFrequency();
+		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 		
 		Assert.assertTrue(
-				controlUnit.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+				staticRegulator.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 
 	}
 	
@@ -78,10 +78,10 @@ public class AstaticRegulationUnitTest {
 	@Test
 	public void doNothingIfFrequencyInNonSensivityRangeAndMoreThanZero(){
 		prepareMockSimulationWithLittleHigherButPermissibleFrequency();
-		regulationUnit.verifyAndAdjustPowerAtRequiredFrequency();
+		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 			
 		Assert.assertTrue(
-				controlUnit.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+				staticRegulator.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
 	
 	private void prepareMockSimulationWithLittleHigherButPermissibleFrequency(){
@@ -93,19 +93,19 @@ public class AstaticRegulationUnitTest {
 	public void doNothingIfFrequencyIsLowAndGeneratorPowerIsMaximal(){
 		prepareMockSimulationWithLowFrequency();
 		generator.setNominalPowerInMW(100);
-		regulationUnit.verifyAndAdjustPowerAtRequiredFrequency();
+		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 		
 		Assert.assertTrue(
-				controlUnit.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+				staticRegulator.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
 	
 	@Test
 	public void doNothingIfFrequencyIsHighAndGeneratorPowerIsMinimal(){
 		prepareMockSimulationWithHighFrequency();
 		generator.setMinimalPowerInMW(100);
-		regulationUnit.verifyAndAdjustPowerAtRequiredFrequency();
+		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 		
 		Assert.assertTrue(
-				controlUnit.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+				staticRegulator.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
 }

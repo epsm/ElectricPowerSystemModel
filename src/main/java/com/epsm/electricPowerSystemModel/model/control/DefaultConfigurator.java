@@ -6,7 +6,7 @@ import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulatort;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
@@ -61,7 +61,7 @@ public class DefaultConfigurator {
 		ReportSender sender = new ReportSender(controlPanel);
 		
 		Generator generator_1 = new Generator(1);
-		AstaticRegulatort regulationUnit_1 = new AstaticRegulatort(simulation, generator_1);
+		AstaticRegulator regulationUnit_1 = new AstaticRegulator(simulation, generator_1);
 		StaticRegulator controlUnit_1 = new StaticRegulator(simulation, generator_1);
 		
 		generator_1.setAstaticRegulator(regulationUnit_1);
@@ -70,7 +70,7 @@ public class DefaultConfigurator {
 		generator_1.setNominalPowerInMW(40);
 		
 		Generator generator_2 = new Generator(2);
-		AstaticRegulatort regulationUnit_2 = new AstaticRegulatort(simulation, generator_2);
+		AstaticRegulator regulationUnit_2 = new AstaticRegulator(simulation, generator_2);
 		StaticRegulator controlUnit_2 = new StaticRegulator(simulation, generator_2);
 		
 		generator_2.setAstaticRegulator(regulationUnit_2);

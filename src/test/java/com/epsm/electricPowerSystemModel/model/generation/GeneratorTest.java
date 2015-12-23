@@ -6,14 +6,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulatort;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 
 public class GeneratorTest{
 	private Generator generator;
 	private StaticRegulator staticRegulator;
-	private AstaticRegulatort astaticRegulator;
+	private AstaticRegulator astaticRegulator;
 	private final float GENERATOR_GENERATION = 1000f; 
 	
 	@Before
@@ -50,7 +50,7 @@ public class GeneratorTest{
 	}
 	
 	private void prepareMockAstaticRegulationUnit(){
-		astaticRegulator = mock(AstaticRegulatort.class);
+		astaticRegulator = mock(AstaticRegulator.class);
 		generator.setAstaticRegulator(astaticRegulator);
 	}
 }

@@ -3,14 +3,14 @@ package main.java.com.epsm.electricPowerSystemModel.model.generation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
-public class AstaticRegulatort {
+public class AstaticRegulator {
 	private ElectricPowerSystemSimulation simulation;
 	private Generator generator;
 	private float currentFrequency;
 	private final float ASTATIC_REGULATION_SENSIVITY = 0.03f;
 	private final float REGULATION_STEP = 0.1f;
 
-	public AstaticRegulatort(ElectricPowerSystemSimulation simulation, Generator generator) {
+	public AstaticRegulator(ElectricPowerSystemSimulation simulation, Generator generator) {
 		this.simulation = simulation;
 		this.generator = generator;
 	}
