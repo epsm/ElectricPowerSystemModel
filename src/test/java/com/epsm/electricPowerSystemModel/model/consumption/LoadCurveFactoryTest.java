@@ -6,19 +6,19 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.RandomLoadCurveFactory;
+import main.java.com.epsm.electricPowerSystemModel.model.consumption.LoadCurveFactory;
 import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
-public class RandomLoadCurveFactoryTest {
+public class LoadCurveFactoryTest {
 	private float[] originalLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 	private float maxLoadWithoutRandomInMW = 100;
 	private float randomFluctuaton = 10;
 	private LoadCurve curve;
-	private RandomLoadCurveFactory factory = new RandomLoadCurveFactory();
+	private LoadCurveFactory factory = new LoadCurveFactory();
 
 	@Test
 	public void conformityOriginalLoadAndLoadAccordingToCurveCountingRandomFluctuations(){
-		curve = factory.calculateLoadCurve(
+		curve = factory.getRandomCurve(
 				originalLoadByHoursInPercent, maxLoadWithoutRandomInMW, randomFluctuaton);
 		
 		for(int i = 0; i < 24; i++){
@@ -43,9 +43,9 @@ public class RandomLoadCurveFactoryTest {
 	@Test
 	public void constructedLoadCurvesAreRandom(){
 		boolean atLeastOneLoadValueIsUnique = false;
-		LoadCurve curve_1 = factory.calculateLoadCurve(
+		LoadCurve curve_1 = factory.getRandomCurve(
 				originalLoadByHoursInPercent, maxLoadWithoutRandomInMW, randomFluctuaton);
-		LoadCurve curve_2 = factory.calculateLoadCurve(
+		LoadCurve curve_2 = factory.getRandomCurve(
 				originalLoadByHoursInPercent, maxLoadWithoutRandomInMW, randomFluctuaton);
 		
 		for(int i = 0; i < 24; i++){

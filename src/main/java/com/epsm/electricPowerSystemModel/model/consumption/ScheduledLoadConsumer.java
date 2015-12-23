@@ -9,7 +9,7 @@ import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGener
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
 public class ScheduledLoadConsumer extends Consumer{
-	private RandomLoadCurveFactory factory = new RandomLoadCurveFactory();
+	private LoadCurveFactory factory = new LoadCurveFactory();
 	private float[] approximateLoadByHoursOnDayInPercent;
 	private float maxLoadWithoutFluctuationsInMW;
 	private float randomFluctuationsInPercent;
@@ -47,7 +47,7 @@ public class ScheduledLoadConsumer extends Consumer{
 	}
 	
 	private void calculateLoadCurveOnThisDay(){
-		loadCurveOnDay = factory.calculateLoadCurve(
+		loadCurveOnDay = factory.getRandomCurve(
 				approximateLoadByHoursOnDayInPercent, maxLoadWithoutFluctuationsInMW, randomFluctuationsInPercent);
 	}
 

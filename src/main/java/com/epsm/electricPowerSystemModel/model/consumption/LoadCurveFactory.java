@@ -5,18 +5,18 @@ import java.util.Random;
 
 import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 
-public class RandomLoadCurveFactory {
+public class LoadCurveFactory {
 	private Random random = new Random();
 	private float[] newLoadByHoursInMW = new float[24];
 	private float[] originalLoadByHoursInPercent;
 	private float maxLoadWithoutRandomInMW;
 	private float randomFluctuatonInPercent;
 	
-	public LoadCurve calculateLoadCurve(float[] originalLoadByHoursInPercent,
-			float MaxiLoadWithoutRandomInMW, float randomFluctuationInPercent){
+	public LoadCurve getRandomCurve(float[] originalLoadByHoursInPercent,
+			float MaxLoadWithoutRandomInMW, float randomFluctuationInPercent){
 		
 		this.originalLoadByHoursInPercent = originalLoadByHoursInPercent;
-		this.maxLoadWithoutRandomInMW = MaxiLoadWithoutRandomInMW;
+		this.maxLoadWithoutRandomInMW = MaxLoadWithoutRandomInMW;
 		this.randomFluctuatonInPercent = randomFluctuationInPercent;
 		
 		fillNewLoadByHoursInMW();
