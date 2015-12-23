@@ -12,18 +12,18 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Report;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSenderSource;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
 public class ReportSenderTest{
-	private ArgumentCaptor<Report> reportCaptor;
+	private ArgumentCaptor<PowerObjectState> reportCaptor;
 	private Dispatcher dispatcher;
 	private ReportSenderSource source;
 	private ReportSender sender;
-	private Report reportFromSource;
-	private Report capturedReport;
+	private PowerObjectState reportFromSource;
+	private PowerObjectState capturedReport;
 	
 	@Before
 	public void initialize(){
@@ -31,10 +31,10 @@ public class ReportSenderTest{
 		source = mock(ReportSenderSource.class);
 		sender = new ReportSender(source); 
 		sender.setDispatcher(dispatcher);
-		reportFromSource = mock(Report.class);
-		reportCaptor = ArgumentCaptor.forClass(Report.class);
+		reportFromSource = mock(PowerObjectState.class);
+		reportCaptor = ArgumentCaptor.forClass(PowerObjectState.class);
 		
-		when(source.getReport()).thenReturn(reportFromSource);
+		when(source.getState()).thenReturn(reportFromSource);
 	}
 	
 	@Test
@@ -53,7 +53,7 @@ public class ReportSenderTest{
 	}
 	
 	private void hasReportBeenRequestedFromSourceTwice(){
-		verify(source, times(2)).getReport();
+		verify(source, times(2)).getState();
 	}
 	
 	@Test

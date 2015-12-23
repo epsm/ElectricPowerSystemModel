@@ -1,6 +1,10 @@
 package main.java.com.epsm.electricPowerSystemModel.model.generation;
 
-public class Generator {
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSource;
+
+public class Generator implements StateSource{
 	private int number;
 	private StaticRegulator staticRegulator;
 	private AstaticRegulator astaticRegulator;
@@ -9,16 +13,20 @@ public class Generator {
 	private float currentGeneration;
 	private boolean turnedOn;
 	private boolean astaticRegulationTurnedOn;
-	
+	private GeneratorState state;
+
 	public Generator(int number){
 		this.number = number;
+		prepareState();
 	}
 	
 	public float calculateGeneration(){
 		if(turnedOn){
 			calculateCurrentGeneration();
+			prepareState();
 			return currentGeneration;
 		}else{
+			prepareState();
 			return 0;
 		}
 	}
@@ -28,6 +36,15 @@ public class Generator {
 			astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 		}
 		currentGeneration = staticRegulator.getGeneratorPowerInMW();
+	}
+	
+	@Override
+	public PowerObjectState getState(){
+		return state;
+	}
+	
+	private void prepareState(){
+		state = new GeneratorState(number, currentGeneration);
 	}
 	
 	public int getNumber(){
@@ -56,10 +73,6 @@ public class Generator {
 
 	public void setMinimalPowerInMW(float minimalPowerInMW) {
 		this.minimalPowerInMW = minimalPowerInMW;
-	}
-	
-	public float getGenerationInMW(){
-		return currentGeneration;
 	}
 	
 	public boolean isTurnedOn(){

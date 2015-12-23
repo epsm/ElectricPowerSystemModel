@@ -1,25 +1,30 @@
 package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
 
+import java.text.DecimalFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Set;
 
-public class PowerStationReport extends Report{
+public class PowerStationState extends PowerObjectState{
 	private int powerStationNumber;
 	private LocalTime timeStamp;
-	private Set<GeneratorStateReport> generatorsStatesReports;
+	private float frequency;
+	private Set<GeneratorState> generatorsStatesReports;
 	private StringBuilder stringBuilder;
-	private DateTimeFormatter formatter;
+	private DateTimeFormatter timeFormatter;
+	private DecimalFormat numberFormatter;
 
-	public PowerStationReport(int powerStationNumber, LocalTime timeStamp,
-			Set<GeneratorStateReport> generatorsStatesReports) {
+	public PowerStationState(int powerStationNumber, LocalTime timeStamp, float frequency,
+			Set<GeneratorState> generatorsStatesReports) {
 		this.powerStationNumber = powerStationNumber;
 		this.timeStamp = timeStamp;
+		this.frequency = frequency;
 		this.generatorsStatesReports = Collections.unmodifiableSet(generatorsStatesReports);
 		
 		stringBuilder = new StringBuilder();
-		formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		numberFormatter = new DecimalFormat("0000.000");
 	}
 
 	public int getPowerStationNumber() {
@@ -30,18 +35,24 @@ public class PowerStationReport extends Report{
 		return timeStamp;
 	}
 
-	public Set<GeneratorStateReport> getGeneratorsStatesReports() {
+	public float getFrequency() {
+		return frequency;
+	}
+
+	public Set<GeneratorState> getGeneratorsStatesReports() {
 		return generatorsStatesReports;
 	}
 
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("PowerStationStateReport ");
+		stringBuilder.append("PowerStationState ");
 		stringBuilder.append("[time in simulation= ");
-		stringBuilder.append(timeStamp.format(formatter));
+		stringBuilder.append(timeStamp.format(timeFormatter));
 		stringBuilder.append(", powerStationNumber=");
 		stringBuilder.append(powerStationNumber);
+		stringBuilder.append(", frequency=");
+		stringBuilder.append(numberFormatter.format(frequency));
 		stringBuilder.append(", generatorsStatesReports ");
 		stringBuilder.append(generatorsStatesReports);
 		stringBuilder.append("]");

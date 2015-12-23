@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationReport;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationState;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
@@ -52,7 +52,7 @@ public class ScheduledLoadConsumerTest{
 			}
 			
 			@Override
-			public SimulationReport calculateNextStep() {
+			public SimulationState calculateNextStep() {
 				time = time.plusNanos(100_000_000);
 				frequency = (random.nextFloat() * GlobalConstatnts.STANDART_FREQUENCY * 
 						possibleFluctuations);

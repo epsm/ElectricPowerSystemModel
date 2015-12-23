@@ -2,16 +2,18 @@ package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.text.DecimalFormat;
 
-public class GeneratorStateReport implements Comparable<GeneratorStateReport>{
+public class GeneratorState extends PowerObjectState implements Comparable<GeneratorState>{
 	private  int generatorNumber;
 	private float generationInWM;
 	private StringBuilder stringBuilder;
+	private DecimalFormat formatter;
 	
-	public GeneratorStateReport(int generatorNumber, float generationInWM) {
+	public GeneratorState(int generatorNumber, float generationInWM) {
 		this.generatorNumber = generatorNumber;
 		this.generationInWM = generationInWM;
 		
 		stringBuilder = new StringBuilder();
+		formatter = new DecimalFormat("0000.000");
 	}
 
 	public int getGeneratorNumber() {
@@ -23,7 +25,7 @@ public class GeneratorStateReport implements Comparable<GeneratorStateReport>{
 	}
 
 	@Override
-	public int compareTo(GeneratorStateReport o) {
+	public int compareTo(GeneratorState o) {
 		if(generationInWM - o.generatorNumber < 0){
 			return -1;
 		}else if(generationInWM - o.generatorNumber > 0){
@@ -53,7 +55,7 @@ public class GeneratorStateReport implements Comparable<GeneratorStateReport>{
 			return false;
 		}
 		
-		GeneratorStateReport other = (GeneratorStateReport) obj;
+		GeneratorState other = (GeneratorState) obj;
 		
 		if(generatorNumber != other.generatorNumber){
 			return false;
@@ -63,8 +65,6 @@ public class GeneratorStateReport implements Comparable<GeneratorStateReport>{
 
 	@Override
 	public String toString() {
-		DecimalFormat formatter = new DecimalFormat("0000.000");
-		
 		stringBuilder.setLength(0);
 		stringBuilder.append("GeneratorStateReport ");
 		stringBuilder.append("[generatorNumber=");

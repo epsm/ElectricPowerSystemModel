@@ -5,11 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationReport;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
-
 	private Set<PowerStation> powerStations;
 	private Set<Consumer> powerConsumers;
 	private float frequencyInPowerSystem = GlobalConstatnts.STANDART_FREQUENCY;
@@ -24,15 +22,12 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 
 	@Override
-	public SimulationReport calculateNextStep() {
+	public void calculateNextStep() {
 		float totalGeneration = calculateTotalGenerationsInMW();
 		float totalLoad = calculateTotalLoadInMW();
 		
 		calculateFrequencyInPowerSystem(totalGeneration, totalLoad);
 		changeTimeForStep();
-		
-		return new SimulationReport(totalGeneration, totalLoad,
-				frequencyInPowerSystem, currentTimeInSimulation);
 	}
 	
 	private float calculateTotalGenerationsInMW(){
@@ -65,7 +60,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private void changeTimeForStep(){
 		currentTimeInSimulation = currentTimeInSimulation.plusNanos(SIMULATION_STEP_IN_NANOS);
 	}
-	
+
 	@Override
 	public void addPowerStation(PowerStation powerStation) {
 		powerStations.add(powerStation);

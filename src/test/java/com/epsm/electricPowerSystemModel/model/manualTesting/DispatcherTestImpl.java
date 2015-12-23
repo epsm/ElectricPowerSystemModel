@@ -2,13 +2,13 @@ package test.java.com.epsm.electricPowerSystemModel.model.manualTesting;
 
 import java.util.Formatter;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerReport;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorStateReport;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationReport;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Report;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationReport;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationState;
 
 /*public class DispatcherTestImpl implements Dispatcher{
 	

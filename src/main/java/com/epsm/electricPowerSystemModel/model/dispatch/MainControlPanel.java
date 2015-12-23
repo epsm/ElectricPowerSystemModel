@@ -17,7 +17,7 @@ import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
-public class MainControlPanel implements ReportSource, ReportSenderSource{
+public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSource{
 	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station;
 	private PowerStationGenerationSchedule curentSchedule;
@@ -27,8 +27,8 @@ public class MainControlPanel implements ReportSource, ReportSenderSource{
 	private GenerationScheduleValidator validator = new GenerationScheduleValidator();
 	private ReportSender sender;
 	private PowerStationParameters parameters;
-	private PowerStationReport stationReport;
-	private Set<GeneratorStateReport> generatorsReports = new TreeSet<GeneratorStateReport>();
+	private PowerStationState stationReport;
+	private Set<GeneratorState> generatorsReports = new TreeSet<GeneratorState>();
 	private Logger logger = (Logger) LoggerFactory.getLogger(MainControlPanel.class);
 	
 	public void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
@@ -76,12 +76,12 @@ public class MainControlPanel implements ReportSource, ReportSenderSource{
 	}
 	
 	@Override
-	public void subscribeOnReports(){
+	public void sendReports(){
 		sender.sendReports();
 	}
 	
 	@Override
-	public Report getReport() {
+	public PowerObjectState getState() {
 		processStateOfEveryGenerator();
 		prepareStationStateReport();
 		return stationReport;
@@ -100,26 +100,26 @@ public class MainControlPanel implements ReportSource, ReportSenderSource{
 		Collection<Integer> generatorNumbers = station.getGeneratorsNumbers();
 		for(Integer generatorNumber: generatorNumbers){
 			Generator generator = station.getGenerator(generatorNumber);
-			GeneratorStateReport generatorReport = prepareGeneratorStateReport(generator);
+			GeneratorState generatorReport = prepareGeneratorStateReport(generator);
 			addGeneratorStateReportToGeneratorsStatesReport(generatorReport);
 		}
 	}
 	
-	private GeneratorStateReport prepareGeneratorStateReport(Generator generator){
+	private GeneratorState prepareGeneratorStateReport(Generator generator){
 		int generatorNumber = generator.getNumber();
 		float generationInWM = generator.getGenerationInMW();
 		
-		return new GeneratorStateReport(generatorNumber, generationInWM);
+		return new GeneratorState(generatorNumber, generationInWM);
 	}
 	
-	private void addGeneratorStateReportToGeneratorsStatesReport(GeneratorStateReport report){
+	private void addGeneratorStateReportToGeneratorsStatesReport(GeneratorState report){
 		generatorsReports.add(report);
 	}
 	
 	private void prepareStationStateReport(){
 		int stationNumber = station.getNumber();
 		LocalTime currentTime = simulation.getTime();
-		stationReport = new PowerStationReport(stationNumber, currentTime, generatorsReports);
+		stationReport = new PowerStationState(stationNumber, currentTime, generatorsReports);
 	}
 
 	public void setSimulation(ElectricPowerSystemSimulation simulation) {

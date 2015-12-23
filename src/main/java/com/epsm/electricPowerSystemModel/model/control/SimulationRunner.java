@@ -4,17 +4,17 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Report;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSenderSource;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSource;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationReport;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ObjectToBeDispatching;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationState;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 
-public class SimulationRunner implements ReportSource, ReportSenderSource{
+public class SimulationRunner implements ObjectToBeDispatching, ReportSenderSource{
 	private ElectricPowerSystemSimulationImpl simulation;
 	private ReportSender sender;
-	private SimulationReport report;
+	private SimulationState report;
 	private Logger logger = (Logger) LoggerFactory.getLogger(SimulationRunner.class);
 	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 100;
 	
@@ -56,12 +56,12 @@ public class SimulationRunner implements ReportSource, ReportSenderSource{
 	}
 	
 	@Override
-	public Report getReport(){
+	public PowerObjectState getState(){
 		return report;
 	}
 
 	@Override
-	public void subscribeOnReports(){
+	public void sendReports(){
 		sender.sendReports();
 	}
 

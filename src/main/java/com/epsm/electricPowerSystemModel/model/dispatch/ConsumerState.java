@@ -3,14 +3,14 @@ package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
 import java.text.DecimalFormat;
 import java.time.LocalTime;
 
-public class ConsumerReport extends Report{
+public class ConsumerState extends PowerObjectState{
 	private int consumerNumber;
 	private float load;
 	private LocalTime timeStamp;
 	private StringBuilder stringBuilder;
 	private DecimalFormat formatter;
 	
-	public ConsumerReport(int consumerNumber, float load, LocalTime timeStamp) {
+	public ConsumerState(int consumerNumber, float load, LocalTime timeStamp) {
 		this.consumerNumber = consumerNumber;
 		this.load = load;
 		this.timeStamp = timeStamp;
@@ -33,7 +33,7 @@ public class ConsumerReport extends Report{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("ConsumerReport ");
+		stringBuilder.append("ConsumerState ");
 		stringBuilder.append("[consumerNumber=");
 		stringBuilder.append(consumerNumber);
 		stringBuilder.append(", load=");

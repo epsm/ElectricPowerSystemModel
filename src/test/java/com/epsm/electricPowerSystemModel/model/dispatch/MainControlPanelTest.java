@@ -9,10 +9,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorStateReport;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationReport;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Report;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
@@ -21,7 +21,7 @@ public class MainControlPanelTest{
 	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station;
 	private MainControlPanel stationControlPanel;
-	private PowerStationReport stationStateReport;
+	private PowerStationState stationStateReport;
 	private LocalTime CONSTANT_TIME_IN_MOCK_SIMULATION = LocalTime.NOON;
 	private final int STATION_NUMBER = 158;
 	private final float FIRST_GENERATOR_GENERATION = 100;
@@ -61,11 +61,11 @@ public class MainControlPanelTest{
 	}
 	
 	private void getStationReport(){
-		Report rawReport = stationControlPanel.getReport();
+		PowerObjectState rawReport = stationControlPanel.getState();
 		
-		Assert.assertTrue(rawReport instanceof PowerStationReport);
+		Assert.assertTrue(rawReport instanceof PowerStationState);
 		
-		stationStateReport = (PowerStationReport) rawReport;
+		stationStateReport = (PowerStationState) rawReport;
 	}
 	
 	private void verifyStationReport(){
@@ -74,7 +74,7 @@ public class MainControlPanelTest{
 		float firstGeneratorGeneration = 0;
 		float secondGeneratorGeneration = 0;
 		
-		for(GeneratorStateReport generatorStateReport: stationStateReport.getGeneratorsStatesReports()){
+		for(GeneratorState generatorStateReport: stationStateReport.getGeneratorsStatesReports()){
 			if(generatorStateReport.getGeneratorNumber() == 1){
 				firstGeneratorGeneration = generatorStateReport.getGenerationInWM();
 				firstGeneratorNumber = generatorStateReport.getGeneratorNumber();

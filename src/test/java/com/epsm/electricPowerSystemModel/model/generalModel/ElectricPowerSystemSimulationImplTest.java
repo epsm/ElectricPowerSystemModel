@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import org.junit.*;
 
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationReport;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationState;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
@@ -18,7 +18,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	private PowerStation station_2;
 	private Consumer consumer_1;
 	private Consumer consumer_2;
-	private SimulationReport report;
+	private SimulationState report;
 	private float previousFrequency;
 	private float currentFrequency;
 	

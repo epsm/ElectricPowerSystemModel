@@ -2,41 +2,41 @@ package main.java.com.epsm.electricPowerSystemModel.model.consumption;
 
 import java.time.LocalTime;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerReport;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Report;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSenderSource;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSource;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ObjectToBeDispatching;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
-public abstract class Consumer implements ReportSource, ReportSenderSource{
+public abstract class Consumer implements ObjectToBeDispatching, ReportSenderSource{
 	private int consumerNumber;
 	protected ElectricPowerSystemSimulation simulation;
 	protected float degreeOnDependingOfFrequency;
 	protected LocalTime currentTime;
 	protected float currentLoad;
 	protected ReportSender sender;
-	private ConsumerReport report;
+	private ConsumerState report;
 	
 	public Consumer(int consumerNumber){
 		this.consumerNumber = consumerNumber;
 	}
 
 	@Override
-	public void subscribeOnReports(){
+	public void sendReports(){
 		sender.sendReports();
 	}
 	
 	@Override
-	public Report getReport() {
-		prepareReport();
+	public PowerObjectState getState() {
+		prepareState();
 		
 		return report;
 	}
 	
-	private void prepareReport(){
+	private void prepareState(){
 		LocalTime timeStamp = simulation.getTime();
-		report = new ConsumerReport(consumerNumber, currentLoad, timeStamp);
+		report = new ConsumerState(consumerNumber, currentLoad, timeStamp);
 	}
 	
 	public int getConsumerNumber() {

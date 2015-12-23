@@ -1,5 +1,5 @@
 package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
 
-public abstract class Report{
+public abstract class PowerObjectState{
 	public abstract String toString();
 }

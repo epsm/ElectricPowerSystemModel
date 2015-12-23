@@ -48,7 +48,7 @@ public class ReportSender {
 	}
 
 	private class SendReportTask extends TimerTask{
-		private Report report;
+		private PowerObjectState report;
 		
 		@Override
 		public void run(){
@@ -64,7 +64,7 @@ public class ReportSender {
 		}
 		
 		private void getReportFromSource(){
-			report = source.getReport();
+			report = source.getState();
 		}
 		
 		private void sendReportToDispatcher(){

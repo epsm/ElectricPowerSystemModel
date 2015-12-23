@@ -2,7 +2,7 @@ package test.java.com.epsm.electricPowerSystemModel.model.manualTesting;
 
 import java.util.Formatter;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationReport;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationState;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 
 public class PowerSystemSimulationManualTest {
