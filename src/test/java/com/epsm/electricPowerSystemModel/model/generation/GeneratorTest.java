@@ -6,23 +6,23 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulationUnit;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.ControlUnit;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulatort;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 
 public class GeneratorTest{
 	private Generator generator;
-	private ControlUnit controlUnit;
-	private AstaticRegulationUnit regulationUnit;
-	private final float GENERATION = 1000f; 
+	private StaticRegulator staticRegulator;
+	private AstaticRegulatort astaticRegulator;
+	private final float GENERATOR_GENERATION = 1000f; 
 	
 	@Before
 	public void initialize(){
 		generator = new Generator(1);
-		controlUnit = mock(ControlUnit.class);
+		staticRegulator = mock(StaticRegulator.class);
 		
-		when(controlUnit.getGeneratorPowerInMW()).thenReturn(GENERATION);
-		generator.setControlUnit(controlUnit);
+		when(staticRegulator.getGeneratorPowerInMW()).thenReturn(GENERATOR_GENERATION);
+		generator.setStaticRegulator(staticRegulator);
 		generator.turnOnGenerator();
 	}
 	
@@ -37,7 +37,7 @@ public class GeneratorTest{
 	public void isGeneratorPowerEqualsToControlUnitIfItTurnedOn(){
 		generator.turnOnGenerator();
 		
-		Assert.assertEquals(controlUnit.getGeneratorPowerInMW(), generator.calculateGeneration(), 0);
+		Assert.assertEquals(staticRegulator.getGeneratorPowerInMW(), generator.calculateGeneration(), 0);
 	}
 	
 	@Test
@@ -46,11 +46,11 @@ public class GeneratorTest{
 		generator.turnOnAstaticRegulation();
 		generator.calculateGeneration();
 		
-		verify(regulationUnit, times(1)).verifyAndAdjustPowerAtRequiredFrequency();
+		verify(astaticRegulator, times(1)).verifyAndAdjustPowerAtRequiredFrequency();
 	}
 	
 	private void prepareMockAstaticRegulationUnit(){
-		regulationUnit = mock(AstaticRegulationUnit.class);
-		generator.setAstaticRegulationUnit(regulationUnit);
+		astaticRegulator = mock(AstaticRegulatort.class);
+		generator.setAstaticRegulator(astaticRegulator);
 	}
 }

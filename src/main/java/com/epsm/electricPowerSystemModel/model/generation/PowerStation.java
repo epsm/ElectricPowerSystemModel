@@ -57,7 +57,7 @@ public class PowerStation{
 	
 	private GeneratorParameters getGeneratorParameters(Generator generator){
 		int generatorNumber = generator.getNumber();
-		float minimalPower = generator.getMinimalTechnologyPower();
+		float minimalPower = generator.getMinimalPowerInMW();
 		float nominalPower = generator.getNominalPowerInMW(); 
 		
 		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);

@@ -3,7 +3,7 @@ package main.java.com.epsm.electricPowerSystemModel.model.generation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
-public class ControlUnit {
+public class StaticRegulator {
 	private ElectricPowerSystemSimulation simulation;
 	private Generator generator;
 	private float coefficientOfStatism;
@@ -11,7 +11,7 @@ public class ControlUnit {
 	private float powerAtRequiredFrequency;
 	private float frequencyInPowerSystem;
 
-	public ControlUnit(ElectricPowerSystemSimulation simulation, Generator generator) {
+	public StaticRegulator(ElectricPowerSystemSimulation simulation, Generator generator) {
 		this.simulation = simulation;
 		this.generator = generator;
 		requiredFrequency = GlobalConstatnts.STANDART_FREQUENCY;
@@ -31,7 +31,7 @@ public class ControlUnit {
 		}
 		
 		if(isPowerLessThanGeneratorMinimalTechnology(powerAccordingToStaticCharacteristic)){
-			return generator.getMinimalTechnologyPower();
+			return generator.getMinimalPowerInMW();
 		}
 		
 		return powerAccordingToStaticCharacteristic;
@@ -47,11 +47,7 @@ public class ControlUnit {
 	}
 	
 	private boolean isPowerLessThanGeneratorMinimalTechnology(float power){
-		return power < generator.getMinimalTechnologyPower();
-	}
-
-	public void setCoefficientOfStatism(float coefficientOfStatism) {
-		this.coefficientOfStatism = coefficientOfStatism;
+		return power < generator.getMinimalPowerInMW();
 	}
 
 	public float getPowerAtRequiredFrequency() {

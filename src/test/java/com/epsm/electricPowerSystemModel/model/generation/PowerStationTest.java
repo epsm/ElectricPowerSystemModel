@@ -15,7 +15,7 @@ import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParam
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.ControlUnit;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
@@ -27,9 +27,9 @@ public class PowerStationTest{
 	private Generator generator_1;
 	private Generator generator_2;
 	private Generator generator_3;
-	private ControlUnit controlUnit_1;
-	private ControlUnit controlUnit_2;
-	private ControlUnit controlUnit_3;
+	private StaticRegulator controlUnit_1;
+	private StaticRegulator controlUnit_2;
+	private StaticRegulator controlUnit_3;
 	private final float FIRST_GENERATOR_RQUIRED_POWER = 20;
 	private final float SECOND_GENERATOR_RQUIRED_POWER = 50;
 	private final float THIRD_GENERATOR_RQUIRED_POWER = 100;
@@ -52,10 +52,10 @@ public class PowerStationTest{
 	
 	void prepareAndInstallFirstGenerator(){
 		generator_1 = new Generator(1);
-		controlUnit_1 = new ControlUnit(simulation, generator_1);
+		controlUnit_1 = new StaticRegulator(simulation, generator_1);
 		
-		generator_1.setControlUnit(controlUnit_1);
-		generator_1.setMinimalTechnologyPower(FIRST_GENERATOR_MIN_POWER);
+		generator_1.setStaticRegulator(controlUnit_1);
+		generator_1.setMinimalPowerInMW(FIRST_GENERATOR_MIN_POWER);
 		generator_1.setNominalPowerInMW(FIRST_GENERATOR_NOMINAL_POWER);
 		generator_1.setPowerAtRequiredFrequency(FIRST_GENERATOR_RQUIRED_POWER);
 	
@@ -65,11 +65,11 @@ public class PowerStationTest{
 	void prepareAndInstallSecondAndThirdGenerators(){
 		generator_2 = new Generator(2);
 		generator_3 = new Generator(3);
-		controlUnit_2 = new ControlUnit(simulation, generator_1);
-		controlUnit_3 = new ControlUnit(simulation, generator_1);
+		controlUnit_2 = new StaticRegulator(simulation, generator_1);
+		controlUnit_3 = new StaticRegulator(simulation, generator_1);
 		
-		generator_2.setControlUnit(controlUnit_2);
-		generator_3.setControlUnit(controlUnit_3);
+		generator_2.setStaticRegulator(controlUnit_2);
+		generator_3.setStaticRegulator(controlUnit_3);
 		generator_2.setNominalPowerInMW(SECOND_GENERATOR_NOMINAL_POWER);
 		generator_3.setNominalPowerInMW(THIRD_GENERATOR_NOMINAL_POWER);
 		generator_2.setPowerAtRequiredFrequency(SECOND_GENERATOR_RQUIRED_POWER);

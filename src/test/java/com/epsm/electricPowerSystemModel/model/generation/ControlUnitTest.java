@@ -9,26 +9,26 @@ import org.junit.Test;
 
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.ControlUnit;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 
 public class ControlUnitTest {
 	private ElectricPowerSystemSimulation simulation;
 	private Generator generator;
-	private ControlUnit controlUnit;
+	private StaticRegulator controlUnit;
 	private final float GENERATOR_POWER_AT_REQUAIRED_FREQUENCY = 100;
 	
 	@Before
 	public void init(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		generator = new Generator(1);
-		controlUnit = new ControlUnit(simulation, generator);
+		controlUnit = new StaticRegulator(simulation, generator);
 		
 		controlUnit.setCoefficientOfStatism(0.1f);
 		controlUnit.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 		
-		generator.setControlUnit(controlUnit);
-		generator.setMinimalTechnologyPower(50);
+		generator.setStaticRegulator(controlUnit);
+		generator.setMinimalPowerInMW(50);
 		generator.setNominalPowerInMW(150);
 	}
 
@@ -73,7 +73,7 @@ public class ControlUnitTest {
 	public void DoesPowerNotLessThanGeneratorMinimalTechnilogyPower(){
 		prepareMockSimulationWithTooHightFrequency();
 		
-		Assert.assertTrue(controlUnit.getGeneratorPowerInMW() >= generator.getMinimalTechnologyPower());
+		Assert.assertTrue(controlUnit.getGeneratorPowerInMW() >= generator.getMinimalPowerInMW());
 	}
 	
 	private void prepareMockSimulationWithTooHightFrequency(){

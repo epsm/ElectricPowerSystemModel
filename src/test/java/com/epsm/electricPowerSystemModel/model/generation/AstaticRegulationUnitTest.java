@@ -8,14 +8,14 @@ import static org.mockito.Mockito.*;
 
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulationUnit;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.ControlUnit;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulatort;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 
 public class AstaticRegulationUnitTest {
 	private ElectricPowerSystemSimulation simulation;
-	private AstaticRegulationUnit regulationUnit;
-	private ControlUnit controlUnit;
+	private AstaticRegulatort regulationUnit;
+	private StaticRegulator controlUnit;
 	private Generator generator;
 	private final float GENERATOR_POWER_AT_REQUAIRED_FREQUENCY = 100;
 	
@@ -23,11 +23,11 @@ public class AstaticRegulationUnitTest {
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		generator = new Generator(1);
-		regulationUnit = new AstaticRegulationUnit(simulation, generator);
-		controlUnit = new ControlUnit(simulation, generator);
+		regulationUnit = new AstaticRegulatort(simulation, generator);
+		controlUnit = new StaticRegulator(simulation, generator);
 		
-		generator.setAstaticRegulationUnit(regulationUnit);
-		generator.setControlUnit(controlUnit);
+		generator.setAstaticRegulator(regulationUnit);
+		generator.setStaticRegulator(controlUnit);
 		generator.setNominalPowerInMW(200);
 		controlUnit.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
@@ -102,7 +102,7 @@ public class AstaticRegulationUnitTest {
 	@Test
 	public void doNothingIfFrequencyIsHighAndGeneratorPowerIsMinimal(){
 		prepareMockSimulationWithHighFrequency();
-		generator.setMinimalTechnologyPower(100);
+		generator.setMinimalPowerInMW(100);
 		regulationUnit.verifyAndAdjustPowerAtRequiredFrequency();
 		
 		Assert.assertTrue(

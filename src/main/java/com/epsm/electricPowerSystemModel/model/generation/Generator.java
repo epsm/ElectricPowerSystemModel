@@ -1,21 +1,21 @@
 package main.java.com.epsm.electricPowerSystemModel.model.generation;
 
-public class Generator{
-	private ControlUnit controlUnit;
-	private AstaticRegulationUnit regulationUnit;
+public class Generator {
+	private int number;
+	private StaticRegulator staticRegulator;
+	private AstaticRegulatort astaticRegulator;
 	private float nominalPowerInMW;
-	private float minimalTechnologyPower;
+	private float minimalPowerInMW;
 	private float currentGeneration;
-	private boolean generatorTurnedOn;
+	private boolean turnedOn;
 	private boolean astaticRegulationTurnedOn;
-	private int number;//must not be changed after construction
 	
 	public Generator(int number){
 		this.number = number;
 	}
 	
 	public float calculateGeneration(){
-		if(generatorTurnedOn){
+		if(turnedOn){
 			calculateCurrentGeneration();
 			return currentGeneration;
 		}else{
@@ -25,19 +25,23 @@ public class Generator{
 	
 	private void calculateCurrentGeneration(){
 		if(astaticRegulationTurnedOn){
-			regulationUnit.verifyAndAdjustPowerAtRequiredFrequency();
+			astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 		}
-		currentGeneration = controlUnit.getGeneratorPowerInMW();
+		currentGeneration = staticRegulator.getGeneratorPowerInMW();
 	}
 	
-	public void setControlUnit(ControlUnit controlUnit) {
-		this.controlUnit = controlUnit;
+	public int getNumber(){
+		return number;
 	}
 	
-	public void setAstaticRegulationUnit(AstaticRegulationUnit regulationUnit) {
-		this.regulationUnit = regulationUnit;
+	public void setStaticRegulator(StaticRegulator staticRegulator) {
+		this.staticRegulator = staticRegulator;
 	}
-
+	
+	public void setAstaticRegulator(AstaticRegulatort astaticRegulator) {
+		this.astaticRegulator = astaticRegulator;
+	}
+	
 	public float getNominalPowerInMW() {
 		return nominalPowerInMW;
 	}
@@ -46,29 +50,28 @@ public class Generator{
 		this.nominalPowerInMW = nominalPowerInMW;
 	}
 
-	public float getMinimalTechnologyPower() {
-		return minimalTechnologyPower;
+	public float getMinimalPowerInMW() {
+		return minimalPowerInMW;
 	}
 
-	public void setMinimalTechnologyPower(float minimalTechnologyPower) {
-		this.minimalTechnologyPower = minimalTechnologyPower;
+	public void setMinimalPowerInMW(float minimalPowerInMW) {
+		this.minimalPowerInMW = minimalPowerInMW;
 	}
-
-	//Only this method must be used for report making to avoid recalculation and changing state of object 
+	
 	public float getGenerationInMW(){
 		return currentGeneration;
 	}
 	
 	public boolean isTurnedOn(){
-		return generatorTurnedOn;
+		return turnedOn;
 	}
 
 	public void turnOnGenerator(){
-		generatorTurnedOn = true;
+		turnedOn = true;
 	}
 	
 	public void turnOffGenerator(){
-		generatorTurnedOn = false;
+		turnedOn = false;
 	}
 
 	public boolean isAstaticRegulationTurnedOn() {
@@ -83,19 +86,11 @@ public class Generator{
 		astaticRegulationTurnedOn = false;
 	}
 	
-	public int getNumber(){
-		return number;
-	}
-
 	public float getPowerAtRequiredFrequency() {
-		return controlUnit.getPowerAtRequiredFrequency();
+		return staticRegulator.getPowerAtRequiredFrequency();
 	}
 
 	public void setPowerAtRequiredFrequency(float powerAtRequiredFrequency) {
-		controlUnit.setPowerAtRequiredFrequency(powerAtRequiredFrequency);
-	}
-
-	public void setCoefficientOfStatism(float coefficientOfStatism) {
-		controlUnit.setCoefficientOfStatism(coefficientOfStatism);
+		staticRegulator.setPowerAtRequiredFrequency(powerAtRequiredFrequency);
 	}
 }

@@ -19,7 +19,7 @@ import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPan
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.ControlUnit;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
@@ -48,15 +48,15 @@ public class MainControlPanelPerformGenerationScheduleTest {
 		Generator g_2 = new Generator(2);
 		generator_1 = spy(g_1);
 		generator_2 = spy(g_2);
-		ControlUnit controlUnit_1 = new ControlUnit(simulation, generator_1);
-		ControlUnit controlUnit_2 = new ControlUnit(simulation, generator_2);
+		StaticRegulator controlUnit_1 = new StaticRegulator(simulation, generator_1);
+		StaticRegulator controlUnit_2 = new StaticRegulator(simulation, generator_2);
 		
 		when(simulation.getTime()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 		
 		generator_1.setNominalPowerInMW(200);
 		generator_2.setNominalPowerInMW(200);
-		generator_1.setControlUnit(controlUnit_1);
-		generator_2.setControlUnit(controlUnit_2);
+		generator_1.setStaticRegulator(controlUnit_1);
+		generator_2.setStaticRegulator(controlUnit_2);
 		station.addGenerator(generator_1);
 		station.addGenerator(generator_2);
 		stationControlPanel.setSimulation(simulation);
