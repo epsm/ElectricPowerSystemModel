@@ -29,11 +29,11 @@ public class ReportSender {
 	}
 	
 	public void sendReports(){
-		createTmier();
+		createTimer();
 		startSending();
 	}
 	
-	private void createTmier(){
+	private void createTimer(){
 		reportTimer = new Timer();
 		logger.info(sourceType + " will be sending reports to dispatcher.");
 	}
