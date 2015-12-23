@@ -69,7 +69,7 @@ public class StaticRegulatorTest {
 	}
 	
 	@Test 
-	public void DoesPowerNotLessThanGeneratorMinimalTechnilogyPower(){
+	public void DoesPowerNotLessThanGeneratorMinimalPower(){
 		prepareMockSimulationWithTooHightFrequency();
 		
 		Assert.assertTrue(staticRegulator.getGeneratorPowerInMW() >= generator.getMinimalPowerInMW());

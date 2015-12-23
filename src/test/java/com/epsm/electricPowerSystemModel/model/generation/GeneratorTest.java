@@ -41,15 +41,15 @@ public class GeneratorTest{
 	}
 	
 	@Test
-	public void DoesAstacicRegulationUnitUsesIfItTurnedOn(){
-		prepareMockAstaticRegulationUnit();
+	public void DoesAstacicRegulatorUsesIfItTurnedOn(){
+		prepareMockAstaticRegulator();
 		generator.turnOnAstaticRegulation();
 		generator.calculateGeneration();
 		
 		verify(astaticRegulator, times(1)).verifyAndAdjustPowerAtRequiredFrequency();
 	}
 	
-	private void prepareMockAstaticRegulationUnit(){
+	private void prepareMockAstaticRegulator(){
 		astaticRegulator = mock(AstaticRegulator.class);
 		generator.setAstaticRegulator(astaticRegulator);
 	}
