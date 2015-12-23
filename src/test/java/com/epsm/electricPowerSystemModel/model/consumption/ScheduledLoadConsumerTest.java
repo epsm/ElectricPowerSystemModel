@@ -8,15 +8,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ConsumerWithScheduledLoad;
+import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationReport;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
-public class PowerConsumerWithScheduledLoadTest{
-	private ConsumerWithScheduledLoad consumer;
+public class ScheduledLoadConsumerTest{
+	private ScheduledLoadConsumer consumer;
 	private ElectricPowerSystemSimulation simulation;
 	private float[] approximateLoadByHoursInPercent;
 	private Random random = new Random(); 
@@ -24,7 +24,7 @@ public class PowerConsumerWithScheduledLoadTest{
 	@Before
 	public void initialize(){
 		simulation = createPowerSystemStub();
-		consumer = new ConsumerWithScheduledLoad(1);
+		consumer = new ScheduledLoadConsumer(1);
 		approximateLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 		
 		consumer.setApproximateLoadByHoursOnDayInPercent(approximateLoadByHoursInPercent);

@@ -8,7 +8,7 @@ import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
-public class ConsumerWithScheduledLoad extends Consumer{
+public class ScheduledLoadConsumer extends Consumer{
 	private RandomLoadCurveFactory factory = new RandomLoadCurveFactory();
 	private float[] approximateLoadByHoursOnDayInPercent;
 	private float maxLoadWithoutFluctuationsInMW;
@@ -16,9 +16,9 @@ public class ConsumerWithScheduledLoad extends Consumer{
 	private LoadCurve loadCurveOnDay;
 	private LocalTime previousLoadRequestTime;
 	private float currentFrequency;
-	private Logger logger = (Logger) LoggerFactory.getLogger(ConsumerWithScheduledLoad.class);
+	private Logger logger = (Logger) LoggerFactory.getLogger(ScheduledLoadConsumer.class);
 	
-	public ConsumerWithScheduledLoad(int consumerNumber) {
+	public ScheduledLoadConsumer(int consumerNumber) {
 		super(consumerNumber);
 		logger.info("Consumer ¹" + consumerNumber + " with scheduled load created");
 	}

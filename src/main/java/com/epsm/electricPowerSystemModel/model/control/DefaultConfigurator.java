@@ -1,6 +1,6 @@
 package main.java.com.epsm.electricPowerSystemModel.model.control;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ConsumerWithScheduledLoad;
+import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ConsumerWithShockLoad;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
@@ -36,7 +36,7 @@ public class DefaultConfigurator {
 		powerConsumer_scheduled.setMaxPauseBetweenWorkInSeconds(200);
 		powerConsumer_scheduled.setElectricalPowerSystemSimulation(simulation);
 		
-		ConsumerWithScheduledLoad powerConsumer_shock = new ConsumerWithScheduledLoad(2);
+		ScheduledLoadConsumer powerConsumer_shock = new ScheduledLoadConsumer(2);
 		powerConsumer_shock.setDegreeOfDependingOnFrequency(2);
 		powerConsumer_shock.setApproximateLoadByHoursOnDayInPercent(pattern);
 		powerConsumer_shock.setMaxLoadWithoutRandomInMW(100);
