@@ -9,17 +9,16 @@ import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSenderSo
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSource;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
-public abstract class PowerConsumer implements ReportSource, ReportSenderSource{
+public abstract class Consumer implements ReportSource, ReportSenderSource{
 	private int consumerNumber;
 	protected ElectricPowerSystemSimulation simulation;
 	protected float degreeOnDependingOfFrequency;
-	//childrens must save last load value there for making report without recalculating;
 	protected LocalTime currentTime;
 	protected float currentLoad;
 	protected ReportSender sender;
 	private ConsumerReport report;
 	
-	public PowerConsumer(int consumerNumber){
+	public Consumer(int consumerNumber){
 		this.consumerNumber = consumerNumber;
 	}
 
@@ -44,12 +43,12 @@ public abstract class PowerConsumer implements ReportSource, ReportSenderSource{
 		return consumerNumber;
 	}
 
-	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation simulation){
-		this.simulation = simulation;
-	}
-
 	public void setDegreeOfDependingOnFrequency(float degreeOnDependingOfFrequency){
 		this.degreeOnDependingOfFrequency = degreeOnDependingOfFrequency;
+	}
+	
+	public void setElectricalPowerSystemSimulation(ElectricPowerSystemSimulation simulation){
+		this.simulation = simulation;
 	}
 
 	public float getDegreeOnDependingOfFrequency() {

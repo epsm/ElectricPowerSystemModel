@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
-public class ConsumerWithShockLoad extends PowerConsumer{
+public class ConsumerWithShockLoad extends Consumer{
 	private int maxWorkDurationInSeconds;
 	private int maxPauseBetweenWorkInSeconds;
 	private float maxLoad;

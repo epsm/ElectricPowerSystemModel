@@ -8,7 +8,7 @@ import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
-public class ConsumerWithScheduledLoad extends PowerConsumer{
+public class ConsumerWithScheduledLoad extends Consumer{
 	private RandomLoadCurveFactory factory = new RandomLoadCurveFactory();
 	private float[] approximateLoadByHoursOnDayInPercent;
 	private float maxLoadWithoutFluctuationsInMW;

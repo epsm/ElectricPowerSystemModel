@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.PowerConsumer;
+import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ConsumerWithScheduledLoad;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationReport;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
@@ -61,7 +61,7 @@ public class PowerConsumerWithScheduledLoadTest{
 			}
 
 			@Override
-			public void addPowerConsumer(PowerConsumer powerConsumer) {
+			public void addPowerConsumer(Consumer powerConsumer) {
 			}
 
 			@Override

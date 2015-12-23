@@ -6,7 +6,7 @@ import java.time.LocalTime;
 
 import org.junit.*;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.PowerConsumer;
+import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationReport;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
@@ -16,8 +16,8 @@ public class ElectricPowerSystemSimulationImplTest {
 	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station_1;
 	private PowerStation station_2;
-	private PowerConsumer consumer_1;
-	private PowerConsumer consumer_2;
+	private Consumer consumer_1;
+	private Consumer consumer_2;
 	private SimulationReport report;
 	private float previousFrequency;
 	private float currentFrequency;
@@ -26,7 +26,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	public void initialize(){
 		simulation = new ElectricPowerSystemSimulationImpl();
 		station_1 = mock(PowerStation.class);
-		consumer_1 = mock(PowerConsumer.class);
+		consumer_1 = mock(Consumer.class);
 		
 		simulation.addPowerStation(station_1);
 		simulation.addPowerConsumer(consumer_1);
@@ -100,7 +100,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	
 	private void prepareSecondConsumerAndSecondPowerStation(){
 		station_2 = mock(PowerStation.class);
-		consumer_2 = mock(PowerConsumer.class);
+		consumer_2 = mock(Consumer.class);
 		
 		when(station_1.calculateGenerationInMW()).thenReturn(60f);
 		when(station_2.calculateGenerationInMW()).thenReturn(70f);

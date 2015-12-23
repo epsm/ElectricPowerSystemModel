@@ -4,14 +4,14 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.PowerConsumer;
+import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationReport;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
 
 	private Set<PowerStation> powerStations;
-	private Set<PowerConsumer> powerConsumers;
+	private Set<Consumer> powerConsumers;
 	private float frequencyInPowerSystem = GlobalConstatnts.STANDART_FREQUENCY;
 	private LocalTime currentTimeInSimulation;
 	private final float TIME_CONASTNT = 2_000;
@@ -19,7 +19,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	
 	public ElectricPowerSystemSimulationImpl() {
 		powerStations = new HashSet<PowerStation>();
-		powerConsumers = new HashSet<PowerConsumer>();
+		powerConsumers = new HashSet<Consumer>();
 		currentTimeInSimulation = LocalTime.NOON;
 	}
 
@@ -48,7 +48,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private float calculateTotalLoadInMW(){
 		float load = 0;
 		
-		for(PowerConsumer consumer: powerConsumers){
+		for(Consumer consumer: powerConsumers){
 			load += consumer.calculateCurrentLoadInMW();
 		}
 		
@@ -72,7 +72,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 
 	@Override
-	public void addPowerConsumer(PowerConsumer powerConsumer) {
+	public void addPowerConsumer(Consumer powerConsumer) {
 		powerConsumers.add(powerConsumer);
 	}
 	
