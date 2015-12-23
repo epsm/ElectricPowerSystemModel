@@ -9,13 +9,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ConsumerWithShockLoad;
+import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
-public class PowerConsumerWithShockLoadTest {
+public class ShockLoadTestConsumerTest {
 	private ElectricPowerSystemSimulationImpl simulation;
-	private ConsumerWithShockLoad consumer;
+	private ShockLoadConsumer consumer;
 	float previousLoad;
 	float currentLoad;
 	private LocalTime turnOnTime;
@@ -26,7 +26,7 @@ public class PowerConsumerWithShockLoadTest {
 	@Before
 	public void initialize(){
 		simulation = spy(new ElectricPowerSystemSimulationImpl());
-		consumer = new ConsumerWithShockLoad(1);
+		consumer = new ShockLoadConsumer(1);
 		turnOnTime = null;
 		turnOffTime = null;
 		

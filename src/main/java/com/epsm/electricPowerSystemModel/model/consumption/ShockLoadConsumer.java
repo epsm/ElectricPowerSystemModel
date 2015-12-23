@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
-public class ConsumerWithShockLoad extends Consumer{
+public class ShockLoadConsumer extends Consumer{
 	private int maxWorkDurationInSeconds;
 	private int maxPauseBetweenWorkInSeconds;
 	private float maxLoad;
@@ -18,9 +18,9 @@ public class ConsumerWithShockLoad extends Consumer{
 	private LocalTime timeToTurnOff;
 	private boolean isTurnedOn;
 	private Random random = new Random();
-	private Logger logger = (Logger) LoggerFactory.getLogger(ConsumerWithShockLoad.class);
+	private Logger logger = (Logger) LoggerFactory.getLogger(ShockLoadConsumer.class);
 	
-	public ConsumerWithShockLoad(int consumerNumber) {
+	public ShockLoadConsumer(int consumerNumber) {
 		super(consumerNumber);
 		logger.info("Consumer ¹" + consumerNumber + " with shock load created");
 	}

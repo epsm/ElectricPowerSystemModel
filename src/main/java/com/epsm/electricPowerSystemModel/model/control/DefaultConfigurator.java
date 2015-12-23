@@ -1,7 +1,7 @@
 package main.java.com.epsm.electricPowerSystemModel.model.control;
 
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ConsumerWithShockLoad;
+import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
@@ -29,7 +29,7 @@ public class DefaultConfigurator {
 	private void createConsumerAndAddItToEnergySystem(){
 		float[] pattern = TestsConstants.LOAD_BY_HOURS;
 		
-		ConsumerWithShockLoad powerConsumer_scheduled = new ConsumerWithShockLoad(1);
+		ShockLoadConsumer powerConsumer_scheduled = new ShockLoadConsumer(1);
 		powerConsumer_scheduled.setDegreeOfDependingOnFrequency(2);
 		powerConsumer_scheduled.setMaxLoad(10f);
 		powerConsumer_scheduled.setMaxWorkDurationInSeconds(300);
