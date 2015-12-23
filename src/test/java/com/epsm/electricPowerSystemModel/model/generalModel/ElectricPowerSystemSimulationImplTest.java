@@ -7,7 +7,6 @@ import java.time.LocalTime;
 import org.junit.*;
 
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationState;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
@@ -18,7 +17,6 @@ public class ElectricPowerSystemSimulationImplTest {
 	private PowerStation station_2;
 	private Consumer consumer_1;
 	private Consumer consumer_2;
-	private SimulationState report;
 	private float previousFrequency;
 	private float currentFrequency;
 	
@@ -86,38 +84,5 @@ public class ElectricPowerSystemSimulationImplTest {
 			
 			Assert.assertTrue(previousFrequency == currentFrequency);
 		}
-	}
-	
-	@Test
-	public void SummaryPowerGenerationFromPowerStationEqualsToShownByModel(){
-		prepareSecondConsumerAndSecondPowerStation();
-		float generation = station_1.calculateGenerationInMW() + station_2.calculateGenerationInMW();
-		
-		report = simulation.calculateNextStep();
-		
-		Assert.assertEquals(generation, report.getTotalGeneration(), 0);
-	}
-	
-	private void prepareSecondConsumerAndSecondPowerStation(){
-		station_2 = mock(PowerStation.class);
-		consumer_2 = mock(Consumer.class);
-		
-		when(station_1.calculateGenerationInMW()).thenReturn(60f);
-		when(station_2.calculateGenerationInMW()).thenReturn(70f);
-		when(consumer_1.calculateCurrentLoadInMW()).thenReturn(80f);
-		when(consumer_2.calculateCurrentLoadInMW()).thenReturn(40f);
-		
-		simulation.addPowerStation(station_2);
-		simulation.addPowerConsumer(consumer_2);
-	}
-	
-	@Test
-	public void SummaryPowerLoadFromConsumerEqualsToShownByModel(){
-		prepareSecondConsumerAndSecondPowerStation();
-		float load = consumer_1.calculateCurrentLoadInMW() + consumer_2.calculateCurrentLoadInMW();
-		
-		report = simulation.calculateNextStep();
-		
-		Assert.assertEquals(load, report.getTotalLoad(), 0);
 	}
 }

@@ -10,17 +10,17 @@ public class PowerStationState extends PowerObjectState{
 	private int powerStationNumber;
 	private LocalTime timeStamp;
 	private float frequency;
-	private Set<GeneratorState> generatorsStatesReports;
+	private Set<GeneratorState> generatorsStates;
 	private StringBuilder stringBuilder;
 	private DateTimeFormatter timeFormatter;
 	private DecimalFormat numberFormatter;
 
 	public PowerStationState(int powerStationNumber, LocalTime timeStamp, float frequency,
-			Set<GeneratorState> generatorsStatesReports) {
+			Set<GeneratorState> generatorsStates) {
 		this.powerStationNumber = powerStationNumber;
 		this.timeStamp = timeStamp;
 		this.frequency = frequency;
-		this.generatorsStatesReports = Collections.unmodifiableSet(generatorsStatesReports);
+		this.generatorsStates = Collections.unmodifiableSet(generatorsStates);
 		
 		stringBuilder = new StringBuilder();
 		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -39,8 +39,8 @@ public class PowerStationState extends PowerObjectState{
 		return frequency;
 	}
 
-	public Set<GeneratorState> getGeneratorsStatesReports() {
-		return generatorsStatesReports;
+	public Set<GeneratorState> getGeneratorsStates() {
+		return generatorsStates;
 	}
 
 	@Override
@@ -53,8 +53,8 @@ public class PowerStationState extends PowerObjectState{
 		stringBuilder.append(powerStationNumber);
 		stringBuilder.append(", frequency=");
 		stringBuilder.append(numberFormatter.format(frequency));
-		stringBuilder.append(", generatorsStatesReports ");
-		stringBuilder.append(generatorsStatesReports);
+		stringBuilder.append(", generatorsStates ");
+		stringBuilder.append(generatorsStates);
 		stringBuilder.append("]");
 
 		return stringBuilder.toString();

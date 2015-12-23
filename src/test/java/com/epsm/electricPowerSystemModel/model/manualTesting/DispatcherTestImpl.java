@@ -8,7 +8,6 @@ import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.SimulationState;
 
 /*public class DispatcherTestImpl implements Dispatcher{
 	

@@ -3,6 +3,7 @@ package test.java.com.epsm.electricPowerSystemModel.model.generation;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalTime;
 import java.util.Collection;
 
 import org.junit.Assert;
@@ -12,17 +13,20 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 
 public class PowerStationTest{
 	private ElectricPowerSystemSimulation simulation;
 	private PowerStationParameters stationParameters;
+	private PowerStationState stationState;
 	private PowerStation station;
 	private Generator generator_1;
 	private Generator generator_2;
@@ -30,6 +34,7 @@ public class PowerStationTest{
 	private StaticRegulator staticRegulator_1;
 	private StaticRegulator staticRegulator_2;
 	private StaticRegulator staticRegulator_3;
+	private LocalTime CONSTANT_TIME_IN_MOCK_SIMULATION = LocalTime.NOON;
 	private final float FIRST_GENERATOR_RQUIRED_POWER = 20;
 	private final float SECOND_GENERATOR_RQUIRED_POWER = 50;
 	private final float THIRD_GENERATOR_RQUIRED_POWER = 100;
@@ -45,9 +50,10 @@ public class PowerStationTest{
 	@Before
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
-		station = new PowerStation(POWER_STATION_NUMBER);
+		station = new PowerStation(POWER_STATION_NUMBER, simulation);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstatnts.STANDART_FREQUENCY);
+		when(simulation.getTime()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 	}
 	
 	void prepareAndInstallFirstGenerator(){
@@ -58,15 +64,15 @@ public class PowerStationTest{
 		generator_1.setMinimalPowerInMW(FIRST_GENERATOR_MIN_POWER);
 		generator_1.setNominalPowerInMW(FIRST_GENERATOR_NOMINAL_POWER);
 		generator_1.setPowerAtRequiredFrequency(FIRST_GENERATOR_RQUIRED_POWER);
-	
+		
 		station.addGenerator(generator_1);
 	}
 	
 	void prepareAndInstallSecondAndThirdGenerators(){
 		generator_2 = new Generator(2);
 		generator_3 = new Generator(3);
-		staticRegulator_2 = new StaticRegulator(simulation, generator_1);
-		staticRegulator_3 = new StaticRegulator(simulation, generator_1);
+		staticRegulator_2 = mock(StaticRegulator.class);
+		staticRegulator_3 = mock(StaticRegulator.class);
 		
 		generator_2.setStaticRegulator(staticRegulator_2);
 		generator_3.setStaticRegulator(staticRegulator_3);
@@ -75,6 +81,9 @@ public class PowerStationTest{
 		generator_2.setPowerAtRequiredFrequency(SECOND_GENERATOR_RQUIRED_POWER);
 		generator_3.setPowerAtRequiredFrequency(THIRD_GENERATOR_RQUIRED_POWER);
 
+		when(staticRegulator_2.getGeneratorPowerInMW()).thenReturn(SECOND_GENERATOR_RQUIRED_POWER);
+		when(staticRegulator_3.getGeneratorPowerInMW()).thenReturn(THIRD_GENERATOR_RQUIRED_POWER);
+		
 		station.addGenerator(generator_2);
 		station.addGenerator(generator_3);
 	}
@@ -147,7 +156,7 @@ public class PowerStationTest{
 	}
 	
 	@Test
-	public void exceptionIfTryToAddNull(){
+	public void exceptionIfTryToAddNullInsteadGenerator(){
 		expectedEx.expect(PowerStationException.class);
 	    expectedEx.expectMessage("Generator must not be null.");
 		
@@ -161,5 +170,52 @@ public class PowerStationTest{
 		
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallFirstGenerator();
+	}
+	
+	@Test
+	public void powerStationStateContainsCorrectData(){
+		prepareAndInstallSecondAndThirdGenerators();
+		turnOnSecondAndThirdGenerators();
+		calculateOneStepInSimulation();
+		getStation();
+		verifyStationState();
+	}
+
+	private void turnOnSecondAndThirdGenerators(){
+		generator_2.turnOnGenerator();
+		generator_3.turnOnGenerator();
+	}
+	
+	private void calculateOneStepInSimulation(){
+		station.calculateGenerationInMW();
+	}
+	
+	private void getStation(){
+		stationState = station.getState();
+	}
+	
+	private void verifyStationState(){
+		int secondtGeneratorNumber = 0;
+		float secondGeneratorGeneration = 0;
+		int thirdGeneratorNumber = 0;
+		float thirdGeneratorGeneration = 0;
+		
+		for(GeneratorState generatorStateReport: stationState.getGeneratorsStates()){
+			if(generatorStateReport.getGeneratorNumber() == 2){
+				secondtGeneratorNumber = generatorStateReport.getGeneratorNumber();
+				secondGeneratorGeneration = generatorStateReport.getGenerationInWM();
+			}else if(generatorStateReport.getGeneratorNumber() == 3){
+				thirdGeneratorNumber = generatorStateReport.getGeneratorNumber();
+				thirdGeneratorGeneration = generatorStateReport.getGenerationInWM();
+			}
+		}
+		
+		Assert.assertEquals(2, stationState.getGeneratorsStates().size());
+		Assert.assertEquals(POWER_STATION_NUMBER, stationState.getPowerStationNumber());
+		Assert.assertEquals(CONSTANT_TIME_IN_MOCK_SIMULATION, stationState.getTimeStamp());
+		Assert.assertEquals(2, secondtGeneratorNumber);
+		Assert.assertEquals(3, thirdGeneratorNumber);
+		Assert.assertEquals(SECOND_GENERATOR_RQUIRED_POWER, secondGeneratorGeneration, 0);
+		Assert.assertEquals(THIRD_GENERATOR_RQUIRED_POWER, thirdGeneratorGeneration, 0);
 	}
 }

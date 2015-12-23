@@ -1,44 +1,98 @@
 package main.java.com.epsm.electricPowerSystemModel.model.generation;
 
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
+import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class PowerStation{
+	private ElectricPowerSystemSimulation simulation;
 	private int number;//must not be changed after creation
 	private Map<Integer, Generator> generators;
+	private LocalTime currentTime;
+	private float currentFrequency;
+	private float currentGenerationInMW;
+	private Set<GeneratorState> generatorsStates;
 	private PowerStationParameters stationParameters;
 	private Map<Integer, GeneratorParameters> generatorParameters;
-	private Generator generator;
+	private Generator generatorToAdd;
+	private PowerStationState state;
 	private Logger logger = (Logger) LoggerFactory.getLogger(PowerStation.class);
 	
-	public PowerStation(int number) {
+	public PowerStation(int number, ElectricPowerSystemSimulation simulation) {
 		this.number = number;
+		this.simulation = simulation;
+		
 		generators = new HashMap<Integer, Generator>();
+		generatorsStates = new TreeSet<GeneratorState>();
 		
 		logger.info("Power station was created.");
 	}
 
 	public float calculateGenerationInMW(){
-		float generationInMW = 0;
+		getTimeAndFrequencyFromSimulation();
+		resetPreviousGeneration();
+		getTotalGeneratorGeneration();
+		prepareStationState();
 		
+		return currentGenerationInMW;
+	}
+	
+	private void getTimeAndFrequencyFromSimulation(){
+		currentTime = simulation.getTime();
+		currentFrequency = simulation.getFrequencyInPowerSystem();	
+	}
+	
+	private void getTotalGeneratorGeneration(){
 		for(Generator generator: generators.values()){
-			generationInMW += generator.calculateGeneration();
+			currentGenerationInMW += generator.calculateGeneration();
 		}
-		
-		return generationInMW;
+	}
+	
+	private void resetPreviousGeneration(){
+		currentGenerationInMW = 0;
+	}
+	
+	private void prepareStationState(){
+		clearPreviousGeneratorsStates();
+		prepareGeneratorsStates();
+		createStationState();
+	}
+	
+	private void clearPreviousGeneratorsStates(){
+		generatorsStates.clear();
+	}
+	
+	private void prepareGeneratorsStates(){
+		for(Generator generator: generators.values()){
+			addGeneratorState(generator);
+		}
+	}
+	
+	private void addGeneratorState(Generator generator){
+		GeneratorState state =generator.getState(); 
+		generatorsStates.add(state);
+	}
+	
+	private void createStationState(){
+		state = new PowerStationState(number, currentTime, currentFrequency, generatorsStates);
 	}
 	
 	public PowerStationParameters getPowerStationParameters(){
 		createNewContainerForGeneratorsParameters();
 		createAndSaveParametersForEveryGenerator();
-		createStationParametersReport();
+		createStationParameters();
 
 		return stationParameters;
 	}
@@ -63,26 +117,26 @@ public class PowerStation{
 		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);
 	}
 	
-	public void createStationParametersReport(){
+	public void createStationParameters(){
 		stationParameters = new PowerStationParameters(number, generatorParameters);
 	}
 	
 	public void addGenerator(Generator generator){
-		this.generator = generator;
+		this.generatorToAdd = generator;
 		verifyIsGeneratorNotNull();
 		verifyIfGeneartorWithTheSameNumberExists();
 		addGenerator();
 	}
 	
 	private void verifyIsGeneratorNotNull(){
-		if(generator == null){
+		if(generatorToAdd == null){
 			String message = "Generator must not be null.";
 			throw new PowerStationException(message);
 		}
 	}
 	
 	private void verifyIfGeneartorWithTheSameNumberExists(){
-		int generatorNumber = generator.getNumber();
+		int generatorNumber = generatorToAdd.getNumber();
 		Generator existingGenerator = generators.get(generatorNumber);
 		
 		if(existingGenerator != null){
@@ -92,8 +146,12 @@ public class PowerStation{
 	}
 	
 	private void addGenerator(){
-		int generatorNumber = generator.getNumber();
-		generators.put(generatorNumber, generator);
+		int generatorNumber = generatorToAdd.getNumber();
+		generators.put(generatorNumber, generatorToAdd);
+	}
+	
+	public PowerStationState getState(){
+		return state;
 	}
 	
 	public Generator getGenerator(int generatorNumber){

@@ -2,10 +2,8 @@ package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.time.LocalTime;
 import java.util.Collection;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.LoggerFactory;
@@ -27,8 +25,6 @@ public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSour
 	private GenerationScheduleValidator validator = new GenerationScheduleValidator();
 	private ReportSender sender;
 	private PowerStationParameters parameters;
-	private PowerStationState stationReport;
-	private Set<GeneratorState> generatorsReports = new TreeSet<GeneratorState>();
 	private Logger logger = (Logger) LoggerFactory.getLogger(MainControlPanel.class);
 	
 	public void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
@@ -82,44 +78,7 @@ public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSour
 	
 	@Override
 	public PowerObjectState getState() {
-		processStateOfEveryGenerator();
-		prepareStationStateReport();
-		return stationReport;
-	}
-		
-	private void processStateOfEveryGenerator(){
-		clearPreviousGeneratorsReports();
-		prepareGeneratorsStatesReports();
-	}
-	
-	private void clearPreviousGeneratorsReports(){
-		generatorsReports.clear();
-	}
-	
-	private void prepareGeneratorsStatesReports(){
-		Collection<Integer> generatorNumbers = station.getGeneratorsNumbers();
-		for(Integer generatorNumber: generatorNumbers){
-			Generator generator = station.getGenerator(generatorNumber);
-			GeneratorState generatorReport = prepareGeneratorStateReport(generator);
-			addGeneratorStateReportToGeneratorsStatesReport(generatorReport);
-		}
-	}
-	
-	private GeneratorState prepareGeneratorStateReport(Generator generator){
-		int generatorNumber = generator.getNumber();
-		float generationInWM = generator.getGenerationInMW();
-		
-		return new GeneratorState(generatorNumber, generationInWM);
-	}
-	
-	private void addGeneratorStateReportToGeneratorsStatesReport(GeneratorState report){
-		generatorsReports.add(report);
-	}
-	
-	private void prepareStationStateReport(){
-		int stationNumber = station.getNumber();
-		LocalTime currentTime = simulation.getTime();
-		stationReport = new PowerStationState(stationNumber, currentTime, generatorsReports);
+		return station.getState();
 	}
 
 	public void setSimulation(ElectricPowerSystemSimulation simulation) {

@@ -3,7 +3,6 @@ package main.java.com.epsm.electricPowerSystemModel.model.control;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
@@ -48,14 +47,12 @@ public class DefaultConfigurator {
 	}
 	
 	private void createPowerStationAndAddToEnergySystem(){
-		PowerStation powerStation = new PowerStation(1);
+		PowerStation powerStation = new PowerStation(1, simulation);
 		simulation.addPowerStation(powerStation);
 		
 		controlPanel = new MainControlPanel();
 		controlPanel.setSimulation(simulation);
 		controlPanel.setStation(powerStation);
-		
-		ReportSender sender = new ReportSender(controlPanel);
 		
 		Generator generator_1 = new Generator(1);
 		AstaticRegulator astaticRegulator_1 = new AstaticRegulator(simulation, generator_1);

@@ -1,10 +1,8 @@
 package main.java.com.epsm.electricPowerSystemModel.model.generation;
 
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSource;
 
-public class Generator implements StateSource{
+public class Generator{
 	private int number;
 	private StaticRegulator staticRegulator;
 	private AstaticRegulator astaticRegulator;
@@ -38,8 +36,7 @@ public class Generator implements StateSource{
 		currentGeneration = staticRegulator.getGeneratorPowerInMW();
 	}
 	
-	@Override
-	public PowerObjectState getState(){
+	public GeneratorState getState(){
 		return state;
 	}
 	
