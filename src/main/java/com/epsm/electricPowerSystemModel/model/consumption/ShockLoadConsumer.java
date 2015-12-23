@@ -27,7 +27,7 @@ public class ShockLoadConsumer extends Consumer{
 	public ShockLoadConsumer(int consumerNumber, ElectricPowerSystemSimulation simulation) {
 		super(consumerNumber, simulation);
 		
-		logger.info("Shock load Consumer ¹" + consumerNumber + " created");
+		logger.info("Shock load consumer ¹" + consumerNumber + " created.");
 	}
 	
 	@Override
@@ -41,12 +41,13 @@ public class ShockLoadConsumer extends Consumer{
 		}else{
 			if(IsItTimeToTurnOn()){
 				turnOnAndSetTimeToTurnOff();
-			}else{
-				return 0;
 			}
 		}
 		
-		currentLoad = calculateLoadCountingFrequency(currentLoad, currentFrequency);
+		if(currentLoad != 0){
+			currentLoad = calculateLoadCountingFrequency(currentLoad, currentFrequency);
+		}
+		
 		state = prepareState(currentTime, currentLoad);
 		
 		return currentLoad;

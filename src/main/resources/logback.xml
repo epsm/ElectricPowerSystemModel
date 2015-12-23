@@ -10,7 +10,7 @@
 	<appender name="Model" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>/C:/logs/model.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS}  %-5level %-10([%thread]) %-46(%logger{36}) - %msg%n</Pattern>
+			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS}  %-5level %-6([%thread]) %-36(%logger{36}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
@@ -27,7 +27,7 @@
 	<appender name="InteractionWithDispatcher" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>/C:/logs/Interaction_with_dispatcher.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS}  %-5level %-15([%thread]) %-30(%logger{36}) - %msg%n</Pattern>
+			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS}  %-5level %-8([%thread]) %-30(%logger{40}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
@@ -41,15 +41,19 @@
 		</triggeringPolicy>
 	</appender>
 
-	<logger name="main.java.com.yvhobby.epsm.model" level="INFO" additivity="false">
+	<logger name="main.java.com.epsm.electricPowerSystemModel.model" level="INFO" additivity="false">
 		<appender-ref ref="Model" />
 	</logger>
 	
-	<logger name="main.java.com.yvhobby.epsm.model.dispatch.MainControlPanel" level="INFO" additivity="false">
+	<logger name="main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel" level="INFO" additivity="false">
+		<appender-ref ref="InteractionWithDispatcher" />
+	</logger>
+	
+	<logger name="main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender" level="INFO" additivity="false">
 		<appender-ref ref="InteractionWithDispatcher" />
 	</logger>
 
 	<root level="INFO">
-		<appender-ref ref="STDOUT" />
+		<appender-ref ref="STDOUT"/>
 	</root>
 </configuration>

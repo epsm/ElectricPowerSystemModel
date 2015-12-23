@@ -2,20 +2,26 @@ package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.text.DecimalFormat;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
 public class ConsumerState extends PowerObjectState{
 	private int consumerNumber;
 	private float load;
 	private LocalTime timeStamp;
 	private StringBuilder stringBuilder;
-	private DecimalFormat formatter;
+	private DateTimeFormatter timeFormatter;
+	private DecimalFormat numberFormatter;
 	
 	public ConsumerState(int consumerNumber, float load, LocalTime timeStamp) {
 		this.consumerNumber = consumerNumber;
 		this.load = load;
 		this.timeStamp = timeStamp;
 		
-		formatter = new DecimalFormat("0000.000");
+		stringBuilder = new StringBuilder();
+		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		numberFormatter = new DecimalFormat("00.000", GlobalConstatnts.SYMBOLS);
 	}
 
 	public int getConsumerNumber() {
@@ -33,11 +39,12 @@ public class ConsumerState extends PowerObjectState{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("ConsumerState ");
-		stringBuilder.append("[consumerNumber=");
+		stringBuilder.append("Consumer ¹");
 		stringBuilder.append(consumerNumber);
-		stringBuilder.append(", load=");
-		stringBuilder.append(formatter.format(load));
+		stringBuilder.append(" [time: ");
+		stringBuilder.append(timeStamp.format(timeFormatter));
+		stringBuilder.append(" load MW: ");
+		stringBuilder.append(numberFormatter.format(load));
 		stringBuilder.append("]");
 
 		return stringBuilder.toString();

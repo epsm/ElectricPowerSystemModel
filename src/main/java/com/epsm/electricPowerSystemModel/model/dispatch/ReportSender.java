@@ -14,7 +14,7 @@ public class ReportSender {
 	private Timer reportTimer;
 	private SendReportTask task = new SendReportTask();
 	private String sourceType;
-	private final int DELAY_BEFORE_SENDING_REPORTS = 0;
+	private final int DELAY_BEFORE_SENDING_REPORTS = 200;
 	private Logger logger = (Logger) LoggerFactory.getLogger(ReportSender.class);
 	
 	public ReportSender(ReportSenderSource source) {
@@ -25,7 +25,7 @@ public class ReportSender {
 	}
 
 	private void determineSourceType(){
-		sourceType = source.getClass().getName();
+		sourceType = source.getClass().getSimpleName();
 	}
 	
 	public void sendReports(){
@@ -56,11 +56,11 @@ public class ReportSender {
 			getReportFromSource();
 			sendReportToDispatcher();
 			
-			logger.info(sourceType + " sent report to dispatcher: {}", report);
+			logger.info(sourceType + ": {}", report);
 		}
 		
 		private void setThreadName(){
-			Thread.currentThread().setName(sourceType + " ReportSender");
+			Thread.currentThread().setName("sender");
 		}
 		
 		private void getReportFromSource(){

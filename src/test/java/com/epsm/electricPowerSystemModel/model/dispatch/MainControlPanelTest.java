@@ -208,7 +208,7 @@ public class MainControlPanelTest {
 	}
 	
 	@Test
-	public void controlPanelRegisteresWithDispacherRightAfterSetIt(){
+	public void controlPanelRegisteresWithDispacherRightAfterreRisterWithDispatcherCalled(){
 		Dispatcher dispatcher = mock(Dispatcher.class);
 		stationControlPanel.registerWithDispatcher(dispatcher);
 		

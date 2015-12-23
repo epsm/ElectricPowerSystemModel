@@ -19,6 +19,10 @@ public abstract class Consumer implements ObjectToBeDispatching, ReportSenderSou
 	public Consumer(int consumerNumber, ElectricPowerSystemSimulation simulation){
 		this.number = consumerNumber;
 		this.simulation = simulation;
+		
+		if(simulation == null){
+			throw new ConsumptionException("Consumer: simulation must not be null.");
+		}
 	}
 
 	protected float calculateLoadCountingFrequency(float load, float frequency){

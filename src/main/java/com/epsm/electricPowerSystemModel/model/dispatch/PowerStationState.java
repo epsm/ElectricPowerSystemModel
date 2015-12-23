@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Set;
 
+import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+
 public class PowerStationState extends PowerObjectState{
 	private int powerStationNumber;
 	private LocalTime timeStamp;
@@ -24,7 +26,7 @@ public class PowerStationState extends PowerObjectState{
 		
 		stringBuilder = new StringBuilder();
 		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-		numberFormatter = new DecimalFormat("0000.000");
+		numberFormatter = new DecimalFormat("00.000", GlobalConstatnts.SYMBOLS);
 	}
 
 	public int getPowerStationNumber() {
@@ -46,14 +48,13 @@ public class PowerStationState extends PowerObjectState{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("PowerStationState ");
-		stringBuilder.append("[time in simulation= ");
-		stringBuilder.append(timeStamp.format(timeFormatter));
-		stringBuilder.append(", powerStationNumber=");
+		stringBuilder.append("PowerStation ¹");
 		stringBuilder.append(powerStationNumber);
-		stringBuilder.append(", frequency=");
+		stringBuilder.append(" [time: ");
+		stringBuilder.append(timeStamp.format(timeFormatter));
+		stringBuilder.append(" frequency: ");
 		stringBuilder.append(numberFormatter.format(frequency));
-		stringBuilder.append(", generatorsStates ");
+		stringBuilder.append(" generators: ");
 		stringBuilder.append(generatorsStates);
 		stringBuilder.append("]");
 

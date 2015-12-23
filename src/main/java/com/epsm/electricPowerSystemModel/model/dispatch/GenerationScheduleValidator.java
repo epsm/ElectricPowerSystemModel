@@ -65,7 +65,7 @@ public class GenerationScheduleValidator {
 	}
 	
 	private void quantityOfGeneratorsOnStationConformsToTheirQuantityInSchedule(){
-		int generatorsInStation =  stationParameters.getQuantityOfGenerators();
+		int generatorsInStation = stationParameters.getQuantityOfGenerators();
 		int generatorsInSchedule = stationSchedule.getQuantityOfGenerators();
 		
 		if(generatorsInSchedule != generatorsInStation){

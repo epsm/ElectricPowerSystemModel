@@ -77,7 +77,7 @@ public class ReportSenderTest{
 	}
 	
 	private void doPauseWhileTaskWillBePrepared() throws InterruptedException{
-		Thread.sleep(100);
+		Thread.sleep(200);
 	}
 	
 	private void captureSentToDispatcherReport(){

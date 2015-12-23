@@ -52,6 +52,7 @@ public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSour
 			logger.info("Schedule was received.");
 			return true;
 		}catch (PowerStationException exception){
+			System.err.println(exception);
 			//TODO send request to dispatcher
 			logger.warn("Received ", exception);
 			return false;

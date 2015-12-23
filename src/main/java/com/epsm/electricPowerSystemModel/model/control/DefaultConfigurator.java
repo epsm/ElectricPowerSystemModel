@@ -1,9 +1,15 @@
 package main.java.com.epsm.electricPowerSystemModel.model.control;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import main.java.com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
@@ -12,10 +18,22 @@ import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.Tests
 
 public class DefaultConfigurator {
 	private ElectricPowerSystemSimulation simulation;
-	private MainControlPanel controlPanel;
+	private Dispatcher dispatcher;
+	private Logger logger = (Logger) LoggerFactory.getLogger(DefaultConfigurator.class);
 	
-	public void initialize(ElectricPowerSystemSimulation simulation){
+	public void initialize(ElectricPowerSystemSimulation simulation, Dispatcher dispatcher){
 		this.simulation = simulation;
+		this.dispatcher = dispatcher;
+		
+		if(simulation == null){
+			logger.error("Attempt to initialize model without simulation.");
+			throw new SimulationException("DefaultConfigurer: Simulation must not be null.");
+		}
+		
+		if(dispatcher == null){
+			logger.error("Attempt to initialize model without dispatcher.");
+			throw new SimulationException("DefaultConfigurer: Dispatcher must not be null.");
+		}
 		
 		createAndBoundObjects();
 	}
@@ -28,29 +46,40 @@ public class DefaultConfigurator {
 	private void createConsumerAndAddItToEnergySystem(){
 		float[] pattern = TestsConstants.LOAD_BY_HOURS;
 		
-		ShockLoadConsumer powerConsumer_scheduled = new ShockLoadConsumer(1, simulation);
-		powerConsumer_scheduled.setDegreeOfDependingOnFrequency(2);
-		powerConsumer_scheduled.setMaxLoad(10f);
-		powerConsumer_scheduled.setMaxWorkDurationInSeconds(300);
-		powerConsumer_scheduled.setMaxPauseBetweenWorkInSeconds(200);
+		ShockLoadConsumer shockLoadConsumer = new ShockLoadConsumer(1, simulation);
+		ReportSender shockLoadCustomerSender = new ReportSender(shockLoadConsumer);
+		shockLoadConsumer.setDegreeOfDependingOnFrequency(2);
+		shockLoadConsumer.setMaxLoad(10f);
+		shockLoadConsumer.setMaxWorkDurationInSeconds(300);
+		shockLoadConsumer.setMaxPauseBetweenWorkInSeconds(200);
+		shockLoadConsumer.registerWithDispatcher(dispatcher);
+		shockLoadConsumer.setReportSender(shockLoadCustomerSender);
+		shockLoadCustomerSender.setDispatcher(dispatcher);
 		
-		ScheduledLoadConsumer powerConsumer_shock = new ScheduledLoadConsumer(2, simulation);
-		powerConsumer_shock.setDegreeOfDependingOnFrequency(2);
-		powerConsumer_shock.setApproximateLoadByHoursOnDayInPercent(pattern);
-		powerConsumer_shock.setMaxLoadWithoutRandomInMW(100);
-		powerConsumer_shock.setRandomFluctuationsInPercent(10);
+		ScheduledLoadConsumer scheduledLoadConsumer = new ScheduledLoadConsumer(2, simulation);
+		ReportSender scheduledLoadCustomerSender = new ReportSender(scheduledLoadConsumer);
+		scheduledLoadConsumer.setDegreeOfDependingOnFrequency(2);
+		scheduledLoadConsumer.setApproximateLoadByHoursOnDayInPercent(pattern);
+		scheduledLoadConsumer.setMaxLoadWithoutRandomInMW(100);
+		scheduledLoadConsumer.setRandomFluctuationsInPercent(10);
+		scheduledLoadConsumer.registerWithDispatcher(dispatcher);
+		scheduledLoadConsumer.setReportSender(scheduledLoadCustomerSender);
+		scheduledLoadCustomerSender.setDispatcher(dispatcher);
 
-		simulation.addPowerConsumer(powerConsumer_scheduled);
-		simulation.addPowerConsumer(powerConsumer_shock);
+		simulation.addPowerConsumer(shockLoadConsumer);
+		simulation.addPowerConsumer(scheduledLoadConsumer);
 	}
 	
 	private void createPowerStationAndAddToEnergySystem(){
 		PowerStation powerStation = new PowerStation(1, simulation);
+		MainControlPanel controlPanel = new MainControlPanel();
+		ReportSender controlPanelSender = new ReportSender(controlPanel);
 		simulation.addPowerStation(powerStation);
 		
-		controlPanel = new MainControlPanel();
 		controlPanel.setSimulation(simulation);
 		controlPanel.setStation(powerStation);
+		controlPanel.setReportSender(controlPanelSender);
+		controlPanelSender.setDispatcher(dispatcher);
 		
 		Generator generator_1 = new Generator(1);
 		AstaticRegulator astaticRegulator_1 = new AstaticRegulator(simulation, generator_1);
@@ -72,5 +101,11 @@ public class DefaultConfigurator {
 		
 		powerStation.addGenerator(generator_1);
 		powerStation.addGenerator(generator_2);
+		
+		/*
+		 * last to avoid situation when validator throws exception because dispatcher will send schedule for 2
+		 * generators but station has 0.
+		 */
+		controlPanel.registerWithDispatcher(dispatcher);
 	}
 }
