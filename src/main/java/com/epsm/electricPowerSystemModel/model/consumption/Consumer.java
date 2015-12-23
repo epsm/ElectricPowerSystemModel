@@ -3,6 +3,7 @@ package main.java.com.epsm.electricPowerSystemModel.model.consumption;
 import java.time.LocalTime;
 
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ObjectToBeDispatching;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSenderSource;
@@ -39,6 +40,11 @@ public abstract class Consumer implements ObjectToBeDispatching, ReportSenderSou
 		this.sender = sender;
 	}
 
+	@Override
+	public final void registerWithDispatcher(Dispatcher dispatcher){
+		dispatcher.registerPowerObject(this);
+	}
+	
 	public int getConsumerNumber() {
 		return number;
 	}

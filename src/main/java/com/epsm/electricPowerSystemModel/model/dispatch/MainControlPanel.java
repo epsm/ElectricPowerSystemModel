@@ -81,6 +81,11 @@ public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSour
 		return station.getState();
 	}
 
+	@Override
+	public void registerWithDispatcher(Dispatcher dispatcher){
+		dispatcher.registerPowerObject(this);
+	}
+	
 	public void setSimulation(ElectricPowerSystemSimulation simulation) {
 		this.simulation = simulation;
 	}

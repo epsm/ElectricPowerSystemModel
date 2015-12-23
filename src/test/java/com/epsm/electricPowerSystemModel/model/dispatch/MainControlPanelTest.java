@@ -1,5 +1,6 @@
 package test.java.com.epsm.electricPowerSystemModel.model.dispatch;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorGenerationSchedule;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
@@ -203,5 +205,13 @@ public class MainControlPanelTest {
 	private void hasGeneratorsWereAdjustedTwice(){
 		verify(generator_1, times(2)).isTurnedOn();
 		verify(generator_2, times(2)).isTurnedOn();
+	}
+	
+	@Test
+	public void controlPanelRegisteresWithDispacherRightAfterSetIt(){
+		Dispatcher dispatcher = mock(Dispatcher.class);
+		stationControlPanel.registerWithDispatcher(dispatcher);
+		
+		verify(dispatcher).registerPowerObject(any());
 	}
 }
