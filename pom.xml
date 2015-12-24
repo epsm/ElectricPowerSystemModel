@@ -51,8 +51,6 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<outputDirectory>target/classes</outputDirectory>
 		<plugins>
 			<!-- with it tests with Timer fails -->
 			<plugin>

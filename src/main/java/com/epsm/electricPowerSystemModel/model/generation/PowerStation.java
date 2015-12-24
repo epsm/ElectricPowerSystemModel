@@ -37,7 +37,7 @@ public class PowerStation{
 		generators = new HashMap<Integer, Generator>();
 		generatorsStates = new TreeSet<GeneratorState>();
 		
-		logger.info("Power station was created.");
+		logger.info("Power station #{} was created.", number);
 	}
 
 	public float calculateGenerationInMW(){

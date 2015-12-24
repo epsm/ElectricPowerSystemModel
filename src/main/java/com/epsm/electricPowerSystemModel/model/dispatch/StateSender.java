@@ -8,20 +8,20 @@ import org.slf4j.LoggerFactory;
 
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
-public class ReportSender {
+public class StateSender {
 	private Dispatcher dispatcher;
-	private ReportSenderSource source;
-	private Timer reportTimer;
-	private SendReportTask task;
+	private StateSenderSource source;
+	private Timer sendingTimer;
+	private SendStateTask task;
 	private String sourceType;
 	private Logger logger;
 	private final int DELAY_BEFORE_SENDING_REPORTS = 0;	
 	
-	public ReportSender(ReportSenderSource source) {
+	public StateSender(StateSenderSource source) {
 		this.source = source;
-		source.setReportSender(this);
-		task = new SendReportTask();
-		logger = LoggerFactory.getLogger(ReportSender.class);
+		source.setStateSender(this);
+		task = new SendStateTask();
+		logger = LoggerFactory.getLogger(StateSender.class);
 		determineSourceType();
 	}
 
@@ -35,12 +35,12 @@ public class ReportSender {
 	}
 	
 	private void createTimer(){
-		reportTimer = new Timer();
+		sendingTimer = new Timer();
 		logger.info(sourceType + " will be sending reports to dispatcher.");
 	}
 	
 	private void startSending(){
-		reportTimer.schedule(task, DELAY_BEFORE_SENDING_REPORTS,
+		sendingTimer.schedule(task, DELAY_BEFORE_SENDING_REPORTS,
 				GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS);
 	}
 
@@ -48,28 +48,28 @@ public class ReportSender {
 		this.dispatcher = dispatcher;
 	}
 
-	private class SendReportTask extends TimerTask{
-		private PowerObjectState report;
+	private class SendStateTask extends TimerTask{
+		private PowerObjectState state;
 		
 		@Override
 		public void run(){
 			setThreadName();
-			getReportFromSource();
-			sendReportToDispatcher();
+			getStateFromSource();
+			sendStateToDispatcher();
 			
-			logger.info(sourceType + ": {}", report);
+			logger.info(sourceType + ": {}", state);
 		}
 		
 		private void setThreadName(){
 			Thread.currentThread().setName("sender");
 		}
 		
-		private void getReportFromSource(){
-			report = source.getState();
+		private void getStateFromSource(){
+			state = source.getState();
 		}
 		
-		private void sendReportToDispatcher(){
-			dispatcher.acceptReport(report);
+		private void sendStateToDispatcher(){
+			dispatcher.acceptReport(state);
 		}
 	}
 }

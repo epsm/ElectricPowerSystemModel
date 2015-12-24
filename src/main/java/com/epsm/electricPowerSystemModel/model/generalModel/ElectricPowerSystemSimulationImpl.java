@@ -82,7 +82,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 	
 	private void logFrequency(){
-		logger.warn("Frqueency is unacceptable: " + frequencyInPowerSystem + " Hz.");
+		logger.warn("Frqueency is unacceptable: {} Hz.", frequencyInPowerSystem);
 	}
 	
 	@Override

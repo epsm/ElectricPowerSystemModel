@@ -26,7 +26,7 @@ public class ScheduledLoadConsumer extends Consumer{
 	public ScheduledLoadConsumer(int consumerNumber, ElectricPowerSystemSimulation simulation) {
 		super(consumerNumber, simulation);
 		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
-		logger.info("Scheduled load consumer №" + consumerNumber + " created.");
+		logger.info("Scheduled load consumer №{}  created.", number);
 	}
 	
 	@Override

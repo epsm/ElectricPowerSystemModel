@@ -13,27 +13,27 @@ import org.mockito.ArgumentCaptor;
 
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSenderSource;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSenderSource;
 
 public class ReportSenderTest{
-	private ArgumentCaptor<PowerObjectState> reportCaptor;
+	private ArgumentCaptor<PowerObjectState> stateCaptor;
 	private Dispatcher dispatcher;
-	private ReportSenderSource source;
-	private ReportSender sender;
-	private PowerObjectState reportFromSource;
+	private StateSenderSource source;
+	private StateSender sender;
+	private PowerObjectState stateFromSource;
 	private PowerObjectState capturedReport;
 	
 	@Before
 	public void initialize(){
 		dispatcher = mock(Dispatcher.class);
-		source = mock(ReportSenderSource.class);
-		sender = new ReportSender(source); 
+		source = mock(StateSenderSource.class);
+		sender = new StateSender(source); 
 		sender.setDispatcher(dispatcher);
-		reportFromSource = mock(PowerObjectState.class);
-		reportCaptor = ArgumentCaptor.forClass(PowerObjectState.class);
+		stateFromSource = mock(PowerObjectState.class);
+		stateCaptor = ArgumentCaptor.forClass(PowerObjectState.class);
 		
-		when(source.getState()).thenReturn(reportFromSource);
+		when(source.getState()).thenReturn(stateFromSource);
 	}
 	
 	@Test
@@ -72,11 +72,11 @@ public class ReportSenderTest{
 		doPauseWhileTaskWillBePrepared();
 		captureSentToDispatcherReport();
 		
-		Assert.assertEquals(reportFromSource, capturedReport);
+		Assert.assertEquals(stateFromSource, capturedReport);
 	}
 	
 	private void captureSentToDispatcherReport(){
-		verify(dispatcher, atLeastOnce()).acceptReport(reportCaptor.capture());
-		capturedReport = reportCaptor.getValue();
+		verify(dispatcher, atLeastOnce()).acceptReport(stateCaptor.capture());
+		capturedReport = stateCaptor.getValue();
 	}
 }

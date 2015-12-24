@@ -5,16 +5,16 @@ import java.time.LocalTime;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ObjectToBeDispatching;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSenderSource;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSenderSource;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
-public abstract class Consumer implements ObjectToBeDispatching, ReportSenderSource{
-	private int number;
+public abstract class Consumer implements ObjectToBeDispatching, StateSenderSource{
+	protected int number;
 	protected ElectricPowerSystemSimulation simulation;
 	protected float degreeOnDependingOfFrequency;
-	protected ReportSender sender;
+	protected StateSender sender;
 	
 	public Consumer(int consumerNumber, ElectricPowerSystemSimulation simulation){
 		this.number = consumerNumber;
@@ -40,7 +40,7 @@ public abstract class Consumer implements ObjectToBeDispatching, ReportSenderSou
 	}
 	
 	@Override
-	public void setReportSender(ReportSender sender) {
+	public void setStateSender(StateSender sender) {
 		this.sender = sender;
 	}
 

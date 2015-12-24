@@ -27,7 +27,7 @@ public class ShockLoadConsumer extends Consumer{
 	public ShockLoadConsumer(int consumerNumber, ElectricPowerSystemSimulation simulation) {
 		super(consumerNumber, simulation);
 		logger = LoggerFactory.getLogger(ShockLoadConsumer.class);
-		logger.info("Shock load consumer №" + consumerNumber + " created.");
+		logger.info("Shock load consumer №{} created.", number);
 	}
 	
 	@Override

@@ -7,7 +7,7 @@ import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLo
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender;
+import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
@@ -47,21 +47,21 @@ public class DefaultConfigurator {
 		float[] pattern = TestsConstants.LOAD_BY_HOURS;
 		
 		ShockLoadConsumer shockLoadConsumer = new ShockLoadConsumer(1, simulation);
-		ReportSender shockLoadCustomerSender = new ReportSender(shockLoadConsumer);
+		StateSender shockLoadCustomerSender = new StateSender(shockLoadConsumer);
 		shockLoadConsumer.setDegreeOfDependingOnFrequency(2);
 		shockLoadConsumer.setMaxLoad(10f);
 		shockLoadConsumer.setMaxWorkDurationInSeconds(300);
 		shockLoadConsumer.setMaxPauseBetweenWorkInSeconds(200);
-		shockLoadConsumer.setReportSender(shockLoadCustomerSender);
+		shockLoadConsumer.setStateSender(shockLoadCustomerSender);
 		shockLoadCustomerSender.setDispatcher(dispatcher);
 		
 		ScheduledLoadConsumer scheduledLoadConsumer = new ScheduledLoadConsumer(2, simulation);
-		ReportSender scheduledLoadCustomerSender = new ReportSender(scheduledLoadConsumer);
+		StateSender scheduledLoadCustomerSender = new StateSender(scheduledLoadConsumer);
 		scheduledLoadConsumer.setDegreeOfDependingOnFrequency(2);
 		scheduledLoadConsumer.setApproximateLoadByHoursOnDayInPercent(pattern);
 		scheduledLoadConsumer.setMaxLoadWithoutRandomInMW(100);
 		scheduledLoadConsumer.setRandomFluctuationsInPercent(10);
-		scheduledLoadConsumer.setReportSender(scheduledLoadCustomerSender);
+		scheduledLoadConsumer.setStateSender(scheduledLoadCustomerSender);
 		scheduledLoadCustomerSender.setDispatcher(dispatcher);
 
 		simulation.addPowerConsumer(shockLoadConsumer);
@@ -75,12 +75,12 @@ public class DefaultConfigurator {
 	private void createPowerStationAndAddToEnergySystem(){
 		PowerStation powerStation = new PowerStation(1, simulation);
 		MainControlPanel controlPanel = new MainControlPanel();
-		ReportSender controlPanelSender = new ReportSender(controlPanel);
+		StateSender controlPanelSender = new StateSender(controlPanel);
 		simulation.addPowerStation(powerStation);
 		
 		controlPanel.setSimulation(simulation);
 		controlPanel.setStation(powerStation);
-		controlPanel.setReportSender(controlPanelSender);
+		controlPanel.setStateSender(controlPanelSender);
 		controlPanelSender.setDispatcher(dispatcher);
 		
 		Generator generator_1 = new Generator(1);

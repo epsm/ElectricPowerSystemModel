@@ -1,6 +1,6 @@
 package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
 
-public interface ReportSenderSource {
+public interface StateSenderSource {
 	public PowerObjectState getState();
-	public void setReportSender(ReportSender sender);
+	public void setStateSender(StateSender sender);
 }

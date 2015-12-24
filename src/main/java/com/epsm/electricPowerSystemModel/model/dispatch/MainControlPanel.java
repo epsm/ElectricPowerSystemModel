@@ -15,7 +15,7 @@ import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
-public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSource{
+public class MainControlPanel implements PowerStationControlCenter, StateSenderSource{
 	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station;
 	private PowerStationGenerationSchedule curentSchedule;
@@ -23,10 +23,11 @@ public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSour
 	private Timer generatorControlTimer;
 	private GeneratorsControlTask generatorControlTask = new GeneratorsControlTask();
 	private GenerationScheduleValidator validator = new GenerationScheduleValidator();
-	private ReportSender sender;
+	private StateSender sender;
 	private PowerStationParameters parameters;
 	private Logger logger = LoggerFactory.getLogger(MainControlPanel.class);
 	
+	@Override
 	public void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
 		receivedSchedule = generationSchedule;
 		
@@ -96,7 +97,7 @@ public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSour
 	}
 	
 	@Override
-	public void setReportSender(ReportSender sender) {
+	public void setStateSender(StateSender sender) {
 		this.sender = sender;
 	}
 	
