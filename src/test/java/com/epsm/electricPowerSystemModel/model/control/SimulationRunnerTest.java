@@ -1,16 +1,13 @@
 package test.java.com.epsm.electricPowerSystemModel.model.control;
 
+import java.time.LocalTime;
+
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.mockito.Mockito.mock;
-
-import java.time.LocalTime;
-
 import main.java.com.epsm.electricPowerSystemModel.model.control.SimulationRunner;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;

@@ -4,6 +4,9 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
@@ -13,12 +16,15 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private float frequencyInPowerSystem = GlobalConstatnts.STANDART_FREQUENCY;
 	private LocalTime currentTimeInSimulation;
 	private final float TIME_CONASTNT = 2_000;
+	private Logger logger;
 	private final int SIMULATION_STEP_IN_NANOS = 100_000_000;
-	
+	private final float ACCEPTABLE_FREQUENCY_DELTA = 0.03f;
+
 	public ElectricPowerSystemSimulationImpl() {
 		powerStations = new HashSet<PowerStation>();
 		powerConsumers = new HashSet<Consumer>();
 		currentTimeInSimulation = LocalTime.NOON;
+		logger = (Logger) LoggerFactory.getLogger(ElectricPowerSystemSimulationImpl.class);
 	}
 
 	@Override
@@ -28,6 +34,10 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		
 		calculateFrequencyInPowerSystem(totalGeneration, totalLoad);
 		changeTimeForStep();
+		
+		if(isFrequencyLowerThanNormal()){
+			logFrequency();
+		}
 	}
 	
 	private float calculateTotalGenerationsInMW(){
@@ -61,6 +71,20 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		currentTimeInSimulation = currentTimeInSimulation.plusNanos(SIMULATION_STEP_IN_NANOS);
 	}
 
+	private boolean isFrequencyLowerThanNormal(){
+		float delta = Math.abs(GlobalConstatnts.STANDART_FREQUENCY - frequencyInPowerSystem);
+		
+		if(delta > ACCEPTABLE_FREQUENCY_DELTA){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	private void logFrequency(){
+		logger.warn("Frqueency is unacceptable: " + frequencyInPowerSystem + " Hz.");
+	}
+	
 	@Override
 	public void addPowerStation(PowerStation powerStation) {
 		powerStations.add(powerStation);

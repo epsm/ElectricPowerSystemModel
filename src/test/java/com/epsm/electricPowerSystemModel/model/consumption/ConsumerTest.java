@@ -15,7 +15,6 @@ import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLo
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
 
 public class ConsumerTest {
 	private ElectricPowerSystemSimulation simulation;

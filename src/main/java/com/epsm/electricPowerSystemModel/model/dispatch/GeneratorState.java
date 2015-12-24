@@ -29,9 +29,9 @@ public class GeneratorState extends PowerObjectState implements Comparable<Gener
 	@Override
 	public int compareTo(GeneratorState o) {
 		if(generationInWM - o.generatorNumber < 0){
-			return +1;
-		}else if(generationInWM - o.generatorNumber > 0){
 			return -1;
+		}else if(generationInWM - o.generatorNumber > 0){
+			return +1;
 		}
 		
 		return 0;
@@ -70,9 +70,9 @@ public class GeneratorState extends PowerObjectState implements Comparable<Gener
 		stringBuilder.setLength(0);
 		stringBuilder.append("¹");
 		stringBuilder.append(generatorNumber);
-		stringBuilder.append(" MW: ");
+		stringBuilder.append(" ");
 		stringBuilder.append(formatter.format(generationInWM));
-
+		stringBuilder.append("MW");
 		return stringBuilder.toString();
 	}
 }

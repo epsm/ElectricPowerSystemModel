@@ -14,9 +14,7 @@ import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation
 public class ElectricPowerSystemSimulationImplTest {
 	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station_1;
-	private PowerStation station_2;
 	private Consumer consumer_1;
-	private Consumer consumer_2;
 	private float previousFrequency;
 	private float currentFrequency;
 	

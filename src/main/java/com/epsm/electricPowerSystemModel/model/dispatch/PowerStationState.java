@@ -48,13 +48,14 @@ public class PowerStationState extends PowerObjectState{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("PowerStation ¹");
+		stringBuilder.append("PowerSt. ¹");
 		stringBuilder.append(powerStationNumber);
 		stringBuilder.append(" [time: ");
 		stringBuilder.append(timeStamp.format(timeFormatter));
-		stringBuilder.append(" frequency: ");
+		stringBuilder.append(" freq.: ");
 		stringBuilder.append(numberFormatter.format(frequency));
-		stringBuilder.append(" generators: ");
+		stringBuilder.append("Hz");
+		stringBuilder.append(" gener.: ");
 		stringBuilder.append(generatorsStates);
 		stringBuilder.append("]");
 

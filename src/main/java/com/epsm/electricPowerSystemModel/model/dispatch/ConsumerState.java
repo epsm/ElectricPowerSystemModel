@@ -21,7 +21,7 @@ public class ConsumerState extends PowerObjectState{
 		
 		stringBuilder = new StringBuilder();
 		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-		numberFormatter = new DecimalFormat("00.000", GlobalConstatnts.SYMBOLS);
+		numberFormatter = new DecimalFormat("000.000", GlobalConstatnts.SYMBOLS);
 	}
 
 	public int getConsumerNumber() {

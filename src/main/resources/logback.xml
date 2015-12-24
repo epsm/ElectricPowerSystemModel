@@ -8,37 +8,25 @@
 	</appender>
 
 	<appender name="Model" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/C:/logs/model.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS}  %-5level %-6([%thread]) %-36(%logger{36}) - %msg%n</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-12([%thread]) %-47(%logger{48}) - %msg%n</Pattern>
 		</encoder>
 
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<FileNamePattern>/C:/logs/model.%i.log.zip</FileNamePattern>
-			<MinIndex>1</MinIndex>
-			<MaxIndex>10</MaxIndex>
-		</rollingPolicy>
-
-		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>1MB</MaxFileSize>
-		</triggeringPolicy>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      		<fileNamePattern>/C:/logs/Model.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<maxHistory>7</maxHistory>
+    	</rollingPolicy>
 	</appender>
 	
 	<appender name="InteractionWithDispatcher" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/C:/logs/Interaction_with_dispatcher.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS}  %-5level %-8([%thread]) %-30(%logger{40}) - %msg%n</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-8([%thread]) %-30(%logger{40}) - %msg%n</Pattern>
 		</encoder>
 
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<FileNamePattern>/C:/logs/Interaction_with_dispatcher.%i.log.zip</FileNamePattern>
-			<MinIndex>1</MinIndex>
-			<MaxIndex>10</MaxIndex>
-		</rollingPolicy>
-
-		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>1MB</MaxFileSize>
-		</triggeringPolicy>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      		<fileNamePattern>/C:/logs/InteractionWithDispatcher.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<maxHistory>7</maxHistory>
+    	</rollingPolicy>
 	</appender>
 
 	<logger name="main.java.com.epsm.electricPowerSystemModel.model" level="INFO" additivity="false">

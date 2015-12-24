@@ -12,15 +12,16 @@ public class ReportSender {
 	private Dispatcher dispatcher;
 	private ReportSenderSource source;
 	private Timer reportTimer;
-	private SendReportTask task = new SendReportTask();
+	private SendReportTask task;
 	private String sourceType;
+	private Logger logger;
 	private final int DELAY_BEFORE_SENDING_REPORTS = 200;
-	private Logger logger = (Logger) LoggerFactory.getLogger(ReportSender.class);
 	
 	public ReportSender(ReportSenderSource source) {
 		this.source = source;
 		source.setReportSender(this);
-		
+		task = new SendReportTask();
+		logger = (Logger) LoggerFactory.getLogger(ReportSender.class);
 		determineSourceType();
 	}
 

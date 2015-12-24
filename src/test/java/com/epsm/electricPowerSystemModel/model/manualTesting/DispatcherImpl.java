@@ -7,7 +7,6 @@ import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPan
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ObjectToBeDispatching;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
 class DispatcherImpl implements Dispatcher{
