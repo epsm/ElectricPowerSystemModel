@@ -49,7 +49,7 @@ public class ReportSenderTest{
 	}
 	
 	private void doPauseEnoughtForTwoRequest() throws InterruptedException{
-		Thread.sleep((long)(GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS * 1.3));
+		Thread.sleep((long)(GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS * 1.499));
 	}
 	
 	private void hasReportBeenRequestedFromSourceTwice(){
@@ -77,7 +77,7 @@ public class ReportSenderTest{
 	}
 	
 	private void doPauseWhileTaskWillBePrepared() throws InterruptedException{
-		Thread.sleep(200);
+		Thread.sleep(900);
 	}
 	
 	private void captureSentToDispatcherReport(){

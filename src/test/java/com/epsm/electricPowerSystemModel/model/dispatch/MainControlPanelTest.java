@@ -92,7 +92,7 @@ public class MainControlPanelTest {
 	}
 	
 	private void doPauseUntilMainControlPanellAdjustGenerators() throws InterruptedException{
-		Thread.sleep(300);
+		Thread.sleep(1200);
 	}
 	
 	@Test

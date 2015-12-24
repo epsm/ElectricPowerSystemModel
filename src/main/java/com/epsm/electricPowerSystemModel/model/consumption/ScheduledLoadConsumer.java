@@ -25,7 +25,7 @@ public class ScheduledLoadConsumer extends Consumer{
 	
 	public ScheduledLoadConsumer(int consumerNumber, ElectricPowerSystemSimulation simulation) {
 		super(consumerNumber, simulation);
-		logger.info("Scheduled load consumer ¹" + consumerNumber + " created.");
+		logger.info("Scheduled load consumer â„–" + consumerNumber + " created.");
 	}
 	
 	@Override

@@ -39,7 +39,7 @@ public class ConsumerState extends PowerObjectState{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("Consumer ¹");
+		stringBuilder.append("Consumer â„–");
 		stringBuilder.append(consumerNumber);
 		stringBuilder.append(" [time: ");
 		stringBuilder.append(timeStamp.format(timeFormatter));

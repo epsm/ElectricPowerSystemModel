@@ -48,7 +48,7 @@ public class PowerStationState extends PowerObjectState{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("PowerSt. ¹");
+		stringBuilder.append("PowerSt. â„–");
 		stringBuilder.append(powerStationNumber);
 		stringBuilder.append(" [time: ");
 		stringBuilder.append(timeStamp.format(timeFormatter));

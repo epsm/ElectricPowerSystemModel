@@ -68,7 +68,7 @@ public class GeneratorState extends PowerObjectState implements Comparable<Gener
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("¹");
+		stringBuilder.append("â„–");
 		stringBuilder.append(generatorNumber);
 		stringBuilder.append(" ");
 		stringBuilder.append(formatter.format(generationInWM));
