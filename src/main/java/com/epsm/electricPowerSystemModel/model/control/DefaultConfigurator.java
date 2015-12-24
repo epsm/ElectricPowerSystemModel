@@ -1,8 +1,8 @@
 package main.java.com.epsm.electricPowerSystemModel.model.control;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
@@ -19,7 +19,7 @@ import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.Tests
 public class DefaultConfigurator {
 	private ElectricPowerSystemSimulation simulation;
 	private Dispatcher dispatcher;
-	private Logger logger = (Logger) LoggerFactory.getLogger(DefaultConfigurator.class);
+	private Logger logger = LoggerFactory.getLogger(DefaultConfigurator.class);
 	
 	public void initialize(ElectricPowerSystemSimulation simulation, Dispatcher dispatcher){
 		this.simulation = simulation;
@@ -52,7 +52,6 @@ public class DefaultConfigurator {
 		shockLoadConsumer.setMaxLoad(10f);
 		shockLoadConsumer.setMaxWorkDurationInSeconds(300);
 		shockLoadConsumer.setMaxPauseBetweenWorkInSeconds(200);
-		shockLoadConsumer.registerWithDispatcher(dispatcher);
 		shockLoadConsumer.setReportSender(shockLoadCustomerSender);
 		shockLoadCustomerSender.setDispatcher(dispatcher);
 		
@@ -62,12 +61,15 @@ public class DefaultConfigurator {
 		scheduledLoadConsumer.setApproximateLoadByHoursOnDayInPercent(pattern);
 		scheduledLoadConsumer.setMaxLoadWithoutRandomInMW(100);
 		scheduledLoadConsumer.setRandomFluctuationsInPercent(10);
-		scheduledLoadConsumer.registerWithDispatcher(dispatcher);
 		scheduledLoadConsumer.setReportSender(scheduledLoadCustomerSender);
 		scheduledLoadCustomerSender.setDispatcher(dispatcher);
 
 		simulation.addPowerConsumer(shockLoadConsumer);
 		simulation.addPowerConsumer(scheduledLoadConsumer);
+		
+		//must be called after dispatcher set up
+		shockLoadConsumer.registerWithDispatcher(dispatcher);
+		scheduledLoadConsumer.registerWithDispatcher(dispatcher);
 	}
 	
 	private void createPowerStationAndAddToEnergySystem(){

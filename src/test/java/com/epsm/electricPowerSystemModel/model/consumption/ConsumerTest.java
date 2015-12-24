@@ -11,7 +11,6 @@ import org.junit.rules.ExpectedException;
 
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ConsumptionException;
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
@@ -26,7 +25,7 @@ public class ConsumerTest {
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		dispatcher = mock(Dispatcher.class);
 		
-		consumer = new ScheduledLoadConsumer(1, simulation);
+		consumer = new ShockLoadConsumer(1, simulation);
 	}
 	
 	@Rule

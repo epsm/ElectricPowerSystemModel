@@ -4,9 +4,9 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
@@ -24,7 +24,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		powerStations = new HashSet<PowerStation>();
 		powerConsumers = new HashSet<Consumer>();
 		currentTimeInSimulation = LocalTime.NOON;
-		logger = (Logger) LoggerFactory.getLogger(ElectricPowerSystemSimulationImpl.class);
+		logger = LoggerFactory.getLogger(ElectricPowerSystemSimulationImpl.class);
 	}
 
 	@Override

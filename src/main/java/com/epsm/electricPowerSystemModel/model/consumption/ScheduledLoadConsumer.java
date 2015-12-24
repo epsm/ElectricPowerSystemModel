@@ -2,9 +2,9 @@ package main.java.com.epsm.electricPowerSystemModel.model.consumption;
 
 import java.time.LocalTime;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
@@ -21,10 +21,11 @@ public class ScheduledLoadConsumer extends Consumer{
 	private LocalTime currentTime;
 	private float currentLoad;
 	private float currentFrequency;
-	private Logger logger = (Logger) LoggerFactory.getLogger(ScheduledLoadConsumer.class);
+	private Logger logger;
 	
 	public ScheduledLoadConsumer(int consumerNumber, ElectricPowerSystemSimulation simulation) {
 		super(consumerNumber, simulation);
+		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
 		logger.info("Scheduled load consumer №" + consumerNumber + " created.");
 	}
 	

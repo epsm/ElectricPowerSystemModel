@@ -3,9 +3,9 @@ package main.java.com.epsm.electricPowerSystemModel.model.consumption;
 import java.time.LocalTime;
 import java.util.Random;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
@@ -22,11 +22,11 @@ public class ShockLoadConsumer extends Consumer{
 	private float currentFrequency;
 	private ConsumerState state;
 	private Random random = new Random();
-	private Logger logger = (Logger) LoggerFactory.getLogger(ShockLoadConsumer.class);
+	private Logger logger;
 	
 	public ShockLoadConsumer(int consumerNumber, ElectricPowerSystemSimulation simulation) {
 		super(consumerNumber, simulation);
-		
+		logger = LoggerFactory.getLogger(ShockLoadConsumer.class);
 		logger.info("Shock load consumer №" + consumerNumber + " created.");
 	}
 	

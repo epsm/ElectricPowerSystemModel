@@ -1,14 +1,14 @@
 package main.java.com.epsm.electricPowerSystemModel.model.control;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import main.java.com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
 
 public class SimulationRunner{
 	private ElectricPowerSystemSimulation simulation;
-	private Logger logger = (Logger) LoggerFactory.getLogger(SimulationRunner.class);
+	private Logger logger = LoggerFactory.getLogger(SimulationRunner.class);
 	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 100;
 	
 	public void runSimulation(ElectricPowerSystemSimulation simulation){
