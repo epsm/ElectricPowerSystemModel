@@ -19,21 +19,21 @@ public class SimulationRunnerTest{
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
 	
-	@Test(timeout = 500)
+	@Test
 	public void isTimeInSimulationRuns() throws InterruptedException{
 		LocalTime startTime = null;
 		LocalTime currentTimeInSimulation = null;
 		
 		startTime = simulation.getTime();
 		runner.runSimulation(simulation);
-		waitQarterSecond();
+		doPause();
 		currentTimeInSimulation = simulation.getTime();
 		
 		Assert.assertNotEquals(startTime, currentTimeInSimulation);
 	}
 	
-	private void waitQarterSecond() throws InterruptedException{
-		Thread.sleep(250);
+	private void doPause() throws InterruptedException{
+		Thread.sleep(2000);//too many because test will be failed under maven test otherwise.
 	}
 	
 	@Test

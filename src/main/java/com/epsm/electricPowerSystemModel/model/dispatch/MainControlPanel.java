@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +26,6 @@ public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSour
 	private ReportSender sender;
 	private PowerStationParameters parameters;
 	private Logger logger = LoggerFactory.getLogger(MainControlPanel.class);
-	
-	private static AtomicInteger counter = new AtomicInteger(21);
-	private int number;
-	private long start;
-	private long stop;
 	
 	public void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
 		receivedSchedule = generationSchedule;
@@ -72,13 +66,6 @@ public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSour
 	private void executeSchedule(){
 		generatorControlTimer = new Timer();
 		generatorControlTimer.schedule(generatorControlTask, 0, TimeUnit.SECONDS.toMillis(1));
-		
-		
-		number = counter.getAndIncrement();
-		synchronized(this){
-			start = System.currentTimeMillis();
-			System.out.println("scheduled " + number);
-		}
 	}
 	
 	private boolean isThereValidSchedule(){
@@ -121,11 +108,6 @@ public class MainControlPanel implements ObjectToBeDispatching, ReportSenderSour
 		
 		@Override
 		public void run() {
-			synchronized(this){
-				stop = System.currentTimeMillis();
-				System.out.println("performs " + number + ", delay: " + (stop - start));
-				start = stop;
-			}
 			processEveryGenerationSchedule();
 		}
 		

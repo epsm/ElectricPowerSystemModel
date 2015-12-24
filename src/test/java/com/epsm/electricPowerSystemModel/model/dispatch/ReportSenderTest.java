@@ -44,7 +44,7 @@ public class ReportSenderTest{
 	}
 	
 	private void doPauseWhileTaskWillBePrepared() throws InterruptedException{
-		Thread.sleep(1000);//too many because test will be fail under maven test otherwise.
+		Thread.sleep(2000);//too many because test will be failed under maven test otherwise.
 	}
 	
 	private void startSendReports(){

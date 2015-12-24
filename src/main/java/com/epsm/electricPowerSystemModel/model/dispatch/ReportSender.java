@@ -2,7 +2,6 @@ package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,13 +15,7 @@ public class ReportSender {
 	private SendReportTask task;
 	private String sourceType;
 	private Logger logger;
-	private final int DELAY_BEFORE_SENDING_REPORTS = 0;
-	
-	private static AtomicInteger counter = new AtomicInteger(11);
-	private int number;
-	private long start;
-	private long stop;
-	
+	private final int DELAY_BEFORE_SENDING_REPORTS = 0;	
 	
 	public ReportSender(ReportSenderSource source) {
 		this.source = source;
@@ -30,8 +23,6 @@ public class ReportSender {
 		task = new SendReportTask();
 		logger = LoggerFactory.getLogger(ReportSender.class);
 		determineSourceType();
-		
-		number = counter.getAndIncrement();
 	}
 
 	private void determineSourceType(){
@@ -39,10 +30,6 @@ public class ReportSender {
 	}
 	
 	public void sendReports(){
-		synchronized(this){
-			start = System.currentTimeMillis();
-			System.out.println("scheduled " + number);
-		}
 		createTimer();
 		startSending();
 	}
@@ -66,11 +53,6 @@ public class ReportSender {
 		
 		@Override
 		public void run(){
-			synchronized(this){
-				stop = System.currentTimeMillis();
-				System.out.println("performs " + number + ", delay: " + (stop - start));
-				start = stop;
-			}
 			setThreadName();
 			getReportFromSource();
 			sendReportToDispatcher();
