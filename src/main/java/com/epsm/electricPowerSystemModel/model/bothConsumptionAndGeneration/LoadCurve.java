@@ -1,9 +1,9 @@
-package main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
+package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 
 import java.time.LocalTime;
 
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
 public class LoadCurve{
 	private float[] loadByHoursInMW;

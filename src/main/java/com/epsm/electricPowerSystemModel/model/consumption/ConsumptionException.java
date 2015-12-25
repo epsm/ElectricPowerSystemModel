@@ -1,4 +1,4 @@
-package main.java.com.epsm.electricPowerSystemModel.model.consumption;
+package com.epsm.electricPowerSystemModel.model.consumption;
 
 public class ConsumptionException extends RuntimeException{
 

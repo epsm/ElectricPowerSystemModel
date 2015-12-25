@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.consumption;
+package com.epsm.electricPowerSystemModel.model.consumption;
 
 import java.time.LocalTime;
 import java.util.Random;
@@ -7,13 +7,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
-import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
+import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
+import com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
+import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
 public class ScheduledLoadConsumerTest{
 	private ScheduledLoadConsumer consumer;

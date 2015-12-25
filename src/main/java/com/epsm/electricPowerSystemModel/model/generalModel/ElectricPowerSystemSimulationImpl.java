@@ -1,4 +1,4 @@
-package main.java.com.epsm.electricPowerSystemModel.model.generalModel;
+package com.epsm.electricPowerSystemModel.model.generalModel;
 
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -7,8 +7,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
+import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
 	private Set<PowerStation> powerStations;
@@ -16,9 +16,9 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private float frequencyInPowerSystem = GlobalConstatnts.STANDART_FREQUENCY;
 	private LocalTime currentTimeInSimulation;
 	private final float TIME_CONASTNT = 2_000;
-	private Logger logger;
 	private final int SIMULATION_STEP_IN_NANOS = 100_000_000;
 	private final float ACCEPTABLE_FREQUENCY_DELTA = 0.03f;
+	private Logger logger;
 
 	public ElectricPowerSystemSimulationImpl() {
 		powerStations = new HashSet<PowerStation>();

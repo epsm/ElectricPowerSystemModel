@@ -1,4 +1,4 @@
-package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.dispatch;
 
 public class GeneratorParameters {
 	private int generatorNumber;

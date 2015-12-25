@@ -1,4 +1,4 @@
-package main.java.com.epsm.electricPowerSystemModel.model.consumption;
+package com.epsm.electricPowerSystemModel.model.consumption;
 
 import java.time.LocalTime;
 import java.util.Random;
@@ -6,9 +6,9 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class ShockLoadConsumer extends Consumer{
 	private int maxWorkDurationInSeconds;

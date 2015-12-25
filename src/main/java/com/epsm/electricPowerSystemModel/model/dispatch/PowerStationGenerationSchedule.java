@@ -1,10 +1,10 @@
-package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
 public class PowerStationGenerationSchedule {
 	private Map<Integer, GeneratorGenerationSchedule> generatorSchedules = 

@@ -1,4 +1,4 @@
-package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.util.Collection;
 import java.util.Collections;

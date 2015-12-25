@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.constantsForTests;
+package com.epsm.electricPowerSystemModel.model.constantsForTests;
 
 public class TestsConstants {
 	public final static float[] LOAD_BY_HOURS = new float[]{

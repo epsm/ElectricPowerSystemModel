@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.consumption;
+package com.epsm.electricPowerSystemModel.model.consumption;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -9,11 +9,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ConsumptionException;
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
+import com.epsm.electricPowerSystemModel.model.consumption.ConsumptionException;
+import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class ConsumerTest {
 	private ElectricPowerSystemSimulation simulation;

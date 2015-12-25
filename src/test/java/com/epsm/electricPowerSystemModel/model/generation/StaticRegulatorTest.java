@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.generation;
+package com.epsm.electricPowerSystemModel.model.generation;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -7,10 +7,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
+import com.epsm.electricPowerSystemModel.model.generation.Generator;
 
 public class StaticRegulatorTest {
 	private ElectricPowerSystemSimulation simulation;

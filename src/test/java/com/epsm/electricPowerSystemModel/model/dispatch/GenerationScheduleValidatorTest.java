@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -12,14 +12,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GenerationScheduleValidator;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorGenerationSchedule;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
-import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.electricPowerSystemModel.model.dispatch.GenerationScheduleValidator;
+import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorGenerationSchedule;
+import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
 public class GenerationScheduleValidatorTest {
 	private GenerationScheduleValidator validator;

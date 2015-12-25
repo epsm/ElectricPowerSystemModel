@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.generalModel;
+package com.epsm.electricPowerSystemModel.model.generalModel;
 
 import static org.mockito.Mockito.*;
 
@@ -6,10 +6,10 @@ import java.time.LocalTime;
 
 import org.junit.*;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
+import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImplTest {
 	private ElectricPowerSystemSimulation simulation;

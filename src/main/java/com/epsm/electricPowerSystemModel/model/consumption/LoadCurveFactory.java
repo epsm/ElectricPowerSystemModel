@@ -1,9 +1,9 @@
-package main.java.com.epsm.electricPowerSystemModel.model.consumption;
+package com.epsm.electricPowerSystemModel.model.consumption;
 
 import java.util.Arrays;
 import java.util.Random;
 
-import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 
 public class LoadCurveFactory {
 	private Random random = new Random();

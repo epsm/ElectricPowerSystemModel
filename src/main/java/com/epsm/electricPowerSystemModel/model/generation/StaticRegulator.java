@@ -1,7 +1,7 @@
-package main.java.com.epsm.electricPowerSystemModel.model.generation;
+package com.epsm.electricPowerSystemModel.model.generation;
 
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
 public class StaticRegulator {
 	private ElectricPowerSystemSimulation simulation;

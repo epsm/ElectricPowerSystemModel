@@ -1,6 +1,6 @@
-package main.java.com.epsm.electricPowerSystemModel.model.generation;
+package com.epsm.electricPowerSystemModel.model.generation;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
+import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
 
 public class Generator{
 	private int number;

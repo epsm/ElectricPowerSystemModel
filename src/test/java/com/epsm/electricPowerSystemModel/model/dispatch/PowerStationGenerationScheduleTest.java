@@ -1,12 +1,12 @@
-package test.java.com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorGenerationSchedule;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorGenerationSchedule;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
 public class PowerStationGenerationScheduleTest{
 

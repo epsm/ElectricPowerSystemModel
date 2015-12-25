@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.control;
+package com.epsm.electricPowerSystemModel.model.control;
 
 import static org.mockito.Mockito.mock;
 
@@ -7,11 +7,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import main.java.com.epsm.electricPowerSystemModel.model.control.DefaultConfigurator;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
+import com.epsm.electricPowerSystemModel.model.control.DefaultConfigurator;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
+import com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
 
 public class DefaultConfiguratorTest {
 	private DefaultConfigurator configurator = new DefaultConfigurator();

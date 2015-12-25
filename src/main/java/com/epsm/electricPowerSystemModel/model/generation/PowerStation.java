@@ -1,4 +1,4 @@
-package main.java.com.epsm.electricPowerSystemModel.model.generation;
+package com.epsm.electricPowerSystemModel.model.generation;
 
 import java.time.LocalTime;
 import java.util.Collection;
@@ -10,11 +10,11 @@ import java.util.TreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class PowerStation{
 	private ElectricPowerSystemSimulation simulation;

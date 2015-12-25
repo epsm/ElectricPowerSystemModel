@@ -1,4 +1,4 @@
-package main.java.com.epsm.electricPowerSystemModel.model.generalModel;
+package com.epsm.electricPowerSystemModel.model.generalModel;
 
 public class SimulationException extends RuntimeException{
 	

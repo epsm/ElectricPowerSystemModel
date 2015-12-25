@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -9,16 +9,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorGenerationSchedule;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
-import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorGenerationSchedule;
+import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generation.Generator;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
+import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
+import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
 public class MainControlPanelTest {
 	private ElectricPowerSystemSimulation simulation;

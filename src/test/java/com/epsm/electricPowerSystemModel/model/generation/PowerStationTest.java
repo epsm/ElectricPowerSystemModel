@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.generation;
+package com.epsm.electricPowerSystemModel.model.generation;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -12,16 +12,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
+import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generation.Generator;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 
 public class PowerStationTest{
 	private ElectricPowerSystemSimulation simulation;

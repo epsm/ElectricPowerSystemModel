@@ -1,10 +1,10 @@
-package main.java.com.epsm.electricPowerSystemModel.model.control;
+package com.epsm.electricPowerSystemModel.model.control;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
 
 public class SimulationRunner{
 	private ElectricPowerSystemSimulation simulation;

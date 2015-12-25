@@ -1,8 +1,8 @@
-package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.text.DecimalFormat;
 
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
 public class GeneratorState extends PowerObjectState implements Comparable<GeneratorState>{
 	private  int generatorNumber;

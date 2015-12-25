@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
+package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 
 import java.time.LocalTime;
 
@@ -7,9 +7,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
-import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
 public class LoadCurveTest{
 	private float[] loadByHours = TestsConstants.LOAD_BY_HOURS;

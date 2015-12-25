@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.control;
+package com.epsm.electricPowerSystemModel.model.control;
 
 import java.time.LocalTime;
 
@@ -7,10 +7,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import main.java.com.epsm.electricPowerSystemModel.model.control.SimulationRunner;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
+import com.epsm.electricPowerSystemModel.model.control.SimulationRunner;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
+import com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
 
 public class SimulationRunnerTest{
 	private ElectricPowerSystemSimulation simulation = new ElectricPowerSystemSimulationImpl();

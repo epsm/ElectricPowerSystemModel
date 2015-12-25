@@ -1,4 +1,4 @@
-package main.java.com.epsm.electricPowerSystemModel.model.generation;
+package com.epsm.electricPowerSystemModel.model.generation;
 
 public class GenerationRegulator {
 

@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeastOnce;
@@ -11,10 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSenderSource;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
+import com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
+import com.epsm.electricPowerSystemModel.model.dispatch.StateSenderSource;
 
 public class ReportSenderTest{
 	private ArgumentCaptor<PowerObjectState> stateCaptor;

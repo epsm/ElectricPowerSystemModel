@@ -1,24 +1,30 @@
-package main.java.com.epsm.electricPowerSystemModel.model.control;
+package com.epsm.electricPowerSystemModel.model.control;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.Generator;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStation;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
-import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
+import com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
+import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
+import com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
+import com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
+import com.epsm.electricPowerSystemModel.model.generation.Generator;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
+import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 
 public class DefaultConfigurator {
 	private ElectricPowerSystemSimulation simulation;
 	private Dispatcher dispatcher;
+	public final static float[] LOAD_BY_HOURS = new float[]{
+			64.88f,  59.54f,  55.72f,  51.90f, 	48.47f,  48.85f,
+			48.09f,  57.25f,  76.35f,  91.60f,  100.0f,  99.23f,
+			91.60f,  91.60f,  91.22f,  90.83f,  90.83f,  90.83f,
+			90.83f,  90.83f,  90.83f,  90.83f,  90.83f,  83.96f 
+	};
+	
 	private Logger logger = LoggerFactory.getLogger(DefaultConfigurator.class);
 	
 	public void initialize(ElectricPowerSystemSimulation simulation, Dispatcher dispatcher){
@@ -44,7 +50,7 @@ public class DefaultConfigurator {
 	}
 	
 	private void createConsumerAndAddItToEnergySystem(){
-		float[] pattern = TestsConstants.LOAD_BY_HOURS;
+		float[] pattern = LOAD_BY_HOURS;
 		
 		ShockLoadConsumer shockLoadConsumer = new ShockLoadConsumer(1, simulation);
 		StateSender shockLoadCustomerSender = new StateSender(shockLoadConsumer);

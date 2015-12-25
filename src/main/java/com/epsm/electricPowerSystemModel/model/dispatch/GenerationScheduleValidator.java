@@ -1,11 +1,11 @@
-package main.java.com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.HashSet;
 
-import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import main.java.com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
 public class GenerationScheduleValidator {
 	private PowerStationGenerationSchedule stationSchedule;

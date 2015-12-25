@@ -1,13 +1,13 @@
-package test.java.com.epsm.electricPowerSystemModel.model.consumption;
+package com.epsm.electricPowerSystemModel.model.consumption;
 
 import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import main.java.com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.LoadCurveFactory;
-import test.java.com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.electricPowerSystemModel.model.consumption.LoadCurveFactory;
+import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
 public class LoadCurveFactoryTest {
 	private float[] originalLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;

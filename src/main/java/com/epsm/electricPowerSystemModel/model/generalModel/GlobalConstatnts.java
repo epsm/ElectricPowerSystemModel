@@ -1,4 +1,4 @@
-package main.java.com.epsm.electricPowerSystemModel.model.generalModel;
+package com.epsm.electricPowerSystemModel.model.generalModel;
 
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;

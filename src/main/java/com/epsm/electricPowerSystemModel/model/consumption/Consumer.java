@@ -1,14 +1,14 @@
-package main.java.com.epsm.electricPowerSystemModel.model.consumption;
+package com.epsm.electricPowerSystemModel.model.consumption;
 
 import java.time.LocalTime;
 
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ObjectToBeDispatching;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.StateSenderSource;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.ObjectToBeDispatching;
+import com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
+import com.epsm.electricPowerSystemModel.model.dispatch.StateSenderSource;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
 public abstract class Consumer implements ObjectToBeDispatching, StateSenderSource{
 	protected int number;

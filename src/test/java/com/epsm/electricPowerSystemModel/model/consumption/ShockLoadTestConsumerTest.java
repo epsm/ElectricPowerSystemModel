@@ -1,4 +1,4 @@
-package test.java.com.epsm.electricPowerSystemModel.model.consumption;
+package com.epsm.electricPowerSystemModel.model.consumption;
 
 import static org.mockito.Mockito.*;
 
@@ -9,10 +9,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
-import main.java.com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
-import main.java.com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
 
 public class ShockLoadTestConsumerTest {
 	private ElectricPowerSystemSimulationImpl simulation;
