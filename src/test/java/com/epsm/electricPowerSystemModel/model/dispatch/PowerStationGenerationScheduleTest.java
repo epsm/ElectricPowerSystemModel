@@ -10,7 +10,7 @@ import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
 public class PowerStationGenerationScheduleTest{
 
-	private PowerStationGenerationSchedule stationSchedule = new PowerStationGenerationSchedule();
+	private PowerStationGenerationSchedule stationSchedule = new PowerStationGenerationSchedule(1);
 	private GeneratorGenerationSchedule generatorSchedule =  
 			new GeneratorGenerationSchedule(1, false, false, null);	
 	

@@ -32,7 +32,10 @@ public class GenerationScheduleValidatorTest {
 	@Before
 	public void Initialize(){
 		validator = new GenerationScheduleValidator();
-		stationSchedule = new PowerStationGenerationSchedule();
+		stationSchedule = new PowerStationGenerationSchedule(1);
+		stationParameters = mock(PowerStationParameters.class);
+		
+		when(stationParameters.getPowerStationNumber()).thenReturn(1);
 	}
 	
 	@Test
@@ -52,7 +55,16 @@ public class GenerationScheduleValidatorTest {
 	    expectedEx.expectMessage("station schedule is null.");
 		
 		stationSchedule = null;
-		stationParameters = mock(PowerStationParameters.class);
+		
+		validator.validate(stationSchedule, stationParameters);
+	}
+	
+	@Test
+	public void exceptionIfPowerAndScheduleHaveDifferentNumbers(){
+		expectedEx.expect(PowerStationException.class);
+		expectedEx.expectMessage("wrong schedule: station has №3 but schedule has №1.");
+		
+		when(stationParameters.getPowerStationNumber()).thenReturn(3);
 		
 		validator.validate(stationSchedule, stationParameters);
 	}
@@ -102,8 +114,7 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private void prepareStationWithOnlyOneSecondGenerator(){
-		Collection<Integer> numbers = Arrays.asList(new Integer[] {2}); 
-		stationParameters = mock(PowerStationParameters.class);
+		Collection<Integer> numbers = Arrays.asList(new Integer[] {2});
 		when(stationParameters.getGeneratorsNumbers()).thenReturn(numbers);
 		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
 	}
@@ -120,7 +131,6 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private void prepareMockedStationParametersWithFirstGenerator(){
-		stationParameters = mock(PowerStationParameters.class);
 		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
 		when(stationParameters.getGeneratorsNumbers()).thenReturn(Arrays.asList(new Integer[] {1}));
 	}
@@ -147,7 +157,6 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private void preparePowerStation(GeneratorParameters parameters){
-		stationParameters = mock(PowerStationParameters.class);
 		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
 		when(stationParameters.getGeneratorsNumbers()).thenReturn(Arrays.asList(new Integer[] {1}));
 		when(stationParameters.getGeneratorParameters(anyInt())).thenReturn(parameters);
@@ -211,5 +220,5 @@ public class GenerationScheduleValidatorTest {
 		GeneratorGenerationSchedule generatorSchedule = 
 				new GeneratorGenerationSchedule(1, true, true, null);
 		createStationScheduleWithFirstGenerator(generatorSchedule);
-	} 
+	}
 }

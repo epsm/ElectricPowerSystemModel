@@ -35,7 +35,7 @@ public class MainControlPanelTest {
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		stationControlPanel = new MainControlPanel();
-		stationGenerationSchedule = new PowerStationGenerationSchedule();
+		stationGenerationSchedule = new PowerStationGenerationSchedule(1);
 		PowerStation station = new PowerStation(1, simulation);
 		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		Generator g_1 = new Generator(1);
