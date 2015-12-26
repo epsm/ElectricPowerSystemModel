@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PowerStationState extends PowerObjectState{
 	private int powerStationNumber;
@@ -17,8 +19,13 @@ public class PowerStationState extends PowerObjectState{
 	private DateTimeFormatter timeFormatter;
 	private DecimalFormat numberFormatter;
 
-	public PowerStationState(int powerStationNumber, LocalTime timeStamp, float frequency,
-			Set<GeneratorState> generatorsStates) {
+	@JsonCreator
+	public PowerStationState(
+			@JsonProperty("powerStationNumber") int powerStationNumber,
+			@JsonProperty("timeStamp") LocalTime timeStamp,
+			@JsonProperty("frequency") float frequency,
+			@JsonProperty("generatorsStates") Set<GeneratorState> generatorsStates) {
+		
 		this.powerStationNumber = powerStationNumber;
 		this.timeStamp = timeStamp;
 		this.frequency = frequency;
