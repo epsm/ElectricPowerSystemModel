@@ -11,16 +11,18 @@ import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 public abstract class PowerSystemObject implements DispatchingObject{
 	
 	private TimeService timeService;
-	private String childNameForLogging;
 	private Class<? extends DispatcherMessage> expectedMessageType;
 	private Dispatcher dispatcher;
 	private LocalDateTime timeWhenRecievedLastMessage;
 	private LocalDateTime timeWhenSentLastMessage;
 	private LocalDateTime currentTime;
+	private String thisClassName;
+	private String messageClassName;
+	private String stateClassName;
 	private Logger logger;
 
 	public PowerSystemObject(TimeService timeService, Dispatcher dispatcher,
-			Class<? extends DispatcherMessage> expectedMessageType, String childNameForLogging) {
+			Class<? extends DispatcherMessage> expectedMessageType) {
 		
 		if(timeService == null){
 			String message = "PowerSystem object constructor: timeService must not be null.";
@@ -31,18 +33,12 @@ public abstract class PowerSystemObject implements DispatchingObject{
 		}else if(expectedMessageType == null){
 			String message = "PowerSystem object constructor: expectedMessageType must not be null.";
 			throw new DispatchingException(message);
-		}else if(childNameForLogging == null){
-			String message = "PowerSystem object constructor: childNameForLogging must not be null.";
-			throw new DispatchingException(message);
-		}else if(childNameForLogging.trim().equals("")){
-			String message = "PowerSystem object constructor: childNameForLogging must not be empty.";
-			throw new DispatchingException(message);
 		}
 		
 		this.timeService = timeService;
 		this.dispatcher = dispatcher;
 		this.expectedMessageType = expectedMessageType;
-		this.childNameForLogging = childNameForLogging;
+		thisClassName = this.getClass().getSimpleName();
 		timeWhenRecievedLastMessage = LocalDateTime.MIN;
 		timeWhenSentLastMessage = LocalDateTime.MIN;
 		logger = LoggerFactory.getLogger(PowerSystemObject.class);
@@ -51,19 +47,20 @@ public abstract class PowerSystemObject implements DispatchingObject{
 	@Override
 	public final void acceptMessage(DispatcherMessage message) {
 		if(message == null){
-			logger.warn("{} recieved null from dispatcher",	childNameForLogging);
+			logger.warn("{} recieved null from dispatcher",	thisClassName);
 			return;
 		}
 
 		if(isMessageTypeEqualsToExpected(message)){
 			setLastMessageTime();
 			processDispatcherMessage(message);
+			getMessageClassName(message);
 			
 			logger.info("{} recieved {} from dispatcher",
-					childNameForLogging, message.getClass().getSimpleName());
+					thisClassName, messageClassName);
 		}else{
 			logger.warn("{} recieved {} from dispatcher",
-					childNameForLogging, message.getClass().getSimpleName());
+					thisClassName, messageClassName);
 		}
 	}
 	
@@ -102,13 +99,6 @@ public abstract class PowerSystemObject implements DispatchingObject{
 	}
 	
 	private boolean isItTimeToSentMessage(){
-		System.out.println("current time" + currentTime);
-		System.out.println("last message" + timeWhenSentLastMessage);
-		System.out.println(timeWhenSentLastMessage.plusSeconds(
-				GlobalConstants.PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECCONDS)
-				.isBefore(currentTime));
-		
-		
 		return timeWhenSentLastMessage.plusSeconds(
 				GlobalConstants.PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECCONDS)
 				.isBefore(currentTime);
@@ -123,7 +113,8 @@ public abstract class PowerSystemObject implements DispatchingObject{
 		}
 		
 		dispatcher.acceptReport(state);
-		logger.info("{} sent {} from dispatcher", childNameForLogging, state.getClass().getSimpleName());
+		getStateClassName(state);
+		logger.info("{} sent {} from dispatcher", thisClassName, stateClassName);
 	}
 	
 	protected abstract PowerObjectState getState();
@@ -134,5 +125,13 @@ public abstract class PowerSystemObject implements DispatchingObject{
 	
 	private void establishConnectionToDispatcher(){
 		dispatcher.connectToPowerObject(this);
+	}
+	
+	private void getMessageClassName(DispatcherMessage message){
+		message.getClass().getSimpleName();
+	}
+	
+	private void getStateClassName(PowerObjectState state){
+		state.getClass().getSimpleName();
 	}
 }

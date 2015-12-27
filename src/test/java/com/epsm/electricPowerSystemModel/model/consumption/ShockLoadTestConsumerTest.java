@@ -11,8 +11,11 @@ import org.junit.Test;
 
 import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class ShockLoadTestConsumerTest {
 	private ElectricPowerSystemSimulationImpl simulation;
@@ -24,6 +27,11 @@ public class ShockLoadTestConsumerTest {
 	private float expectedLoad;
 	private LocalTime expectedTime;
 	private ConsumerState state;
+	private TimeService timeService;
+	private Dispatcher dispatcher;
+	private Class<? extends DispatcherMessage> expectedMessageType;
+	
+	
 	private final int WORK_TIME = 300; 
 	private final int PAUSE_TIME = 500;
 	private final int CONSUMER_NUMBER = 664;
@@ -31,9 +39,13 @@ public class ShockLoadTestConsumerTest {
 	@Before
 	public void initialize(){
 		simulation = spy(new ElectricPowerSystemSimulationImpl());
-		consumer = new ShockLoadConsumer(CONSUMER_NUMBER, simulation);
 		turnOnTime = null;
 		turnOffTime = null;
+		timeService = mock(TimeService.class);
+		dispatcher = mock(Dispatcher.class);
+		expectedMessageType = DispatcherMessage.class;
+		
+		consumer = new ShockLoadConsumer(timeService, dispatcher, expectedMessageType, null, CONSUMER_NUMBER, simulation);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		

@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
@@ -16,13 +15,12 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private Set<Consumer> powerConsumers;
 	private float frequencyInPowerSystem = GlobalConstants.STANDART_FREQUENCY;
 	private LocalTime currentTimeInSimulation;
-	private Dispatcher dispatcher;
 	private final float TIME_CONASTNT = 2_000;
 	private final int SIMULATION_STEP_IN_NANOS = 100_000_000;
 	private final float ACCEPTABLE_FREQUENCY_DELTA = 0.03f;
 	private Logger logger;
 
-	public ElectricPowerSystemSimulationImpl(Dispatcher dispatcher) {
+	public ElectricPowerSystemSimulationImpl() {
 		powerStations = new HashSet<PowerStation>();
 		powerConsumers = new HashSet<Consumer>();
 		currentTimeInSimulation = LocalTime.NOON;
@@ -105,10 +103,5 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	@Override
 	public LocalTime getTimeInSimulation(){
 		return currentTimeInSimulation;
-	}
-
-	@Override
-	public Dispatcher getDispatcher() {
-		return dispatcher;
 	}
 }

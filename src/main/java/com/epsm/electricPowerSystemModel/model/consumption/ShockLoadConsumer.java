@@ -7,8 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class ShockLoadConsumer extends Consumer{
 	private int maxWorkDurationInSeconds;
@@ -20,12 +23,17 @@ public class ShockLoadConsumer extends Consumer{
 	private LocalTime currentTime;
 	private float currentLoad;
 	private float currentFrequency;
-	private ConsumerState state;
+	private volatile ConsumerState state;
 	private Random random = new Random();
 	private Logger logger;
 	
-	public ShockLoadConsumer(int consumerNumber, ElectricPowerSystemSimulation simulation) {
-		super(consumerNumber, simulation);
+	public ShockLoadConsumer(TimeService timeService, Dispatcher dispatcher, 
+			Class<? extends DispatcherMessage>  expectedMessageType,
+			String childNameForLogging, int consumerNumber,
+			ElectricPowerSystemSimulation simulation) {
+		
+		super(timeService, dispatcher, expectedMessageType, childNameForLogging, consumerNumber, simulation); 
+
 		logger = LoggerFactory.getLogger(ShockLoadConsumer.class);
 		logger.info("Shock load consumer №{} created.", number);
 	}
@@ -123,5 +131,10 @@ public class ShockLoadConsumer extends Consumer{
 		
 	public void setMaxLoad(float maxLoad) {
 		this.maxLoad = maxLoad;
+	}
+
+	@Override
+	protected void processDispatcherMessage(DispatcherMessage message) {
+		//TODO turn off/on user by dispatcher command. 
 	}
 }

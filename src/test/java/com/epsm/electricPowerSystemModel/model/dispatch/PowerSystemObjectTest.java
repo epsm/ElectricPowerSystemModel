@@ -33,7 +33,7 @@ public class PowerSystemObjectTest{
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);
 		expectedMessageType = DispatcherMessage.class;
-		object = new Child(timeService, dispatcher, expectedMessageType, "№1");
+		object = new Child(timeService, dispatcher, expectedMessageType);
 		message = new DispatcherMessage(START_TIME);
 
 		when(timeService.getCurrentTime()).thenReturn(START_TIME);
@@ -105,7 +105,7 @@ public class PowerSystemObjectTest{
 	public void doNothingIfAcceptedMessageClassIsNotExpected(){
 		message = new  PowerStationGenerationSchedule(1);
 		object = new ChildExceptionIfInteractWithOverridenMethods(
-				timeService, dispatcher, expectedMessageType, "1");
+				timeService, dispatcher, expectedMessageType);
 		
 		object.interactWithDisparcher();
 		object.acceptMessage(message);
@@ -118,7 +118,7 @@ public class PowerSystemObjectTest{
 	public void doNothingIfAcceptedMessageIsNull(){
 		message = null;
 		object = new ChildExceptionIfInteractWithOverridenMethods(
-				timeService, dispatcher, expectedMessageType, "1");
+				timeService, dispatcher, expectedMessageType);
 		
 		object.interactWithDisparcher();
 		object.acceptMessage(message);
@@ -132,7 +132,7 @@ public class PowerSystemObjectTest{
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerObjectState must not be null.");
 	    
-	    object = new ChildReturnsNullWithGetState(timeService, dispatcher, expectedMessageType, "1");
+	    object = new ChildReturnsNullWithGetState(timeService, dispatcher, expectedMessageType);
 	    
 	    object.interactWithDisparcher();
 		object.acceptMessage(message);
@@ -144,7 +144,7 @@ public class PowerSystemObjectTest{
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerSystem object constructor: timeService must not be null.");
 	
-	    object = new ChildReturnsNullWithGetState(null, dispatcher, expectedMessageType, "1");
+	    object = new Child(null, dispatcher, expectedMessageType);
 	}
 	
 	@Test
@@ -152,7 +152,7 @@ public class PowerSystemObjectTest{
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerSystem object constructor: dispatcher must not be null.");
 	
-	    object = new ChildReturnsNullWithGetState(timeService, null, expectedMessageType, "1");
+	    object = new Child(timeService, null, expectedMessageType);
 	}
 	
 	@Test
@@ -160,30 +160,14 @@ public class PowerSystemObjectTest{
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerSystem object constructor: expectedMessageType must not be null.");
 	
-	    object = new ChildReturnsNullWithGetState(timeService, dispatcher, null, "1");
-	}
-	
-	@Test
-	public void exceptionInConstructorIfChildNameForLoggingIsNull(){
-		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("PowerSystem object constructor: childNameForLogging must not be null.");
-	
-	    object = new ChildReturnsNullWithGetState(timeService, dispatcher, expectedMessageType, null);
-	}
-	
-	@Test
-	public void exceptionInConstructorIfChildNameForLoggingIsEmpty(){
-		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("PowerSystem object constructor: childNameForLogging must not be empty.");
-	
-	    object = new ChildReturnsNullWithGetState(timeService, dispatcher, expectedMessageType, "   ");
+	    object = new Child(timeService, dispatcher, null);
 	}
 	
 	private class Child extends PowerSystemObject{
 		public Child(TimeService timeService, Dispatcher dispatcher,
-				Class<? extends DispatcherMessage> expectedMessageType, String childNameForLogging) {
+				Class<? extends DispatcherMessage> expectedMessageType) {
 
-			super(timeService, dispatcher, expectedMessageType, childNameForLogging);
+			super(timeService, dispatcher, expectedMessageType);
 		}
 
 		@Override
@@ -199,8 +183,8 @@ public class PowerSystemObjectTest{
 	private class ChildReturnsNullWithGetState extends Child{
 
 		public ChildReturnsNullWithGetState(TimeService timeService, Dispatcher dispatcher,
-				Class<? extends DispatcherMessage> expectedMessageType, String childNameForLogging) {
-			super(timeService, dispatcher, expectedMessageType, childNameForLogging);
+				Class<? extends DispatcherMessage> expectedMessageType) {
+			super(timeService, dispatcher, expectedMessageType);
 		}
 		
 		@Override
@@ -211,9 +195,9 @@ public class PowerSystemObjectTest{
 	
 	private class ChildExceptionIfInteractWithOverridenMethods extends Child{
 		public ChildExceptionIfInteractWithOverridenMethods(TimeService timeService, Dispatcher dispatcher,
-				Class<? extends DispatcherMessage> expectedMessageType, String childNameForLogging) {
+				Class<? extends DispatcherMessage> expectedMessageType) {
 
-			super(timeService, dispatcher, expectedMessageType, childNameForLogging);
+			super(timeService, dispatcher, expectedMessageType);
 		}
 
 		@Override
