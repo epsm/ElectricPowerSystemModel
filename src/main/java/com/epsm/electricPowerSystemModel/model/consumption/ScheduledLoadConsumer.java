@@ -7,8 +7,11 @@ import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class ScheduledLoadConsumer extends Consumer{
 	private LoadCurveFactory factory = new LoadCurveFactory();
@@ -23,8 +26,12 @@ public class ScheduledLoadConsumer extends Consumer{
 	private float currentFrequency;
 	private Logger logger;
 	
-	public ScheduledLoadConsumer(int consumerNumber, ElectricPowerSystemSimulation simulation) {
-		super(consumerNumber, simulation);
+	public ScheduledLoadConsumer(TimeService timeService, Dispatcher dispatcher, 
+			Class<? extends DispatcherMessage>  expectedMessageType,
+			String childNameForLogging, int consumerNumber,
+			ElectricPowerSystemSimulation simulation) {
+		
+		super(timeService, dispatcher, expectedMessageType, childNameForLogging, consumerNumber, simulation); 
 		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
 		logger.info("Scheduled load consumer №{}  created.", number);
 	}
@@ -90,5 +97,10 @@ public class ScheduledLoadConsumer extends Consumer{
 
 	public float getMaxLoadWithoutRandomInMW() {
 		return maxLoadWithoutFluctuationsInMW;
+	}
+
+	@Override
+	protected void processDispatcherMessage(DispatcherMessage message) {
+		//TODO turn off/on user by dispatcher command. 
 	}
 }

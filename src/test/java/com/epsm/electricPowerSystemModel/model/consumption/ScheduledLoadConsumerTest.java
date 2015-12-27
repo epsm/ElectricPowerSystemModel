@@ -1,5 +1,7 @@
 package com.epsm.electricPowerSystemModel.model.consumption;
 
+import static org.mockito.Mockito.mock;
+
 import java.time.LocalTime;
 import java.util.Random;
 
@@ -10,8 +12,11 @@ import org.junit.Test;
 import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
@@ -22,13 +27,21 @@ public class ScheduledLoadConsumerTest{
 	private float expectedLoad;
 	private LocalTime expectedTime;
 	private ConsumerState state;
+	private TimeService timeService;
+	private Dispatcher dispatcher;
+	private Class<? extends DispatcherMessage> expectedMessageType;
 	private Random random = new Random();
 	private final int CONSUMER_NUMBER = 664;
 	
 	@Before
 	public void initialize(){
 		simulation = createPowerSystemStub();
-		consumer = new ScheduledLoadConsumer(CONSUMER_NUMBER, simulation);
+		timeService = mock(TimeService.class);
+		dispatcher = mock(Dispatcher.class);
+		expectedMessageType = DispatcherMessage.class;
+		
+		consumer = new ScheduledLoadConsumer(
+				timeService, dispatcher, expectedMessageType, null, CONSUMER_NUMBER, simulation);
 		approximateLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 		
 		consumer.setApproximateLoadByHoursOnDayInPercent(approximateLoadByHoursInPercent);

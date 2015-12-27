@@ -20,7 +20,7 @@ public abstract class Consumer extends PowerSystemObject{
 			String childNameForLogging, int consumerNumber,
 			ElectricPowerSystemSimulation simulation){
 		
-		super(timeService, dispatcher, expectedMessageType, childNameForLogging);
+		super(timeService, dispatcher, expectedMessageType);
 		this.number = consumerNumber;
 		this.simulation = simulation;
 		
