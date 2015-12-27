@@ -54,7 +54,7 @@ public class ShockLoadConsumer extends Consumer{
 	}
 
 	private void getNecessaryParametersFromPowerSystem(){
-		currentTime = simulation.getTime();
+		currentTime = simulation.getTimeInSimulation();
 		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 	

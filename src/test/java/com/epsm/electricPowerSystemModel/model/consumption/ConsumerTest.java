@@ -36,7 +36,7 @@ public class ConsumerTest {
 		//as method setDispatcher(...) defined in Consumer as final I can test only one any implementation
 		consumer.registerWithDispatcher(dispatcher);
 		
-		verify(dispatcher).registerPowerObject(any());
+		verify(dispatcher).connectToPowerObject(any());
 	}
 	
 	@Test

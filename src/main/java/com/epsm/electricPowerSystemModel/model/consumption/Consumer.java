@@ -46,7 +46,7 @@ public abstract class Consumer implements ObjectToBeDispatching, StateSenderSour
 
 	@Override
 	public final void registerWithDispatcher(Dispatcher dispatcher){
-		dispatcher.registerPowerObject(this);
+		dispatcher.connectToPowerObject(this);
 	}
 	
 	public int getConsumerNumber() {

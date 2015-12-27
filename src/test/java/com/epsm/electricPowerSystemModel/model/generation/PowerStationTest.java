@@ -53,7 +53,7 @@ public class PowerStationTest{
 		station = new PowerStation(POWER_STATION_NUMBER, simulation);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstatnts.STANDART_FREQUENCY);
-		when(simulation.getTime()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
+		when(simulation.getTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 	}
 	
 	void prepareAndInstallFirstGenerator(){

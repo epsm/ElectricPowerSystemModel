@@ -45,7 +45,7 @@ public class ScheduledLoadConsumerTest{
 			float frequency = 50;
 						
 			@Override
-			public LocalTime getTime() {
+			public LocalTime getTimeInSimulation() {
 				return time;
 			}
 			
@@ -80,7 +80,7 @@ public class ScheduledLoadConsumerTest{
 		int repeats = 2 * 24 * 60 * 60 * 10;//two days with step 0.1s
 		
 		for(int i = 0; i < repeats; i++){
-			time = simulation.getTime();
+			time = simulation.getTimeInSimulation();
 			actualValue = consumer.calculateCurrentLoadInMW();
 			minPermissibleValue = calculateMinPermissibleValue(time);
 			maxPermissibleValue = calculateMaxPermissibleValue(time);
@@ -152,7 +152,7 @@ public class ScheduledLoadConsumerTest{
 	
 	private void getExpectedValues(){
 		expectedLoad = consumer.calculateCurrentLoadInMW();
-		expectedTime = simulation.getTime();
+		expectedTime = simulation.getTimeInSimulation();
 	}
 	
 	private void getState(){

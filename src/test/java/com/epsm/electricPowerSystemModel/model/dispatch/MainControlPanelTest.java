@@ -45,7 +45,7 @@ public class MainControlPanelTest {
 		StaticRegulator controlUnit_1 = new StaticRegulator(simulation, generator_1);
 		StaticRegulator controlUnit_2 = new StaticRegulator(simulation, generator_2);
 		
-		when(simulation.getTime()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
+		when(simulation.getTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 		
 		generator_1.setNominalPowerInMW(200);
 		generator_2.setNominalPowerInMW(200);
@@ -203,6 +203,6 @@ public class MainControlPanelTest {
 		Dispatcher dispatcher = mock(Dispatcher.class);
 		stationControlPanel.registerWithDispatcher(dispatcher);
 		
-		verify(dispatcher, atLeastOnce()).registerPowerObject(any());
+		verify(dispatcher, atLeastOnce()).connectToPowerObject(any());
 	}
 }

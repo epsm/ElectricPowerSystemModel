@@ -85,7 +85,7 @@ public class MainControlPanel implements PowerStationControlCenter, StateSenderS
 
 	@Override
 	public void registerWithDispatcher(Dispatcher dispatcher){
-		dispatcher.registerPowerObject(this);
+		dispatcher.connectToPowerObject(this);
 	}
 	
 	public void setSimulation(ElectricPowerSystemSimulation simulation) {
@@ -185,7 +185,7 @@ public class MainControlPanel implements PowerStationControlCenter, StateSenderS
 		}
 		
 		private void adjustGenerationPower(){
-			LocalTime currentTime = simulation.getTime();
+			LocalTime currentTime = simulation.getTimeInSimulation();
 			float newGenerationPower = generationCurve.getPowerOnTimeInMW(currentTime);
 			generator.setPowerAtRequiredFrequency(newGenerationPower);
 		}

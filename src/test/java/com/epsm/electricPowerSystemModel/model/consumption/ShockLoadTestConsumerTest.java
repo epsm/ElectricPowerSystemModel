@@ -111,7 +111,7 @@ public class ShockLoadTestConsumerTest {
 		for(int i = 0; i < 1_000_000; i++){
 			rememberCurrentLoadAsPreviousAndDoNextStep();
 			if(wasLoadTurnedOn()){
-				turnOnTime = simulation.getTime();
+				turnOnTime = simulation.getTimeInSimulation();
 				break;
 			}
 		}
@@ -121,7 +121,7 @@ public class ShockLoadTestConsumerTest {
 		for(int i = 0; i < 1_000_000; i++){
 			rememberCurrentLoadAsPreviousAndDoNextStep();
 			if(wasLoadTurnedOff()){
-				turnOffTime = simulation.getTime();
+				turnOffTime = simulation.getTimeInSimulation();
 				break;
 			}
 		}
@@ -169,7 +169,7 @@ public class ShockLoadTestConsumerTest {
 	
 	private void getExpectedValues(){
 		expectedLoad = consumer.calculateCurrentLoadInMW();
-		expectedTime = simulation.getTime();
+		expectedTime = simulation.getTimeInSimulation();
 	}
 	
 	private void getState(){

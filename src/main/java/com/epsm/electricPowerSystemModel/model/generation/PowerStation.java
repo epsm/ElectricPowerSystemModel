@@ -50,7 +50,7 @@ public class PowerStation{
 	}
 	
 	private void getTimeAndFrequencyFromSimulation(){
-		currentTime = simulation.getTime();
+		currentTime = simulation.getTimeInSimulation();
 		currentFrequency = simulation.getFrequencyInPowerSystem();	
 	}
 	

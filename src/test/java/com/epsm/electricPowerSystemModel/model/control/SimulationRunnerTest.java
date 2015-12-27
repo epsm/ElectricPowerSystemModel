@@ -24,10 +24,10 @@ public class SimulationRunnerTest{
 		LocalTime startTime = null;
 		LocalTime currentTimeInSimulation = null;
 		
-		startTime = simulation.getTime();
+		startTime = simulation.getTimeInSimulation();
 		runner.runSimulation(simulation);
 		doPause();
-		currentTimeInSimulation = simulation.getTime();
+		currentTimeInSimulation = simulation.getTimeInSimulation();
 		
 		Assert.assertNotEquals(startTime, currentTimeInSimulation);
 	}
