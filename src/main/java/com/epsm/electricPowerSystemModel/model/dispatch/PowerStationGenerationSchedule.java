@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
-public class PowerStationGenerationSchedule {
+public class PowerStationGenerationSchedule extends DispatcherMessage{
 	private int powerStationNumber;
 	private Map<Integer, GeneratorGenerationSchedule> generatorSchedules 
 			= new HashMap<Integer, GeneratorGenerationSchedule>();
