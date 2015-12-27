@@ -12,12 +12,14 @@ import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
+import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class PowerStation{
 	private ElectricPowerSystemSimulation simulation;
+	private MainControlPanel controlPanel;
 	private int number;//must not be changed after creation
 	private Map<Integer, Generator> generators;
 	private LocalTime currentTime;
@@ -30,9 +32,8 @@ public class PowerStation{
 	private PowerStationState state;
 	private Logger logger = LoggerFactory.getLogger(PowerStation.class);
 	
-	public PowerStation(int number, ElectricPowerSystemSimulation simulation) {
+	public PowerStation(int number) {
 		this.number = number;
-		this.simulation = simulation;
 		
 		generators = new HashMap<Integer, Generator>();
 		generatorsStates = new TreeSet<GeneratorState>();
@@ -41,17 +42,29 @@ public class PowerStation{
 	}
 
 	public float calculateGenerationInMW(){
+		verifyControlPanel();
 		getTimeAndFrequencyFromSimulation();
-		resetPreviousGeneration();
+		adjustGenerators();
+		setGenerationOnThisStepToZero();
 		getTotalGeneratorGeneration();
 		prepareStationState();
 		
 		return currentGenerationInMW;
 	}
 	
+	private void verifyControlPanel(){
+		if(controlPanel == null){
+			throw new PowerStationException("Control panel must not be null.");
+		}
+	}
+	
 	private void getTimeAndFrequencyFromSimulation(){
 		currentTime = simulation.getTimeInSimulation();
 		currentFrequency = simulation.getFrequencyInPowerSystem();	
+	}
+	
+	private void adjustGenerators(){
+		controlPanel.adjustGenerators();
 	}
 	
 	private void getTotalGeneratorGeneration(){
@@ -60,7 +73,7 @@ public class PowerStation{
 		}
 	}
 	
-	private void resetPreviousGeneration(){
+	private void setGenerationOnThisStepToZero(){
 		currentGenerationInMW = 0;
 	}
 	
@@ -162,6 +175,14 @@ public class PowerStation{
 		return generators.keySet();
 	}
 
+	public void setSimulation(ElectricPowerSystemSimulation simulation) {
+		this.simulation = simulation;
+	}
+	
+	public void setMainControlPanel(MainControlPanel controlPanel){
+		this.controlPanel = controlPanel;
+	}
+	
 	public int getNumber(){
 		return number;
 	}

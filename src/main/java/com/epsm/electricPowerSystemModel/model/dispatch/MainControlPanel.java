@@ -1,43 +1,53 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.time.LocalTime;
-import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generation.Generator;
+import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
-public class MainControlPanel implements PowerStationControlCenter, StateSenderSource{
+public class MainControlPanel extends PowerSystemObject{
+
 	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station;
+	private GeneratorsController controller;
 	private PowerStationGenerationSchedule curentSchedule;
 	private PowerStationGenerationSchedule receivedSchedule;
-	private Timer generatorControlTimer;
-	private GeneratorsControlTask generatorControlTask = new GeneratorsControlTask();
-	private GenerationScheduleValidator validator = new GenerationScheduleValidator();
-	private StateSender sender;
+	private GenerationScheduleValidator validator;
 	private PowerStationParameters parameters;
-	private Logger logger = LoggerFactory.getLogger(MainControlPanel.class);
+	private Logger logger;
+	
+	public MainControlPanel(TimeService timeService, Dispatcher dispatcher,
+			Class<? extends DispatcherMessage> expectedMessageType,
+			ElectricPowerSystemSimulation simulation, PowerStation station) {
+		
+		super(timeService, dispatcher, expectedMessageType);
+		station.setMainControlPanel(this);
+		station.setSimulation(simulation);
+		
+		this.simulation = simulation;
+		this.station = station;
+		controller = new GeneratorsController(station);
+		validator = new GenerationScheduleValidator();
+		logger = LoggerFactory.getLogger(MainControlPanel.class);
+	}
 	
 	@Override
+	protected void processDispatcherMessage(DispatcherMessage message) {
+		PowerStationGenerationSchedule schedule = (PowerStationGenerationSchedule) message;
+		performGenerationSchedule(schedule);
+	}
+	
 	public void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
 		receivedSchedule = generationSchedule;
-		
 		getStationParameters();
 		
 		if(isReceivedScheduleValid()){
 			replaceCurrentSchedule();
-			executeSchedule();
-		}else if(isThereValidSchedule()){
-			executeSchedule();
 		}
 	}
 	
@@ -64,130 +74,23 @@ public class MainControlPanel implements PowerStationControlCenter, StateSenderS
 		curentSchedule = receivedSchedule;
 	}
 	
-	private void executeSchedule(){
-		generatorControlTimer = new Timer();
-		generatorControlTimer.schedule(generatorControlTask, 0, TimeUnit.SECONDS.toMillis(1));
-	}
-	
 	private boolean isThereValidSchedule(){
 		return curentSchedule != null;
-	}
-	
-	@Override
-	public void sendReports(){
-		sender.sendReports();
 	}
 	
 	@Override
 	public PowerObjectState getState() {
 		return station.getState();
 	}
-
-	@Override
-	public void registerWithDispatcher(Dispatcher dispatcher){
-		dispatcher.connectToPowerObject(this);
+	
+	public void adjustGenerators(){
+		if(isThereValidSchedule()){
+			getTimeAndAdjustGenerators();
+		}
 	}
 	
-	public void setSimulation(ElectricPowerSystemSimulation simulation) {
-		this.simulation = simulation;
-	}
-
-	public void setStation(PowerStation station) {
-		this.station = station;
-	}
-	
-	@Override
-	public void setStateSender(StateSender sender) {
-		this.sender = sender;
-	}
-	
-	private class GeneratorsControlTask extends TimerTask{
-		private Generator generator;
-		private LoadCurve generationCurve;
-		private boolean shouldGeneratorBeTurnedOn;
-		private boolean shouldAstaticRegulationBeTurnedOn;
-		
-		@Override
-		public void run() {
-			processEveryGenerationSchedule();
-		}
-		
-		private void processEveryGenerationSchedule(){
-			Collection<Integer> generatorNumbers = station.getGeneratorsNumbers();
-			for(Integer generatorNumber: generatorNumbers){
-				Generator generator = station.getGenerator(generatorNumber);
-				rememberCurrentGenerator(generator);
-				GeneratorGenerationSchedule generatorSchedule = getGeneratorGenerationSchedule(generator);
-				adjustGenerationAccordingToSchedule(generatorSchedule);
-			}
-		}
-
-		private void rememberCurrentGenerator(Generator generator){
-			this.generator = generator;
-		}
-		
-		private GeneratorGenerationSchedule getGeneratorGenerationSchedule(Generator generator){
-			int generatorNumber = generator.getNumber();
-			return curentSchedule.getGeneratorGenerationSchedule(generatorNumber);
-		}
-		
-		private void adjustGenerationAccordingToSchedule(GeneratorGenerationSchedule generatorSchedule){
-			getNewGenerationParameters(generatorSchedule);
-			adjustNecessaryParameters();
-		}
-
-		private void getNewGenerationParameters(GeneratorGenerationSchedule generatorSchedule){
-			shouldGeneratorBeTurnedOn = generatorSchedule.isGeneratorTurnedOn();
-			shouldAstaticRegulationBeTurnedOn = generatorSchedule.isAstaticRegulatorTurnedOn();
-			generationCurve = generatorSchedule.getCurve();
-		}
-		
-		private void adjustNecessaryParameters() {
-			if(shouldGeneratorBeTurnedOn){
-				vefifyAndTurnOnGenerator();
-				adjustGeneration();
-			}else{
-				vefifyAndTurnOffGenerator();
-			}
-		}
-		
-		private void vefifyAndTurnOnGenerator(){
-			if(! generator.isTurnedOn()){
-				generator.turnOnGenerator();
-			}
-		}
-		
-		private void vefifyAndTurnOffGenerator() {
-			if(generator.isTurnedOn()){
-				generator.turnOffGenerator();
-			}
-		}
-		
-		private void adjustGeneration(){
-			if(shouldAstaticRegulationBeTurnedOn){
-				vefifyAndTurnOnAstaticRegulation();
-			}else{
-				vefifyAndTurnOffAstaticRegulation();
-				adjustGenerationPower();
-			}
-		}
-		
-		private void vefifyAndTurnOnAstaticRegulation(){
-			if(! generator.isAstaticRegulationTurnedOn()){
-				generator.turnOnAstaticRegulation();
-			}
-		}
-		
-		private void vefifyAndTurnOffAstaticRegulation(){
-			if(generator.isAstaticRegulationTurnedOn()){
-				generator.turnOffAstaticRegulation();
-			}
-		}
-		
-		private void adjustGenerationPower(){
-			LocalTime currentTime = simulation.getTimeInSimulation();
-			float newGenerationPower = generationCurve.getPowerOnTimeInMW(currentTime);
-			generator.setPowerAtRequiredFrequency(newGenerationPower);
-		}
+	private void getTimeAndAdjustGenerators(){
+		LocalTime currentTime = simulation.getTimeInSimulation();
+		controller.adjustGenerators(curentSchedule, currentTime);
 	}
 }

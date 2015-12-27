@@ -14,6 +14,7 @@ import org.junit.rules.ExpectedException;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
+import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
@@ -25,6 +26,7 @@ import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 
 public class PowerStationTest{
 	private ElectricPowerSystemSimulation simulation;
+	private MainControlPanel controlPanel;
 	private PowerStationParameters stationParameters;
 	private PowerStationState stationState;
 	private PowerStation station;
@@ -50,8 +52,11 @@ public class PowerStationTest{
 	@Before
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
-		station = new PowerStation(POWER_STATION_NUMBER, simulation);
+		station = new PowerStation(POWER_STATION_NUMBER);
+		controlPanel = mock(MainControlPanel.class);
 		
+		station.setSimulation(simulation);
+		station.setMainControlPanel(controlPanel);
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		when(simulation.getTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 	}
@@ -170,6 +175,15 @@ public class PowerStationTest{
 		
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallFirstGenerator();
+	}
+	
+	@Test
+	public void exceptionIfMainControlPanelIsNull(){
+		expectedEx.expect(PowerStationException.class);
+	    expectedEx.expectMessage("Control panel must not be null.");
+		
+	    station.setMainControlPanel(null);
+	    station.calculateGenerationInMW();
 	}
 	
 	@Test
