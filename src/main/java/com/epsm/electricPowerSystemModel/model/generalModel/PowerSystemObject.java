@@ -1,15 +1,20 @@
-package com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.generalModel;
 
 import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public abstract class PowerSystemObject implements DispatchingObject{
-	
+	protected ElectricPowerSystemSimulation simulation;
 	private TimeService timeService;
 	private Class<? extends DispatcherMessage> expectedMessageType;
 	private Dispatcher dispatcher;
@@ -21,10 +26,13 @@ public abstract class PowerSystemObject implements DispatchingObject{
 	private String stateClassName;
 	private Logger logger;
 
-	public PowerSystemObject(TimeService timeService, Dispatcher dispatcher,
-			Class<? extends DispatcherMessage> expectedMessageType) {
+	public PowerSystemObject(ElectricPowerSystemSimulation simulation, TimeService timeService,
+			Dispatcher dispatcher, Class<? extends DispatcherMessage> expectedMessageType) {
 		
-		if(timeService == null){
+		if(simulation == null){
+			String message = "PowerSystem object constructor: simulation must not be null.";
+			throw new DispatchingException(message);
+		}else if(timeService == null){
 			String message = "PowerSystem object constructor: timeService must not be null.";
 			throw new DispatchingException(message);
 		}else if(dispatcher == null){
@@ -35,6 +43,7 @@ public abstract class PowerSystemObject implements DispatchingObject{
 			throw new DispatchingException(message);
 		}
 		
+		this.simulation = simulation;
 		this.timeService = timeService;
 		this.dispatcher = dispatcher;
 		this.expectedMessageType = expectedMessageType;

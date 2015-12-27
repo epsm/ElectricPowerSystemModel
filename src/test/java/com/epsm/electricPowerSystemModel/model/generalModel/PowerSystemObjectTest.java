@@ -1,4 +1,4 @@
-package com.epsm.electricPowerSystemModel.model.dispatch;
+package com.epsm.electricPowerSystemModel.model.generalModel;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -14,10 +14,19 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.PowerSystemObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class PowerSystemObjectTest{
+	private ElectricPowerSystemSimulation simulation;
 	private PowerSystemObject object;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
@@ -30,10 +39,11 @@ public class PowerSystemObjectTest{
 	
 	@Before
 	public void initialize(){
+		simulation = mock(ElectricPowerSystemSimulation.class);
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);
 		expectedMessageType = DispatcherMessage.class;
-		object = new Child(timeService, dispatcher, expectedMessageType);
+		object = new AbstractImpl(simulation, timeService, dispatcher, expectedMessageType);
 		message = new DispatcherMessage(START_TIME);
 
 		when(timeService.getCurrentTime()).thenReturn(START_TIME);
@@ -104,8 +114,8 @@ public class PowerSystemObjectTest{
 	@Test
 	public void doNothingIfAcceptedMessageClassIsNotExpected(){
 		message = new  PowerStationGenerationSchedule(1);
-		object = new ChildExceptionIfInteractWithOverridenMethods(
-				timeService, dispatcher, expectedMessageType);
+		object = new ImplExceptionIfInteractWithOverridenMethods(
+				simulation, timeService, dispatcher, expectedMessageType);
 		
 		object.interactWithDisparcher();
 		object.acceptMessage(message);
@@ -117,8 +127,8 @@ public class PowerSystemObjectTest{
 	@Test
 	public void doNothingIfAcceptedMessageIsNull(){
 		message = null;
-		object = new ChildExceptionIfInteractWithOverridenMethods(
-				timeService, dispatcher, expectedMessageType);
+		object = new ImplExceptionIfInteractWithOverridenMethods(
+				simulation, timeService, dispatcher, expectedMessageType);
 		
 		object.interactWithDisparcher();
 		object.acceptMessage(message);
@@ -132,7 +142,7 @@ public class PowerSystemObjectTest{
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerObjectState must not be null.");
 	    
-	    object = new ChildReturnsNullWithGetState(timeService, dispatcher, expectedMessageType);
+	    object = new ImplReturnsNullWithGetState(simulation, timeService, dispatcher, expectedMessageType);
 	    
 	    object.interactWithDisparcher();
 		object.acceptMessage(message);
@@ -140,11 +150,19 @@ public class PowerSystemObjectTest{
 	}
 	
 	@Test
+	public void exceptionInConstructorIfSimulationIsNull(){
+		expectedEx.expect(DispatchingException.class);
+	    expectedEx.expectMessage("PowerSystem object constructor: simulation must not be null.");
+	
+	    object = new AbstractImpl(null, timeService, dispatcher, expectedMessageType);
+	}
+	
+	@Test
 	public void exceptionInConstructorIfTimeServiseIsNull(){
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerSystem object constructor: timeService must not be null.");
 	
-	    object = new Child(null, dispatcher, expectedMessageType);
+	    object = new AbstractImpl(simulation, null, dispatcher, expectedMessageType);
 	}
 	
 	@Test
@@ -152,7 +170,7 @@ public class PowerSystemObjectTest{
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerSystem object constructor: dispatcher must not be null.");
 	
-	    object = new Child(timeService, null, expectedMessageType);
+	    object = new AbstractImpl(simulation, timeService, null, expectedMessageType);
 	}
 	
 	@Test
@@ -160,14 +178,14 @@ public class PowerSystemObjectTest{
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerSystem object constructor: expectedMessageType must not be null.");
 	
-	    object = new Child(timeService, dispatcher, null);
+	    object = new AbstractImpl(simulation, timeService, dispatcher, null);
 	}
 	
-	private class Child extends PowerSystemObject{
-		public Child(TimeService timeService, Dispatcher dispatcher,
-				Class<? extends DispatcherMessage> expectedMessageType) {
+	private class AbstractImpl extends PowerSystemObject{
+		public AbstractImpl(ElectricPowerSystemSimulation simulation, TimeService timeService,
+				Dispatcher dispatcher, 	Class<? extends DispatcherMessage> expectedMessageType) {
 
-			super(timeService, dispatcher, expectedMessageType);
+			super(simulation, timeService, dispatcher, expectedMessageType);
 		}
 
 		@Override
@@ -180,11 +198,13 @@ public class PowerSystemObjectTest{
 		}
 	}
 	
-	private class ChildReturnsNullWithGetState extends Child{
+	private class ImplReturnsNullWithGetState extends AbstractImpl{
 
-		public ChildReturnsNullWithGetState(TimeService timeService, Dispatcher dispatcher,
+		public ImplReturnsNullWithGetState(ElectricPowerSystemSimulation simulation,
+				TimeService timeService, Dispatcher dispatcher,
 				Class<? extends DispatcherMessage> expectedMessageType) {
-			super(timeService, dispatcher, expectedMessageType);
+			
+			super(simulation, timeService, dispatcher, expectedMessageType);
 		}
 		
 		@Override
@@ -193,11 +213,12 @@ public class PowerSystemObjectTest{
 		}
 	}
 	
-	private class ChildExceptionIfInteractWithOverridenMethods extends Child{
-		public ChildExceptionIfInteractWithOverridenMethods(TimeService timeService, Dispatcher dispatcher,
+	private class ImplExceptionIfInteractWithOverridenMethods extends AbstractImpl{
+		public ImplExceptionIfInteractWithOverridenMethods(ElectricPowerSystemSimulation simulation,
+				TimeService timeService, Dispatcher dispatcher,
 				Class<? extends DispatcherMessage> expectedMessageType) {
 
-			super(timeService, dispatcher, expectedMessageType);
+			super(simulation, timeService, dispatcher, expectedMessageType);
 		}
 
 		@Override

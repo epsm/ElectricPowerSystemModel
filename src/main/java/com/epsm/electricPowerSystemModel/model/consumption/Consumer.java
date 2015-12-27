@@ -5,28 +5,22 @@ import java.time.LocalTime;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerSystemObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.PowerSystemObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public abstract class Consumer extends PowerSystemObject{
 	protected int number;
-	protected ElectricPowerSystemSimulation simulation;
 	protected float degreeOnDependingOfFrequency;
 	
-	public Consumer(TimeService timeService, Dispatcher dispatcher, 
-			Class<? extends DispatcherMessage>  expectedMessageType,
-			String childNameForLogging, int consumerNumber,
-			ElectricPowerSystemSimulation simulation){
+	public Consumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
+			Dispatcher dispatcher, Class<? extends DispatcherMessage>  expectedMessageType,
+			String childNameForLogging, int consumerNumber){
 		
-		super(timeService, dispatcher, expectedMessageType);
+		super(simulation, timeService, dispatcher, expectedMessageType);
 		this.number = consumerNumber;
 		this.simulation = simulation;
-		
-		if(simulation == null){
-			throw new ConsumptionException("Consumer: simulation must not be null.");
-		}
 	}
 
 	protected float calculateLoadCountingFrequency(float load, float frequency){

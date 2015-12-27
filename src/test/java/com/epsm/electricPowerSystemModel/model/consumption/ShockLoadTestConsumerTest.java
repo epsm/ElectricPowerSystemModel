@@ -30,8 +30,6 @@ public class ShockLoadTestConsumerTest {
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private Class<? extends DispatcherMessage> expectedMessageType;
-	
-	
 	private final int WORK_TIME = 300; 
 	private final int PAUSE_TIME = 500;
 	private final int CONSUMER_NUMBER = 664;
@@ -46,7 +44,7 @@ public class ShockLoadTestConsumerTest {
 		expectedMessageType = DispatcherMessage.class;
 		
 		consumer = new ShockLoadConsumer(
-				timeService, dispatcher, expectedMessageType, null, CONSUMER_NUMBER, simulation);
+				simulation, timeService, dispatcher, expectedMessageType, null, CONSUMER_NUMBER);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		

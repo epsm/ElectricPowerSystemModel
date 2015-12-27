@@ -1,33 +1,39 @@
 package com.epsm.electricPowerSystemModel.model.consumption;
 
+import static org.mockito.Matchers.anyFloat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.junit.Rule;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
-import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
 public class ConsumerTest {
-	private ElectricPowerSystemSimulation simulation = null;
-	private Dispatcher dispatcher = mock(Dispatcher.class);
-	private TimeService timeService  = mock(TimeService.class);
-	private Class<? extends DispatcherMessage> expectedMessageType = DispatcherMessage.class;
-	private int consumerNumber = 1;
-	private String childNameForLogging = "1";
+	private Consumer consumer;
+	private final float DEGREE_DEPENDENCY_ON_FREQUENCY = 3;
+	private final float FREQUENCY = 49.5f;
+	private final float LOAD = 100;
 	
-	@Rule
-	public ExpectedException expectedEx = ExpectedException.none();
+	@Before
+	public void initialize(){
+		consumer = mock(Consumer.class);
+
+		when(consumer.calculateLoadCountingFrequency(anyFloat(), anyFloat())).thenCallRealMethod();
+		consumer.degreeOnDependingOfFrequency = DEGREE_DEPENDENCY_ON_FREQUENCY;
+	}
 	
 	@Test
-	public void exceptionIfSimulationInConstructorIsNull(){
-		expectedEx.expect(ConsumptionException.class);
-	    expectedEx.expectMessage("Consumer: simulation must not be null.");
+	public void isCalculatedLoadCountingFrequencyEqualsToExpected(){
+		float expectedLoad = calculateLoadCountingFrequency(LOAD, FREQUENCY);
+		float calculatedLoad = consumer.calculateLoadCountingFrequency(LOAD, FREQUENCY);
 		
-	    new ShockLoadConsumer(timeService, dispatcher, expectedMessageType,
-				childNameForLogging, consumerNumber, simulation);
+		Assert.assertEquals(expectedLoad, calculatedLoad, 0);
+	}
+	
+	private float calculateLoadCountingFrequency(float load, float frequency){
+		return (float)Math.pow((frequency / GlobalConstants.STANDART_FREQUENCY),
+				DEGREE_DEPENDENCY_ON_FREQUENCY) * load;
 	}
 }

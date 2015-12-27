@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.PowerSystemObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
@@ -21,11 +22,11 @@ public class MainControlPanel extends PowerSystemObject{
 	private PowerStationParameters parameters;
 	private Logger logger;
 	
-	public MainControlPanel(TimeService timeService, Dispatcher dispatcher,
-			Class<? extends DispatcherMessage> expectedMessageType,
-			ElectricPowerSystemSimulation simulation, PowerStation station) {
+	public MainControlPanel(ElectricPowerSystemSimulation simulation, TimeService timeService,
+			Dispatcher dispatcher, Class<? extends DispatcherMessage> expectedMessageType,
+			PowerStation station) {
 		
-		super(timeService, dispatcher, expectedMessageType);
+		super(simulation, timeService, dispatcher, expectedMessageType);
 		station.setMainControlPanel(this);
 		station.setSimulation(simulation);
 		

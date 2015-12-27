@@ -27,12 +27,11 @@ public class ShockLoadConsumer extends Consumer{
 	private Random random = new Random();
 	private Logger logger;
 	
-	public ShockLoadConsumer(TimeService timeService, Dispatcher dispatcher, 
-			Class<? extends DispatcherMessage>  expectedMessageType,
-			String childNameForLogging, int consumerNumber,
-			ElectricPowerSystemSimulation simulation) {
+	public ShockLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
+			Dispatcher dispatcher, 	Class<? extends DispatcherMessage>  expectedMessageType,
+			String childNameForLogging, int consumerNumber) {
 		
-		super(timeService, dispatcher, expectedMessageType, childNameForLogging, consumerNumber, simulation); 
+		super(simulation, timeService, dispatcher, expectedMessageType, childNameForLogging, consumerNumber); 
 
 		logger = LoggerFactory.getLogger(ShockLoadConsumer.class);
 		logger.info("Shock load consumer №{} created.", number);

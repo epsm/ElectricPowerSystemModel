@@ -41,7 +41,7 @@ public class ScheduledLoadConsumerTest{
 		expectedMessageType = DispatcherMessage.class;
 		
 		consumer = new ScheduledLoadConsumer(
-				timeService, dispatcher, expectedMessageType, null, CONSUMER_NUMBER, simulation);
+				simulation, timeService, dispatcher, expectedMessageType, null, CONSUMER_NUMBER);
 		approximateLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 		
 		consumer.setApproximateLoadByHoursOnDayInPercent(approximateLoadByHoursInPercent);

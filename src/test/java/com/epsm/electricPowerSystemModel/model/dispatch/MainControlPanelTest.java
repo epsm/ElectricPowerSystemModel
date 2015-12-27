@@ -29,14 +29,15 @@ public class MainControlPanelTest {
 	private LoadCurve generationCurve;
 	private Generator generator_1;
 	private Generator generator_2;
+	
 	private LocalTime CONSTANT_TIME_IN_MOCK_SIMULATION = LocalTime.NOON;
 	
 	@Before
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
-		stationControlPanel = new MainControlPanel();
+		stationControlPanel = new MainControlPanel(simulation, null, null, null, null);
 		stationGenerationSchedule = new PowerStationGenerationSchedule(1);
-		PowerStation station = new PowerStation(1, simulation);
+		PowerStation station = new PowerStation(1);
 		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		Generator g_1 = new Generator(1);
 		Generator g_2 = new Generator(2);

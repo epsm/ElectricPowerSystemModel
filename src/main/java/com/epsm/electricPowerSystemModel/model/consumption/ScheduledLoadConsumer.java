@@ -26,12 +26,11 @@ public class ScheduledLoadConsumer extends Consumer{
 	private float currentFrequency;
 	private Logger logger;
 	
-	public ScheduledLoadConsumer(TimeService timeService, Dispatcher dispatcher, 
-			Class<? extends DispatcherMessage>  expectedMessageType,
-			String childNameForLogging, int consumerNumber,
-			ElectricPowerSystemSimulation simulation) {
+	public ScheduledLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
+			Dispatcher dispatcher, Class<? extends DispatcherMessage>  expectedMessageType,
+			String childNameForLogging, int consumerNumber){
 		
-		super(timeService, dispatcher, expectedMessageType, childNameForLogging, consumerNumber, simulation); 
+		super(simulation, timeService, dispatcher, expectedMessageType, childNameForLogging, consumerNumber); 
 		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
 		logger.info("Scheduled load consumer №{}  created.", number);
 	}
