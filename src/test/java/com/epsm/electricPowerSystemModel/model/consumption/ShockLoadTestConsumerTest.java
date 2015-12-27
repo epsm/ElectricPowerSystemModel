@@ -44,7 +44,7 @@ public class ShockLoadTestConsumerTest {
 		expectedMessageType = DispatcherMessage.class;
 		
 		consumer = new ShockLoadConsumer(
-				simulation, timeService, dispatcher, expectedMessageType, null, CONSUMER_NUMBER);
+				simulation, timeService, dispatcher, expectedMessageType, CONSUMER_NUMBER);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		

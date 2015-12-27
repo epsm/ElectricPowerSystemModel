@@ -29,9 +29,9 @@ public class ShockLoadConsumer extends Consumer{
 	
 	public ShockLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
 			Dispatcher dispatcher, 	Class<? extends DispatcherMessage>  expectedMessageType,
-			String childNameForLogging, int consumerNumber) {
+			int consumerNumber) {
 		
-		super(simulation, timeService, dispatcher, expectedMessageType, childNameForLogging, consumerNumber); 
+		super(simulation, timeService, dispatcher, expectedMessageType, consumerNumber); 
 
 		logger = LoggerFactory.getLogger(ShockLoadConsumer.class);
 		logger.info("Shock load consumer №{} created.", number);

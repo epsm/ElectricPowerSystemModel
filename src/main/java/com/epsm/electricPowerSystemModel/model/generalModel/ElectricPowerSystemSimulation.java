@@ -11,4 +11,6 @@ public interface ElectricPowerSystemSimulation{
 	public LocalTime getTimeInSimulation();
 	public void addPowerConsumer(Consumer powerConsumer);
 	public void addPowerStation(PowerStation powerStation);
+	public PowerSystemObject getPowerStation(int powerStationNumber);
+	public PowerSystemObject getConsumer(int consumerNumber);
 }

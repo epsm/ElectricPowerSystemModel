@@ -28,9 +28,9 @@ public class ScheduledLoadConsumer extends Consumer{
 	
 	public ScheduledLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
 			Dispatcher dispatcher, Class<? extends DispatcherMessage>  expectedMessageType,
-			String childNameForLogging, int consumerNumber){
+			int consumerNumber){
 		
-		super(simulation, timeService, dispatcher, expectedMessageType, childNameForLogging, consumerNumber); 
+		super(simulation, timeService, dispatcher, expectedMessageType, consumerNumber); 
 		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
 		logger.info("Scheduled load consumer №{}  created.", number);
 	}
@@ -61,8 +61,8 @@ public class ScheduledLoadConsumer extends Consumer{
 	}
 	
 	private void calculateLoadCurveOnThisDay(){
-		loadCurveOnDay = factory.getRandomCurve(
-				approximateLoadByHoursOnDayInPercent, maxLoadWithoutFluctuationsInMW, randomFluctuationsInPercent);
+		loadCurveOnDay = factory.getRandomCurve(approximateLoadByHoursOnDayInPercent,
+				maxLoadWithoutFluctuationsInMW, randomFluctuationsInPercent);
 	}
 
 	private void saveRequestTime(){

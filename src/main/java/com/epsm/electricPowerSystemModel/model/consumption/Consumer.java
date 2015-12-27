@@ -16,7 +16,7 @@ public abstract class Consumer extends PowerSystemObject{
 	
 	public Consumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
 			Dispatcher dispatcher, Class<? extends DispatcherMessage>  expectedMessageType,
-			String childNameForLogging, int consumerNumber){
+			int consumerNumber){
 		
 		super(simulation, timeService, dispatcher, expectedMessageType);
 		this.number = consumerNumber;

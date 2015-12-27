@@ -12,8 +12,6 @@ import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
 public class MainControlPanel extends PowerSystemObject{
-
-	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station;
 	private GeneratorsController controller;
 	private PowerStationGenerationSchedule curentSchedule;
@@ -30,7 +28,6 @@ public class MainControlPanel extends PowerSystemObject{
 		station.setMainControlPanel(this);
 		station.setSimulation(simulation);
 		
-		this.simulation = simulation;
 		this.station = station;
 		controller = new GeneratorsController(station);
 		validator = new GenerationScheduleValidator();

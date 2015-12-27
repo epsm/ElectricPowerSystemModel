@@ -104,4 +104,16 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	public LocalTime getTimeInSimulation(){
 		return currentTimeInSimulation;
 	}
+
+	@Override
+	public PowerSystemObject getPowerStation(int powerStationNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PowerSystemObject getConsumer(int consumerNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
