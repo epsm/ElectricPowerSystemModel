@@ -6,7 +6,7 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
 public class StateSender {
 	private Dispatcher dispatcher;
@@ -36,12 +36,12 @@ public class StateSender {
 	
 	private void createTimer(){
 		sendingTimer = new Timer();
-		logger.info(sourceType + " will be sending reports to dispatcher.");
+		logger.info("{} will be sending reports to dispatcher.", sourceType);
 	}
 	
 	private void startSending(){
 		sendingTimer.schedule(task, DELAY_BEFORE_SENDING_REPORTS,
-				GlobalConstatnts.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS);
+				GlobalConstants.PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS);
 	}
 
 	public void setDispatcher(Dispatcher dispatcher) {
@@ -57,7 +57,7 @@ public class StateSender {
 			getStateFromSource();
 			sendStateToDispatcher();
 			
-			logger.info(sourceType + ": {}", state);
+			logger.info("{}: {}", sourceType, state);
 		}
 		
 		private void setThreadName(){

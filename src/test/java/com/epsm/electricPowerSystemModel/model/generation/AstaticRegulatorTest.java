@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.mockito.Mockito.*;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
 import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import com.epsm.electricPowerSystemModel.model.generation.Generator;
@@ -43,7 +43,7 @@ public class AstaticRegulatorTest {
 	
 	private void prepareMockSimulationWithLowFrequency(){
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(
-				(float)(GlobalConstatnts.STANDART_FREQUENCY - 0.1));
+				(float)(GlobalConstants.STANDART_FREQUENCY - 0.1));
 	}
 	
 	@Test
@@ -57,7 +57,7 @@ public class AstaticRegulatorTest {
 	
 	private void prepareMockSimulationWithHighFrequency(){
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(
-				(float)(GlobalConstatnts.STANDART_FREQUENCY + 0.1));
+				(float)(GlobalConstants.STANDART_FREQUENCY + 0.1));
 	}
 	
 	@Test
@@ -72,7 +72,7 @@ public class AstaticRegulatorTest {
 	
 	private void prepareMockSimulationWithLittleLowerButPermissibleFrequency(){
 		when(simulation.getFrequencyInPowerSystem()).
-		thenReturn((float)(GlobalConstatnts.STANDART_FREQUENCY - 0.02));
+		thenReturn((float)(GlobalConstants.STANDART_FREQUENCY - 0.02));
 	}
 	
 	@Test
@@ -86,7 +86,7 @@ public class AstaticRegulatorTest {
 	
 	private void prepareMockSimulationWithLittleHigherButPermissibleFrequency(){
 		when(simulation.getFrequencyInPowerSystem()).
-		thenReturn((float)(GlobalConstatnts.STANDART_FREQUENCY + 0.02));
+		thenReturn((float)(GlobalConstants.STANDART_FREQUENCY + 0.02));
 	}
 	
 	@Test

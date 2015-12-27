@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Set;
 
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -33,7 +33,7 @@ public class PowerStationState extends PowerObjectState{
 		
 		stringBuilder = new StringBuilder();
 		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-		numberFormatter = new DecimalFormat("00.000", GlobalConstatnts.SYMBOLS);
+		numberFormatter = new DecimalFormat("00.000", GlobalConstants.SYMBOLS);
 	}
 
 	public int getPowerStationNumber() {

@@ -2,7 +2,7 @@ package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.text.DecimalFormat;
 
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
 public class GeneratorState extends PowerObjectState implements Comparable<GeneratorState>{
 	private  int generatorNumber;
@@ -15,7 +15,7 @@ public class GeneratorState extends PowerObjectState implements Comparable<Gener
 		this.generationInWM = generationInWM;
 
 		stringBuilder = new StringBuilder();
-		formatter = new DecimalFormat("0000.000", GlobalConstatnts.SYMBOLS);
+		formatter = new DecimalFormat("0000.000", GlobalConstants.SYMBOLS);
 	}
 
 	public int getGeneratorNumber() {

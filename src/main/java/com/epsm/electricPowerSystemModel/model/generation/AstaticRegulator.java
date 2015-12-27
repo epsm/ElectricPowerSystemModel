@@ -1,7 +1,7 @@
 package com.epsm.electricPowerSystemModel.model.generation;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
 public class AstaticRegulator {
 	private ElectricPowerSystemSimulation simulation;
@@ -24,13 +24,13 @@ public class AstaticRegulator {
 	}
 
 	private boolean isFrequencyInNonSensivityLimit(){
-		float deviation = Math.abs(currentFrequency - GlobalConstatnts.STANDART_FREQUENCY);
+		float deviation = Math.abs(currentFrequency - GlobalConstants.STANDART_FREQUENCY);
 		
 		return deviation <= ASTATIC_REGULATION_SENSIVITY;
 	}
 
 	private void adjustPowerAtRequiredFrequency(){
-		if(currentFrequency < GlobalConstatnts.STANDART_FREQUENCY){
+		if(currentFrequency < GlobalConstants.STANDART_FREQUENCY){
 			increasePowerAtRequiredFrequency();
 		}else{
 			decreasePowerAtRequiredFrequency();

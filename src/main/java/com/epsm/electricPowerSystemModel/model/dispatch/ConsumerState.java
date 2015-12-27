@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
 public class ConsumerState extends PowerObjectState{
 	private int consumerNumber;
@@ -21,7 +21,7 @@ public class ConsumerState extends PowerObjectState{
 		
 		stringBuilder = new StringBuilder();
 		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-		numberFormatter = new DecimalFormat("000.000", GlobalConstatnts.SYMBOLS);
+		numberFormatter = new DecimalFormat("000.000", GlobalConstants.SYMBOLS);
 	}
 
 	public int getConsumerNumber() {

@@ -1,7 +1,7 @@
 package com.epsm.electricPowerSystemModel.model.generation;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
 public class StaticRegulator {
 	private ElectricPowerSystemSimulation simulation;
@@ -14,7 +14,7 @@ public class StaticRegulator {
 	public StaticRegulator(ElectricPowerSystemSimulation simulation, Generator generator) {
 		this.simulation = simulation;
 		this.generator = generator;
-		requiredFrequency = GlobalConstatnts.STANDART_FREQUENCY;
+		requiredFrequency = GlobalConstants.STANDART_FREQUENCY;
 		coefficientOfStatism = 0.01f;
 	}
 

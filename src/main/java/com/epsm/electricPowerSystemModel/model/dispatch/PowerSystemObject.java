@@ -1,63 +1,138 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.time.LocalDateTime;
-import java.util.TimerTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
-public abstract class PowerSystemObject implements ObjectToBeDispatching{
+public abstract class PowerSystemObject implements DispatchingObject{
 	
 	private TimeService timeService;
 	private String childNameForLogging;
-	private Object expectedMessageType;
+	private Class<? extends DispatcherMessage> expectedMessageType;
 	private Dispatcher dispatcher;
-	private LocalDateTime lastMessageFromDispatcherTime;
-	private DispatcherMessage message;
-	private volatile boolean connectionWithDispatcherActive;
+	private LocalDateTime timeWhenRecievedLastMessage;
+	private LocalDateTime timeWhenSentLastMessage;
+	private LocalDateTime currentTime;
+	private Logger logger;
 
-	public PowerSystemObject(Object expectedMessageType, String childNameForLogging) {
+	public PowerSystemObject(TimeService timeService, Dispatcher dispatcher,
+			Class<? extends DispatcherMessage> expectedMessageType, String childNameForLogging) {
+		
+		if(timeService == null){
+			String message = "PowerSystem object constructor: timeService must not be null.";
+			throw new DispatchingException(message);
+		}else if(dispatcher == null){
+			String message = "PowerSystem object constructor: dispatcher must not be null.";
+			throw new DispatchingException(message);
+		}else if(expectedMessageType == null){
+			String message = "PowerSystem object constructor: expectedMessageType must not be null.";
+			throw new DispatchingException(message);
+		}else if(childNameForLogging == null){
+			String message = "PowerSystem object constructor: childNameForLogging must not be null.";
+			throw new DispatchingException(message);
+		}else if(childNameForLogging.trim().equals("")){
+			String message = "PowerSystem object constructor: childNameForLogging must not be empty.";
+			throw new DispatchingException(message);
+		}
+		
+		this.timeService = timeService;
+		this.dispatcher = dispatcher;
 		this.expectedMessageType = expectedMessageType;
+		this.childNameForLogging = childNameForLogging;
+		timeWhenRecievedLastMessage = LocalDateTime.MIN;
+		timeWhenSentLastMessage = LocalDateTime.MIN;
+		logger = LoggerFactory.getLogger(PowerSystemObject.class);
 	}
 	
 	@Override
-	public void acceptMessage(DispatcherMessage message) {
-		this.message = message;
-		
-		if(isMessageTypeEqualsToExpected()){
-			setConnectionActive();
+	public final void acceptMessage(DispatcherMessage message) {
+		if(message == null){
+			logger.warn("{} recieved null from dispatcher",	childNameForLogging);
+			return;
+		}
+
+		if(isMessageTypeEqualsToExpected(message)){
 			setLastMessageTime();
+			processDispatcherMessage(message);
+			
+			logger.info("{} recieved {} from dispatcher",
+					childNameForLogging, message.getClass().getSimpleName());
+		}else{
+			logger.warn("{} recieved {} from dispatcher",
+					childNameForLogging, message.getClass().getSimpleName());
 		}
 	}
 	
-	private boolean isMessageTypeEqualsToExpected(){
-		return message.getClass().equals(expectedMessageType.getClass());
-	}
-	
-	private void setConnectionActive(){
-		connectionWithDispatcherActive = true;
+	private boolean isMessageTypeEqualsToExpected(DispatcherMessage message){
+		return message.getClass().equals(expectedMessageType);
 	}
 	
 	private void setLastMessageTime(){
-		lastMessageFromDispatcherTime = timeService.getCurrentTime();
-	}
-	
-	 
-	
-	
-	
-	
-	private void connectToDispatcher(){
-		dispatcher.connectToPowerObject(this);
-	}
-	
-	private class Task extends TimerTask{
-
-		@Override
-		public void run() {
-			
-			
-		}
+		timeWhenRecievedLastMessage = timeService.getCurrentTime();
 	}
 	
 	protected abstract void processDispatcherMessage(DispatcherMessage message);
+	
+	@Override
+	public final void interactWithDisparcher(){
+		getCurrentTime();
+		
+		if(isConnectionWithDispatcherActive()){
+			if(isItTimeToSentMessage()){
+				sendStateToDispatcher();
+				setTimeWhenSentLastMessage();
+			}
+		}else{
+			establishConnectionToDispatcher();
+		}
+	}
+	
+	private void getCurrentTime(){
+		currentTime = timeService.getCurrentTime();
+	}
+	
+	private boolean isConnectionWithDispatcherActive(){
+		return timeWhenRecievedLastMessage.plusSeconds(
+				GlobalConstants.ACCEPTABLE_PAUSE_BETWEEN_MESSAGES_FROM_DISPATCHER_IN_SECCONDS)
+				.isAfter(currentTime);
+	}
+	
+	private boolean isItTimeToSentMessage(){
+		System.out.println("current time" + currentTime);
+		System.out.println("last message" + timeWhenSentLastMessage);
+		System.out.println(timeWhenSentLastMessage.plusSeconds(
+				GlobalConstants.PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECCONDS)
+				.isBefore(currentTime));
+		
+		
+		return timeWhenSentLastMessage.plusSeconds(
+				GlobalConstants.PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECCONDS)
+				.isBefore(currentTime);
+	}
+	
+	private void sendStateToDispatcher(){
+		PowerObjectState state = getState();
+		
+		if(state == null){
+			String message = "PowerObjectState must not be null.";
+			throw new DispatchingException(message);
+		}
+		
+		dispatcher.acceptReport(state);
+		logger.info("{} sent {} from dispatcher", childNameForLogging, state.getClass().getSimpleName());
+	}
+	
+	protected abstract PowerObjectState getState();
+	
+	private void setTimeWhenSentLastMessage(){
+		timeWhenSentLastMessage = currentTime;
+	}
+	
+	private void establishConnectionToDispatcher(){
+		dispatcher.connectToPowerObject(this);
+	}
 }

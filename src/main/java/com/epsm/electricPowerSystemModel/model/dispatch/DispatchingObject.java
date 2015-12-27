@@ -1,6 +1,6 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-public interface ObjectToBeDispatching {
+public interface DispatchingObject {
 	public void acceptMessage(DispatcherMessage message);
-	public void doNextStep();
+	public void interactWithDisparcher();
 }

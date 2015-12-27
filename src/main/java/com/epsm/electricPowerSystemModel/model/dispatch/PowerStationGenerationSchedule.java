@@ -1,5 +1,6 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class PowerStationGenerationSchedule extends DispatcherMessage{
 	private GeneratorGenerationSchedule generatorSchedule;
 	
 	public  PowerStationGenerationSchedule(int powerStationNumber){
+		super(LocalDateTime.now());
 		this.powerStationNumber = powerStationNumber;
 	}
 	

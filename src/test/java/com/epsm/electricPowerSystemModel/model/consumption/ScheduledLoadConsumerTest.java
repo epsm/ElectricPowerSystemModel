@@ -11,7 +11,7 @@ import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
@@ -57,7 +57,7 @@ public class ScheduledLoadConsumerTest{
 			@Override
 			public void calculateNextStep() {
 				time = time.plusNanos(100_000_000);
-				frequency = (random.nextFloat() * GlobalConstatnts.STANDART_FREQUENCY * 
+				frequency = (random.nextFloat() * GlobalConstants.STANDART_FREQUENCY * 
 						possibleFluctuations);
 			}
 
@@ -115,7 +115,7 @@ public class ScheduledLoadConsumerTest{
 	
 	private float calculateLoadCountingFrequencyInMW(float load){
 		float currentFrequency = simulation.getFrequencyInPowerSystem();
-		float standartFrequency = GlobalConstatnts.STANDART_FREQUENCY;
+		float standartFrequency = GlobalConstants.STANDART_FREQUENCY;
 		float degreeOfDepending = consumer.getDegreeOnDependingOfFrequency();
 		
 		return (float)Math.pow(

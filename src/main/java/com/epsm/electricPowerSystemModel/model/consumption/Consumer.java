@@ -4,13 +4,13 @@ import java.time.LocalTime;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.ObjectToBeDispatching;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
 import com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
 import com.epsm.electricPowerSystemModel.model.dispatch.StateSenderSource;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
-public abstract class Consumer implements ObjectToBeDispatching, StateSenderSource{
+public abstract class Consumer implements DispatchingObject, StateSenderSource{
 	protected int number;
 	protected ElectricPowerSystemSimulation simulation;
 	protected float degreeOnDependingOfFrequency;
@@ -26,7 +26,7 @@ public abstract class Consumer implements ObjectToBeDispatching, StateSenderSour
 	}
 
 	protected float calculateLoadCountingFrequency(float load, float frequency){
-		return (float)Math.pow((frequency / GlobalConstatnts.STANDART_FREQUENCY),
+		return (float)Math.pow((frequency / GlobalConstants.STANDART_FREQUENCY),
 				degreeOnDependingOfFrequency) * load;
 	}
 	

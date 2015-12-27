@@ -17,7 +17,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generation.Generator;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
@@ -52,7 +52,7 @@ public class PowerStationTest{
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		station = new PowerStation(POWER_STATION_NUMBER, simulation);
 		
-		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstatnts.STANDART_FREQUENCY);
+		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		when(simulation.getTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 	}
 	

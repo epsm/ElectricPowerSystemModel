@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstatnts;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
 public class ShockLoadTestConsumerTest {
 	private ElectricPowerSystemSimulationImpl simulation;
@@ -35,7 +35,7 @@ public class ShockLoadTestConsumerTest {
 		turnOnTime = null;
 		turnOffTime = null;
 		
-		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstatnts.STANDART_FREQUENCY);
+		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		
 		consumer.setMaxLoad(100f);
 		consumer.setMaxWorkDurationInSeconds(WORK_TIME);

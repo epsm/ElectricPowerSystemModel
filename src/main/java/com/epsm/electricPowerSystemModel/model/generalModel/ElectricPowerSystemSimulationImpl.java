@@ -14,7 +14,7 @@ import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
 	private Set<PowerStation> powerStations;
 	private Set<Consumer> powerConsumers;
-	private float frequencyInPowerSystem = GlobalConstatnts.STANDART_FREQUENCY;
+	private float frequencyInPowerSystem = GlobalConstants.STANDART_FREQUENCY;
 	private LocalTime currentTimeInSimulation;
 	private Dispatcher dispatcher;
 	private final float TIME_CONASTNT = 2_000;
@@ -66,7 +66,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 			float totalLoad){
 		frequencyInPowerSystem = frequencyInPowerSystem + ((totalGeneration - 
 				totalLoad) / TIME_CONASTNT) * ((float)SIMULATION_STEP_IN_NANOS /
-				GlobalConstatnts.NANOS_IN_SECOND);
+				GlobalConstants.NANOS_IN_SECOND);
 	}
 	
 	private void changeTimeForStep(){
@@ -74,7 +74,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 
 	private boolean isFrequencyLowerThanNormal(){
-		float delta = Math.abs(GlobalConstatnts.STANDART_FREQUENCY - frequencyInPowerSystem);
+		float delta = Math.abs(GlobalConstants.STANDART_FREQUENCY - frequencyInPowerSystem);
 		
 		if(delta > ACCEPTABLE_FREQUENCY_DELTA){
 			return true;
