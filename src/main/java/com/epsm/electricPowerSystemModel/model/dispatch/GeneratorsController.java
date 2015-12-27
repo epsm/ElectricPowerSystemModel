@@ -2,7 +2,6 @@ package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.time.LocalTime;
 import java.util.Collection;
-import java.util.TimerTask;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.electricPowerSystemModel.model.generation.Generator;

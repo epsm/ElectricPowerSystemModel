@@ -34,7 +34,7 @@ public class MainControlPanel extends PowerSystemObject{
 		this.station = station;
 		controller = new GeneratorsController(station);
 		validator = new GenerationScheduleValidator();
-		logger = LoggerFactory.getLogger(MainControlPanel.class);
+		logger = LoggerFactory.getLogger(MainControlPanelTest.class);
 	}
 	
 	@Override
@@ -63,7 +63,6 @@ public class MainControlPanel extends PowerSystemObject{
 			validator.validate(receivedSchedule, parameters);
 			return true;
 		}catch (PowerStationException exception){
-			System.err.println(exception);
 			//TODO send request to dispatcher
 			logger.warn("Received ", exception);
 			return false;

@@ -22,7 +22,7 @@ public class AstaticRegulatorTest {
 	@Before
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
-		generator = new Generator(1);
+		generator = new Generator(simulation, 1);
 		astaticRegulator = new AstaticRegulator(simulation, generator);
 		staticRegulator = new StaticRegulator(simulation, generator);
 		

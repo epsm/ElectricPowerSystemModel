@@ -19,10 +19,6 @@ import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
-import com.epsm.electricPowerSystemModel.model.generation.Generator;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
-import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 
 public class PowerStationTest{
 	private ElectricPowerSystemSimulation simulation;

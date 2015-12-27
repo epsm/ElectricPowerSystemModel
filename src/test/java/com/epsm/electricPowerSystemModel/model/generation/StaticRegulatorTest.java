@@ -21,7 +21,7 @@ public class StaticRegulatorTest {
 	@Before
 	public void init(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
-		generator = new Generator(1);
+		generator = new Generator(simulation, 1);
 		staticRegulator = new StaticRegulator(simulation, generator);
 		
 		staticRegulator.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);

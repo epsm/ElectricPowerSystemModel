@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
+import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanelTest;
 import com.epsm.electricPowerSystemModel.model.dispatch.StateSender;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
@@ -80,7 +80,7 @@ public class DefaultConfigurator {
 	
 	private void createPowerStationAndAddToEnergySystem(){
 		PowerStation powerStation = new PowerStation(1, simulation);
-		MainControlPanel controlPanel = new MainControlPanel();
+		MainControlPanelTest controlPanel = new MainControlPanelTest();
 		StateSender controlPanelSender = new StateSender(controlPanel);
 		simulation.addPowerStation(powerStation);
 		

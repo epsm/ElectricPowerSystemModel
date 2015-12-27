@@ -18,7 +18,6 @@ import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemS
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.Generator;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
-import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 
 public class GeneratorControllerTest {
 	private ElectricPowerSystemSimulation simulation;
@@ -48,40 +47,35 @@ public class GeneratorControllerTest {
 		Generator g_2 = new Generator(simulation, 2);
 		generator_1 = spy(g_1);
 		generator_2 = spy(g_2);
-		StaticRegulator controlUnit_1 = new StaticRegulator(simulation, generator_1);
-		StaticRegulator controlUnit_2 = new StaticRegulator(simulation, generator_2);
 		
 		generator_1.setNominalPowerInMW(200);
 		generator_2.setNominalPowerInMW(200);
-		generator_1.setStaticRegulator(controlUnit_1);
-		generator_2.setStaticRegulator(controlUnit_2);
 		station.addGenerator(generator_1);
 		station.addGenerator(generator_2);
 		simulation.addPowerStation(station);
 	}
 	
-	/*@Test
+	@Test
 	public void mainControlPanelTurnsOnGeneratorIfItIsScheduledIndependentAreTheyTurnedOnOrOff()
 			throws InterruptedException{
 		prepareGenerationScheduleWithTurnedOnGenerators();
 		turnOnfirstAndTurnOffsecondGenerators();
-		stationControlPanel.acceptMessage(stationGenerationSchedule);
-		doNexStep();
+		doNextStep();
 
 		Assert.assertTrue(generator_1.isTurnedOn());
 		Assert.assertTrue(generator_2.isTurnedOn());
-	}*/
+	}
 	
-	private void doNexStep(){
-		stationControlPanel.interactWithDisparcher();
+	private void doNextStep(){
+		stationControlPanel.acceptMessage(stationGenerationSchedule);
 		simulation.calculateNextStep();
 	}
 	
-	/*private void prepareGenerationScheduleWithTurnedOnGenerators(){
+	private void prepareGenerationScheduleWithTurnedOnGenerators(){
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, false, generationCurve);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
 		fillStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);
-	}*/
+	}
 	
 	private void fillStationGenerationSchedule(
 			GeneratorGenerationSchedule genrationSchedule_1, GeneratorGenerationSchedule genrationSchedule_2){
@@ -89,7 +83,7 @@ public class GeneratorControllerTest {
 		stationGenerationSchedule.addGeneratorGenerationSchedule(genrationSchedule_2);
 	}
 	
-	/*private void turnOnfirstAndTurnOffsecondGenerators(){
+	private void turnOnfirstAndTurnOffsecondGenerators(){
 		generator_1.turnOnGenerator();
 		generator_2.turnOffGenerator();
 	}
@@ -99,8 +93,7 @@ public class GeneratorControllerTest {
 			throws InterruptedException{
 		prepareGenerationScheduleWithTwoTurnedOffGenerators();
 		turnOnfirstAndTurnOffsecondGenerators();
-		stationControlPanel.acceptMessage(stationGenerationSchedule);
-		doNexStep();
+		doNextStep();
 		
 		Assert.assertFalse(generator_1.isTurnedOn());
 		Assert.assertFalse(generator_2.isTurnedOn());
@@ -110,16 +103,15 @@ public class GeneratorControllerTest {
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, false, false, generationCurve);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, false, false, generationCurve);
 		fillStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);
-	}*/
+	}
 	
 	@Test
-	public void astaticRegulationWillBeTurnedOnIfItIsScheduledIndependentIsItTurnedOnOrOff() 
+	public void mainAstaticRegulationWillBeTurnedOnIfItIsScheduledIndependentIsItTurnedOnOrOff() 
 			throws InterruptedException{
 		prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOnAstaticRegulation();
 		turnOnBothGenerators();
 		turnOnAstaticRegulationOnfirstAndTurnOffItOnSecondGenerators();
-		stationControlPanel.acceptMessage(stationGenerationSchedule);
-		doNexStep();
+		doNextStep();
 
 		Assert.assertTrue(generator_1.isAstaticRegulationTurnedOn());
 		Assert.assertTrue(generator_2.isAstaticRegulationTurnedOn());
@@ -147,8 +139,7 @@ public class GeneratorControllerTest {
 		prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOffAstaticRegulation();
 		turnOnBothGenerators();
 		turnOnAstaticRegulationOnfirstAndTurnOffItOnSecondGenerators();
-		stationControlPanel.acceptMessage(stationGenerationSchedule);
-		doNexStep();
+		doNextStep();
 
 		Assert.assertFalse(generator_1.isAstaticRegulationTurnedOn());
 		Assert.assertFalse(generator_2.isAstaticRegulationTurnedOn());
@@ -165,8 +156,7 @@ public class GeneratorControllerTest {
 			throws InterruptedException{
 		prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOffAstaticRegulation();
 		prepareTurnedOnGeneratorsWithTurnedOffAstaticRegulation();
-		stationControlPanel.acceptMessage(stationGenerationSchedule);
-		doNexStep();
+		doNextStep();
 		isAdjustedGenerationsOfGeneratorsConformsScheduled();
 	}
 	
@@ -176,7 +166,7 @@ public class GeneratorControllerTest {
 	}
 	
 	private void isAdjustedGenerationsOfGeneratorsConformsScheduled(){
-		LocalTime timeInSimulation = simulation.getTimeInSimulation();
+		LocalTime timeInSimulation = simulation.getTimeInSimulation(); 
 		float expectedGenerations = generationCurve.getPowerOnTimeInMW(timeInSimulation);
 		float firstGeneratorGeneration = generator_1.getPowerAtRequiredFrequency();
 		float secondGeneratorGeneration = generator_2.getPowerAtRequiredFrequency();
@@ -188,9 +178,8 @@ public class GeneratorControllerTest {
 	@Test
 	public void mainControlPanelControlsGeneration() throws InterruptedException{
 		prepareGenerationScheduleWithAnyAllowableParameters();
-		stationControlPanel.acceptMessage(stationGenerationSchedule);
-		doNexStep();
-		wereGeneratorsBeenAdjusted();
+		doNextStep();
+		hasGeneratorsWereAdjusted();
 	}
 	
 	private void prepareGenerationScheduleWithAnyAllowableParameters(){
@@ -198,7 +187,7 @@ public class GeneratorControllerTest {
 		prepareTurnedOnGeneratorsWithTurnedOffAstaticRegulation();
 	}
 	
-	private void wereGeneratorsBeenAdjusted(){
+	private void hasGeneratorsWereAdjusted(){
 		verify(generator_1, atLeastOnce()).isTurnedOn();
 		verify(generator_2, atLeastOnce()).isTurnedOn();
 	}
