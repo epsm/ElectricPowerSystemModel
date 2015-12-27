@@ -16,6 +16,8 @@ public class StaticRegulator {
 		this.generator = generator;
 		requiredFrequency = GlobalConstants.STANDART_FREQUENCY;
 		coefficientOfStatism = 0.01f;
+		
+		generator.setStaticRegulator(this);
 	}
 
 	public float getGeneratorPowerInMW(){

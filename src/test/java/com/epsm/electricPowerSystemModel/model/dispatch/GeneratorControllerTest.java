@@ -1,7 +1,9 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import java.time.LocalTime;
 
@@ -10,20 +12,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorGenerationSchedule;
-import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
+import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
-import com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
 import com.epsm.electricPowerSystemModel.model.generation.Generator;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
-import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
-public class MainControlPanelTest {
+public class GeneratorControllerTest {
 	private ElectricPowerSystemSimulation simulation;
 	private MainControlPanel stationControlPanel;
 	private PowerStationGenerationSchedule stationGenerationSchedule;
@@ -51,35 +48,40 @@ public class MainControlPanelTest {
 		Generator g_2 = new Generator(simulation, 2);
 		generator_1 = spy(g_1);
 		generator_2 = spy(g_2);
+		StaticRegulator controlUnit_1 = new StaticRegulator(simulation, generator_1);
+		StaticRegulator controlUnit_2 = new StaticRegulator(simulation, generator_2);
 		
 		generator_1.setNominalPowerInMW(200);
 		generator_2.setNominalPowerInMW(200);
+		generator_1.setStaticRegulator(controlUnit_1);
+		generator_2.setStaticRegulator(controlUnit_2);
 		station.addGenerator(generator_1);
 		station.addGenerator(generator_2);
 		simulation.addPowerStation(station);
 	}
 	
-	@Test
+	/*@Test
 	public void mainControlPanelTurnsOnGeneratorIfItIsScheduledIndependentAreTheyTurnedOnOrOff()
 			throws InterruptedException{
 		prepareGenerationScheduleWithTurnedOnGenerators();
 		turnOnfirstAndTurnOffsecondGenerators();
-		doNextStep();
+		stationControlPanel.acceptMessage(stationGenerationSchedule);
+		doNexStep();
 
 		Assert.assertTrue(generator_1.isTurnedOn());
 		Assert.assertTrue(generator_2.isTurnedOn());
-	}
+	}*/
 	
-	private void doNextStep(){
-		stationControlPanel.acceptMessage(stationGenerationSchedule);
+	private void doNexStep(){
+		stationControlPanel.interactWithDisparcher();
 		simulation.calculateNextStep();
 	}
 	
-	private void prepareGenerationScheduleWithTurnedOnGenerators(){
+	/*private void prepareGenerationScheduleWithTurnedOnGenerators(){
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, false, generationCurve);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
 		fillStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);
-	}
+	}*/
 	
 	private void fillStationGenerationSchedule(
 			GeneratorGenerationSchedule genrationSchedule_1, GeneratorGenerationSchedule genrationSchedule_2){
@@ -87,7 +89,7 @@ public class MainControlPanelTest {
 		stationGenerationSchedule.addGeneratorGenerationSchedule(genrationSchedule_2);
 	}
 	
-	private void turnOnfirstAndTurnOffsecondGenerators(){
+	/*private void turnOnfirstAndTurnOffsecondGenerators(){
 		generator_1.turnOnGenerator();
 		generator_2.turnOffGenerator();
 	}
@@ -97,7 +99,8 @@ public class MainControlPanelTest {
 			throws InterruptedException{
 		prepareGenerationScheduleWithTwoTurnedOffGenerators();
 		turnOnfirstAndTurnOffsecondGenerators();
-		doNextStep();
+		stationControlPanel.acceptMessage(stationGenerationSchedule);
+		doNexStep();
 		
 		Assert.assertFalse(generator_1.isTurnedOn());
 		Assert.assertFalse(generator_2.isTurnedOn());
@@ -107,15 +110,16 @@ public class MainControlPanelTest {
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, false, false, generationCurve);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, false, false, generationCurve);
 		fillStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);
-	}
+	}*/
 	
 	@Test
-	public void mainAstaticRegulationWillBeTurnedOnIfItIsScheduledIndependentIsItTurnedOnOrOff() 
+	public void astaticRegulationWillBeTurnedOnIfItIsScheduledIndependentIsItTurnedOnOrOff() 
 			throws InterruptedException{
 		prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOnAstaticRegulation();
 		turnOnBothGenerators();
 		turnOnAstaticRegulationOnfirstAndTurnOffItOnSecondGenerators();
-		doNextStep();
+		stationControlPanel.acceptMessage(stationGenerationSchedule);
+		doNexStep();
 
 		Assert.assertTrue(generator_1.isAstaticRegulationTurnedOn());
 		Assert.assertTrue(generator_2.isAstaticRegulationTurnedOn());
@@ -143,7 +147,8 @@ public class MainControlPanelTest {
 		prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOffAstaticRegulation();
 		turnOnBothGenerators();
 		turnOnAstaticRegulationOnfirstAndTurnOffItOnSecondGenerators();
-		doNextStep();
+		stationControlPanel.acceptMessage(stationGenerationSchedule);
+		doNexStep();
 
 		Assert.assertFalse(generator_1.isAstaticRegulationTurnedOn());
 		Assert.assertFalse(generator_2.isAstaticRegulationTurnedOn());
@@ -160,7 +165,8 @@ public class MainControlPanelTest {
 			throws InterruptedException{
 		prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOffAstaticRegulation();
 		prepareTurnedOnGeneratorsWithTurnedOffAstaticRegulation();
-		doNextStep();
+		stationControlPanel.acceptMessage(stationGenerationSchedule);
+		doNexStep();
 		isAdjustedGenerationsOfGeneratorsConformsScheduled();
 	}
 	
@@ -170,7 +176,7 @@ public class MainControlPanelTest {
 	}
 	
 	private void isAdjustedGenerationsOfGeneratorsConformsScheduled(){
-		LocalTime timeInSimulation = simulation.getTimeInSimulation(); 
+		LocalTime timeInSimulation = simulation.getTimeInSimulation();
 		float expectedGenerations = generationCurve.getPowerOnTimeInMW(timeInSimulation);
 		float firstGeneratorGeneration = generator_1.getPowerAtRequiredFrequency();
 		float secondGeneratorGeneration = generator_2.getPowerAtRequiredFrequency();
@@ -182,8 +188,9 @@ public class MainControlPanelTest {
 	@Test
 	public void mainControlPanelControlsGeneration() throws InterruptedException{
 		prepareGenerationScheduleWithAnyAllowableParameters();
-		doNextStep();
-		hasGeneratorsWereAdjusted();
+		stationControlPanel.acceptMessage(stationGenerationSchedule);
+		doNexStep();
+		wereGeneratorsBeenAdjusted();
 	}
 	
 	private void prepareGenerationScheduleWithAnyAllowableParameters(){
@@ -191,7 +198,7 @@ public class MainControlPanelTest {
 		prepareTurnedOnGeneratorsWithTurnedOffAstaticRegulation();
 	}
 	
-	private void hasGeneratorsWereAdjusted(){
+	private void wereGeneratorsBeenAdjusted(){
 		verify(generator_1, atLeastOnce()).isTurnedOn();
 		verify(generator_2, atLeastOnce()).isTurnedOn();
 	}

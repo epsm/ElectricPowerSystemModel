@@ -56,19 +56,21 @@ public abstract class PowerSystemObject implements DispatchingObject{
 	@Override
 	public final void acceptMessage(DispatcherMessage message) {
 		if(message == null){
-			logger.warn("{} recieved null from dispatcher",	thisClassName);
+			logger.warn("{} recieved null from dispatcher.", thisClassName);
 			return;
 		}
-
+		
+		getMessageClassName(message);
+		
 		if(isMessageTypeEqualsToExpected(message)){
 			setLastMessageTime();
 			processDispatcherMessage(message);
 			getMessageClassName(message);
 			
-			logger.info("{} recieved {} from dispatcher",
+			logger.info("{} recieved {} from dispatcher.",
 					thisClassName, messageClassName);
 		}else{
-			logger.warn("{} recieved {} from dispatcher",
+			logger.warn("{} recieved {} from dispatcher.",
 					thisClassName, messageClassName);
 		}
 	}
@@ -123,7 +125,7 @@ public abstract class PowerSystemObject implements DispatchingObject{
 		
 		dispatcher.acceptReport(state);
 		getStateClassName(state);
-		logger.info("{} sent {} from dispatcher", thisClassName, stateClassName);
+		logger.info("{} sent {} to dispatcher.", thisClassName, stateClassName);
 	}
 	
 	protected abstract PowerObjectState getState();
@@ -137,10 +139,10 @@ public abstract class PowerSystemObject implements DispatchingObject{
 	}
 	
 	private void getMessageClassName(DispatcherMessage message){
-		message.getClass().getSimpleName();
+		messageClassName = message.getClass().getSimpleName();
 	}
 	
 	private void getStateClassName(PowerObjectState state){
-		state.getClass().getSimpleName();
+		stateClassName = state.getClass().getSimpleName();
 	}
 }

@@ -43,7 +43,7 @@ public class MainControlPanel extends PowerSystemObject{
 		performGenerationSchedule(schedule);
 	}
 	
-	public void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
+	private void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
 		receivedSchedule = generationSchedule;
 		getStationParameters();
 		
@@ -61,7 +61,6 @@ public class MainControlPanel extends PowerSystemObject{
 	private boolean isReceivedScheduleValid(){
 		try{
 			validator.validate(receivedSchedule, parameters);
-			logger.info("Schedule was received.");
 			return true;
 		}catch (PowerStationException exception){
 			System.err.println(exception);

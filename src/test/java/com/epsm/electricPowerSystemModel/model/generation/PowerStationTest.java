@@ -62,7 +62,7 @@ public class PowerStationTest{
 	}
 	
 	void prepareAndInstallFirstGenerator(){
-		generator_1 = new Generator(1);
+		generator_1 = new Generator(simulation, 1);
 		staticRegulator_1 = new StaticRegulator(simulation, generator_1);
 		
 		generator_1.setStaticRegulator(staticRegulator_1);
@@ -74,8 +74,8 @@ public class PowerStationTest{
 	}
 	
 	void prepareAndInstallSecondAndThirdGenerators(){
-		generator_2 = new Generator(2);
-		generator_3 = new Generator(3);
+		generator_2 = new Generator(simulation, 2);
+		generator_3 = new Generator(simulation, 3);
 		staticRegulator_2 = mock(StaticRegulator.class);
 		staticRegulator_3 = mock(StaticRegulator.class);
 		

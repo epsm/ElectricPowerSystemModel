@@ -13,6 +13,8 @@ public class AstaticRegulator {
 	public AstaticRegulator(ElectricPowerSystemSimulation simulation, Generator generator) {
 		this.simulation = simulation;
 		this.generator = generator;
+		
+		generator.setAstaticRegulator(this);
 	}
 	
 	public void verifyAndAdjustPowerAtRequiredFrequency(){

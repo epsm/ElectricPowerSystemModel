@@ -22,6 +22,8 @@ public class GeneratorsController{
 	}
 	
 	public void adjustGenerators(PowerStationGenerationSchedule schedule, LocalTime currentTime) {
+		powerstationGenerationSchedule = schedule;
+		this.currentTime = currentTime;
 		processEveryGenerationSchedule();
 	}
 	

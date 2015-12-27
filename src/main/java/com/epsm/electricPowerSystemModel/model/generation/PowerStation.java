@@ -37,6 +37,7 @@ public class PowerStation{
 		
 		generators = new HashMap<Integer, Generator>();
 		generatorsStates = new TreeSet<GeneratorState>();
+		prepareStationState();
 		
 		logger.info("Power station #{} was created.", number);
 	}
