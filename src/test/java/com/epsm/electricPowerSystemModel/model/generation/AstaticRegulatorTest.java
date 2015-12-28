@@ -6,7 +6,10 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
+import java.time.LocalTime;
+
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
 import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
@@ -18,10 +21,11 @@ public class AstaticRegulatorTest {
 	private StaticRegulator staticRegulator;
 	private Generator generator;
 	private final float GENERATOR_POWER_AT_REQUAIRED_FREQUENCY = 100;
+	private final float GENERATOR_REGULATION_SPEED_IN_MW_PER_MINUTE = 2;
 	
 	@Before
 	public void initialize(){
-		simulation = mock(ElectricPowerSystemSimulation.class);
+		simulation = spy(new ElectricPowerSystemSimulationImpl());
 		generator = new Generator(simulation, 1);
 		astaticRegulator = new AstaticRegulator(simulation, generator);
 		staticRegulator = new StaticRegulator(simulation, generator);
@@ -29,16 +33,22 @@ public class AstaticRegulatorTest {
 		generator.setAstaticRegulator(astaticRegulator);
 		generator.setStaticRegulator(staticRegulator);
 		generator.setNominalPowerInMW(200);
+		generator.setReugulationSpeedInMWPerMinute(GENERATOR_REGULATION_SPEED_IN_MW_PER_MINUTE);
 		staticRegulator.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
 	
 	@Test
 	public void increasePowerIfFrequencyIsLow(){
 		prepareMockSimulationWithLowFrequency();
-		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
+		doNextStep();
 		
 		Assert.assertTrue(
 				staticRegulator.getPowerAtRequiredFrequency() > GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
+	}
+	
+	private void doNextStep(){
+		simulation.calculateNextStep();
+		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 	}
 	
 	private void prepareMockSimulationWithLowFrequency(){
@@ -49,7 +59,7 @@ public class AstaticRegulatorTest {
 	@Test
 	public void decreasePowerIfFrequencyIsHight(){
 		prepareMockSimulationWithHighFrequency();
-		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
+		doNextStep();
 		
 		Assert.assertTrue(
 				staticRegulator.getPowerAtRequiredFrequency() < GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
@@ -58,6 +68,22 @@ public class AstaticRegulatorTest {
 	private void prepareMockSimulationWithHighFrequency(){
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(
 				(float)(GlobalConstants.STANDART_FREQUENCY + 0.1));
+	}
+	
+	@Test
+	public void actualGeneratorRegulationSpeedNotMoreThanNominalForGenerator(){
+		prepareMockSimulationWithHighFrequency();
+		when(simulation.getTimeInSimulation()).thenReturn(LocalTime.NOON);
+		simulation.calculateNextStep();
+		when(simulation.getTimeInSimulation()).thenReturn(LocalTime.NOON.plusMinutes(1));
+		simulation.calculateNextStep();
+		float previousPowerAtRequiredFrequency = staticRegulator.getPowerAtRequiredFrequency();
+		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
+		float curentPowerAtRequiredFrequency = staticRegulator.getPowerAtRequiredFrequency();
+		
+		Assert.assertNotEquals(previousPowerAtRequiredFrequency, curentPowerAtRequiredFrequency, 0);
+		Assert.assertEquals(previousPowerAtRequiredFrequency, curentPowerAtRequiredFrequency, 
+				GENERATOR_REGULATION_SPEED_IN_MW_PER_MINUTE);
 	}
 	
 	@Test

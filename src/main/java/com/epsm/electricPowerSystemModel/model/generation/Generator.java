@@ -9,6 +9,7 @@ public class Generator{
 	private AstaticRegulator astaticRegulator;
 	private float nominalPowerInMW;
 	private float minimalPowerInMW;
+	private float reugulationSpeedInMWPerMinute;
 	private float currentGeneration;
 	private boolean turnedOn;
 	private boolean astaticRegulationTurnedOn;
@@ -79,6 +80,14 @@ public class Generator{
 		this.minimalPowerInMW = minimalPowerInMW;
 	}
 	
+	public float getReugulationSpeedInMWPerMinute() {
+		return reugulationSpeedInMWPerMinute;
+	}
+
+	public void setReugulationSpeedInMWPerMinute(float reugulationSpeedInMWPerMinute) {
+		this.reugulationSpeedInMWPerMinute = reugulationSpeedInMWPerMinute;
+	}
+
 	public boolean isTurnedOn(){
 		return turnedOn;
 	}
