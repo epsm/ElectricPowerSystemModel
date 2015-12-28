@@ -35,7 +35,7 @@ public class GenerationScheduleValidatorTest {
 		stationSchedule = new PowerStationGenerationSchedule(1);
 		stationParameters = mock(PowerStationParameters.class);
 		
-		when(stationParameters.getPowerStationNumber()).thenReturn(1);
+		when(stationParameters.getPowerObjectId()).thenReturn(1L);
 	}
 	
 	@Test
@@ -62,9 +62,9 @@ public class GenerationScheduleValidatorTest {
 	@Test
 	public void exceptionIfPowerAndScheduleHaveDifferentNumbers(){
 		expectedEx.expect(PowerStationException.class);
-		expectedEx.expectMessage("wrong schedule: station has №3 but schedule has №1.");
+		expectedEx.expectMessage("wrong schedule: station id is 3 but schedule id is 1.");
 		
-		when(stationParameters.getPowerStationNumber()).thenReturn(3);
+		when(stationParameters.getPowerObjectId()).thenReturn(3L);
 		
 		validator.validate(stationSchedule, stationParameters);
 	}

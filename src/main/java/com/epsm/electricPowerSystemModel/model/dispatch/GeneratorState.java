@@ -4,8 +4,8 @@ import java.text.DecimalFormat;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
-public class GeneratorState extends PowerObjectState implements Comparable<GeneratorState>{
-	private  int generatorNumber;
+public class GeneratorState implements Comparable<GeneratorState>{
+	private int generatorNumber;
 	private float generationInWM;
 	private StringBuilder stringBuilder;
 	private DecimalFormat formatter;

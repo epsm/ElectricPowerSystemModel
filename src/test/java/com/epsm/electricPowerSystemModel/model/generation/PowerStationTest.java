@@ -40,7 +40,7 @@ public class PowerStationTest{
 	private final float SECOND_GENERATOR_NOMINAL_POWER = 300;
 	private final float THIRD_GENERATOR_NOMINAL_POWER = 400;
 	private final float FIRST_GENERATOR_MIN_POWER = 5;
-	private final int POWER_STATION_NUMBER = 4458;
+	private final long POWER_STATION_ID = 4458;
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -48,13 +48,14 @@ public class PowerStationTest{
 	@Before
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
-		station = new PowerStation(POWER_STATION_NUMBER);
+		station = new PowerStation();
 		controlPanel = mock(MainControlPanel.class);
 		
 		station.setSimulation(simulation);
-		station.setMainControlPanel(controlPanel);
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		when(simulation.getTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
+		when(controlPanel.getId()).thenReturn(POWER_STATION_ID);
+		
 	}
 	
 	void prepareAndInstallFirstGenerator(){
@@ -91,6 +92,7 @@ public class PowerStationTest{
 	
 	@Test
 	public void GenerationOfElectricStationEqualsToSumOfAllTurnedOnGenerators(){
+		setControlPanelToPowerStation();
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallSecondAndThirdGenerators();
 		turnOnFirstAndSecondGeneratorsAndTurnOffThird();
@@ -98,6 +100,10 @@ public class PowerStationTest{
 		float stationGeneration = station.calculateGenerationInMW();
 		
 		Assert.assertEquals(sumOfPowerTwoTurnedOnGenerators, stationGeneration, 0);
+	}
+	
+	public void setControlPanelToPowerStation(){
+		station.setMainControlPanel(controlPanel);
 	}
 	
 	private void turnOnFirstAndSecondGeneratorsAndTurnOffThird(){
@@ -174,16 +180,24 @@ public class PowerStationTest{
 	}
 	
 	@Test
-	public void exceptionIfMainControlPanelIsNull(){
+	public void exceptionIfMainControlPanelIsNullWhenCalculateGenerationInMWCalled(){
 		expectedEx.expect(PowerStationException.class);
-	    expectedEx.expectMessage("Control panel must not be null.");
+	    expectedEx.expectMessage("Can't calculate generation with null control panel.");
 		
-	    station.setMainControlPanel(null);
 	    station.calculateGenerationInMW();
 	}
 	
 	@Test
+	public void exceptionWhenSetMainControlPaneCalledWithNullParameter(){
+		expectedEx.expect(PowerStationException.class);
+	    expectedEx.expectMessage("Can't add null control panel.");
+		
+	    station.setMainControlPanel(null);
+	}
+	
+	@Test
 	public void powerStationStateContainsCorrectData(){
+		setControlPanelToPowerStation();
 		prepareAndInstallSecondAndThirdGenerators();
 		turnOnSecondAndThirdGenerators();
 		calculateOneStepInSimulation();
@@ -221,7 +235,7 @@ public class PowerStationTest{
 		}
 		
 		Assert.assertEquals(2, stationState.getGeneratorsStates().size());
-		Assert.assertEquals(POWER_STATION_NUMBER, stationState.getPowerStationNumber());
+		Assert.assertEquals(POWER_STATION_ID, stationState.getPowerObjectId());
 		Assert.assertEquals(CONSTANT_TIME_IN_MOCK_SIMULATION, stationState.getTimeStamp());
 		Assert.assertEquals(2, secondtGeneratorNumber);
 		Assert.assertEquals(3, thirdGeneratorNumber);

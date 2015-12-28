@@ -32,22 +32,20 @@ public class ShockLoadTestConsumerTest {
 	private Class<? extends DispatcherMessage> expectedMessageType;
 	private final int WORK_TIME = 300; 
 	private final int PAUSE_TIME = 500;
-	private final int CONSUMER_NUMBER = 664;
+	private final long CONSUMER_NUMBER = 664;
 	
 	@Before
 	public void initialize(){
 		simulation = spy(new ElectricPowerSystemSimulationImpl());
+		when(simulation.generateId()).thenReturn(CONSUMER_NUMBER);
 		turnOnTime = null;
 		turnOffTime = null;
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);
 		expectedMessageType = DispatcherMessage.class;
-		
-		consumer = new ShockLoadConsumer(
-				simulation, timeService, dispatcher, expectedMessageType, CONSUMER_NUMBER);
+		consumer = new ShockLoadConsumer(simulation, timeService, dispatcher, expectedMessageType);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
-		
 		consumer.setMaxLoad(100f);
 		consumer.setMaxWorkDurationInSeconds(WORK_TIME);
 		consumer.setMaxPauseBetweenWorkInSeconds(PAUSE_TIME);
@@ -188,7 +186,7 @@ public class ShockLoadTestConsumerTest {
 	}
 	
 	private void compareValues(){
-		int actualConsumerNumber = state.getConsumerNumber();
+		long actualConsumerNumber = state.getPowerObjectId();
 		LocalTime actualInState = state.getTimeStamp();
 		float actualLoad = state.getTotalLoad();
 		

@@ -6,12 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.PowerSystemObject;
+import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
-public class MainControlPanel extends PowerSystemObject{
+public class MainControlPanel extends PowerObject{
 	private PowerStation station;
 	private GeneratorsController controller;
 	private PowerStationGenerationSchedule curentSchedule;
@@ -88,5 +88,10 @@ public class MainControlPanel extends PowerSystemObject{
 	private void getTimeAndAdjustGenerators(){
 		LocalTime currentTime = simulation.getTimeInSimulation();
 		controller.adjustGenerators(curentSchedule, currentTime);
+	}
+
+	@Override
+	public PowerObjectParameters getParameters() {
+		return station.getPowerStationParameters();
 	}
 }

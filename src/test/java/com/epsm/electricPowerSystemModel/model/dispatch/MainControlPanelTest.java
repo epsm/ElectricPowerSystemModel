@@ -30,9 +30,10 @@ public class MainControlPanelTest{
 		timeService = new TimeService();
 		expectedMessageType = PowerStationGenerationSchedule.class;
 		dispatcher = mock(Dispatcher.class);
-		station = new PowerStation(1);
-		controlPanel = new MainControlPanel(simulation, timeService, dispatcher, expectedMessageType, station);
-		stationSchedule = new PowerStationGenerationSchedule(1);
+		station = new PowerStation();
+		controlPanel= new MainControlPanel(simulation, timeService, dispatcher,
+				expectedMessageType, station);
+		stationSchedule = new PowerStationGenerationSchedule(0);
 		generatorSchedule = new GeneratorGenerationSchedule(1, true, true, null);
 		generator = new Generator(simulation, 1);
 		
@@ -50,7 +51,7 @@ public class MainControlPanelTest{
 	}
 	
 	public void doNextStep(){
-		controlPanel.interactWithDisparcher();
+		controlPanel.doRealTimeDependOperation();
 		simulation.calculateNextStep();
 	}
 	

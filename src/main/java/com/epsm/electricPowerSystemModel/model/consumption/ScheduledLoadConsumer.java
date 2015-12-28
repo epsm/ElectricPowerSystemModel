@@ -6,9 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
@@ -27,12 +29,11 @@ public class ScheduledLoadConsumer extends Consumer{
 	private Logger logger;
 	
 	public ScheduledLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher, Class<? extends DispatcherMessage>  expectedMessageType,
-			int consumerNumber){
+			Dispatcher dispatcher, Class<? extends DispatcherMessage>  expectedMessageType){
 		
-		super(simulation, timeService, dispatcher, expectedMessageType, consumerNumber); 
+		super(simulation, timeService, dispatcher, expectedMessageType); 
 		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
-		logger.info("Scheduled load consumer №{}  created.", number);
+		logger.info("Scheduled load consumer created with id {}.", id);
 	}
 	
 	@Override
@@ -101,5 +102,11 @@ public class ScheduledLoadConsumer extends Consumer{
 	@Override
 	protected void processDispatcherMessage(DispatcherMessage message) {
 		//TODO turn off/on user by dispatcher command. 
+	}
+
+	@Override
+	public PowerObjectParameters getParameters() {
+		//for now just stub
+		return new ConsumerParameters(1);
 	}
 }

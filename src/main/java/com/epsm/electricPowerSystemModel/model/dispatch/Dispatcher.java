@@ -1,6 +1,6 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
 public interface Dispatcher {
-	public void connectToPowerObject(DispatchingObject powerObject);
+	public void establishConnection(PowerObjectParameters parameters);
 	public void acceptReport(PowerObjectState report);
 }

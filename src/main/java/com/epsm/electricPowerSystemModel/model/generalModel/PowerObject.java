@@ -9,16 +9,18 @@ import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
-public abstract class PowerSystemObject implements DispatchingObject{
+public abstract class PowerObject implements DispatchingObject, TimeServiceConsumer{
+	protected long id;//must not bee changed after creation
 	protected ElectricPowerSystemSimulation simulation;
 	private TimeService timeService;
 	private Class<? extends DispatcherMessage> expectedMessageType;
 	private Dispatcher dispatcher;
-	private LocalDateTime timeWhenRecievedLastMessage;
+	private volatile LocalDateTime timeWhenRecievedLastMessage;
 	private LocalDateTime timeWhenSentLastMessage;
 	private LocalDateTime currentTime;
 	private String thisClassName;
@@ -26,7 +28,7 @@ public abstract class PowerSystemObject implements DispatchingObject{
 	private String stateClassName;
 	private Logger logger;
 
-	public PowerSystemObject(ElectricPowerSystemSimulation simulation, TimeService timeService,
+	public PowerObject(ElectricPowerSystemSimulation simulation, TimeService timeService,
 			Dispatcher dispatcher, Class<? extends DispatcherMessage> expectedMessageType) {
 		
 		if(simulation == null){
@@ -43,6 +45,7 @@ public abstract class PowerSystemObject implements DispatchingObject{
 			throw new DispatchingException(message);
 		}
 		
+		id = simulation.generateId();
 		this.simulation = simulation;
 		this.timeService = timeService;
 		this.dispatcher = dispatcher;
@@ -50,7 +53,8 @@ public abstract class PowerSystemObject implements DispatchingObject{
 		thisClassName = this.getClass().getSimpleName();
 		timeWhenRecievedLastMessage = LocalDateTime.MIN;
 		timeWhenSentLastMessage = LocalDateTime.MIN;
-		logger = LoggerFactory.getLogger(PowerSystemObject.class);
+		logger = LoggerFactory.getLogger(PowerObject.class);
+		logger.info("{} was created with id {}.", thisClassName, id);
 	}
 	
 	@Override
@@ -65,7 +69,6 @@ public abstract class PowerSystemObject implements DispatchingObject{
 		if(isMessageTypeEqualsToExpected(message)){
 			setLastMessageTime();
 			processDispatcherMessage(message);
-			getMessageClassName(message);
 			
 			logger.info("{} recieved {} from dispatcher.",
 					thisClassName, messageClassName);
@@ -86,7 +89,7 @@ public abstract class PowerSystemObject implements DispatchingObject{
 	protected abstract void processDispatcherMessage(DispatcherMessage message);
 	
 	@Override
-	public final void interactWithDisparcher(){
+	public final void doRealTimeDependOperation(){
 		getCurrentTime();
 		
 		if(isConnectionWithDispatcherActive()){
@@ -119,7 +122,7 @@ public abstract class PowerSystemObject implements DispatchingObject{
 		PowerObjectState state = getState();
 		
 		if(state == null){
-			String message = "PowerObjectState must not be null.";
+			String message = "PowerObjectState can't be null.";
 			throw new DispatchingException(message);
 		}
 		
@@ -135,8 +138,17 @@ public abstract class PowerSystemObject implements DispatchingObject{
 	}
 	
 	private void establishConnectionToDispatcher(){
-		dispatcher.connectToPowerObject(this);
+		PowerObjectParameters parameters = getParameters();
+		
+		if(parameters == null){
+			String message = "PowerObjectParameters can't be null.";
+			throw new DispatchingException(message);
+		}
+		
+		dispatcher.establishConnection(parameters);
 	}
+	
+	public abstract PowerObjectParameters getParameters();
 	
 	private void getMessageClassName(DispatcherMessage message){
 		messageClassName = message.getClass().getSimpleName();
@@ -144,5 +156,9 @@ public abstract class PowerSystemObject implements DispatchingObject{
 	
 	private void getStateClassName(PowerObjectState state){
 		stateClassName = state.getClass().getSimpleName();
+	}
+	
+	public long getId(){
+		return id;
 	}
 }

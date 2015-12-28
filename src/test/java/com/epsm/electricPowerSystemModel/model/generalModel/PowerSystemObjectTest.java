@@ -14,20 +14,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
-import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
-import com.epsm.electricPowerSystemModel.model.generalModel.PowerSystemObject;
-import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class PowerSystemObjectTest{
 	private ElectricPowerSystemSimulation simulation;
-	private PowerSystemObject object;
+	private PowerObject object;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private Class<? extends DispatcherMessage> expectedMessageType;
@@ -51,19 +49,19 @@ public class PowerSystemObjectTest{
 
 	@Test
 	public void triesConnectToDispatcher(){
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		
-		verify(dispatcher).connectToPowerObject(any());
+		verify(dispatcher).establishConnection(any(PowerObjectParameters.class));
 	}
 	
 	@Test
 	public void doesNotTryConnectToDispatcherIfConnectionEstablishedAndActive(){
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		object.acceptMessage(message);
 		addToSystemTimeValueLessThanAcceptablePauseBetweenDispatcherMessages();
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		
-		verify(dispatcher).connectToPowerObject(any());
+		verify(dispatcher).establishConnection(any(PowerObjectParameters.class));
 	}
 	
 	private void addToSystemTimeValueLessThanAcceptablePauseBetweenDispatcherMessages(){
@@ -73,12 +71,12 @@ public class PowerSystemObjectTest{
 	
 	@Test
 	public void TriesConnectToDispatcherAgainIfConnectionLost(){
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		object.acceptMessage(message);
 		addToSystemTimeValueMoreThanAcceptablePauseBetweenDispatcherMessages();
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		
-		verify(dispatcher, times(2)).connectToPowerObject(any());
+		verify(dispatcher, times(2)).establishConnection(any());
 	}
 	
 	private void addToSystemTimeValueMoreThanAcceptablePauseBetweenDispatcherMessages(){
@@ -88,20 +86,20 @@ public class PowerSystemObjectTest{
 	
 	@Test
 	public void sendsMessagesToDispatcherIfPauseBetweenSendingMoreThenSet(){
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		object.acceptMessage(message);
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		
 		verify(dispatcher).acceptReport(any());
 	}
 	
 	@Test
 	public void doesNotSendsMessagesToDispatcherIfPauseBetweenSendingLessThenSet(){
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		object.acceptMessage(message);
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		addToSystemTimeValueLessThanPauseBetweenSending();
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		
 		verify(dispatcher).acceptReport(any());
 	}
@@ -117,9 +115,9 @@ public class PowerSystemObjectTest{
 		object = new ImplExceptionIfInteractWithOverridenMethods(
 				simulation, timeService, dispatcher, expectedMessageType);
 		
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		object.acceptMessage(message);
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		
 		verify(dispatcher, never()).acceptReport(any());
 	}
@@ -130,9 +128,9 @@ public class PowerSystemObjectTest{
 		object = new ImplExceptionIfInteractWithOverridenMethods(
 				simulation, timeService, dispatcher, expectedMessageType);
 		
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		object.acceptMessage(message);
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
 		
 		verify(dispatcher, never()).acceptReport(any());
 	}
@@ -140,13 +138,26 @@ public class PowerSystemObjectTest{
 	@Test
 	public void exceptionIfOverridenGetStateReturnsNull(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("PowerObjectState must not be null.");
+	    expectedEx.expectMessage("PowerObjectState can't be null.");
 	    
 	    object = new ImplReturnsNullWithGetState(simulation, timeService, dispatcher, expectedMessageType);
 	    
-	    object.interactWithDisparcher();
+	    object.doRealTimeDependOperation();
 		object.acceptMessage(message);
-		object.interactWithDisparcher();
+		object.doRealTimeDependOperation();
+	}
+	
+	@Test
+	public void exceptionIfOverridenGetParametersReturnsNull(){
+		expectedEx.expect(DispatchingException.class);
+	    expectedEx.expectMessage("PowerObjectParameters can't be null.");
+	    
+	    object = new ImplReturnsNullWithGetParameters(
+	    		simulation, timeService, dispatcher, expectedMessageType);
+	    
+	    object.doRealTimeDependOperation();
+		object.acceptMessage(message);
+		object.doRealTimeDependOperation();
 	}
 	
 	@Test
@@ -181,7 +192,7 @@ public class PowerSystemObjectTest{
 	    object = new AbstractImpl(simulation, timeService, dispatcher, null);
 	}
 	
-	private class AbstractImpl extends PowerSystemObject{
+	private class AbstractImpl extends PowerObject{
 		public AbstractImpl(ElectricPowerSystemSimulation simulation, TimeService timeService,
 				Dispatcher dispatcher, 	Class<? extends DispatcherMessage> expectedMessageType) {
 
@@ -196,6 +207,11 @@ public class PowerSystemObjectTest{
 		protected PowerObjectState getState() {
 			return new ConsumerState(1, 1, null);
 		}
+
+		@Override
+		public PowerObjectParameters getParameters() {
+			return new ConsumerParameters(1);
+		}
 	}
 	
 	private class ImplReturnsNullWithGetState extends AbstractImpl{
@@ -209,6 +225,21 @@ public class PowerSystemObjectTest{
 		
 		@Override
 		protected PowerObjectState getState() {
+			return null;
+		}
+	}
+	
+	private class ImplReturnsNullWithGetParameters extends AbstractImpl{
+
+		public ImplReturnsNullWithGetParameters(ElectricPowerSystemSimulation simulation,
+				TimeService timeService, Dispatcher dispatcher,
+				Class<? extends DispatcherMessage> expectedMessageType) {
+			
+			super(simulation, timeService, dispatcher, expectedMessageType);
+		}
+		
+		@Override
+		public PowerObjectParameters getParameters(){
 			return null;
 		}
 	}

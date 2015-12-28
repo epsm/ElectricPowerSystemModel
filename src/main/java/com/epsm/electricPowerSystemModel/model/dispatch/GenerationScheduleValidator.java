@@ -60,18 +60,18 @@ public class GenerationScheduleValidator {
 	}
 	
 	private void validateOnConformityGeneratorsNumberInStationAndInSchedule(){
-		scheduleAndPowerStationHaveTheSameNumber();
+		IdInScheduleAndInPowerStationIsTheSame();
 		quantityOfGeneratorsOnStationConformsToTheirQuantityInSchedule();
 		scheduleContainsTheSameGeneratorsNumbersAsPowerStation();
 	}
 	
-	private void scheduleAndPowerStationHaveTheSameNumber(){
-		int numberInParameters = stationParameters.getPowerStationNumber();
-		int numberInSchedule = stationSchedule.getPowerStationNumber();
+	private void IdInScheduleAndInPowerStationIsTheSame(){
+		long numberInParameters = stationParameters.getPowerObjectId();
+		long numberInSchedule = stationSchedule.getPowerStationId();
 		
 		if(numberInParameters != numberInSchedule){
-			String message = HEADER + "station has №" + numberInParameters 
-					+ " but schedule has №" + numberInSchedule + ".";
+			String message = HEADER + "station id is " + numberInParameters 
+					+ " but schedule id is " + numberInSchedule + ".";
 			throw new PowerStationException(message);
 		}
 	}

@@ -7,25 +7,19 @@ import java.time.format.DateTimeFormatter;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
 public class ConsumerState extends PowerObjectState{
-	private int consumerNumber;
 	private float load;
 	private LocalTime timeStamp;
 	private StringBuilder stringBuilder;
 	private DateTimeFormatter timeFormatter;
 	private DecimalFormat numberFormatter;
 	
-	public ConsumerState(int consumerNumber, float load, LocalTime timeStamp) {
-		this.consumerNumber = consumerNumber;
+	public ConsumerState(long powerObjectId, float load, LocalTime timeStamp) {
+		super(powerObjectId);
 		this.load = load;
 		this.timeStamp = timeStamp;
-		
 		stringBuilder = new StringBuilder();
 		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 		numberFormatter = new DecimalFormat("000.000", GlobalConstants.SYMBOLS);
-	}
-
-	public int getConsumerNumber() {
-		return consumerNumber;
 	}
 
 	public float getTotalLoad() {
@@ -39,8 +33,8 @@ public class ConsumerState extends PowerObjectState{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("Consumer №");
-		stringBuilder.append(consumerNumber);
+		stringBuilder.append("Consumer with id ");
+		stringBuilder.append(powerObjectId);
 		stringBuilder.append(" [time: ");
 		stringBuilder.append(timeStamp.format(timeFormatter));
 		stringBuilder.append(" load MW: ");

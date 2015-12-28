@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PowerStationState extends PowerObjectState{
-	private int powerStationNumber;
 	private LocalTime timeStamp;
 	private float frequency;
 	private Set<GeneratorState> generatorsStates;
@@ -21,12 +20,12 @@ public class PowerStationState extends PowerObjectState{
 
 	@JsonCreator
 	public PowerStationState(
-			@JsonProperty("powerStationNumber") int powerStationNumber,
+			@JsonProperty("powerObjectId") long powerObjectId,
 			@JsonProperty("timeStamp") LocalTime timeStamp,
 			@JsonProperty("frequency") float frequency,
 			@JsonProperty("generatorsStates") Set<GeneratorState> generatorsStates) {
 		
-		this.powerStationNumber = powerStationNumber;
+		super(powerObjectId);
 		this.timeStamp = timeStamp;
 		this.frequency = frequency;
 		this.generatorsStates = Collections.unmodifiableSet(generatorsStates);
@@ -34,10 +33,6 @@ public class PowerStationState extends PowerObjectState{
 		stringBuilder = new StringBuilder();
 		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 		numberFormatter = new DecimalFormat("00.000", GlobalConstants.SYMBOLS);
-	}
-
-	public int getPowerStationNumber() {
-		return powerStationNumber;
 	}
 	
 	public LocalTime getTimeStamp() {
@@ -55,8 +50,8 @@ public class PowerStationState extends PowerObjectState{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("PowerSt. №");
-		stringBuilder.append(powerStationNumber);
+		stringBuilder.append("PowerSt. with id ");
+		stringBuilder.append(powerObjectId);
 		stringBuilder.append(" [time: ");
 		stringBuilder.append(timeStamp.format(timeFormatter));
 		stringBuilder.append(" freq.: ");

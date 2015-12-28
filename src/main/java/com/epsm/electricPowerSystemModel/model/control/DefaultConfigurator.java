@@ -55,14 +55,14 @@ public class DefaultConfigurator {
 		float[] pattern = LOAD_BY_HOURS;
 		
 		ShockLoadConsumer shockLoadConsumer 
-				= new ShockLoadConsumer(simulation, timeService, dispatcher, DispatcherMessage.class, 1);
+				= new ShockLoadConsumer(simulation, timeService, dispatcher, DispatcherMessage.class);
 		shockLoadConsumer.setDegreeOfDependingOnFrequency(2);
 		shockLoadConsumer.setMaxLoad(10f);
 		shockLoadConsumer.setMaxWorkDurationInSeconds(300);
 		shockLoadConsumer.setMaxPauseBetweenWorkInSeconds(200);
 		
 		ScheduledLoadConsumer scheduledLoadConsumer 
-				= new ScheduledLoadConsumer(simulation, timeService, dispatcher, DispatcherMessage.class, 2);
+				= new ScheduledLoadConsumer(simulation, timeService, dispatcher, DispatcherMessage.class);
 		scheduledLoadConsumer.setDegreeOfDependingOnFrequency(2);
 		scheduledLoadConsumer.setApproximateLoadByHoursOnDayInPercent(pattern);
 		scheduledLoadConsumer.setMaxLoadWithoutRandomInMW(100);
@@ -73,7 +73,7 @@ public class DefaultConfigurator {
 	}
 	
 	private void createPowerStationAndAddToEnergySystem(){
-		PowerStation powerStation = new PowerStation(1);
+		PowerStation powerStation = new PowerStation();
 		@SuppressWarnings("unused")
 		MainControlPanel controlPanel = new MainControlPanel(simulation, timeService, dispatcher,
 				PowerStationGenerationSchedule.class, powerStation);

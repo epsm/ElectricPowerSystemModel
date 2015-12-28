@@ -18,9 +18,9 @@ import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class PowerStation{
+	private long id;
 	private ElectricPowerSystemSimulation simulation;
 	private MainControlPanel controlPanel;
-	private int number;//must not be changed after creation
 	private Map<Integer, Generator> generators;
 	private LocalTime currentTime;
 	private float currentFrequency;
@@ -32,14 +32,10 @@ public class PowerStation{
 	private PowerStationState state;
 	private Logger logger = LoggerFactory.getLogger(PowerStation.class);
 	
-	public PowerStation(int number) {
-		this.number = number;
-		
+	public PowerStation() {
 		generators = new HashMap<Integer, Generator>();
 		generatorsStates = new TreeSet<GeneratorState>();
 		prepareStationState();
-		
-		logger.info("Power station #{} was created.", number);
 	}
 
 	public float calculateGenerationInMW(){
@@ -55,7 +51,7 @@ public class PowerStation{
 	
 	private void verifyControlPanel(){
 		if(controlPanel == null){
-			throw new PowerStationException("Control panel must not be null.");
+			throw new PowerStationException("Can't calculate generation with null control panel.");
 		}
 	}
 	
@@ -95,12 +91,12 @@ public class PowerStation{
 	}
 	
 	private void addGeneratorState(Generator generator){
-		GeneratorState state =generator.getState(); 
+		GeneratorState state = generator.getState(); 
 		generatorsStates.add(state);
 	}
 	
 	private void createStationState(){
-		state = new PowerStationState(number, currentTime, currentFrequency, generatorsStates);
+		state = new PowerStationState(id, currentTime, currentFrequency, generatorsStates);
 	}
 	
 	public PowerStationParameters getPowerStationParameters(){
@@ -132,7 +128,7 @@ public class PowerStation{
 	}
 	
 	public void createStationParameters(){
-		stationParameters = new PowerStationParameters(number, generatorParameters);
+		stationParameters = new PowerStationParameters(id, generatorParameters);
 	}
 	
 	public void addGenerator(Generator generator){
@@ -140,6 +136,7 @@ public class PowerStation{
 		verifyIsGeneratorNotNull();
 		verifyIfGeneartorWithTheSameNumberExists();
 		addGenerator();
+		logger.info("Generator №{} added to power station", generator.getNumber());
 	}
 	
 	private void verifyIsGeneratorNotNull(){
@@ -181,10 +178,11 @@ public class PowerStation{
 	}
 	
 	public void setMainControlPanel(MainControlPanel controlPanel){
+		if(controlPanel == null){
+			throw new PowerStationException("Can't add null control panel.");
+		}
+		
 		this.controlPanel = controlPanel;
-	}
-	
-	public int getNumber(){
-		return number;
+		id = controlPanel.getId();
 	}
 }

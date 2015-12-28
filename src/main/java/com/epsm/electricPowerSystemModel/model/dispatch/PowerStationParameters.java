@@ -7,25 +7,20 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PowerStationParameters{
-	private int powerStationNumber;
+public class PowerStationParameters extends PowerObjectParameters{
 	private Map<Integer, GeneratorParameters> generatorParameters;
 	
 	@JsonCreator
 	public PowerStationParameters(
-			@JsonProperty("powerStationNumber") int powerStationNumber,
+			@JsonProperty("powerStationNumber") long powerStationId,
 			@JsonProperty("generatorsParameters") Map<Integer, GeneratorParameters> generatorsParameters) {
 		
-		this.powerStationNumber = powerStationNumber;
+		super(powerStationId);
 		this.generatorParameters = Collections.unmodifiableMap(generatorsParameters);
 	}
 
 	public GeneratorParameters getGeneratorParameters(int generatorNumber){
 		return generatorParameters.get(generatorNumber);
-	}
-
-	public int getPowerStationNumber() {
-		return powerStationNumber;
 	}
 	
 	//Temporary solution to make JSON serialization work, must not be used anywhere

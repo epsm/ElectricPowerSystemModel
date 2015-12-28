@@ -8,15 +8,15 @@ import java.util.Map;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
 
 public class PowerStationGenerationSchedule extends DispatcherMessage{
-	private int powerStationNumber;
+	private long powerStationId;
 	private Map<Integer, GeneratorGenerationSchedule> generatorSchedules 
 			= new HashMap<Integer, GeneratorGenerationSchedule>();
 	
 	private GeneratorGenerationSchedule generatorSchedule;
 	
-	public  PowerStationGenerationSchedule(int powerStationNumber){
+	public  PowerStationGenerationSchedule(long powerStationId){
 		super(LocalDateTime.now());
-		this.powerStationNumber = powerStationNumber;
+		this.powerStationId = powerStationId;
 	}
 	
 	public void addGeneratorGenerationSchedule(GeneratorGenerationSchedule generatorSchedule){
@@ -49,8 +49,8 @@ public class PowerStationGenerationSchedule extends DispatcherMessage{
 		generatorSchedules.put(generatorNumber, generatorSchedule);
 	}
 	
-	public int getPowerStationNumber(){
-		return powerStationNumber;
+	public long getPowerStationId(){
+		return powerStationId;
 	}
 	
 	public GeneratorGenerationSchedule getGeneratorGenerationSchedule(int generatorNumber) {

@@ -38,8 +38,7 @@ public class ScheduledLoadConsumerTest{
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
 		expectedMessageType = DispatcherMessage.class;		
-		consumer = new ScheduledLoadConsumer(
-				simulation, timeService, dispatcher, expectedMessageType, CONSUMER_NUMBER);
+		consumer = new ScheduledLoadConsumer(simulation, timeService, dispatcher, expectedMessageType);
 		approximateLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 		currentTime = LocalTime.MIDNIGHT;
 		
@@ -62,6 +61,11 @@ public class ScheduledLoadConsumerTest{
 		@Override
 		public LocalTime getTimeInSimulation(){
 			return currentTime;
+		}
+		
+		@Override
+		public long generateId(){
+			return	CONSUMER_NUMBER;
 		}
 	}
 	
@@ -95,7 +99,7 @@ public class ScheduledLoadConsumerTest{
 	}
 	
 	private void compareValues(){
-		int actualConsumerNumber = state.getConsumerNumber();
+		long actualConsumerNumber = state.getPowerObjectId();
 		LocalTime actualTime = state.getTimeStamp();
 		float actualLoad = state.getTotalLoad();
 		

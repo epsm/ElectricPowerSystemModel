@@ -7,19 +7,16 @@ import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
-import com.epsm.electricPowerSystemModel.model.generalModel.PowerSystemObject;
+import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
-public abstract class Consumer extends PowerSystemObject{
-	protected int number;
+public abstract class Consumer extends PowerObject{
 	protected float degreeOnDependingOfFrequency;
 	
 	public Consumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher, Class<? extends DispatcherMessage>  expectedMessageType,
-			int consumerNumber){
+			Dispatcher dispatcher, Class<? extends DispatcherMessage>  expectedMessageType){
 		
 		super(simulation, timeService, dispatcher, expectedMessageType);
-		this.number = consumerNumber;
 		this.simulation = simulation;
 	}
 
@@ -29,11 +26,7 @@ public abstract class Consumer extends PowerSystemObject{
 	}
 	
 	protected ConsumerState prepareState(LocalTime timeStamp, float load){
-		return new ConsumerState(number, load, timeStamp);
-	}
-	
-	public int getConsumerNumber() {
-		return number;
+		return new ConsumerState(id, load, timeStamp);
 	}
 
 	public void setDegreeOfDependingOnFrequency(float degreeOnDependingOfFrequency){
