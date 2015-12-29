@@ -9,7 +9,7 @@ import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemS
 import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 
 public class MainControlPanel extends PowerObject{
 	private PowerStation station;
@@ -59,7 +59,7 @@ public class MainControlPanel extends PowerObject{
 		try{
 			validator.validate(receivedSchedule, parameters);
 			return true;
-		}catch (PowerStationException exception){
+		}catch (GenerationException exception){
 			//TODO send request to dispatcher
 			logger.warn("Received ", exception);
 			return false;

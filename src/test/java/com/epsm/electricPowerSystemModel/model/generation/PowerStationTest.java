@@ -164,7 +164,7 @@ public class PowerStationTest{
 	
 	@Test
 	public void exceptionIfTryToAddNullInsteadGenerator(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("Generator must not be null.");
 		
 		station.addGenerator(null);
@@ -172,7 +172,7 @@ public class PowerStationTest{
 	
 	@Test
 	public void exceptionIfTryToAddGeneratorWithTheSameNumberAsPreviouslyInstalled(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("Generator with number 1 already installed.");
 		
 		prepareAndInstallFirstGenerator();
@@ -181,7 +181,7 @@ public class PowerStationTest{
 	
 	@Test
 	public void exceptionIfMainControlPanelIsNullWhenCalculateGenerationInMWCalled(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("Can't calculate generation with null control panel.");
 		
 	    station.calculateGenerationInMW();
@@ -189,7 +189,7 @@ public class PowerStationTest{
 	
 	@Test
 	public void exceptionWhenSetMainControlPaneCalledWithNullParameter(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("Can't add null control panel.");
 		
 	    station.setMainControlPanel(null);

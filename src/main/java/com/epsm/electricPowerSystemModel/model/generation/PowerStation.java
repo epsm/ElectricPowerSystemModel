@@ -51,7 +51,7 @@ public class PowerStation{
 	
 	private void verifyControlPanel(){
 		if(controlPanel == null){
-			throw new PowerStationException("Can't calculate generation with null control panel.");
+			throw new GenerationException("Can't calculate generation with null control panel.");
 		}
 	}
 	
@@ -142,7 +142,7 @@ public class PowerStation{
 	private void verifyIsGeneratorNotNull(){
 		if(generatorToAdd == null){
 			String message = "Generator must not be null.";
-			throw new PowerStationException(message);
+			throw new GenerationException(message);
 		}
 	}
 	
@@ -152,7 +152,7 @@ public class PowerStation{
 		
 		if(existingGenerator != null){
 			String message = "Generator with number " + generatorNumber + " already installed.";
-			throw new PowerStationException(message);
+			throw new GenerationException(message);
 		}
 	}
 	
@@ -179,7 +179,7 @@ public class PowerStation{
 	
 	public void setMainControlPanel(MainControlPanel controlPanel){
 		if(controlPanel == null){
-			throw new PowerStationException("Can't add null control panel.");
+			throw new GenerationException("Can't add null control panel.");
 		}
 		
 		this.controlPanel = controlPanel;

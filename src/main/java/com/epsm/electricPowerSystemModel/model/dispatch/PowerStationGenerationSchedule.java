@@ -1,22 +1,19 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 
 public class PowerStationGenerationSchedule extends DispatcherMessage{
-	private long powerStationId;
 	private Map<Integer, GeneratorGenerationSchedule> generatorSchedules 
 			= new HashMap<Integer, GeneratorGenerationSchedule>();
 	
 	private GeneratorGenerationSchedule generatorSchedule;
 	
 	public  PowerStationGenerationSchedule(long powerStationId){
-		super(LocalDateTime.now());
-		this.powerStationId = powerStationId;
+		super(powerStationId);
 	}
 	
 	public void addGeneratorGenerationSchedule(GeneratorGenerationSchedule generatorSchedule){
@@ -29,7 +26,7 @@ public class PowerStationGenerationSchedule extends DispatcherMessage{
 	private void verifyIsScheduleNotNull(){
 		if(generatorSchedule == null){
 			String message = "Generation schedule must not be null.";
-			throw new PowerStationException(message);
+			throw new GenerationException(message);
 		}
 	}
 	
@@ -40,17 +37,13 @@ public class PowerStationGenerationSchedule extends DispatcherMessage{
 		if(existingSchedule != null){
 			String message = "Generation schedule for generator number "
 					+ generatorSchedule.getGeneratorNumber() + " already exists.";
-			throw new PowerStationException(message);
+			throw new GenerationException(message);
 		}
 	}
 	
 	private void addSchedule(){
 		int generatorNumber = generatorSchedule.getGeneratorNumber();
 		generatorSchedules.put(generatorNumber, generatorSchedule);
-	}
-	
-	public long getPowerStationId(){
-		return powerStationId;
 	}
 	
 	public GeneratorGenerationSchedule getGeneratorGenerationSchedule(int generatorNumber) {
@@ -63,5 +56,10 @@ public class PowerStationGenerationSchedule extends DispatcherMessage{
 	
 	public Collection<Integer> getGeneratorsNumbers(){
 		return generatorSchedules.keySet();
+	}
+
+	@Override
+	public String toString() {
+		return "PowerStationGenerationSchedule toString() stub";
 	}
 }

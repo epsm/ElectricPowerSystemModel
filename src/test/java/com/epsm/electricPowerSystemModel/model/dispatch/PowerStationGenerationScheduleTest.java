@@ -6,7 +6,7 @@ import org.junit.rules.ExpectedException;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorGenerationSchedule;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 
 public class PowerStationGenerationScheduleTest{
 
@@ -19,7 +19,7 @@ public class PowerStationGenerationScheduleTest{
 	
 	@Test
 	public void exceptionIfGeneratorGenerationScheduleIsNull(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("Generation schedule must not be null.");
 		
 		stationSchedule.addGeneratorGenerationSchedule(null);
@@ -27,7 +27,7 @@ public class PowerStationGenerationScheduleTest{
 	
 	@Test
 	public void exceptionIfTryToAddGeneratorScheduleWithGeneratorNumberAsPreviouslyAdded(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("Generation schedule for generator number 1 already exists.");
 		
 		stationSchedule.addGeneratorGenerationSchedule(generatorSchedule);

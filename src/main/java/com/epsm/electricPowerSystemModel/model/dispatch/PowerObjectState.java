@@ -1,15 +1,7 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-public abstract class PowerObjectState{
-	protected long powerObjectId;
-	
+public abstract class PowerObjectState extends Message{
 	public PowerObjectState(long powerObjectId) {
-		this.powerObjectId = powerObjectId;
+		super(powerObjectId);
 	}
-
-	public long getPowerObjectId(){
-		return powerObjectId;
-	}
-
-	public abstract String toString();
 }

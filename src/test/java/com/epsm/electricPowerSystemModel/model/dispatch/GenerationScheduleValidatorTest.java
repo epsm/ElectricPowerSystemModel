@@ -18,7 +18,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorGenerationSched
 import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
 public class GenerationScheduleValidatorTest {
@@ -40,7 +40,7 @@ public class GenerationScheduleValidatorTest {
 	
 	@Test
 	public void exceptionIfStationParameterIsNull(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("station parameters is null.");
 		
 		stationSchedule = mock(PowerStationGenerationSchedule.class);
@@ -51,7 +51,7 @@ public class GenerationScheduleValidatorTest {
 	
 	@Test
 	public void exceptionIfStationScheduleIsNull(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("station schedule is null.");
 		
 		stationSchedule = null;
@@ -61,7 +61,7 @@ public class GenerationScheduleValidatorTest {
 	
 	@Test
 	public void exceptionIfPowerAndScheduleHaveDifferentNumbers(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 		expectedEx.expectMessage("wrong schedule: station id is 3 but schedule id is 1.");
 		
 		when(stationParameters.getPowerObjectId()).thenReturn(3L);
@@ -71,7 +71,7 @@ public class GenerationScheduleValidatorTest {
 	
 	@Test
 	public void exceptionIfStationParametersAndScheduleHaveDifferentAmountOfGenerators(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("wrong schedule: station has 2 generator(s) but schedule has "
 	    		+ "3 generator(s).");
 		
@@ -93,7 +93,7 @@ public class GenerationScheduleValidatorTest {
 	
 	@Test
 	public void exceptionIfStationParametersAndScheduleHaveGeneratorsWithDifferentNumbers(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("wrong schedule: station and schedule has different generator numbers.");
 	    
 		prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNull();
@@ -121,7 +121,7 @@ public class GenerationScheduleValidatorTest {
 	
 	@Test
 	public void exceptionIfgenerationCurveIsAbsentWhenAstaticRegulationTurnedOff(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("wrong schedule: there is no necessary generation curve for generator 1.");
 		
 	    prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNull();
@@ -137,7 +137,7 @@ public class GenerationScheduleValidatorTest {
 	
 	@Test
 	public void powerInGenerationCurveTooHighForGenerator(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("wrong schedule: scheduled generation power for generator 1 is"
 	    		+ " more than nominal.");
 		
@@ -171,7 +171,7 @@ public class GenerationScheduleValidatorTest {
 	
 	@Test
 	public void powerInGenerationCurveTooLowForGenerator(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("wrong schedule: scheduled generation power for generator 1 is"
 	    		+ " less than minimal technology.");
 		

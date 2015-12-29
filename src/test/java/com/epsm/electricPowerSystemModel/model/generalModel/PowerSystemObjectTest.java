@@ -19,7 +19,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
-import com.epsm.electricPowerSystemModel.model.dispatch.PermissionForConsumption;
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumptionPermission;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
@@ -112,7 +112,7 @@ public class PowerSystemObjectTest{
 	
 	@Test
 	public void doNothingIfAcceptedMessageClassIsNotExpected(){
-		message = new  PermissionForConsumption(START_TIME);
+		message = new  ConsumptionPermission(1);
 		object = new AbstractImpl(simulation, timeService, dispatcher, expectedMessageType);
 		
 		object.doRealTimeDependOperation();

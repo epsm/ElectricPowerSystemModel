@@ -5,4 +5,9 @@ public class ConsumerParameters extends PowerObjectParameters{
 	public ConsumerParameters(long id) {
 		super(id);
 	}
+
+	@Override
+	public String toString() {
+		return "ConsumerParameters toString() stub";
+	}
 }

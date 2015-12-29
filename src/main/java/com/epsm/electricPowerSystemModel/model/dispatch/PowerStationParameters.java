@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,6 +17,12 @@ public class PowerStationParameters extends PowerObjectParameters{
 			@JsonProperty("generatorsParameters") Map<Integer, GeneratorParameters> generatorsParameters) {
 		
 		super(powerStationId);
+		
+		if(generatorsParameters == null){
+			throw new GenerationException("PowerStationParameters constructor: "
+					+ "generatorsParameters can't be null.");
+		}
+	
 		this.generatorParameters = Collections.unmodifiableMap(generatorsParameters);
 	}
 
@@ -34,5 +41,10 @@ public class PowerStationParameters extends PowerObjectParameters{
 	
 	public Collection<Integer> getGeneratorsNumbers(){
 		return generatorParameters.keySet();
+	}
+
+	@Override
+	public String toString() {
+		return "PowerStationParameters toString() stub";
 	}
 }

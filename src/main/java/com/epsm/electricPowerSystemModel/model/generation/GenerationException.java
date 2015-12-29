@@ -1,10 +1,10 @@
 package com.epsm.electricPowerSystemModel.model.generation;
 
-public class PowerStationException extends RuntimeException{
+public class GenerationException extends RuntimeException{
 
 	private static final long serialVersionUID = -1857859999356022876L;
 
-	public PowerStationException(String message) {
+	public GenerationException(String message) {
 		super(message);
 	}
 }
