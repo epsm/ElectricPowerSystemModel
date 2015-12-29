@@ -19,6 +19,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
+import com.epsm.electricPowerSystemModel.model.dispatch.PermissionForConsumption;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
@@ -28,7 +29,7 @@ public class PowerSystemObjectTest{
 	private PowerObject object;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
-	private Class<? extends DispatcherMessage> expectedMessageType;
+	private Class<PowerStationGenerationSchedule> expectedMessageType;
 	private DispatcherMessage message;
 	private final LocalDateTime START_TIME = LocalDateTime.of(2000, 01, 01, 00, 00);
 	
@@ -40,9 +41,9 @@ public class PowerSystemObjectTest{
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);
-		expectedMessageType = DispatcherMessage.class;
+		expectedMessageType = PowerStationGenerationSchedule.class;
 		object = new AbstractImpl(simulation, timeService, dispatcher, expectedMessageType);
-		message = new DispatcherMessage(START_TIME);
+		message = new PowerStationGenerationSchedule(0);
 
 		when(timeService.getCurrentTime()).thenReturn(START_TIME);
 	}
@@ -111,9 +112,8 @@ public class PowerSystemObjectTest{
 	
 	@Test
 	public void doNothingIfAcceptedMessageClassIsNotExpected(){
-		message = new  PowerStationGenerationSchedule(1);
-		object = new ImplExceptionIfInteractWithOverridenMethods(
-				simulation, timeService, dispatcher, expectedMessageType);
+		message = new  PermissionForConsumption(START_TIME);
+		object = new AbstractImpl(simulation, timeService, dispatcher, expectedMessageType);
 		
 		object.doRealTimeDependOperation();
 		object.acceptMessage(message);

@@ -26,6 +26,7 @@ public abstract class PowerObject implements DispatchingObject, TimeServiceConsu
 	private String thisClassName;
 	private String messageClassName;
 	private String stateClassName;
+	private String expectedClassName;
 	private Logger logger;
 
 	public PowerObject(ElectricPowerSystemSimulation simulation, TimeService timeService,
@@ -51,6 +52,7 @@ public abstract class PowerObject implements DispatchingObject, TimeServiceConsu
 		this.dispatcher = dispatcher;
 		this.expectedMessageType = expectedMessageType;
 		thisClassName = this.getClass().getSimpleName();
+		expectedClassName = expectedMessageType.getSimpleName();
 		timeWhenRecievedLastMessage = LocalDateTime.MIN;
 		timeWhenSentLastMessage = LocalDateTime.MIN;
 		logger = LoggerFactory.getLogger(PowerObject.class);
@@ -73,8 +75,8 @@ public abstract class PowerObject implements DispatchingObject, TimeServiceConsu
 			logger.info("{} recieved {} from dispatcher.",
 					thisClassName, messageClassName);
 		}else{
-			logger.warn("{} recieved {} from dispatcher.",
-					thisClassName, messageClassName);
+			logger.warn("{} got from dispatcher wrong message class: {}. Expected: {}.",
+					thisClassName, messageClassName, expectedClassName);
 		}
 	}
 	
@@ -120,7 +122,7 @@ public abstract class PowerObject implements DispatchingObject, TimeServiceConsu
 	
 	private void sendStateToDispatcher(){
 		PowerObjectState state = getState();
-		
+
 		if(state == null){
 			String message = "PowerObjectState can't be null.";
 			throw new DispatchingException(message);
