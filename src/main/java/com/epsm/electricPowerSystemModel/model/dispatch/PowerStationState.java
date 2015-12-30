@@ -15,8 +15,6 @@ public class PowerStationState extends PowerObjectState{
 	private float frequency;
 	private Set<GeneratorState> generatorsStates;
 	private StringBuilder stringBuilder;
-	private DateTimeFormatter timeFormatter;
-	private DecimalFormat numberFormatter;
 
 	@JsonCreator
 	public PowerStationState(
@@ -29,10 +27,6 @@ public class PowerStationState extends PowerObjectState{
 		this.timeStamp = timeStamp;
 		this.frequency = frequency;
 		this.generatorsStates = Collections.unmodifiableSet(generatorsStates);
-		
-		stringBuilder = new StringBuilder();
-		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-		numberFormatter = new DecimalFormat("00.000", GlobalConstants.SYMBOLS);
 	}
 	
 	public LocalTime getTimeStamp() {
@@ -55,7 +49,7 @@ public class PowerStationState extends PowerObjectState{
 		stringBuilder.append(" [time: ");
 		stringBuilder.append(timeStamp.format(timeFormatter));
 		stringBuilder.append(" freq.: ");
-		stringBuilder.append(numberFormatter.format(frequency));
+		stringBuilder.append(timeFormatter.format(frequency));
 		stringBuilder.append("Hz");
 		stringBuilder.append(" gener.: ");
 		stringBuilder.append(generatorsStates);

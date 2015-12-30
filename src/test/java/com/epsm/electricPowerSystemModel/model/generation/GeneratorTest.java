@@ -69,7 +69,7 @@ public class GeneratorTest{
 		generator.calculateGeneration();
 		GeneratorState state = generator.getState();
 		
-		Assert.assertEquals(GENERATOR_NUMBER, state.getGeneratorNumber());
+		Assert.assertEquals(GENERATOR_NUMBER, state.getPowerUnitNumber());
 		Assert.assertEquals(GENERATOR_GENERATION, state.getGenerationInWM(), 0);
 	}
 	

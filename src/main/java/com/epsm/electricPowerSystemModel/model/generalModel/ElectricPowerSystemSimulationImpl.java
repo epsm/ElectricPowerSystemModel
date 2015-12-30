@@ -30,7 +30,6 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		idSource = new AtomicLong();
 		logger = LoggerFactory.getLogger(ElectricPowerSystemSimulationImpl.class);
 	}
-
 	
 	@Override
 	public void calculateNextStep() {

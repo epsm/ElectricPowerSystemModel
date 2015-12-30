@@ -1,26 +1,17 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-import java.text.DecimalFormat;
-
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
-
-public class GeneratorState implements Comparable<GeneratorState>{
-	private int generatorNumber;
-	private float generationInWM;
-	private StringBuilder stringBuilder;
-	private DecimalFormat formatter;
+public class GeneratorState extends PowerObjectState implements Comparable<GeneratorState>{
 	
-	public GeneratorState(int generatorNumber, float generationInWM) {
+	private float generationInWM;
+	
+	public GeneratorState(long powerObjectId, int generatorNumber, float generationInWM) {
+		super(powerObjectId);
 		this.generatorNumber = generatorNumber;
 		this.generationInWM = generationInWM;
 
-		stringBuilder = new StringBuilder();
-		formatter = new DecimalFormat("0000.000", GlobalConstants.SYMBOLS);
 	}
 
-	public int getGeneratorNumber() {
-		return generatorNumber;
-	}
+	
 
 	public float getGenerationInWM() {
 		return generationInWM;
@@ -37,33 +28,7 @@ public class GeneratorState implements Comparable<GeneratorState>{
 		return 0;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + generatorNumber;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if(this == obj){
-			return true;
-		}
-		if(obj == null){
-			return false;
-		}
-		if(getClass() != obj.getClass()){
-			return false;
-		}
-		
-		GeneratorState other = (GeneratorState) obj;
-		
-		if(generatorNumber != other.generatorNumber){
-			return false;
-		}
-		return true;
-	}
+	
 
 	@Override
 	public String toString() {
@@ -71,7 +36,7 @@ public class GeneratorState implements Comparable<GeneratorState>{
 		stringBuilder.append("№");
 		stringBuilder.append(generatorNumber);
 		stringBuilder.append(" ");
-		stringBuilder.append(formatter.format(generationInWM));
+		stringBuilder.append(numberFormatter.format(generationInWM));
 		stringBuilder.append("MW");
 		return stringBuilder.toString();
 	}

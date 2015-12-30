@@ -14,12 +14,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParametersStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumptionPermission;
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumptionPermissionStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
@@ -112,7 +112,7 @@ public class PowerSystemObjectTest{
 	
 	@Test
 	public void doNothingIfAcceptedMessageClassIsNotExpected(){
-		message = new  ConsumptionPermission(1);
+		message = new  ConsumptionPermissionStub(1);
 		object = new AbstractImpl(simulation, timeService, dispatcher, expectedMessageType);
 		
 		object.doRealTimeDependOperation();
@@ -210,7 +210,7 @@ public class PowerSystemObjectTest{
 
 		@Override
 		public PowerObjectParameters getParameters() {
-			return new ConsumerParameters(1);
+			return new ConsumerParametersStub(1);
 		}
 	}
 	

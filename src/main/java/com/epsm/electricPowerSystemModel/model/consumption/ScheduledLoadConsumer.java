@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParametersStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
@@ -107,6 +107,6 @@ public class ScheduledLoadConsumer extends Consumer{
 	@Override
 	public PowerObjectParameters getParameters() {
 		//for now just stub
-		return new ConsumerParameters(1);
+		return new ConsumerParametersStub(1);
 	}
 }
