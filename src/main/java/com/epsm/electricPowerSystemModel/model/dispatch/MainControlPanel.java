@@ -19,15 +19,13 @@ public class MainControlPanel extends PowerObject{
 	private GenerationScheduleValidator validator;
 	private PowerStationParameters parameters;
 	private Logger logger;
-	
-	public MainControlPanel(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher, Class<? extends DispatcherMessage> expectedMessageType,
-			PowerStation station) {
+
+	public MainControlPanel(ElectricPowerSystemSimulation simulation, TimeService timeService, 
+			Dispatcher dispatcher, PowerStation station) {
 		
-		super(simulation, timeService, dispatcher, expectedMessageType);
+		super(simulation, timeService, dispatcher);
 		station.setMainControlPanel(this);
 		station.setSimulation(simulation);
-		
 		this.station = station;
 		controller = new GeneratorsController(station);
 		validator = new GenerationScheduleValidator();
@@ -35,7 +33,7 @@ public class MainControlPanel extends PowerObject{
 	}
 	
 	@Override
-	protected void processDispatcherMessage(DispatcherMessage message) {
+	public void processDispatcherMessage(Message message) {
 		PowerStationGenerationSchedule schedule = (PowerStationGenerationSchedule) message;
 		performGenerationSchedule(schedule);
 	}
@@ -75,7 +73,7 @@ public class MainControlPanel extends PowerObject{
 	}
 	
 	@Override
-	public PowerObjectState getState() {
+	public Message getState() {
 		return station.getState();
 	}
 	
@@ -91,7 +89,7 @@ public class MainControlPanel extends PowerObject{
 	}
 
 	@Override
-	public PowerObjectParameters getParameters() {
+	public Message getParameters() {
 		return station.getPowerStationParameters();
 	}
 }
