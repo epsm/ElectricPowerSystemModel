@@ -1,12 +1,12 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
+import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
 
 public class MessageFilter {
 	private Class<? extends Message> expectedCommandMessageClass;
 	private Class<? extends Message> expectedStateMessageClass;
 	private Class<? extends Message> expectedParametersMessageClass;
-	private Class<? extends PowerObject> object;
 	
 	public MessageFilter(Class<? extends PowerObject> objectClass) {
 		if(objectClass == null){
@@ -14,15 +14,28 @@ public class MessageFilter {
 			throw new DispatchingException(message);
 		}
 		
-		this.object = objectClass;
-		
-		if(objectClass.equals(MainControlPanel.class)){
+		if(isObjectPowerStation(objectClass)){
 			expectedCommandMessageClass = PowerStationGenerationSchedule.class;
 			expectedStateMessageClass = PowerStationState.class;
+			expectedParametersMessageClass = PowerStationParameters.class;
+		}else if(isObjectInstanceOfConsumer(objectClass)){
+			expectedCommandMessageClass = ConsumptionPermissionStub.class;
+			expectedStateMessageClass = ConsumerState.class;
+			expectedParametersMessageClass = ConsumerParametersStub.class;
+		}else{
+			String message = String.format("%s constructor: %s.class is not supported.", 
+					getClass().getSimpleName(), objectClass.getSimpleName());
+			throw new DispatchingException(message);
 		}
 	}
 	
-	/*-----------------------------------------------------------------------*/
+	private boolean isObjectPowerStation(Class<? extends PowerObject> objectClass){
+		return objectClass == MainControlPanel.class;
+	}
+	
+	private boolean isObjectInstanceOfConsumer(Class<? extends PowerObject> objectClass){
+		return Consumer.class.isAssignableFrom(objectClass);
+	}
 	
 	public boolean isCommandMessageValid(Message message){
 		throwExceptionIfMessageIsNull(message, "isCommandMessageValid(Message message)");
@@ -42,12 +55,10 @@ public class MessageFilter {
 		return message.getClass() == expectedStateMessageClass;
 	}
 
-	public boolean verifyParametersMessage(Message message){
+	public boolean isParametersMessageValid(Message message){
 		throwExceptionIfMessageIsNull(message, "isParametersMessageValid(Message message)");
 		return message.getClass() == expectedParametersMessageClass;
 	}
-	
-	/*-----------------------------------------------------------------------*/
 	
 	public String getExpectedCommandMessageClassName(){
 		return expectedCommandMessageClass.getSimpleName();

@@ -11,9 +11,10 @@ import com.epsm.electricPowerSystemModel.model.dispatch.ObjectConnectionManager;
 public abstract class PowerObject implements DispatchingObject{
 	protected long id;//must not bee changed after creation
 	protected ElectricPowerSystemSimulation simulation;
+	protected TimeService timeService;
 	@SuppressWarnings("unused")
 	private ObjectConnectionManager manager;
-	private Logger logger;
+	protected Logger logger;
 
 	public PowerObject(ElectricPowerSystemSimulation simulation, TimeService timeService,
 			Dispatcher dispatcher) {
@@ -31,9 +32,10 @@ public abstract class PowerObject implements DispatchingObject{
 		
 		id = simulation.generateId();
 		this.simulation = simulation;
+		this.timeService = timeService;
 		manager = new ObjectConnectionManager(timeService, dispatcher, this);
 		logger = LoggerFactory.getLogger(PowerObject.class);
-		logger.info("{}#{} was created.", this.getClass().getSimpleName(), id);
+		logger.info("{}#{} was created.", getClass().getSimpleName(), id);
 	}
 
 	public long getId(){

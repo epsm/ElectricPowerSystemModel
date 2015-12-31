@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,8 +22,12 @@ import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.Message;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumptionPermissionStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
+import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class ObjectConnectionManagerTest{
+	private ObjectConnectionManager manager;
 	private ElectricPowerSystemSimulation simulation;
 	private PowerObject object;
 	private TimeService timeService;
@@ -41,24 +46,25 @@ public class ObjectConnectionManagerTest{
 		dispatcher = mock(Dispatcher.class);
 		expectedMessageType = PowerStationGenerationSchedule.class;
 		object = new AbstractImpl(simulation, timeService, dispatcher, expectedMessageType);
-		message = new PowerStationGenerationSchedule(0);
-
+		message = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 1);
+		manager = new ObjectConnectionManager(timeService, dispatcher, object);
+		
 		when(timeService.getCurrentTime()).thenReturn(START_TIME);
 	}
 
 	@Test
 	public void triesConnectToDispatcher(){
-		object.doRealTimeDependOperation();
+		manager.doRealTimeDependOperation();
 		
-		verify(dispatcher).establishConnection(any(PowerObjectParameters.class));
+		verify(dispatcher).acceptMessage((any(PowerObjectParameters.class));
 	}
 	
 	@Test
 	public void doesNotTryConnectToDispatcherIfConnectionEstablishedAndActive(){
-		object.doRealTimeDependOperation();
-		object.acceptMessage(message);
+		manager.doRealTimeDependOperation();
+		manager.acceptMessage(message);
 		addToSystemTimeValueLessThanAcceptablePauseBetweenDispatcherMessages();
-		object.doRealTimeDependOperation();
+		manager.doRealTimeDependOperation();
 		
 		verify(dispatcher).establishConnection(any(PowerObjectParameters.class));
 	}
