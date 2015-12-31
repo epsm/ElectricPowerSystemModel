@@ -22,7 +22,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.Message;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumptionPermissionStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
 
-public class PowerSystemObjectTest{
+public class PowerObjectTest{
 	private ElectricPowerSystemSimulation simulation;
 	private PowerObject object;
 	private TimeService timeService;

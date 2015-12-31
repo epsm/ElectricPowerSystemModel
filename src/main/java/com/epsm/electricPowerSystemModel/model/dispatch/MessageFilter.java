@@ -8,22 +8,46 @@ public class MessageFilter {
 	private Class<? extends Message> expectedParametersMessageClass;
 	private Class<? extends PowerObject> object;
 	
-	public MessageFilter(Class<? extends PowerObject> object) {
-		this.object = object;
+	public MessageFilter(Class<? extends PowerObject> objectClass) {
+		if(objectClass == null){
+			String message  = "MessageFilter constructor: objectClass can't be null.";
+			throw new DispatchingException(message);
+		}
 		
+		this.object = objectClass;
+		
+		if(objectClass.equals(MainControlPanel.class)){
+			expectedCommandMessageClass = PowerStationGenerationSchedule.class;
+			expectedStateMessageClass = PowerStationState.class;
+		}
 	}
 	
-	public boolean verifyCommandMessage(Message message){
-		return message.getClass().equals(expectedCommandMessageClass.getClass());
+	/*-----------------------------------------------------------------------*/
+	
+	public boolean isCommandMessageValid(Message message){
+		throwExceptionIfMessageIsNull(message, "isCommandMessageValid(Message message)");
+		return message.getClass() == expectedCommandMessageClass;
 	}
 	
-	public boolean verifyStateMessage(Message message){
-		return message.getClass().equals(expectedStateMessageClass.getClass());
+	private void throwExceptionIfMessageIsNull(Message message, String method){
+		if(message == null){
+			String exceptionMessage = String.format(
+					"MessageFilter %s method: message can't be null.", method);
+			throw new DispatchingException(exceptionMessage);
+		}
+	}
+	
+	public boolean isStateMessageValid(Message message){
+		throwExceptionIfMessageIsNull(message, "isStateMessageValid(Message message)");
+		return message.getClass() == expectedStateMessageClass;
 	}
 
 	public boolean verifyParametersMessage(Message message){
-		return message.getClass().equals(expectedParametersMessageClass.getClass());
+		throwExceptionIfMessageIsNull(message, "isParametersMessageValid(Message message)");
+		return message.getClass() == expectedParametersMessageClass;
 	}
+	
+	/*-----------------------------------------------------------------------*/
 	
 	public String getExpectedCommandMessageClassName(){
 		return expectedCommandMessageClass.getSimpleName();

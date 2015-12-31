@@ -68,7 +68,7 @@ public class ObjectConnectionManager implements DispatcherConnection, TimeServic
 	}
 	
 	private boolean isCommandMessageTypeEqualsToExpected(Message message){
-		return filter.verifyCommandMessage(message);
+		return filter.isCommandMessageValid(message);
 	}
 	
 	private void setLastMessageTime(){
@@ -125,7 +125,7 @@ public class ObjectConnectionManager implements DispatcherConnection, TimeServic
 	}
 	
 	private boolean isStateMessageTypeEqualsToExpected(Message message){
-		return filter.verifyCommandMessage(message);
+		return filter.isCommandMessageValid(message);
 	}
 	
 	private void setTimeWhenSentLastMessage(){
@@ -155,6 +155,6 @@ public class ObjectConnectionManager implements DispatcherConnection, TimeServic
 	}
 	
 	private boolean isParametersMessageTypeEqualsToExpected(Message message){
-		return filter.verifyCommandMessage(message);
+		return filter.isCommandMessageValid(message);
 	}
 }

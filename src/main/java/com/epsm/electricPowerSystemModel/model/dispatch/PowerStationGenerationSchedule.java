@@ -5,13 +5,13 @@ import java.time.LocalTime;
 
 public class PowerStationGenerationSchedule extends MessageInclusionsContainer{
 	public PowerStationGenerationSchedule(long powerObjectId, LocalDateTime realTimeStamp,
-			LocalTime simulationTimeStamp, int quantityOfInclusions) {
+			LocalTime simulationTimeStamp, int quantityOfGeneratorSchedules) {
 		
-		super(powerObjectId, realTimeStamp, simulationTimeStamp, quantityOfInclusions);
+		super(powerObjectId, realTimeStamp, simulationTimeStamp, quantityOfGeneratorSchedules);
 	}
 
 	@Override
 	public String toString() {
-		return "PowerStationGenerationSchedule toString() stub";
+		return "PowerStationGenerationSchedule toString() stub.";
 	}
 }

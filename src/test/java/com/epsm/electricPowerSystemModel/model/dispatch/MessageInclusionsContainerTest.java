@@ -38,9 +38,19 @@ public class MessageInclusionsContainerTest {
 			super(powerUnitNumber);
 		}
 	}
+	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
 	
+	@Test
+	public void exceptionInConstructorIfQuantityOfInclusionsLessThanOne(){
+		expectedEx.expect(DispatchingException.class);
+	    expectedEx.expectMessage("MessageInclusionsContainerImpl constructor: "
+	    		+ "quantityOfInclusions must be more than zero, but was 0.");
+	    
+	    container = new MessageInclusionsContainerImpl(0, LocalDateTime.MIN, LocalTime.MIN, 0);
+	}
+	/*
 	@Test
 	public void exceptionInGetQuantityOfInclusionsMethodIfContainerContainsNonExpectedQuantityOfInclusion(){
 		expectedEx.expect(DispatchingException.class);
@@ -112,5 +122,5 @@ public class MessageInclusionsContainerTest {
 		inclusion_2 = new MessageInclusionImpl(1);
 		container.addInclusion(inclusion_1);
 		container.addInclusion(inclusion_2);
-	}
+	}*/
 }

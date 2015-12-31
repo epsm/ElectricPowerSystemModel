@@ -15,6 +15,13 @@ public abstract class MessageInclusionsContainer extends Message{
 			LocalTime simulationTimeStamp, int quantityOfInclusions) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
+
+		if(quantityOfInclusions < 1){
+			String message = String.format("%s constructor: quantityOfInclusions must be more than zero,"
+					+ " but was %d.", getNameOfThisClass(), quantityOfInclusions);
+			throw new DispatchingException(message);
+		}
+		
 		inclusions = new HashMap<Integer, MessageInclusion>();
 		expectedQuantityOfInclusions = quantityOfInclusions;
 	}
