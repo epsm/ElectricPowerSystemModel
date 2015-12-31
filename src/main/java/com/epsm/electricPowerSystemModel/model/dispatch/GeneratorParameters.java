@@ -1,6 +1,6 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-public class GeneratorParameters extends GeneratorInclusion{
+public class GeneratorParameters extends MessageInclusion{
 
 	public GeneratorParameters(int generatorNumber, float nominalPowerInMW, float minimalTechnologyPower) {
 		super(generatorNumber);

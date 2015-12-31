@@ -2,7 +2,7 @@ package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 
-public class GeneratorGenerationSchedule extends GeneratorInclusion{
+public class GeneratorGenerationSchedule extends MessageInclusion{
 	private boolean GeneratorTurnedOn;
 	private boolean AstaticRegulatorTurnedOn;
 	private LoadCurve curve;

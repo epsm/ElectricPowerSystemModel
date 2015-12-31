@@ -83,4 +83,14 @@ public abstract class MessageInclusionsContainer extends Message{
 	private boolean isInclusionToAddAlreadyInContainer(int powerUnitNumber){
 		return inclusions.containsKey(powerUnitNumber);
 	}
+	
+	public String toString(){
+		stringBuilder.setLength(0);
+		
+		for(MessageInclusion inclusion: inclusions.values()){
+			stringBuilder.append(inclusion.toString());
+		}
+		
+		return stringBuilder.toString();
+	}
 }
