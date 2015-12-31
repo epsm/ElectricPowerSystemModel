@@ -16,7 +16,7 @@ import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemS
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class ScheduledLoadConsumer extends Consumer{
-	private LoadCurveFactory factory = new LoadCurveFactory();
+	private LoadCurveBuilder factory = new LoadCurveBuilder();
 	private float[] approximateLoadByHoursOnDayInPercent;
 	private float maxLoadWithoutFluctuationsInMW;
 	private float randomFluctuationsInPercent;

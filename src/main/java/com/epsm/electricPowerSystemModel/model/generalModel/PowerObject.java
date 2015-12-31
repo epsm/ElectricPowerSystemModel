@@ -6,11 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectParameters;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
+import com.epsm.electricPowerSystemModel.model.dispatch.Message;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
@@ -18,7 +16,7 @@ public abstract class PowerObject implements DispatchingObject, TimeServiceConsu
 	protected long id;//must not bee changed after creation
 	protected ElectricPowerSystemSimulation simulation;
 	private TimeService timeService;
-	private Class<? extends DispatcherMessage> expectedMessageType;
+	private Class<? extends Message> expectedMessageType;
 	private Dispatcher dispatcher;
 	private volatile LocalDateTime timeWhenRecievedLastMessage;
 	private LocalDateTime timeWhenSentLastMessage;
@@ -30,19 +28,19 @@ public abstract class PowerObject implements DispatchingObject, TimeServiceConsu
 	private Logger logger;
 
 	public PowerObject(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher, Class<? extends DispatcherMessage> expectedMessageType) {
+			Dispatcher dispatcher, Class<? extends Message> expectedMessageType) {
 		
 		if(simulation == null){
-			String message = "PowerSystem object constructor: simulation must not be null.";
+			String message = "PowerObject constructor: simulation must not be null.";
 			throw new DispatchingException(message);
 		}else if(timeService == null){
-			String message = "PowerSystem object constructor: timeService must not be null.";
+			String message = "PowerObject constructor: timeService must not be null.";
 			throw new DispatchingException(message);
 		}else if(dispatcher == null){
-			String message = "PowerSystem object constructor: dispatcher must not be null.";
+			String message = "PowerObject constructor: dispatcher must not be null.";
 			throw new DispatchingException(message);
 		}else if(expectedMessageType == null){
-			String message = "PowerSystem object constructor: expectedMessageType must not be null.";
+			String message = "PowerObject constructor: expectedMessageType must not be null.";
 			throw new DispatchingException(message);
 		}
 		
@@ -60,7 +58,7 @@ public abstract class PowerObject implements DispatchingObject, TimeServiceConsu
 	}
 	
 	@Override
-	public final void acceptMessage(DispatcherMessage message) {
+	public final void acceptMessage(Message message) {
 		if(message == null){
 			logger.warn("{} recieved null from dispatcher.", thisClassName);
 			return;
@@ -80,7 +78,11 @@ public abstract class PowerObject implements DispatchingObject, TimeServiceConsu
 		}
 	}
 	
-	private boolean isMessageTypeEqualsToExpected(DispatcherMessage message){
+	private void getMessageClassName(Message message){
+		messageClassName = message.getClass().getSimpleName();
+	}
+	
+	private boolean isMessageTypeEqualsToExpected(Message message){
 		return message.getClass().equals(expectedMessageType);
 	}
 	
@@ -88,7 +90,7 @@ public abstract class PowerObject implements DispatchingObject, TimeServiceConsu
 		timeWhenRecievedLastMessage = timeService.getCurrentTime();
 	}
 	
-	protected abstract void processDispatcherMessage(DispatcherMessage message);
+	protected abstract void processDispatcherMessage(Message message);
 	
 	@Override
 	public final void doRealTimeDependOperation(){
@@ -121,42 +123,38 @@ public abstract class PowerObject implements DispatchingObject, TimeServiceConsu
 	}
 	
 	private void sendStateToDispatcher(){
-		PowerObjectState state = getState();
+		Message state = getState();
 
 		if(state == null){
 			String message = "PowerObjectState can't be null.";
 			throw new DispatchingException(message);
 		}
 		
-		dispatcher.acceptReport(state);
+		dispatcher.acceptMessage(state);
 		getStateClassName(state);
 		logger.info("{} sent {} to dispatcher.", thisClassName, stateClassName);
 	}
 	
-	protected abstract PowerObjectState getState();
+	protected abstract Message getState();
 	
 	private void setTimeWhenSentLastMessage(){
 		timeWhenSentLastMessage = currentTime;
 	}
 	
 	private void establishConnectionToDispatcher(){
-		PowerObjectParameters parameters = getParameters();
+		Message parameters = getParameters();
 		
 		if(parameters == null){
 			String message = "PowerObjectParameters can't be null.";
 			throw new DispatchingException(message);
 		}
 		
-		dispatcher.establishConnection(parameters);
+		dispatcher.acceptMessage(parameters);
 	}
 	
-	public abstract PowerObjectParameters getParameters();
+	public abstract Message getParameters();
 	
-	private void getMessageClassName(DispatcherMessage message){
-		messageClassName = message.getClass().getSimpleName();
-	}
-	
-	private void getStateClassName(PowerObjectState state){
+	private void getStateClassName(Message state){
 		stateClassName = state.getClass().getSimpleName();
 	}
 	

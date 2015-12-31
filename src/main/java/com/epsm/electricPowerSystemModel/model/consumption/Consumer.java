@@ -13,12 +13,12 @@ import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 public abstract class Consumer extends PowerObject{
 	protected float degreeOnDependingOfFrequency;
 	
-	public Consumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
+	/*public Consumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
 			Dispatcher dispatcher, Class<? extends DispatcherMessage>  expectedMessageType){
 		
 		super(simulation, timeService, dispatcher, expectedMessageType);
 		this.simulation = simulation;
-	}
+	}*/
 
 	protected float calculateLoadCountingFrequency(float load, float frequency){
 		return (float)Math.pow((frequency / GlobalConstants.STANDART_FREQUENCY),

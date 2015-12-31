@@ -17,11 +17,9 @@ import org.junit.rules.ExpectedException;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParametersStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
+import com.epsm.electricPowerSystemModel.model.dispatch.Message;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumptionPermissionStub;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectParameters;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
 
 public class PowerSystemObjectTest{
@@ -30,7 +28,7 @@ public class PowerSystemObjectTest{
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private Class<PowerStationGenerationSchedule> expectedMessageType;
-	private DispatcherMessage message;
+	private Message message;
 	private final LocalDateTime START_TIME = LocalDateTime.of(2000, 01, 01, 00, 00);
 	
 	@Rule
@@ -193,73 +191,70 @@ public class PowerSystemObjectTest{
 	}
 	
 	private class AbstractImpl extends PowerObject{
-		public AbstractImpl(ElectricPowerSystemSimulation simulation, TimeService timeService,
-				Dispatcher dispatcher, 	Class<? extends DispatcherMessage> expectedMessageType) {
 
+		public AbstractImpl(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher,
+				Class<? extends Message> expectedMessageType) {
 			super(simulation, timeService, dispatcher, expectedMessageType);
+			// TODO Auto-generated constructor stub
 		}
 
 		@Override
-		protected void processDispatcherMessage(DispatcherMessage message) {
+		protected void processDispatcherMessage(Message message) {
 		}
 
 		@Override
-		protected PowerObjectState getState() {
-			return new ConsumerState(1, 1, null);
+		protected Message getState() {
+			return null;
 		}
 
 		@Override
-		public PowerObjectParameters getParameters() {
-			return new ConsumerParametersStub(1);
+		public Message getParameters() {
+			return null;
 		}
 	}
 	
 	private class ImplReturnsNullWithGetState extends AbstractImpl{
-
-		public ImplReturnsNullWithGetState(ElectricPowerSystemSimulation simulation,
-				TimeService timeService, Dispatcher dispatcher,
-				Class<? extends DispatcherMessage> expectedMessageType) {
+		
+		public ImplReturnsNullWithGetState(ElectricPowerSystemSimulation simulation, TimeService timeService,
+				Dispatcher dispatcher, Class<? extends Message> expectedMessageType) {
 			
 			super(simulation, timeService, dispatcher, expectedMessageType);
 		}
-		
+
 		@Override
-		protected PowerObjectState getState() {
+		protected Message getState() {
 			return null;
 		}
 	}
 	
 	private class ImplReturnsNullWithGetParameters extends AbstractImpl{
-
-		public ImplReturnsNullWithGetParameters(ElectricPowerSystemSimulation simulation,
-				TimeService timeService, Dispatcher dispatcher,
-				Class<? extends DispatcherMessage> expectedMessageType) {
+		public ImplReturnsNullWithGetParameters(ElectricPowerSystemSimulation simulation, TimeService timeService,
+				Dispatcher dispatcher, Class<? extends Message> expectedMessageType) {
 			
 			super(simulation, timeService, dispatcher, expectedMessageType);
 		}
-		
+
 		@Override
-		public PowerObjectParameters getParameters(){
+		public Message getParameters(){
 			return null;
 		}
 	}
 	
 	private class ImplExceptionIfInteractWithOverridenMethods extends AbstractImpl{
 		public ImplExceptionIfInteractWithOverridenMethods(ElectricPowerSystemSimulation simulation,
-				TimeService timeService, Dispatcher dispatcher,
-				Class<? extends DispatcherMessage> expectedMessageType) {
-
+				TimeService timeService, Dispatcher dispatcher, Class<? extends Message> expectedMessageType) {
+			
 			super(simulation, timeService, dispatcher, expectedMessageType);
 		}
 
 		@Override
-		protected void processDispatcherMessage(DispatcherMessage message) {
+		protected void processDispatcherMessage(Message message) {
 			throw new DispatchingException("PowerObject test implementation with exceptions: "
 					+ "overriden processDispatcherMessage() was called.");
 		}
 
 		@Override
-		protected PowerObjectState getState() {
+		protected Message getState() {
 			throw new DispatchingException("PowerObject test implementation with exceptions: "
 					+ "overriden getState() was called.");
 		}
