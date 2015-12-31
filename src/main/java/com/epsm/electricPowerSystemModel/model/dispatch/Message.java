@@ -1,32 +1,23 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
-
-public abstract class Message {
+public abstract class Message extends Formatting{
 	protected long powerObjectId;
 	protected LocalTime simulationTimeStamp;
 	protected LocalDateTime realTimeStamp;
-	protected StringBuilder stringBuilder;
-	protected DecimalFormat numberFormatter;
-	protected DateTimeFormatter timeFormatter;
 	
 	public Message(long powerObjectId, LocalDateTime realTimeStamp, LocalTime simulationTimeStamp){
 		if(realTimeStamp == null){
-			throw new DispatchingException("Message constructor: realTimeStamp can't be null.");
+			throw new DispatchingException("PowerObjectMessage constructor: realTimeStamp can't be null.");
 		}else if(simulationTimeStamp == null){
-			throw new DispatchingException("Message constructor: simulationTimeStamp can't be null.");
+			throw new DispatchingException("PowerObjectMessage constructor: simulationTimeStamp can't be null.");
 		}
 		
-		
 		this.powerObjectId = powerObjectId;
-		stringBuilder = new StringBuilder();
-		numberFormatter = new DecimalFormat("0000.000", GlobalConstants.SYMBOLS);
-		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
+		this.realTimeStamp = realTimeStamp;
+		this.simulationTimeStamp = simulationTimeStamp;
 	}
 
 	public long getPowerObjectId(){

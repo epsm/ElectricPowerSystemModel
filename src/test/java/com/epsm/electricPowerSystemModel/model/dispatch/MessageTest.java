@@ -1,30 +1,19 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-import org.junit.Before;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.mockito.Mockito.*;
-
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
-import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
-
 public class MessageTest {
-	private Message message;
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
 	
-	@Before
-	public void initialize(){
-		message = mock(Message.class);
-	}
-	
 	@Test
-	public void exceptionInConstructorRealTimeStampIsNull(){
+	public void exceptionInConstructorIfRealTimeStampIsNull(){
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("Message constructor: realTimeStamp can't be null.");
 	    
@@ -32,7 +21,7 @@ public class MessageTest {
 	}
 	
 	@Test
-	public void exceptionInConstructorSimulationTimeStamppIsNull(){
+	public void exceptionInConstructorIfSimulationTimeStamppIsNull(){
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("Message constructor: simulationTimeStamp can't be null.");
 	    

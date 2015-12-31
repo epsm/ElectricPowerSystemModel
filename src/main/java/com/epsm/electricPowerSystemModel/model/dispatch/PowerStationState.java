@@ -1,6 +1,7 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -10,35 +11,18 @@ import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PowerStationState extends PowerObjectState{
-	private LocalTime timeStamp;
+public class PowerStationState extends Message{
 	private float frequency;
-	private Set<GeneratorState> generatorsStates;
-	private StringBuilder stringBuilder;
 
-	@JsonCreator
-	public PowerStationState(
-			@JsonProperty("powerObjectId") long powerObjectId,
-			@JsonProperty("timeStamp") LocalTime timeStamp,
-			@JsonProperty("frequency") float frequency,
-			@JsonProperty("generatorsStates") Set<GeneratorState> generatorsStates) {
+	public PowerStationState(long powerObjectId, LocalDateTime realTimeStamp, 
+			LocalTime simulationTimeStamp, float frequency) {
 		
-		super(powerObjectId);
-		this.timeStamp = timeStamp;
+		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		this.frequency = frequency;
-		this.generatorsStates = Collections.unmodifiableSet(generatorsStates);
-	}
-	
-	public LocalTime getTimeStamp() {
-		return timeStamp;
-	}
+	}	
 
 	public float getFrequency() {
 		return frequency;
-	}
-
-	public Set<GeneratorState> getGeneratorsStates() {
-		return generatorsStates;
 	}
 
 	@Override
@@ -47,7 +31,7 @@ public class PowerStationState extends PowerObjectState{
 		stringBuilder.append("PowerSt. with id ");
 		stringBuilder.append(powerObjectId);
 		stringBuilder.append(" [time: ");
-		stringBuilder.append(timeStamp.format(timeFormatter));
+		stringBuilder.append(simulationTimeStamp.format(timeFormatter));
 		stringBuilder.append(" freq.: ");
 		stringBuilder.append(timeFormatter.format(frequency));
 		stringBuilder.append("Hz");

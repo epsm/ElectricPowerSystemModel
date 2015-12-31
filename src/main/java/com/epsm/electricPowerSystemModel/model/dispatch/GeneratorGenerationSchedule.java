@@ -2,20 +2,15 @@ package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 
-public class GeneratorGenerationSchedule {
-	private int generatorNumber;//must not be changed after construction
+public class GeneratorGenerationSchedule extends GeneratorInclusion{
 	private boolean GeneratorTurnedOn;
 	private boolean AstaticRegulatorTurnedOn;
 	private LoadCurve curve;
-
-	public GeneratorGenerationSchedule(int generatorNumber, boolean generatorTurnedOn,
-			boolean astaticRegulatorTurnedOn, LoadCurve curve) {
-		this.generatorNumber = generatorNumber;
-		GeneratorTurnedOn = generatorTurnedOn;
-		AstaticRegulatorTurnedOn = astaticRegulatorTurnedOn;
-		this.curve = curve;
+	
+	public GeneratorGenerationSchedule(int inclusionNumber) {
+		super(inclusionNumber);
 	}
-
+	
 	public boolean isGeneratorTurnedOn() {
 		return GeneratorTurnedOn;
 	}
@@ -26,9 +21,5 @@ public class GeneratorGenerationSchedule {
 
 	public LoadCurve getCurve() {
 		return curve;
-	}
-
-	public int getGeneratorNumber() {
-		return generatorNumber;
 	}
 }

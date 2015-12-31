@@ -1,19 +1,15 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-public class GeneratorParameters {
-	private int generatorNumber;
-	private float nominalPowerInMW;
-	private float minimalTechnologyPower;
-	
+public class GeneratorParameters extends GeneratorInclusion{
+
 	public GeneratorParameters(int generatorNumber, float nominalPowerInMW, float minimalTechnologyPower) {
-		this.generatorNumber = generatorNumber;
+		super(generatorNumber);
 		this.nominalPowerInMW = nominalPowerInMW;
 		this.minimalTechnologyPower = minimalTechnologyPower;
 	}
 
-	public int getGeneratorNumber() {
-		return generatorNumber;
-	}
+	private float nominalPowerInMW;
+	private float minimalTechnologyPower;
 
 	public float getNominalPowerInMW() {
 		return nominalPowerInMW;

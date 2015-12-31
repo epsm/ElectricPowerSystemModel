@@ -3,7 +3,7 @@ package com.epsm.electricPowerSystemModel.model.dispatch;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class ConsumerState extends PowerObjectState{
+public class ConsumerState extends Message{
 	private float load;
 	
 	public ConsumerState(long powerObjectId, LocalDateTime realTimeStamp, LocalTime simulationTimeStamp, 

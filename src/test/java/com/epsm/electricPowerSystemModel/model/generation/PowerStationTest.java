@@ -225,11 +225,11 @@ public class PowerStationTest{
 		float thirdGeneratorGeneration = 0;
 		
 		for(GeneratorState generatorStateReport: stationState.getGeneratorsStates()){
-			if(generatorStateReport.getPowerUnitNumber() == 2){
-				secondtGeneratorNumber = generatorStateReport.getPowerUnitNumber();
+			if(generatorStateReport.getInclusionNumber() == 2){
+				secondtGeneratorNumber = generatorStateReport.getInclusionNumber();
 				secondGeneratorGeneration = generatorStateReport.getGenerationInWM();
-			}else if(generatorStateReport.getPowerUnitNumber() == 3){
-				thirdGeneratorNumber = generatorStateReport.getPowerUnitNumber();
+			}else if(generatorStateReport.getInclusionNumber() == 3){
+				thirdGeneratorNumber = generatorStateReport.getInclusionNumber();
 				thirdGeneratorGeneration = generatorStateReport.getGenerationInWM();
 			}
 		}

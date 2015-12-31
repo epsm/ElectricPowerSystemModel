@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 //There may be methods allows consumer to be turned on/of or limit consumption.
-public class ConsumptionPermissionStub extends DispatcherMessage{
+public class ConsumptionPermissionStub extends Message{
 	public ConsumptionPermissionStub(long powerObjectId, LocalDateTime realTimeStamp,
 			LocalTime simulationTimeStamp) {
 		
