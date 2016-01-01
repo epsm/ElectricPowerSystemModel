@@ -1,14 +1,15 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
 public class GeneratorState extends MessageInclusion{
-	public GeneratorState(int generatorNumber) {
+	protected float generationInWM;
+	
+	public GeneratorState(int generatorNumber, float generationInWM) {
 		super(generatorNumber);
+		this.generationInWM = generationInWM;
 	}
 
-	protected float gnerationInWM;
-
 	public float getGenerationInWM() {
-		return gnerationInWM;
+		return generationInWM;
 	}
 
 	@Override
@@ -17,7 +18,7 @@ public class GeneratorState extends MessageInclusion{
 		stringBuilder.append("№");
 		stringBuilder.append(getInclusionNumber());
 		stringBuilder.append(" ");
-		stringBuilder.append(numberFormatter.format(gnerationInWM));
+		stringBuilder.append(numberFormatter.format(generationInWM));
 		stringBuilder.append("MW");
 		return stringBuilder.toString();
 	}
