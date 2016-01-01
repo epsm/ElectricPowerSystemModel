@@ -63,10 +63,12 @@ public abstract class MessageInclusionsContainer extends Message{
 	}
 	
 	private void throwExceptionIfRequestedInclusionDoesNotExist(int inclusionNumber){
-		String message = String.format("%s: there isn't inclusion with number %d, presents only inclusions "
-				+ "with numbers: %s.",
-				getNameOfThisClass(), inclusionNumber, inclusions.keySet());
-		throw new DispatchingException(message);
+		if(! inclusions.containsKey(inclusionNumber)){
+			String message = String.format("%s: there isn't inclusion with number %d, presents only inclusions "
+					+ "with numbers: %s.",
+					getNameOfThisClass(), inclusionNumber, inclusions.keySet());
+			throw new DispatchingException(message);
+		}
 	}
 	
 	protected final void addInclusion(MessageInclusion inclusion){

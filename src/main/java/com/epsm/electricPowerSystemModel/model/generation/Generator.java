@@ -23,7 +23,6 @@ public class Generator{
 		this.number = number;
 		staticRegulator = new StaticRegulator(simulation, this);
 		astaticRegulator = new AstaticRegulator(simulation, this);
-		prepareState();
 	}
 	
 	public float calculateGeneration(){

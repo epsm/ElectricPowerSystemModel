@@ -16,7 +16,6 @@ import org.junit.rules.ExpectedException;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
-import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
@@ -25,7 +24,6 @@ import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class PowerStationTest{
 	private ElectricPowerSystemSimulation simulation;
-	private MainControlPanel controlPanel;
 	private PowerStationParameters stationParameters;
 	private PowerStationState stationState;
 	private PowerStation station;
@@ -67,9 +65,6 @@ public class PowerStationTest{
 	
 	void prepareAndInstallFirstGenerator(){
 		generator_1 = new Generator(simulation, 1);
-		staticRegulator_1 = new StaticRegulator(simulation, generator_1);
-		
-		generator_1.setStaticRegulator(staticRegulator_1);
 		generator_1.setMinimalPowerInMW(FIRST_GENERATOR_MIN_POWER);
 		generator_1.setNominalPowerInMW(FIRST_GENERATOR_NOMINAL_POWER);
 		generator_1.setPowerAtRequiredFrequency(FIRST_GENERATOR_RQUIRED_POWER);
@@ -114,25 +109,20 @@ public class PowerStationTest{
 		generator_3.turnOffGenerator();
 	}
 	
-	@Test
-	public void powerStationParametersContainsAsManyGeneratorsAsPresentInThePowerStation(){
-		prepareAndInstallFirstGenerator();
-		prepareAndInstallSecondAndThirdGenerators();
-		getPowerStationParameters();
-		int numberOfGeneratorsInParameters = stationParameters.getQuantityOfInclusions();
-		
-		Assert.assertEquals(3, numberOfGeneratorsInParameters);
-	}
-	
 	private void getPowerStationParameters(){
-		stationParameters = station.getPowerStationParameters();
+		stationParameters = (PowerStationParameters) station.getParameters();
 	}
 	
 	@Test
 	public void powerStationParametersContainsCorrectData(){
 		prepareAndInstallFirstGenerator();
+		doCalculatinStepToGetNecessaryTimeParametersFromSimulation();
 		getPowerStationParameters();
 		compareDataFromParametersWithReal();
+	}
+	
+	public void doCalculatinStepToGetNecessaryTimeParametersFromSimulation(){
+		station.calculateGenerationInMW();
 	}
 	
 	private void compareDataFromParametersWithReal(){
@@ -182,14 +172,6 @@ public class PowerStationTest{
 	}
 	
 	@Test
-	public void exceptionIfMainControlPanelIsNullWhenCalculateGenerationInMWCalled(){
-		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("Can't calculate generation with null control panel.");
-		
-	    station.calculateGenerationInMW();
-	}
-	
-	@Test
 	public void powerStationStateContainsCorrectData(){
 		prepareAndInstallSecondAndThirdGenerators();
 		turnOnSecondAndThirdGenerators();
@@ -208,7 +190,7 @@ public class PowerStationTest{
 	}
 	
 	private void getStation(){
-		stationState = station.getState();
+		stationState = (PowerStationState) station.getState();
 	}
 	
 	private void verifyStationState(){

@@ -50,7 +50,7 @@ public class MessageInclusionsContainerTest {
 	    
 	    container = new MessageInclusionsContainerImpl(0, LocalDateTime.MIN, LocalTime.MIN, 0);
 	}
-	/*
+	
 	@Test
 	public void exceptionInGetQuantityOfInclusionsMethodIfContainerContainsNonExpectedQuantityOfInclusion(){
 		expectedEx.expect(DispatchingException.class);
@@ -101,6 +101,12 @@ public class MessageInclusionsContainerTest {
 	}
 	
 	@Test
+	public void doNothinIfGetInclusionMesthodRequestedForExistInclusion(){
+	    addTwoInclusionsToContainer();
+	    container.getInclusion(2);
+	}
+	
+	@Test
 	public void exceptionIfTryToAddNullInclusion(){
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("MessageInclusionsContainerImpl addInclusion(...): inclusion "
@@ -122,5 +128,5 @@ public class MessageInclusionsContainerTest {
 		inclusion_2 = new MessageInclusionImpl(1);
 		container.addInclusion(inclusion_1);
 		container.addInclusion(inclusion_2);
-	}*/
+	}
 }

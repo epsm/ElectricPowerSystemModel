@@ -28,9 +28,7 @@ public class PowerStation extends PowerObject{
 	private LocalTime currentTime;
 	private float currentFrequency;
 	private float currentGenerationInMW;
-	private Set<GeneratorState> generatorsStates;
 	private PowerStationParameters stationParameters;
-	private Map<Integer, GeneratorParameters> generatorParameters;
 	private Generator generatorToAdd;
 	private PowerStationState state;
 	private Logger logger = LoggerFactory.getLogger(PowerStation.class);
@@ -39,7 +37,6 @@ public class PowerStation extends PowerObject{
 		super(simulation, timeService, dispatcher);
 		
 		generators = new HashMap<Integer, Generator>();
-		generatorsStates = new TreeSet<GeneratorState>();
 		controlPanel = new MainControlPanel(simulation, this);
 	}
 	
@@ -73,13 +70,13 @@ public class PowerStation extends PowerObject{
 	}
 	
 	private void prepareStationState(){
-		clearPreviousGeneratorsStates();
-		prepareGeneratorsStates();
 		createStationState();
+		prepareGeneratorsStates();
 	}
 	
-	private void clearPreviousGeneratorsStates(){
-		generatorsStates.clear();
+	private void createStationState(){
+		state = new PowerStationState(id, timeService.getCurrentTime(), currentTime,
+				generators.size(), currentFrequency);
 	}
 	
 	private void prepareGeneratorsStates(){
@@ -89,33 +86,27 @@ public class PowerStation extends PowerObject{
 	}
 	
 	private void prepareGeneratorState(Generator generator){
-		GeneratorState state = generator.getState(); 
-		generatorsStates.add(state);
-	}
-	
-	private void createStationState(){
-		state = new PowerStationState(id, timeService.getCurrentTime(), currentTime,
-				generators.size(), currentFrequency);
+		GeneratorState generatorState = generator.getState(); 
+		state.addGeneratorState(generatorState);
 	}
 	
 	@Override
 	public Message getParameters(){
-		createNewContainerForGeneratorsParameters();
-		createAndSaveParametersForEveryGenerator();
 		createStationParameters();
-
+		createAndSaveParametersForEveryGenerator();
+		
 		return stationParameters;
 	}
 	
-	private void createNewContainerForGeneratorsParameters(){
-		generatorParameters = new HashMap<Integer, GeneratorParameters>();
+	public void createStationParameters(){
+		stationParameters = new PowerStationParameters(id, timeService.getCurrentTime(),
+				currentTime, generators.size());
 	}
 	
 	private void createAndSaveParametersForEveryGenerator(){
 		for(Generator generator: generators.values()){
-			int generatorNumber = generator.getNumber();
 			GeneratorParameters parameters = createGeneratorParameters(generator);
-			generatorParameters.put(generatorNumber, parameters);
+			stationParameters.addGeneratorParameters(parameters);
 		}
 	}
 	
@@ -125,11 +116,6 @@ public class PowerStation extends PowerObject{
 		float nominalPower = generator.getNominalPowerInMW(); 
 		
 		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);
-	}
-	
-	public void createStationParameters(){
-		stationParameters = new PowerStationParameters(id, timeService.getCurrentTime(),
-				currentTime, generators.size());
 	}
 	
 	public void addGenerator(Generator generator){
