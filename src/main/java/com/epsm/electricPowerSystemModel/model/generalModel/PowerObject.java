@@ -20,13 +20,13 @@ public abstract class PowerObject implements DispatchingObject{
 			Dispatcher dispatcher) {
 		
 		if(simulation == null){
-			String message = "PowerObject constructor: simulation must not be null.";
+			String message = "PowerObject constructor: simulation can't be null.";
 			throw new DispatchingException(message);
 		}else if(timeService == null){
-			String message = "PowerObject constructor: timeService must not be null.";
+			String message = "PowerObject constructor: timeService can't be null.";
 			throw new DispatchingException(message);
 		}else if(dispatcher == null){
-			String message = "PowerObject constructor: dispatcher must not be null.";
+			String message = "PowerObject constructor: dispatcher can't be null.";
 			throw new DispatchingException(message);
 		}
 		
