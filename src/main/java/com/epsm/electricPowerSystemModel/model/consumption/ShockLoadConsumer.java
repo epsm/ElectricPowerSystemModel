@@ -135,7 +135,6 @@ public class ShockLoadConsumer extends Consumer{
 
 	@Override
 	public Message getParameters() {
-		//for now just stub
 		return new ConsumerParametersStub(id, timeService.getCurrentTime(), simulation.getTimeInSimulation());
 	}
 }

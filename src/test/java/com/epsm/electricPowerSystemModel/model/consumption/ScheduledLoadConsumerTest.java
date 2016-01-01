@@ -21,7 +21,6 @@ public class ScheduledLoadConsumerTest{
 	private ElectricPowerSystemSimulation simulation;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
-	private Class<? extends DispatcherMessage> expectedMessageType;
 	private ScheduledLoadConsumer consumer;
 	private float[] approximateLoadByHoursInPercent;
 	private LocalTime currentTime;
