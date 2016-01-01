@@ -30,9 +30,6 @@ public class PowerStationTest{
 	private Generator generator_1;
 	private Generator generator_2;
 	private Generator generator_3;
-	private StaticRegulator staticRegulator_1;
-	private StaticRegulator staticRegulator_2;
-	private StaticRegulator staticRegulator_3;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private LocalTime CONSTANT_TIME_IN_MOCK_SIMULATION = LocalTime.NOON;
@@ -54,6 +51,7 @@ public class PowerStationTest{
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		when(simulation.getTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
+		when(simulation.generateId()).thenReturn(POWER_STATION_ID);
 		
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentTime()).thenReturn(CONSTANT_REAL_TIME);
@@ -75,18 +73,11 @@ public class PowerStationTest{
 	void prepareAndInstallSecondAndThirdGenerators(){
 		generator_2 = new Generator(simulation, 2);
 		generator_3 = new Generator(simulation, 3);
-		staticRegulator_2 = mock(StaticRegulator.class);
-		staticRegulator_3 = mock(StaticRegulator.class);
 		
-		generator_2.setStaticRegulator(staticRegulator_2);
-		generator_3.setStaticRegulator(staticRegulator_3);
 		generator_2.setNominalPowerInMW(SECOND_GENERATOR_NOMINAL_POWER);
 		generator_3.setNominalPowerInMW(THIRD_GENERATOR_NOMINAL_POWER);
 		generator_2.setPowerAtRequiredFrequency(SECOND_GENERATOR_RQUIRED_POWER);
 		generator_3.setPowerAtRequiredFrequency(THIRD_GENERATOR_RQUIRED_POWER);
-
-		when(staticRegulator_2.getGeneratorPowerInMW()).thenReturn(SECOND_GENERATOR_RQUIRED_POWER);
-		when(staticRegulator_3.getGeneratorPowerInMW()).thenReturn(THIRD_GENERATOR_RQUIRED_POWER);
 		
 		station.addGenerator(generator_2);
 		station.addGenerator(generator_3);
