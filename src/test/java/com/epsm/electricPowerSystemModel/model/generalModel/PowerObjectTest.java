@@ -58,7 +58,7 @@ public class PowerObjectTest{
 		}
 
 		@Override
-		public void processDispatcherMessage(Message message) {
+		public void executeCommand(Message message) {
 		}
 
 		@Override

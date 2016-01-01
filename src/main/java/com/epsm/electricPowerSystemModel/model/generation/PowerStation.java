@@ -160,7 +160,7 @@ public class PowerStation extends PowerObject{
 	}
 
 	@Override
-	public void processDispatcherMessage(Message message) {
+	public void executeCommand(Message message) {
 		controlPanel.acceptGenerationSchedule(message);
 	}
 }

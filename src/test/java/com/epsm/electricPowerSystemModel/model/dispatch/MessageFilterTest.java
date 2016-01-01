@@ -168,7 +168,7 @@ public class MessageFilterTest {
 		}
 		
 		@Override
-		public void processDispatcherMessage(Message message) {
+		public void executeCommand(Message message) {
 		}
 		
 		@Override

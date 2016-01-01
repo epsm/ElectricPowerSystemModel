@@ -50,7 +50,7 @@ public class ObjectConnectionManager{
 			logger.warn("ObjectConnectionManager#{} recieved null from dispatcher.", objectId);
 		}else if(isCommandMessageTypeEqualsToExpected(message)){
 			setTimeWhenReceivedLastMessage();
-			object.processDispatcherMessage(message);
+			object.executeCommand(message);
 			
 			logger.info("ObjectConnectionManager#{} recieved {} from dispatcher.", 
 					objectId, getMessageClassName(message));

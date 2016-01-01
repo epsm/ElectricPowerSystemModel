@@ -77,13 +77,14 @@ public class ObjectConnectionManagerTest{
 	
 	@Test
 	public void triesConnectToDispatcher(){
-		manager.sendMessageIfItNecessary();
+		
 		
 		verify(dispatcher).acceptMessage((isA(ConsumerParametersStub.class)));
 	}
 	
 	private void tryToestablishConnection(){
-		
+		object.c
+		manager.sendMessageIfItNecessary();
 	}
 	
 	@Test

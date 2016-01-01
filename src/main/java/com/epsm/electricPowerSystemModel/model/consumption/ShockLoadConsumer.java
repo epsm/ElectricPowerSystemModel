@@ -123,7 +123,7 @@ public class ShockLoadConsumer extends Consumer{
 	}
 
 	@Override
-	public void processDispatcherMessage(Message message) {
+	public void executeCommand(Message message) {
 		//TODO turn off/on user by dispatcher command. 
 	}
 

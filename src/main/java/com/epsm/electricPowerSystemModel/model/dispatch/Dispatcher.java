@@ -1,5 +1,6 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
 public interface Dispatcher {
-	public void acceptMessage(Message message);
+	public void establishConnection(Parameters parameters);
+	public void acceptState(State state);
 }

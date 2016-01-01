@@ -44,7 +44,7 @@ public class MainControlPanelTest{
 	
 	@Test
 	public void controlPanelAcceptsValidSchedule(){
-		station.processDispatcherMessage(stationSchedule);
+		station.executeCommand(stationSchedule);
 		doNextStep();
 		
 		Assert.assertTrue(generator.isTurnedOn());
