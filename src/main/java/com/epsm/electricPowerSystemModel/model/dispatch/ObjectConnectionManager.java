@@ -18,28 +18,28 @@ public class ObjectConnectionManager implements DispatcherConnection, TimeServic
 	private volatile LocalDateTime timeWhenRecievedLastMessage;
 	private LocalDateTime timeWhenSentLastMessage;
 	private LocalDateTime currentTime;
-	private String objectClassName;
 	private long objectId;
+	private String objectClass;
 	private Logger logger;
 
 	public ObjectConnectionManager(TimeService timeService,	Dispatcher dispatcher, PowerObject object) {
-		
 		if(timeService == null){
-			String message = "PowerObject constru5utyctor: timeService must not be null.";
+			String message = String.format("ObjectConnectionManager constructor: timeService must "
+					+ "not be null.");
 			throw new DispatchingException(message);
 		}else if(dispatcher == null){
-			String message = "PowerObject construyhyctor: dispatcher must not be null.";
+			String message = "ObjectConnectionManager constructor: dispatcher must not be null.";
 			throw new DispatchingException(message);
 		}else if(object == null){
-			String message = "PowerObject constrthtuctor: expectedMessageType must not be null.";
+			String message = "ObjectConnectionManager constructor: PowerObject must not be null.";
 			throw new DispatchingException(message);
 		}
 		
 		this.timeService = timeService;
 		this.dispatcher = dispatcher;
 		this.object = object;
+		objectClass = object.getClass().getSimpleName();
 		filter = new MessageFilter(object.getClass());
-		objectClassName = object.getClass().getSimpleName();
 		objectId = object.getId();
 		timeWhenRecievedLastMessage = LocalDateTime.MIN;
 		timeWhenSentLastMessage = LocalDateTime.MIN;
@@ -49,34 +49,35 @@ public class ObjectConnectionManager implements DispatcherConnection, TimeServic
 	@Override
 	public void acceptMessage(Message message) {
 		if(message == null){
-			logger.warn("{}#{} recieved null from dispatcher.", objectClassName, objectId);
+			logger.warn("ObjectConnectionManager#{} recieved null from dispatcher.", objectId);
 		}else if(isCommandMessageTypeEqualsToExpected(message)){
-			setLastMessageTime();
+			setTimeWhenReceivedLastMessage();
 			object.processDispatcherMessage(message);
 			
-			logger.info("{}#{} recieved {} from dispatcher.", 
-					objectClassName, objectId, getMessageClassName(message));
+			logger.info("ObjectConnectionManager#{} recieved {} from dispatcher.", 
+					objectId, getMessageClassName(message));
 		}else{
-			logger.warn("{}#{} recieved from dispatcher wrong message class: expected {}, but was {}.",
-					objectClassName, objectId, getMessageClassName(message),
-					filter.getExpectedCommandMessageClassName());
+			logger.warn("ObjectConnectionManager#{} recieved from dispatcher wrong message class: "
+					+ "expected {}, but was {}.", objectId, filter.getExpectedCommandMessageClassName(),
+					getMessageClassName(message));
 		}
 	}
 	
 	private String getMessageClassName(Message message){
-		return message.getClass().getName();
+		return message.getClass().getSimpleName();
 	}
 	
 	private boolean isCommandMessageTypeEqualsToExpected(Message message){
 		return filter.isCommandMessageValid(message);
 	}
 	
-	private void setLastMessageTime(){
+	private void setTimeWhenReceivedLastMessage(){
 		timeWhenRecievedLastMessage = timeService.getCurrentTime();
 	}
 	
 	@Override
 	public final void doRealTimeDependOperation(){
+		
 		getCurrentTime();
 		
 		if(isConnectionWithDispatcherActive()){
@@ -109,23 +110,23 @@ public class ObjectConnectionManager implements DispatcherConnection, TimeServic
 		Message state = object.getState();
 		
 		if(state == null){
-			String message =  String.format("%s#%d returned null instead %s.", objectClassName,
+			String message =  String.format("%s#%d returned null instead %s.", objectClass,
 					objectId, filter.getExpectedStateMessageClassName());
 			throw new DispatchingException(message);
 		}else if(isStateMessageTypeEqualsToExpected(state)){
 			dispatcher.acceptMessage(state);
 			
-			logger.info("{}#{} sent {} to dispatcher.", objectClassName, objectId,
+			logger.info("%s#{} sent {} to dispatcher.", objectId, objectClass,
 					filter.getExpectedStateMessageClassName());
 		}else{
-			String message = String.format("%s3%d returned %s instead %s.", objectClassName, 
+			String message = String.format("%s#%d returned %s instead %s.", objectClass,
 					objectId, getMessageClassName(state), filter.getExpectedStateMessageClassName());
 			throw new DispatchingException(message);
 		}		
 	}
 	
 	private boolean isStateMessageTypeEqualsToExpected(Message message){
-		return filter.isCommandMessageValid(message);
+		return filter.isStateMessageValid(message);
 	}
 	
 	private void setTimeWhenSentLastMessage(){
@@ -134,27 +135,25 @@ public class ObjectConnectionManager implements DispatcherConnection, TimeServic
 	
 	private void establishConnectionToDispatcher(){
 		Message parameters = object.getParameters();
-		
 		if(parameters == null){
-			String message =  String.format("%s#%d returned null instead %s.", objectClassName,
+			String message =  String.format("%s#%d returned null instead %s.", objectClass,
 					objectId, filter.getExpectedParametersMessageClassName());
 			throw new DispatchingException(message);
 		}else if(isParametersMessageTypeEqualsToExpected(parameters)){
 			dispatcher.acceptMessage(parameters);
+			setTimeWhenSentLastMessage();
 			
-			logger.info("{}#{} sent {} to dispatcher.", objectClassName, objectId,
+			logger.info("{}#{} sent {} to dispatcher.", objectClass, objectId,
 					filter.getExpectedParametersMessageClassName());
 		}else{
-			String message = String.format("%s#%d returned %s instead %s.", objectClassName, 
-					objectId, getMessageClassName(parameters),
+			String message = String.format("%s#%d returned %s instead %s.", objectClass,
+					objectId, getMessageClassName(parameters), 
 					filter.getExpectedParametersMessageClassName());
 			throw new DispatchingException(message);
 		}
-		
-		dispatcher.acceptMessage(parameters);
 	}
 	
 	private boolean isParametersMessageTypeEqualsToExpected(Message message){
-		return filter.isCommandMessageValid(message);
+		return filter.isParametersMessageValid(message);
 	}
 }

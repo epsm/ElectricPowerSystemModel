@@ -25,6 +25,12 @@ public class ShockLoadConsumer extends Consumer{
 	
 	public ShockLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher) {
 		super(simulation, timeService, dispatcher);
+		initializeFirstState();
+	}
+	
+	private void initializeFirstState(){
+		getNecessaryParametersFromPowerSystem();
+		state = prepareState(currentTime, currentLoad);
 	}
 	
 	@Override

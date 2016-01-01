@@ -1,28 +1,28 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParametersStub;
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
-import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
-import com.epsm.electricPowerSystemModel.model.dispatch.Message;
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumptionPermissionStub;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
+import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
+import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
@@ -32,8 +32,8 @@ public class ObjectConnectionManagerTest{
 	private PowerObject object;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
-	private Class<PowerStationGenerationSchedule> expectedMessageType;
 	private Message message;
+	private ArgumentCaptor<Message> captor;
 	private final LocalDateTime START_TIME = LocalDateTime.of(2000, 01, 01, 00, 00);
 	
 	@Rule
@@ -41,22 +41,45 @@ public class ObjectConnectionManagerTest{
 	
 	@Before
 	public void initialize(){
-		simulation = mock(ElectricPowerSystemSimulation.class);
+		simulation = new ElectricPowerSystemSimulationImpl();
 		timeService = mock(TimeService.class);
-		dispatcher = mock(Dispatcher.class);
-		expectedMessageType = PowerStationGenerationSchedule.class;
-		object = new AbstractImpl(simulation, timeService, dispatcher, expectedMessageType);
-		message = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 1);
-		manager = new ObjectConnectionManager(timeService, dispatcher, object);
-		
 		when(timeService.getCurrentTime()).thenReturn(START_TIME);
+		dispatcher = mock(Dispatcher.class);
+		object = spy(new ShockLoadConsumer(simulation, timeService, dispatcher));
+		message = new ConsumptionPermissionStub(0, LocalDateTime.MIN, simulation.getTimeInSimulation());		
+		manager = new ObjectConnectionManager(timeService, dispatcher, object);
+		captor = ArgumentCaptor.forClass(Message.class);
 	}
 
+	@Test
+	public void exceptionInConstructorIfTimeServiseIsNull(){
+		expectedEx.expect(DispatchingException.class);
+	    expectedEx.expectMessage("ObjectConnectionManager constructor: timeService must not be null.");
+	
+	    manager = new ObjectConnectionManager(null, dispatcher, object);
+	}
+	
+	@Test
+	public void exceptionInConstructorIfDispatcherIsNull(){
+		expectedEx.expect(DispatchingException.class);
+	    expectedEx.expectMessage("ObjectConnectionManager constructor: dispatcher must not be null.");
+	
+	    manager = new ObjectConnectionManager(timeService, null, object);
+	}
+	
+	@Test
+	public void exceptionInConstructorIfPowerObjectIsNull(){
+		expectedEx.expect(DispatchingException.class);
+	    expectedEx.expectMessage("ObjectConnectionManager constructor: PowerObject must not be null.");
+	
+	    manager = new ObjectConnectionManager(timeService, dispatcher, null);
+	}
+	
 	@Test
 	public void triesConnectToDispatcher(){
 		manager.doRealTimeDependOperation();
 		
-		verify(dispatcher).acceptMessage((any(PowerObjectParameters.class));
+		verify(dispatcher).acceptMessage((isA(ConsumerParametersStub.class)));
 	}
 	
 	@Test
@@ -66,7 +89,7 @@ public class ObjectConnectionManagerTest{
 		addToSystemTimeValueLessThanAcceptablePauseBetweenDispatcherMessages();
 		manager.doRealTimeDependOperation();
 		
-		verify(dispatcher).establishConnection(any(PowerObjectParameters.class));
+		verify(dispatcher).acceptMessage(isA(ConsumerParametersStub.class));
 	}
 	
 	private void addToSystemTimeValueLessThanAcceptablePauseBetweenDispatcherMessages(){
@@ -75,38 +98,31 @@ public class ObjectConnectionManagerTest{
 	}
 	
 	@Test
-	public void TriesConnectToDispatcherAgainIfConnectionLost(){
-		object.doRealTimeDependOperation();
-		object.acceptMessage(message);
-		addToSystemTimeValueMoreThanAcceptablePauseBetweenDispatcherMessages();
-		object.doRealTimeDependOperation();
+	public void sendsStatesToDispatcherIfPauseBetweenSendingMoreThenSet(){
+		manager.doRealTimeDependOperation();
+		manager.acceptMessage(message);
+		addToSystemTimeValueMoreThanPauseBetweenSendingMessages();
+		manager.doRealTimeDependOperation();
 		
-		verify(dispatcher, times(2)).establishConnection(any());
+		verify(dispatcher, times(2)).acceptMessage(captor.capture());
+		List<Message> arguments = captor.getAllValues();
+		Assert.assertTrue(arguments.get(0).getClass() == ConsumerParametersStub.class);
+		Assert.assertTrue(arguments.get(1).getClass() == ConsumerState.class);
 	}
 	
-	private void addToSystemTimeValueMoreThanAcceptablePauseBetweenDispatcherMessages(){
+	private void addToSystemTimeValueMoreThanPauseBetweenSendingMessages(){
 		when(timeService.getCurrentTime()).thenReturn(START_TIME.plusSeconds(
-				(GlobalConstants.ACCEPTABLE_PAUSE_BETWEEN_MESSAGES_FROM_DISPATCHER_IN_SECCONDS * 2)));
+				(GlobalConstants.PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECCONDS + 1)));
 	}
 	
 	@Test
-	public void sendsMessagesToDispatcherIfPauseBetweenSendingMoreThenSet(){
-		object.doRealTimeDependOperation();
-		object.acceptMessage(message);
-		object.doRealTimeDependOperation();
-		
-		verify(dispatcher).acceptReport(any());
-	}
-	
-	@Test
-	public void doesNotSendsMessagesToDispatcherIfPauseBetweenSendingLessThenSet(){
-		object.doRealTimeDependOperation();
-		object.acceptMessage(message);
-		object.doRealTimeDependOperation();
+	public void doesNotSendsStatesToDispatcherIfPauseBetweenSendingLessThenSet(){
+		manager.doRealTimeDependOperation();
+		manager.acceptMessage(message);
 		addToSystemTimeValueLessThanPauseBetweenSending();
-		object.doRealTimeDependOperation();
+		manager.doRealTimeDependOperation();
 		
-		verify(dispatcher).acceptReport(any());
+		verify(dispatcher).acceptMessage(isA(ConsumerParametersStub.class));
 	}
 	
 	private void addToSystemTimeValueLessThanPauseBetweenSending(){
@@ -115,154 +131,110 @@ public class ObjectConnectionManagerTest{
 	}
 	
 	@Test
+	public void TriesConnectToDispatcherAgainIfConnectionLost(){
+		manager.doRealTimeDependOperation();
+		manager.acceptMessage(message);
+		addToSystemTimeValueMoreThanAcceptablePauseBetweenDispatcherMessages();
+		manager.doRealTimeDependOperation();
+		
+		verify(dispatcher, times(2)).acceptMessage(isA(ConsumerParametersStub.class));
+	}
+	
+	private void addToSystemTimeValueMoreThanAcceptablePauseBetweenDispatcherMessages(){
+		when(timeService.getCurrentTime()).thenReturn(START_TIME.plusSeconds(
+				(GlobalConstants.ACCEPTABLE_PAUSE_BETWEEN_MESSAGES_FROM_DISPATCHER_IN_SECCONDS * 2)));
+	}
+	
+	@Test
+	public void passesRightCommandToObject(){
+		manager.doRealTimeDependOperation();
+		manager.acceptMessage(message);
+		
+		verify(object).processDispatcherMessage(isA(ConsumptionPermissionStub.class));
+	}
+	
+	@Test
 	public void doNothingIfAcceptedMessageClassIsNotExpected(){
-		message = new  ConsumptionPermissionStub(1);
-		object = new AbstractImpl(simulation, timeService, dispatcher, expectedMessageType);
+		message = new  PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 1);
 		
-		object.doRealTimeDependOperation();
-		object.acceptMessage(message);
-		object.doRealTimeDependOperation();
+		manager.doRealTimeDependOperation();
+		manager.acceptMessage(message);
 		
-		verify(dispatcher, never()).acceptReport(any());
+		verify(object, never()).processDispatcherMessage(isA(ConsumptionPermissionStub.class));
 	}
 	
 	@Test
 	public void doNothingIfAcceptedMessageIsNull(){
 		message = null;
-		object = new ImplExceptionIfInteractWithOverridenMethods(
-				simulation, timeService, dispatcher, expectedMessageType);
 		
-		object.doRealTimeDependOperation();
-		object.acceptMessage(message);
-		object.doRealTimeDependOperation();
+		manager.doRealTimeDependOperation();
+		manager.acceptMessage(message);
 		
-		verify(dispatcher, never()).acceptReport(any());
+		verify(object, never()).processDispatcherMessage(isA(ConsumptionPermissionStub.class));
 	}
 	
 	@Test
-	public void exceptionIfOverridenGetStateReturnsNull(){
+	public void exceptionIfObjectGetStateReturnedNull(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("PowerObjectState can't be null.");
+	    expectedEx.expectMessage("returned null instead ConsumerState.");
 	    
-	    object = new ImplReturnsNullWithGetState(simulation, timeService, dispatcher, expectedMessageType);
+	    when(object.getState()).thenReturn(null);
 	    
-	    object.doRealTimeDependOperation();
-		object.acceptMessage(message);
-		object.doRealTimeDependOperation();
+	    manager.doRealTimeDependOperation();
+	    manager.acceptMessage(message);
+	    addToSystemTimeValueMoreThanPauseBetweenSendingMessages();
+	    manager.doRealTimeDependOperation();
 	}
 	
 	@Test
-	public void exceptionIfOverridenGetParametersReturnsNull(){
+	public void exceptionIfObjectGetStateReturnedWrongStateClass(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("PowerObjectParameters can't be null.");
+	    expectedEx.expectMessage("returned PowerStationState instead ConsumerState.");
 	    
-	    object = new ImplReturnsNullWithGetParameters(
-	    		simulation, timeService, dispatcher, expectedMessageType);
+	    PowerStationState state = new PowerStationState(0, START_TIME, LocalTime.MIN, 1, 0);
+	    when(object.getState()).thenReturn(state);
 	    
-	    object.doRealTimeDependOperation();
-		object.acceptMessage(message);
-		object.doRealTimeDependOperation();
+	    manager.doRealTimeDependOperation();
+	    manager.acceptMessage(message);
+	    addToSystemTimeValueMoreThanPauseBetweenSendingMessages();
+	    manager.doRealTimeDependOperation();
 	}
 	
 	@Test
-	public void exceptionInConstructorIfSimulationIsNull(){
+	public void exceptionIfObjectGetParametersReturnsNull(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("PowerSystem object constructor: simulation must not be null.");
+	    expectedEx.expectMessage("returned null instead ConsumerParametersStub.");
+	    
+	    /*
+		 * It's look like a Mockito bug. when(timeService.getCurrentTime()).thenReturn(START_TIME) returns
+		 * null for this test, although timeService object and START_TIME are not null. Doesn't matter use
+		 * mock() or spy() on TimeService. All the other tests work perfectly, but if to add
+		 * when(object.getParameters()).thenReturn(null) for example to exceptionIfObjectGetStateReturnedNull()
+		 * test, it will get NPE on timeService.getCurrentTime too.
+		 */
+	    reinitializeObjects();
+	    when(object.getParameters()).thenReturn(null);
+	    manager.doRealTimeDependOperation();
+	}
 	
-	    object = new AbstractImpl(null, timeService, dispatcher, expectedMessageType);
+	private void reinitializeObjects(){
+		TimeService timeService = new TimeService();
+		object = spy(new ShockLoadConsumer(simulation, timeService, dispatcher));
+		manager = new ObjectConnectionManager(timeService, dispatcher, object);
 	}
 	
 	@Test
-	public void exceptionInConstructorIfTimeServiseIsNull(){
+	public void exceptionIfObjectGetParametersReturnedWrongParametersClass(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("PowerSystem object constructor: timeService must not be null.");
-	
-	    object = new AbstractImpl(simulation, null, dispatcher, expectedMessageType);
-	}
-	
-	@Test
-	public void exceptionInConstructorIfDispatcherIsNull(){
-		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("PowerSystem object constructor: dispatcher must not be null.");
-	
-	    object = new AbstractImpl(simulation, timeService, null, expectedMessageType);
-	}
-	
-	@Test
-	public void exceptionInConstructorIfExpectedMessageTypeIsNull(){
-		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("PowerSystem object constructor: expectedMessageType must not be null.");
-	
-	    object = new AbstractImpl(simulation, timeService, dispatcher, null);
-	}
-	
-	private class AbstractImpl extends PowerObject{
-
-		public AbstractImpl(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher,
-				Class<? extends Message> expectedMessageType) {
-			super(simulation, timeService, dispatcher, expectedMessageType);
-			// TODO Auto-generated constructor stub
-		}
-
-		@Override
-		protected void processDispatcherMessage(Message message) {
-		}
-
-		@Override
-		protected Message getState() {
-			return null;
-		}
-
-		@Override
-		public Message getParameters() {
-			return null;
-		}
-	}
-	
-	private class ImplReturnsNullWithGetState extends AbstractImpl{
-		
-		public ImplReturnsNullWithGetState(ElectricPowerSystemSimulation simulation, TimeService timeService,
-				Dispatcher dispatcher, Class<? extends Message> expectedMessageType) {
-			
-			super(simulation, timeService, dispatcher, expectedMessageType);
-		}
-
-		@Override
-		protected Message getState() {
-			return null;
-		}
-	}
-	
-	private class ImplReturnsNullWithGetParameters extends AbstractImpl{
-		public ImplReturnsNullWithGetParameters(ElectricPowerSystemSimulation simulation, TimeService timeService,
-				Dispatcher dispatcher, Class<? extends Message> expectedMessageType) {
-			
-			super(simulation, timeService, dispatcher, expectedMessageType);
-		}
-
-		@Override
-		public Message getParameters(){
-			return null;
-		}
-	}
-	
-	private class ImplExceptionIfInteractWithOverridenMethods extends AbstractImpl{
-		public ImplExceptionIfInteractWithOverridenMethods(ElectricPowerSystemSimulation simulation,
-				TimeService timeService, Dispatcher dispatcher, Class<? extends Message> expectedMessageType) {
-			
-			super(simulation, timeService, dispatcher, expectedMessageType);
-		}
-
-		@Override
-		protected void processDispatcherMessage(Message message) {
-			throw new DispatchingException("PowerObject test implementation with exceptions: "
-					+ "overriden processDispatcherMessage() was called.");
-		}
-
-		@Override
-		protected Message getState() {
-			throw new DispatchingException("PowerObject test implementation with exceptions: "
-					+ "overriden getState() was called.");
-		}
+	    expectedEx.expectMessage("returned PowerStationParameters instead ConsumerParametersStub.");
+	    
+	    /*
+	     * The same problem with when(object.getParameters())... as in
+	     * exceptionIfObjectGetParametersReturnsNull() test;
+	     */
+	    reinitializeObjects();
+	    PowerStationParameters parameters = new PowerStationParameters(0, START_TIME, LocalTime.MIN, 1);
+	    when(object.getParameters()).thenReturn(parameters);
+	    manager.doRealTimeDependOperation();
 	}
 }

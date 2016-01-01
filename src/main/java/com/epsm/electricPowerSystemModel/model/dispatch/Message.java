@@ -10,9 +10,9 @@ public abstract class Message extends Formatting{
 	
 	public Message(long powerObjectId, LocalDateTime realTimeStamp, LocalTime simulationTimeStamp){
 		if(realTimeStamp == null){
-			throw new DispatchingException("PowerObjectMessage constructor: realTimeStamp can't be null.");
+			throw new DispatchingException("Message constructor: realTimeStamp can't be null.");
 		}else if(simulationTimeStamp == null){
-			throw new DispatchingException("PowerObjectMessage constructor: simulationTimeStamp can't be null.");
+			throw new DispatchingException("Message constructor: simulationTimeStamp can't be null.");
 		}
 		
 		this.powerObjectId = powerObjectId;
