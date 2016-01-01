@@ -56,7 +56,7 @@ public abstract class MessageInclusionsContainer extends Message{
 		return Collections.unmodifiableSet(inclusions.keySet());
 	}
 	
-	public final MessageInclusion getInclusion(int inclusionNumber){
+	protected final MessageInclusion getInclusion(int inclusionNumber){
 		throwExceptionIfQuantityOfInclusionsNotAsDefinedInConstructor();
 		throwExceptionIfRequestedInclusionDoesNotExist(inclusionNumber);
 		return inclusions.get(inclusionNumber);
@@ -69,7 +69,7 @@ public abstract class MessageInclusionsContainer extends Message{
 		throw new DispatchingException(message);
 	}
 	
-	public final void addInclusion(MessageInclusion inclusion){
+	protected final void addInclusion(MessageInclusion inclusion){
 		if(inclusion == null){
 			String message = String.format("%s addInclusion(...): inclusion can't be null.",
 					getNameOfThisClass());

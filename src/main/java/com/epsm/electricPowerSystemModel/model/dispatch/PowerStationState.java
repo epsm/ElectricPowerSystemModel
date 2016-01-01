@@ -16,6 +16,14 @@ public class PowerStationState extends MessageInclusionsContainer{
 	public float getFrequency() {
 		return frequency;
 	}
+	
+	public void addGeneratorState(GeneratorState state){
+		addInclusion(state);
+	}
+	
+	public GeneratorState getGeneratorState(int generatorNumber){
+		return (GeneratorState)getInclusion(generatorNumber);
+	}
 
 	@Override
 	public String toString() {

@@ -6,12 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
-import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
-public class MainControlPanel extends PowerObject{
+public class MainControlPanel{
+	private ElectricPowerSystemSimulation sumulation;
 	private PowerStation station;
 	private GeneratorsController controller;
 	private PowerStationGenerationSchedule curentSchedule;
@@ -20,20 +19,14 @@ public class MainControlPanel extends PowerObject{
 	private PowerStationParameters parameters;
 	private Logger logger;
 
-	public MainControlPanel(ElectricPowerSystemSimulation simulation, TimeService timeService, 
-			Dispatcher dispatcher, PowerStation station) {
-		
-		super(simulation, timeService, dispatcher);
-		station.setMainControlPanel(this);
-		station.setSimulation(simulation);
+	public MainControlPanel(ElectricPowerSystemSimulation simulation, PowerStation station){
 		this.station = station;
 		controller = new GeneratorsController(station);
 		validator = new GenerationScheduleValidator();
 		logger = LoggerFactory.getLogger(MainControlPanelTest.class);
 	}
 	
-	@Override
-	public void processDispatcherMessage(Message message) {
+	public void acceptGenerationSchedule(Message message) {
 		PowerStationGenerationSchedule schedule = (PowerStationGenerationSchedule) message;
 		performGenerationSchedule(schedule);
 	}
@@ -49,7 +42,7 @@ public class MainControlPanel extends PowerObject{
 	
 	private void getStationParameters(){
 		if(parameters == null){
-			parameters = station.getPowerStationParameters();
+			parameters = (PowerStationParameters) station.getParameters();
 		}
 	}
 	
@@ -72,11 +65,6 @@ public class MainControlPanel extends PowerObject{
 		return curentSchedule != null;
 	}
 	
-	@Override
-	public Message getState() {
-		return station.getState();
-	}
-	
 	public void adjustGenerators(){
 		if(isThereValidSchedule()){
 			getTimeAndAdjustGenerators();
@@ -84,12 +72,7 @@ public class MainControlPanel extends PowerObject{
 	}
 	
 	private void getTimeAndAdjustGenerators(){
-		LocalTime currentTime = simulation.getTimeInSimulation();
+		LocalTime currentTime = sumulation.getTimeInSimulation();
 		controller.adjustGenerators(curentSchedule, currentTime);
-	}
-
-	@Override
-	public Message getParameters() {
-		return station.getPowerStationParameters();
 	}
 }

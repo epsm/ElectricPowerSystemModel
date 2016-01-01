@@ -3,6 +3,7 @@ package com.epsm.electricPowerSystemModel.model.generation;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 
@@ -12,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
 import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
@@ -19,6 +21,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class PowerStationTest{
 	private ElectricPowerSystemSimulation simulation;
@@ -32,7 +35,10 @@ public class PowerStationTest{
 	private StaticRegulator staticRegulator_1;
 	private StaticRegulator staticRegulator_2;
 	private StaticRegulator staticRegulator_3;
+	private TimeService timeService;
+	private Dispatcher dispatcher;
 	private LocalTime CONSTANT_TIME_IN_MOCK_SIMULATION = LocalTime.NOON;
+	private LocalDateTime CONSTANT_REAL_TIME = LocalDateTime.of(2000, 01, 01, 00, 00);
 	private final float FIRST_GENERATOR_RQUIRED_POWER = 20;
 	private final float SECOND_GENERATOR_RQUIRED_POWER = 50;
 	private final float THIRD_GENERATOR_RQUIRED_POWER = 100;
@@ -48,14 +54,15 @@ public class PowerStationTest{
 	@Before
 	public void initialize(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
-		station = new PowerStation();
-		controlPanel = mock(MainControlPanel.class);
-		
-		station.setSimulation(simulation);
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		when(simulation.getTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
-		when(controlPanel.getId()).thenReturn(POWER_STATION_ID);
 		
+		timeService = mock(TimeService.class);
+		when(timeService.getCurrentTime()).thenReturn(CONSTANT_REAL_TIME);
+		
+		dispatcher = mock(Dispatcher.class);
+		
+		station = new PowerStation(simulation, timeService, dispatcher);
 	}
 	
 	void prepareAndInstallFirstGenerator(){
@@ -92,7 +99,6 @@ public class PowerStationTest{
 	
 	@Test
 	public void GenerationOfElectricStationEqualsToSumOfAllTurnedOnGenerators(){
-		setControlPanelToPowerStation();
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallSecondAndThirdGenerators();
 		turnOnFirstAndSecondGeneratorsAndTurnOffThird();
@@ -100,10 +106,6 @@ public class PowerStationTest{
 		float stationGeneration = station.calculateGenerationInMW();
 		
 		Assert.assertEquals(sumOfPowerTwoTurnedOnGenerators, stationGeneration, 0);
-	}
-	
-	public void setControlPanelToPowerStation(){
-		station.setMainControlPanel(controlPanel);
 	}
 	
 	private void turnOnFirstAndSecondGeneratorsAndTurnOffThird(){
@@ -117,7 +119,7 @@ public class PowerStationTest{
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallSecondAndThirdGenerators();
 		getPowerStationParameters();
-		int numberOfGeneratorsInParameters = stationParameters.getGeneratorsNumbers().size();
+		int numberOfGeneratorsInParameters = stationParameters.getQuantityOfInclusions();
 		
 		Assert.assertEquals(3, numberOfGeneratorsInParameters);
 	}
@@ -135,7 +137,7 @@ public class PowerStationTest{
 	
 	private void compareDataFromParametersWithReal(){
 		GeneratorParameters parameters = stationParameters.getGeneratorParameters(1);
-		int generatorNumber = parameters.getGeneratorNumber();
+		int generatorNumber = parameters.getInclusionNumber();
 		float minimalPower = parameters.getMinimalTechnologyPower();
 		float nominalPower = parameters.getNominalPowerInMW();
 		
@@ -188,16 +190,7 @@ public class PowerStationTest{
 	}
 	
 	@Test
-	public void exceptionWhenSetMainControlPaneCalledWithNullParameter(){
-		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("Can't add null control panel.");
-		
-	    station.setMainControlPanel(null);
-	}
-	
-	@Test
 	public void powerStationStateContainsCorrectData(){
-		setControlPanelToPowerStation();
 		prepareAndInstallSecondAndThirdGenerators();
 		turnOnSecondAndThirdGenerators();
 		calculateOneStepInSimulation();
@@ -224,7 +217,9 @@ public class PowerStationTest{
 		int thirdGeneratorNumber = 0;
 		float thirdGeneratorGeneration = 0;
 		
-		for(GeneratorState generatorStateReport: stationState.getGeneratorsStates()){
+		for(Integer number: stationState.getInclusionsNumbers()){
+			GeneratorState generatorStateReport = stationState.getGeneratorState(number);
+			
 			if(generatorStateReport.getInclusionNumber() == 2){
 				secondtGeneratorNumber = generatorStateReport.getInclusionNumber();
 				secondGeneratorGeneration = generatorStateReport.getGenerationInWM();
@@ -234,9 +229,10 @@ public class PowerStationTest{
 			}
 		}
 		
-		Assert.assertEquals(2, stationState.getGeneratorsStates().size());
+		Assert.assertEquals(2, stationState.getInclusionsNumbers().size());
 		Assert.assertEquals(POWER_STATION_ID, stationState.getPowerObjectId());
-		Assert.assertEquals(CONSTANT_TIME_IN_MOCK_SIMULATION, stationState.getTimeStamp());
+		Assert.assertEquals(CONSTANT_TIME_IN_MOCK_SIMULATION, stationState.getSimulationTimeStamp());
+		Assert.assertEquals(CONSTANT_REAL_TIME, stationState.getRealTimeStamp());
 		Assert.assertEquals(2, secondtGeneratorNumber);
 		Assert.assertEquals(3, thirdGeneratorNumber);
 		Assert.assertEquals(SECOND_GENERATOR_RQUIRED_POWER, secondGeneratorGeneration, 0);

@@ -21,7 +21,6 @@ public class MessageFilterTest {
 	private ElectricPowerSystemSimulation simulation;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
-	private PowerStation station;
 	private PowerObject object;
 	private MessageFilter filter;
 	private Message message;
@@ -31,7 +30,6 @@ public class MessageFilterTest {
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);
-		station = mock(PowerStation.class);
 	}
 	
 	@Rule
@@ -51,13 +49,13 @@ public class MessageFilterTest {
 	    expectedEx.expectMessage("MessageFilter isCommandMessageValid(Message message) method:"
 	    		+ " message can't be null.");
 	    
-	    createMainControlPanelAndFilterForIt();
+	    createPowerStationAndFilterForIt();
 		createPowerStationGenerationSchedule();
 		filter.isCommandMessageValid(null);
 	}
 	
-	private void createMainControlPanelAndFilterForIt(){
-		object = new MainControlPanel(simulation, timeService, dispatcher, station);
+	private void createPowerStationAndFilterForIt(){
+		object = new PowerStation(simulation, timeService, dispatcher);
 		filter = new MessageFilter(object.getClass());
 	}
 	
@@ -71,7 +69,7 @@ public class MessageFilterTest {
 		expectedEx.expectMessage("MessageFilter isParametersMessageValid(Message message) method:"
 	    		+ " message can't be null.");
 	    
-	    createMainControlPanelAndFilterForIt();
+	    createPowerStationAndFilterForIt();
 		createPowerStationGenerationSchedule();
 		filter.isParametersMessageValid(null);
 	}
@@ -82,21 +80,21 @@ public class MessageFilterTest {
 		expectedEx.expectMessage("MessageFilter isStateMessageValid(Message message) method:"
 	    		+ " message can't be null.");
 	    
-	    createMainControlPanelAndFilterForIt();
+	    createPowerStationAndFilterForIt();
 		createPowerStationGenerationSchedule();
 		filter.isStateMessageValid(null);
 	}
 
 	@Test
 	public void trueIfObjectIsPowerStationAndCommandIsPowerStationGenerationSchedule(){
-		createMainControlPanelAndFilterForIt();
+		createPowerStationAndFilterForIt();
 		createPowerStationGenerationSchedule();
 		Assert.assertTrue(filter.isCommandMessageValid(message));
 	}
 	
 	@Test
 	public void trueIfObjectIsPowerStationAndStateIsPowerStationState(){
-		createMainControlPanelAndFilterForIt();
+		createPowerStationAndFilterForIt();
 		createPowerStationState();
 		Assert.assertTrue(filter.isStateMessageValid(message));
 	}
@@ -107,7 +105,7 @@ public class MessageFilterTest {
 	
 	@Test
 	public void trueIfObjectIsPowerStationAndParametersIsPowerStationParameters(){
-		createMainControlPanelAndFilterForIt();
+		createPowerStationAndFilterForIt();
 		createPowerStationParameters();
 		Assert.assertTrue(filter.isParametersMessageValid(message));
 	}
@@ -186,21 +184,21 @@ public class MessageFilterTest {
 	
 	@Test
 	public void falseIfObjectIsPowerStationAndCommandIsConsumptionPermission (){
-		createMainControlPanelAndFilterForIt();
+		createPowerStationAndFilterForIt();
 		createConsumerPermisson();
 		Assert.assertFalse(filter.isCommandMessageValid(message));
 	}
 	
 	@Test
 	public void falseIfObjectIsPowerStationAndStateIsConsumerState(){
-		createMainControlPanelAndFilterForIt();
+		createPowerStationAndFilterForIt();
 		createConsumerState();
 		Assert.assertFalse(filter.isStateMessageValid(message));
 	}
 	
 	@Test
 	public void falseIfObjectIsPowerStationAndParametersIsConsumerParameters(){
-		createMainControlPanelAndFilterForIt();
+		createPowerStationAndFilterForIt();
 		createConsumerParameters();
 		Assert.assertFalse(filter.isParametersMessageValid(message));
 	}

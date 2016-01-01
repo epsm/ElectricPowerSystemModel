@@ -2,6 +2,7 @@ package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
 public class MessageFilter {
 	private Class<? extends Message> expectedCommandMessageClass;
@@ -30,7 +31,7 @@ public class MessageFilter {
 	}
 	
 	private boolean isObjectPowerStation(Class<? extends PowerObject> objectClass){
-		return objectClass == MainControlPanel.class;
+		return objectClass == PowerStation.class;
 	}
 	
 	private boolean isObjectInstanceOfConsumer(Class<? extends PowerObject> objectClass){
