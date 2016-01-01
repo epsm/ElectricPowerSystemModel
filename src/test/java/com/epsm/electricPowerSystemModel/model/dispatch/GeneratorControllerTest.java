@@ -67,7 +67,7 @@ public class GeneratorControllerTest {
 	}
 	
 	private void doNextStep(){
-		stationControlPanel.acceptMessage(stationGenerationSchedule);
+		stationControlPanel.process(stationGenerationSchedule);
 		simulation.calculateNextStep();
 	}
 	

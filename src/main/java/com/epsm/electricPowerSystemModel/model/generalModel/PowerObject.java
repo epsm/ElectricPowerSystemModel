@@ -6,13 +6,13 @@ import org.slf4j.LoggerFactory;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
+import com.epsm.electricPowerSystemModel.model.dispatch.Message;
 import com.epsm.electricPowerSystemModel.model.dispatch.ObjectConnectionManager;
 
-public abstract class PowerObject implements DispatchingObject{
+public abstract class PowerObject implements DispatchingObject, SimulationObject{
 	protected long id;//must not bee changed after creation
 	protected ElectricPowerSystemSimulation simulation;
 	protected TimeService timeService;
-	@SuppressWarnings("unused")
 	private ObjectConnectionManager manager;
 	protected Logger logger;
 
@@ -41,4 +41,12 @@ public abstract class PowerObject implements DispatchingObject{
 	public long getId(){
 		return id;
 	}
+	
+	@Override
+	public final void doRealTimeDependingOperation(){
+		manager.sendMessageIfItNecessary();
+	}
+	
+	protected abstract Message getState();
+	protected abstract Message getParameters();
 }

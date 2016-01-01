@@ -1,19 +1,20 @@
 package com.epsm.electricPowerSystemModel.model.generalModel;
 
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
+import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParametersStub;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
+import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
-	private Set<PowerStation> powerStations;
-	private Set<Consumer> powerConsumers;
+	private Map<Long, PowerObject> objects;
 	private float frequencyInPowerSystem;
 	private LocalTime currentTimeInSimulation;
 	private AtomicLong idSource;
@@ -23,8 +24,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private Logger logger;
 
 	public ElectricPowerSystemSimulationImpl() {
-		powerStations = new HashSet<PowerStation>();
-		powerConsumers = new HashSet<Consumer>();
+		objects = new HashMap<Long, PowerObject>();
 		frequencyInPowerSystem = GlobalConstants.STANDART_FREQUENCY;
 		currentTimeInSimulation = LocalTime.NOON;
 		idSource = new AtomicLong();
@@ -32,11 +32,14 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 	
 	@Override
+	public long generateId() {
+		return idSource.getAndIncrement();
+	}
+	
+	@Override
 	public void calculateNextStep() {
-		float totalGeneration = calculateTotalGenerationsInMW();
-		float totalLoad = calculateTotalLoadInMW();
-		
-		calculateFrequencyInPowerSystem(totalGeneration, totalLoad);
+		float powerBalance = calculatePowerBalanceInMW();
+		calculateFrequencyInPowerSystem(powerBalance);
 		changeTimeForStep();
 		
 		if(isFrequencyLowerThanNormal()){
@@ -44,24 +47,14 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		}
 	}
 	
-	private float calculateTotalGenerationsInMW(){
-		float generation = 0;
-		
-		for(PowerStation station: powerStations){
-			generation += station.calculateGenerationInMW();
+	private float calculatePowerBalanceInMW(){
+		float balance = 0;
+
+		for(PowerObject object: objects.values()){
+			balance += object.calculatePowerBalance();
 		}
 		
-		return generation;
-	}
-	
-	private float calculateTotalLoadInMW(){
-		float load = 0;
-		
-		for(Consumer consumer: powerConsumers){
-			load += consumer.calculateCurrentLoadInMW();
-		}
-		
-		return load;
+		return balance;
 	}
 	
 	/*
@@ -69,11 +62,9 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	 * bandwich of power lines, transformers and many other electrical parameters. And only if power
 	 * system will be sustainable, it will be possible to get system frequency.
 	 */
-	private void calculateFrequencyInPowerSystem(float totalGeneration,
-			float totalLoad){
-		frequencyInPowerSystem = frequencyInPowerSystem + ((totalGeneration - 
-				totalLoad) / TIME_CONASTNT) * ((float)SIMULATION_STEP_IN_NANOS /
-				GlobalConstants.NANOS_IN_SECOND);
+	private void calculateFrequencyInPowerSystem(float powerBalance){
+		frequencyInPowerSystem = frequencyInPowerSystem + ((powerBalance) / TIME_CONASTNT)
+				* ((float)SIMULATION_STEP_IN_NANOS / GlobalConstants.NANOS_IN_SECOND);
 	}
 	
 	private void changeTimeForStep(){
@@ -95,16 +86,6 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 	
 	@Override
-	public void addPowerStation(PowerStation powerStation) {
-		powerStations.add(powerStation);
-	}
-
-	@Override
-	public void addPowerConsumer(Consumer powerConsumer) {
-		powerConsumers.add(powerConsumer);
-	}
-	
-	@Override
 	public float getFrequencyInPowerSystem(){
 		return frequencyInPowerSystem;
 	}
@@ -115,19 +96,19 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 
 	@Override
-	public PowerObject getPowerStation(int powerStationNumber) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<Long, DispatchingObject> getDispatchingObjects() {
+		return Collections.unmodifiableMap(new HashMap<Long, DispatchingObject>(objects));
 	}
 
 	@Override
-	public PowerObject getConsumer(int consumerNumber) {
+	public void createConsumer(ConsumerParametersStub parameters) {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
-	public long generateId() {
-		return idSource.getAndIncrement();
+	public void createPowerStation(PowerStationParameters parameters) {
+		// TODO Auto-generated method stub
+		
 	}
 }

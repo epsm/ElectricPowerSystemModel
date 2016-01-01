@@ -7,8 +7,8 @@ public class GeneratorGenerationSchedule extends MessageInclusion{
 	private boolean AstaticRegulatorTurnedOn;
 	private LoadCurve curve;
 	
-	public GeneratorGenerationSchedule(int inclusionNumber) {
-		super(inclusionNumber);
+	public GeneratorGenerationSchedule(int generatorNumber) {
+		super(generatorNumber);
 	}
 	
 	public boolean isGeneratorTurnedOn() {

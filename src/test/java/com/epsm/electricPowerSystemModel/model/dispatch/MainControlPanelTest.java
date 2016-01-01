@@ -2,6 +2,9 @@ package com.epsm.electricPowerSystemModel.model.dispatch;
 
 import static org.mockito.Mockito.mock;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,9 +20,8 @@ public class MainControlPanelTest{
 	private MainControlPanel controlPanel;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
-	private Class<? extends DispatcherMessage> expectedMessageType;
 	private PowerStation station;
-	private PowerStationGenerationSchedule stationSchedule = new PowerStationGenerationSchedule(1);
+	private PowerStationGenerationSchedule stationSchedule;
 	private GeneratorGenerationSchedule generatorSchedule;
 	private Generator generator;
 	
@@ -28,37 +30,35 @@ public class MainControlPanelTest{
 	public void initialize(){
 		simulation = new ElectricPowerSystemSimulationImpl();
 		timeService = new TimeService();
-		expectedMessageType = PowerStationGenerationSchedule.class;
 		dispatcher = mock(Dispatcher.class);
-		station = new PowerStation();
-		controlPanel= new MainControlPanel(simulation, timeService, dispatcher,
-				expectedMessageType, station);
-		stationSchedule = new PowerStationGenerationSchedule(0);
-		generatorSchedule = new GeneratorGenerationSchedule(1, true, true, null);
+		station = new PowerStation(simulation, timeService, dispatcher);
+		controlPanel= new MainControlPanel(simulation, station);
+		stationSchedule = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 1);
+		generatorSchedule = new GeneratorGenerationSchedule(1);
 		generator = new Generator(simulation, 1);
 		
 		station.addGenerator(generator);
-		stationSchedule.addGeneratorGenerationSchedule(generatorSchedule);
+		stationSchedule.addInclusion(generatorSchedule);
 		simulation.addPowerStation(station);
 	}
 	
 	@Test
 	public void controlPanelAcceptsValidSchedule(){
-		controlPanel.acceptMessage(stationSchedule);
+		station.processDispatcherMessage(stationSchedule);
 		doNextStep();
 		
 		Assert.assertTrue(generator.isTurnedOn());
 	}
 	
 	public void doNextStep(){
-		controlPanel.doRealTimeDependOperation();
+		station.doRealTimeDependingOperation();
 		simulation.calculateNextStep();
 	}
 	
 	@Test
 	public void controlPanelDoesnNotAcceptInvalidSchedule(){
 		createInvalidGenerationSchedule();
-		controlPanel.acceptMessage(stationSchedule);
+		controlPanel.process(stationSchedule);
 		doNextStep();
 		
 		Assert.assertFalse(generator.isTurnedOn());

@@ -8,9 +8,8 @@ import org.slf4j.LoggerFactory;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
-import com.epsm.electricPowerSystemModel.model.generalModel.TimeServiceConsumer;
 
-public class ObjectConnectionManager implements DispatcherConnection, TimeServiceConsumer{
+public class ObjectConnectionManager{
 	private PowerObject object;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
@@ -46,8 +45,7 @@ public class ObjectConnectionManager implements DispatcherConnection, TimeServic
 		logger = LoggerFactory.getLogger(ObjectConnectionManager.class);
 	}
 	
-	@Override
-	public void acceptMessage(Message message) {
+	public void process(Message message) {
 		if(message == null){
 			logger.warn("ObjectConnectionManager#{} recieved null from dispatcher.", objectId);
 		}else if(isCommandMessageTypeEqualsToExpected(message)){
@@ -75,8 +73,7 @@ public class ObjectConnectionManager implements DispatcherConnection, TimeServic
 		timeWhenRecievedLastMessage = timeService.getCurrentTime();
 	}
 	
-	@Override
-	public final void doRealTimeDependOperation(){
+	public final void sendMessageIfItNecessary(){
 		
 		getCurrentTime();
 		

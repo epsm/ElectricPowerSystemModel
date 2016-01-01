@@ -77,17 +77,21 @@ public class ObjectConnectionManagerTest{
 	
 	@Test
 	public void triesConnectToDispatcher(){
-		manager.doRealTimeDependOperation();
+		manager.sendMessageIfItNecessary();
 		
 		verify(dispatcher).acceptMessage((isA(ConsumerParametersStub.class)));
 	}
 	
+	private void tryToestablishConnection(){
+		
+	}
+	
 	@Test
 	public void doesNotTryConnectToDispatcherIfConnectionEstablishedAndActive(){
-		manager.doRealTimeDependOperation();
-		manager.acceptMessage(message);
+		manager.sendMessageIfItNecessary();
+		manager.process(message);
 		addToSystemTimeValueLessThanAcceptablePauseBetweenDispatcherMessages();
-		manager.doRealTimeDependOperation();
+		manager.sendMessageIfItNecessary();
 		
 		verify(dispatcher).acceptMessage(isA(ConsumerParametersStub.class));
 	}
@@ -99,10 +103,10 @@ public class ObjectConnectionManagerTest{
 	
 	@Test
 	public void sendsStatesToDispatcherIfPauseBetweenSendingMoreThenSet(){
-		manager.doRealTimeDependOperation();
-		manager.acceptMessage(message);
+		manager.sendMessageIfItNecessary();
+		manager.process(message);
 		addToSystemTimeValueMoreThanPauseBetweenSendingMessages();
-		manager.doRealTimeDependOperation();
+		manager.sendMessageIfItNecessary();
 		
 		verify(dispatcher, times(2)).acceptMessage(captor.capture());
 		List<Message> arguments = captor.getAllValues();
@@ -117,10 +121,10 @@ public class ObjectConnectionManagerTest{
 	
 	@Test
 	public void doesNotSendsStatesToDispatcherIfPauseBetweenSendingLessThenSet(){
-		manager.doRealTimeDependOperation();
-		manager.acceptMessage(message);
+		manager.sendMessageIfItNecessary();
+		manager.process(message);
 		addToSystemTimeValueLessThanPauseBetweenSending();
-		manager.doRealTimeDependOperation();
+		manager.sendMessageIfItNecessary();
 		
 		verify(dispatcher).acceptMessage(isA(ConsumerParametersStub.class));
 	}
@@ -132,10 +136,10 @@ public class ObjectConnectionManagerTest{
 	
 	@Test
 	public void TriesConnectToDispatcherAgainIfConnectionLost(){
-		manager.doRealTimeDependOperation();
-		manager.acceptMessage(message);
+		manager.sendMessageIfItNecessary();
+		manager.process(message);
 		addToSystemTimeValueMoreThanAcceptablePauseBetweenDispatcherMessages();
-		manager.doRealTimeDependOperation();
+		manager.sendMessageIfItNecessary();
 		
 		verify(dispatcher, times(2)).acceptMessage(isA(ConsumerParametersStub.class));
 	}
@@ -147,8 +151,8 @@ public class ObjectConnectionManagerTest{
 	
 	@Test
 	public void passesRightCommandToObject(){
-		manager.doRealTimeDependOperation();
-		manager.acceptMessage(message);
+		manager.sendMessageIfItNecessary();
+		manager.process(message);
 		
 		verify(object).processDispatcherMessage(isA(ConsumptionPermissionStub.class));
 	}
@@ -157,8 +161,8 @@ public class ObjectConnectionManagerTest{
 	public void doNothingIfAcceptedMessageClassIsNotExpected(){
 		message = new  PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 1);
 		
-		manager.doRealTimeDependOperation();
-		manager.acceptMessage(message);
+		manager.sendMessageIfItNecessary();
+		manager.process(message);
 		
 		verify(object, never()).processDispatcherMessage(isA(ConsumptionPermissionStub.class));
 	}
@@ -167,8 +171,8 @@ public class ObjectConnectionManagerTest{
 	public void doNothingIfAcceptedMessageIsNull(){
 		message = null;
 		
-		manager.doRealTimeDependOperation();
-		manager.acceptMessage(message);
+		manager.sendMessageIfItNecessary();
+		manager.process(message);
 		
 		verify(object, never()).processDispatcherMessage(isA(ConsumptionPermissionStub.class));
 	}
@@ -180,10 +184,10 @@ public class ObjectConnectionManagerTest{
 	    
 	    when(object.getState()).thenReturn(null);
 	    
-	    manager.doRealTimeDependOperation();
-	    manager.acceptMessage(message);
+	    manager.sendMessageIfItNecessary();
+	    manager.process(message);
 	    addToSystemTimeValueMoreThanPauseBetweenSendingMessages();
-	    manager.doRealTimeDependOperation();
+	    manager.sendMessageIfItNecessary();
 	}
 	
 	@Test
@@ -194,10 +198,10 @@ public class ObjectConnectionManagerTest{
 	    PowerStationState state = new PowerStationState(0, START_TIME, LocalTime.MIN, 1, 0);
 	    when(object.getState()).thenReturn(state);
 	    
-	    manager.doRealTimeDependOperation();
-	    manager.acceptMessage(message);
+	    manager.sendMessageIfItNecessary();
+	    manager.process(message);
 	    addToSystemTimeValueMoreThanPauseBetweenSendingMessages();
-	    manager.doRealTimeDependOperation();
+	    manager.sendMessageIfItNecessary();
 	}
 	
 	@Test
@@ -214,7 +218,7 @@ public class ObjectConnectionManagerTest{
 		 */
 	    reinitializeObjects();
 	    when(object.getParameters()).thenReturn(null);
-	    manager.doRealTimeDependOperation();
+	    manager.sendMessageIfItNecessary();
 	}
 	
 	private void reinitializeObjects(){
@@ -235,6 +239,6 @@ public class ObjectConnectionManagerTest{
 	    reinitializeObjects();
 	    PowerStationParameters parameters = new PowerStationParameters(0, START_TIME, LocalTime.MIN, 1);
 	    when(object.getParameters()).thenReturn(parameters);
-	    manager.doRealTimeDependOperation();
+	    manager.sendMessageIfItNecessary();
 	}
 }
