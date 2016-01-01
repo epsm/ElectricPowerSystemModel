@@ -9,9 +9,7 @@ import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Load
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParametersStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectParameters;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
+import com.epsm.electricPowerSystemModel.model.dispatch.Message;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
@@ -29,9 +27,9 @@ public class ScheduledLoadConsumer extends Consumer{
 	private Logger logger;
 	
 	public ScheduledLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher, Class<? extends DispatcherMessage>  expectedMessageType){
+			Dispatcher dispatcher) {
 		
-		super(simulation, timeService, dispatcher, expectedMessageType); 
+		super(simulation, timeService, dispatcher);
 		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
 		logger.info("Scheduled load consumer created with id {}.", id);
 	}
@@ -75,7 +73,7 @@ public class ScheduledLoadConsumer extends Consumer{
 	}
 	
 	@Override
-	public PowerObjectState getState() {
+	public Message getState() {
 		return state;
 	}
 	
@@ -100,13 +98,12 @@ public class ScheduledLoadConsumer extends Consumer{
 	}
 
 	@Override
-	protected void processDispatcherMessage(DispatcherMessage message) {
+	public void processDispatcherMessage(Message message) {
 		//TODO turn off/on user by dispatcher command. 
 	}
 
 	@Override
-	public PowerObjectParameters getParameters() {
-		//for now just stub
-		return new ConsumerParametersStub(1);
+	public Message getParameters() {
+		return new ConsumerParametersStub(id, timeService.getCurrentTime(), currentTime);
 	}
 }
