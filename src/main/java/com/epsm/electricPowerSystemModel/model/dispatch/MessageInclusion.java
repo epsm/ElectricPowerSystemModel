@@ -1,7 +1,8 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-public abstract class MessageInclusion extends Formatting implements Comparable<MessageInclusion>{
+public abstract class MessageInclusion implements Comparable<MessageInclusion>{
 	protected int inclusionNumber;
+	
 
 	public MessageInclusion(int inclusionNumber) {
 		this.inclusionNumber = inclusionNumber;
