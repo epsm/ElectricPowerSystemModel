@@ -9,15 +9,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Message;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
-import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
-import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
-import com.epsm.electricPowerSystemModel.model.dispatch.Message;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class PowerStation extends PowerObject{

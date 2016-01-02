@@ -2,11 +2,10 @@ package com.epsm.electricPowerSystemModel.model.consumption;
 
 import java.time.LocalTime;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
-import com.epsm.electricPowerSystemModel.model.generalModel.PowerObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public abstract class Consumer extends PowerObject{

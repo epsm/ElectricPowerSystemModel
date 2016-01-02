@@ -1,6 +1,5 @@
 package com.epsm.electricPowerSystemModel.model.generation;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class Generator{

@@ -6,14 +6,13 @@ import org.slf4j.LoggerFactory;
 import com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
-import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationGenerationSchedule;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.SimulationException;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.Generator;
+import com.epsm.electricPowerSystemModel.model.generation.MainControlPanel;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStationGenerationSchedule;
 
 public class DefaultConfigurator {
 	private ElectricPowerSystemSimulation simulation;

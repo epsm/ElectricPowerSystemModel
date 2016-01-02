@@ -1,6 +1,8 @@
 package com.epsm.electricPowerSystemModel.model.generalModel;
 
-public interface SimulationObject {
-	void doRealTimeDependingOperation();
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
+
+public interface SimulationObject extends DispatchingObject{
+	void doRealTimeDependingOperations();
 	float calculatePowerBalance();
 }

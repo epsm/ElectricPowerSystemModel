@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;

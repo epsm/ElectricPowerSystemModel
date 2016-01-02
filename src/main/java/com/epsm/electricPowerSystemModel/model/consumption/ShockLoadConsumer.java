@@ -3,10 +3,8 @@ package com.epsm.electricPowerSystemModel.model.consumption;
 import java.time.LocalTime;
 import java.util.Random;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParametersStub;
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Message;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.Message;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
@@ -129,6 +127,6 @@ public class ShockLoadConsumer extends Consumer{
 
 	@Override
 	public Message getParameters() {
-		return new ConsumerParametersStub(id, timeService.getCurrentTime(), currentTime);
+		return new ConsumerParameters(id, timeService.getCurrentTime(), currentTime);
 	}
 }
