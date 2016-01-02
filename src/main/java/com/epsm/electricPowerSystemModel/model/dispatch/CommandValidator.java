@@ -4,7 +4,7 @@ public abstract class CommandValidator {
 	protected Command command;
 	protected Parameters parameters;
 	
-	public void  validate(Command command, Parameters parameters){
+	protected void  validate(Command command, Parameters parameters){
 		saveIncomingValues(command, parameters);
 		validateOnId();
 	}
@@ -21,7 +21,7 @@ public abstract class CommandValidator {
 			long parametersId = parameters.getPowerObjectId();
 			String message = String.format("%s validatePowerObjectsId(...): id numbers in command#%d"
 					+ " and parameters#%d are different.", className, commandId, parametersId);
-			System.out.println(message);
+			
 			throw new DispatchingException(message);
 		}
 	}
