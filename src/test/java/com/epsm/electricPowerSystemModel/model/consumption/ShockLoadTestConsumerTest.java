@@ -1,18 +1,18 @@
 package com.epsm.electricPowerSystemModel.model.consumption;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
@@ -29,7 +29,6 @@ public class ShockLoadTestConsumerTest {
 	private ConsumerState state;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
-	private Class<? extends DispatcherMessage> expectedMessageType;
 	private final int WORK_TIME = 300; 
 	private final int PAUSE_TIME = 500;
 	private final long CONSUMER_NUMBER = 664;
@@ -41,9 +40,9 @@ public class ShockLoadTestConsumerTest {
 		turnOnTime = null;
 		turnOffTime = null;
 		timeService = mock(TimeService.class);
+		when(timeService.getCurrentTime()).thenReturn(LocalDateTime.of(2000, 01, 01, 00, 00));
 		dispatcher = mock(Dispatcher.class);
-		expectedMessageType = DispatcherMessage.class;
-		consumer = new ShockLoadConsumer(simulation, timeService, dispatcher, expectedMessageType);
+		consumer = new ShockLoadConsumer(simulation, timeService, dispatcher);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		consumer.setMaxLoad(100f);
@@ -187,7 +186,7 @@ public class ShockLoadTestConsumerTest {
 	
 	private void compareValues(){
 		long actualConsumerNumber = state.getPowerObjectId();
-		LocalTime actualInState = state.getTimeStamp();
+		LocalTime actualInState = state.getSimulationTimeStamp();
 		float actualLoad = state.getTotalLoad();
 		
 		Assert.assertEquals(CONSUMER_NUMBER, actualConsumerNumber, 0);

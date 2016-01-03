@@ -9,9 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
@@ -21,7 +19,6 @@ public class ScheduledLoadConsumerTest{
 	private ElectricPowerSystemSimulation simulation;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
-	private Class<? extends DispatcherMessage> expectedMessageType;
 	private ScheduledLoadConsumer consumer;
 	private float[] approximateLoadByHoursInPercent;
 	private LocalTime currentTime;
@@ -33,12 +30,10 @@ public class ScheduledLoadConsumerTest{
 	
 	@Before
 	public void initialize(){
-
 		simulation = new EPSMImplStub();
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
-		expectedMessageType = DispatcherMessage.class;		
-		consumer = new ScheduledLoadConsumer(simulation, timeService, dispatcher, expectedMessageType);
+		consumer = new ScheduledLoadConsumer(simulation, timeService, dispatcher);
 		approximateLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 		currentTime = LocalTime.MIDNIGHT;
 		
@@ -69,7 +64,6 @@ public class ScheduledLoadConsumerTest{
 		}
 	}
 	
-	
 	@Test
 	public void ConsumerLoadIsInExpectingRange(){
 		do{
@@ -80,6 +74,30 @@ public class ScheduledLoadConsumerTest{
 			
 			Assert.assertEquals(expectedLoad, calculatedLoad, permissibleDelta);
 		}while(currentTime.isAfter(LocalTime.MIDNIGHT));
+	}
+	
+	@Test
+	public void ConsumerLoadIsNewEveryDay(){
+		float firstDayLoad = 0;
+		float seconsDayLoad = 0;
+		int hour = 0;
+		
+		for(; hour < 48 ; hour ++){
+			if(isItFirstDay(hour)){
+				firstDayLoad += consumer.calculateCurrentLoadInMW();
+			}else{
+				seconsDayLoad += consumer.calculateCurrentLoadInMW();
+			}
+			
+			simulation.calculateNextStep();
+		}
+		
+		Assert.assertEquals(hour, 48);
+		Assert.assertNotEquals(firstDayLoad, seconsDayLoad);
+	}
+	
+	private boolean isItFirstDay(int hour){
+		return hour < 24;
 	}
 	
 	@Test
@@ -100,7 +118,7 @@ public class ScheduledLoadConsumerTest{
 	
 	private void compareValues(){
 		long actualConsumerNumber = state.getPowerObjectId();
-		LocalTime actualTime = state.getTimeStamp();
+		LocalTime actualTime = state.getSimulationTimeStamp();
 		float actualLoad = state.getTotalLoad();
 		
 		Assert.assertEquals(CONSUMER_NUMBER, actualConsumerNumber);

@@ -1,5 +1,5 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
 public interface DispatchingObject {
-	public void acceptMessage(DispatcherMessage message);
+	void executeCommand(Command command);
 }

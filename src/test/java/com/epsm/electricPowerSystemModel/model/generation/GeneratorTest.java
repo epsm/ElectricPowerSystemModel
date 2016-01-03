@@ -11,7 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class GeneratorTest{
@@ -69,13 +68,13 @@ public class GeneratorTest{
 		generator.calculateGeneration();
 		GeneratorState state = generator.getState();
 		
-		Assert.assertEquals(GENERATOR_NUMBER, state.getGeneratorNumber());
+		Assert.assertEquals(GENERATOR_NUMBER, state.getInclusionNumber());
 		Assert.assertEquals(GENERATOR_GENERATION, state.getGenerationInWM(), 0);
 	}
 	
 	@Test
 	public void exceptionInConstructorIfSimulationIsNull(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("Generator constructor: simulation must not be null.");
 	    
 	    new Generator(null, 1);

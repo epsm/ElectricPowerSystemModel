@@ -1,14 +1,15 @@
 package com.epsm.electricPowerSystemModel.model.generalModel;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalTime;
 
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImplTest {

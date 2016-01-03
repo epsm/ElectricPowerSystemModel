@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
 public class LoadCurveTest{
@@ -77,7 +77,7 @@ public class LoadCurveTest{
 	
 	@Test
 	public void constructorThrowsExceptionIfIncomingArrayIsNull(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("There is null instead incoming values.");
 	    
 		new LoadCurve(null);
@@ -85,7 +85,7 @@ public class LoadCurveTest{
 	
 	@Test
 	public void constructorThrowsExceptionIfIncomingArrayLenghtIsNot24(){
-		expectedEx.expect(PowerStationException.class);
+		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("Incoming array length must be 24.");
 	    
 	    new LoadCurve(new float[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11});

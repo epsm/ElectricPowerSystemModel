@@ -9,8 +9,6 @@ import org.junit.Test;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
-import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
-import com.epsm.electricPowerSystemModel.model.generation.Generator;
 
 public class StaticRegulatorTest {
 	private ElectricPowerSystemSimulation simulation;

@@ -3,7 +3,7 @@ package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 import java.time.LocalTime;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStationException;
+import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 
 public class LoadCurve{
 	private float[] loadByHoursInMW;
@@ -17,10 +17,10 @@ public class LoadCurve{
 	public LoadCurve(float[] loadByHoursInMW){
 		if(loadByHoursInMW == null){
 			String message = "There is null instead incoming values.";
-			throw new PowerStationException(message);
+			throw new GenerationException(message);
 		}else if(loadByHoursInMW.length != 24){
 			String message = "Incoming array length must be 24.";
-			throw new PowerStationException(message);
+			throw new GenerationException(message);
 		}
 		
 		this.loadByHoursInMW = loadByHoursInMW;

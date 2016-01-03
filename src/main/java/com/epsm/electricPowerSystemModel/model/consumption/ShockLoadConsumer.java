@@ -3,15 +3,8 @@ package com.epsm.electricPowerSystemModel.model.consumption;
 import java.time.LocalTime;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerParameters;
-import com.epsm.electricPowerSystemModel.model.dispatch.ConsumerState;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Message;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatcherMessage;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectParameters;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerObjectState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
@@ -27,15 +20,9 @@ public class ShockLoadConsumer extends Consumer{
 	private float currentFrequency;
 	private volatile ConsumerState state;
 	private Random random = new Random();
-	private Logger logger;
 	
-	public ShockLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher, 	Class<? extends DispatcherMessage>  expectedMessageType) {
-		
-		super(simulation, timeService, dispatcher, expectedMessageType); 
-
-		logger = LoggerFactory.getLogger(ShockLoadConsumer.class);
-		logger.info("Shock load consumer created with id {}.", id);
+	public ShockLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher) {
+		super(simulation, timeService, dispatcher);
 	}
 	
 	@Override
@@ -117,7 +104,7 @@ public class ShockLoadConsumer extends Consumer{
 	}
 	
 	@Override
-	public PowerObjectState getState() {
+	public Message getState() {
 		return state;
 	}
 	
@@ -134,13 +121,12 @@ public class ShockLoadConsumer extends Consumer{
 	}
 
 	@Override
-	protected void processDispatcherMessage(DispatcherMessage message) {
+	public void executeCommand(Message message) {
 		//TODO turn off/on user by dispatcher command. 
 	}
 
 	@Override
-	public PowerObjectParameters getParameters() {
-		//for now just stub
-		return new ConsumerParameters(1);
+	public Message getParameters() {
+		return new ConsumerParameters(id, timeService.getCurrentTime(), currentTime);
 	}
 }

@@ -1,6 +1,5 @@
 package com.epsm.electricPowerSystemModel.model.generation;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class Generator{
@@ -17,13 +16,12 @@ public class Generator{
 
 	public Generator(ElectricPowerSystemSimulation simulation, int number){
 		if(simulation == null){
-			throw new PowerStationException("Generator constructor: simulation must not be null.");
+			throw new GenerationException("Generator constructor: simulation must not be null.");
 		}
 		
 		this.number = number;
 		staticRegulator = new StaticRegulator(simulation, this);
 		astaticRegulator = new AstaticRegulator(simulation, this);
-		prepareState();
 	}
 	
 	public float calculateGeneration(){

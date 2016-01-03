@@ -2,44 +2,38 @@ package com.epsm.electricPowerSystemModel.model.generation;
 
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorParameters;
-import com.epsm.electricPowerSystemModel.model.dispatch.GeneratorState;
-import com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationParameters;
-import com.epsm.electricPowerSystemModel.model.dispatch.PowerStationState;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Message;
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
-public class PowerStation{
-	private long id;
-	private ElectricPowerSystemSimulation simulation;
+public class PowerStation extends PowerObject{
 	private MainControlPanel controlPanel;
 	private Map<Integer, Generator> generators;
 	private LocalTime currentTime;
 	private float currentFrequency;
 	private float currentGenerationInMW;
-	private Set<GeneratorState> generatorsStates;
 	private PowerStationParameters stationParameters;
-	private Map<Integer, GeneratorParameters> generatorParameters;
 	private Generator generatorToAdd;
 	private PowerStationState state;
 	private Logger logger = LoggerFactory.getLogger(PowerStation.class);
 	
-	public PowerStation() {
+	public PowerStation(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher){
+		super(simulation, timeService, dispatcher);
+		
 		generators = new HashMap<Integer, Generator>();
-		generatorsStates = new TreeSet<GeneratorState>();
-		prepareStationState();
+		controlPanel = new MainControlPanel(simulation, this);
 	}
-
+	
 	public float calculateGenerationInMW(){
-		verifyControlPanel();
 		getTimeAndFrequencyFromSimulation();
 		adjustGenerators();
 		setGenerationOnThisStepToZero();
@@ -47,12 +41,6 @@ public class PowerStation{
 		prepareStationState();
 		
 		return currentGenerationInMW;
-	}
-	
-	private void verifyControlPanel(){
-		if(controlPanel == null){
-			throw new PowerStationException("Can't calculate generation with null control panel.");
-		}
 	}
 	
 	private void getTimeAndFrequencyFromSimulation(){
@@ -75,60 +63,52 @@ public class PowerStation{
 	}
 	
 	private void prepareStationState(){
-		clearPreviousGeneratorsStates();
-		prepareGeneratorsStates();
 		createStationState();
+		prepareGeneratorsStates();
 	}
 	
-	private void clearPreviousGeneratorsStates(){
-		generatorsStates.clear();
+	private void createStationState(){
+		state = new PowerStationState(id, timeService.getCurrentTime(), currentTime,
+				generators.size(), currentFrequency);
 	}
 	
 	private void prepareGeneratorsStates(){
 		for(Generator generator: generators.values()){
-			addGeneratorState(generator);
+			prepareGeneratorState(generator);
 		}
 	}
 	
-	private void addGeneratorState(Generator generator){
-		GeneratorState state = generator.getState(); 
-		generatorsStates.add(state);
+	private void prepareGeneratorState(Generator generator){
+		GeneratorState generatorState = generator.getState(); 
+		state.addGeneratorState(generatorState);
 	}
 	
-	private void createStationState(){
-		state = new PowerStationState(id, currentTime, currentFrequency, generatorsStates);
-	}
-	
-	public PowerStationParameters getPowerStationParameters(){
-		createNewContainerForGeneratorsParameters();
-		createAndSaveParametersForEveryGenerator();
+	@Override
+	public Message getParameters(){
 		createStationParameters();
-
+		createAndSaveParametersForEveryGenerator();
+		
 		return stationParameters;
 	}
 	
-	private void createNewContainerForGeneratorsParameters(){
-		generatorParameters = new HashMap<Integer, GeneratorParameters>();
+	public void createStationParameters(){
+		stationParameters = new PowerStationParameters(id, timeService.getCurrentTime(),
+				currentTime, generators.size());
 	}
 	
 	private void createAndSaveParametersForEveryGenerator(){
 		for(Generator generator: generators.values()){
-			int generatorNumber = generator.getNumber();
-			GeneratorParameters parameters = getGeneratorParameters(generator);
-			generatorParameters.put(generatorNumber, parameters);
+			GeneratorParameters parameters = createGeneratorParameters(generator);
+			stationParameters.addGeneratorParameters(parameters);
 		}
 	}
 	
-	private GeneratorParameters getGeneratorParameters(Generator generator){
+	private GeneratorParameters createGeneratorParameters(Generator generator){
 		int generatorNumber = generator.getNumber();
 		float minimalPower = generator.getMinimalPowerInMW();
 		float nominalPower = generator.getNominalPowerInMW(); 
 		
 		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);
-	}
-	
-	public void createStationParameters(){
-		stationParameters = new PowerStationParameters(id, generatorParameters);
 	}
 	
 	public void addGenerator(Generator generator){
@@ -142,7 +122,7 @@ public class PowerStation{
 	private void verifyIsGeneratorNotNull(){
 		if(generatorToAdd == null){
 			String message = "Generator must not be null.";
-			throw new PowerStationException(message);
+			throw new GenerationException(message);
 		}
 	}
 	
@@ -152,7 +132,7 @@ public class PowerStation{
 		
 		if(existingGenerator != null){
 			String message = "Generator with number " + generatorNumber + " already installed.";
-			throw new PowerStationException(message);
+			throw new GenerationException(message);
 		}
 	}
 	
@@ -161,7 +141,8 @@ public class PowerStation{
 		generators.put(generatorNumber, generatorToAdd);
 	}
 	
-	public PowerStationState getState(){
+	@Override
+	public Message getState(){
 		return state;
 	}
 	
@@ -170,19 +151,11 @@ public class PowerStation{
 	}
 	
 	public Collection<Integer> getGeneratorsNumbers(){
-		return generators.keySet();
+		return Collections.unmodifiableSet(generators.keySet());
 	}
 
-	public void setSimulation(ElectricPowerSystemSimulation simulation) {
-		this.simulation = simulation;
-	}
-	
-	public void setMainControlPanel(MainControlPanel controlPanel){
-		if(controlPanel == null){
-			throw new PowerStationException("Can't add null control panel.");
-		}
-		
-		this.controlPanel = controlPanel;
-		id = controlPanel.getId();
+	@Override
+	public void executeCommand(Message message) {
+		controlPanel.acceptGenerationSchedule(message);
 	}
 }
