@@ -5,7 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
+import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.SimulationObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
@@ -48,6 +49,6 @@ public abstract class PowerObject implements SimulationObject{
 		manager.sendMessageIfItNecessary();
 	}
 	
-	protected abstract Message getState();
-	protected abstract Message getParameters();
+	protected abstract State getState();
+	protected abstract Parameters getParameters();
 }

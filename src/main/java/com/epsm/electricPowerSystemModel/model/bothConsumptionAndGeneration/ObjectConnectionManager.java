@@ -5,7 +5,11 @@ import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
+import com.epsm.electricPowerSystemModel.model.dispatch.Command;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
+import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
@@ -14,24 +18,24 @@ public class ObjectConnectionManager{
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private MessageFilter filter;
-	private volatile LocalDateTime timeWhenRecievedLastMessage;
+	private volatile LocalDateTime timeWhenRecievedLastCommand;
 	private LocalDateTime timeWhenSentLastMessage;
 	private LocalDateTime currentTime;
 	private long objectId;
 	private String objectClass;
 	private Logger logger;
 
-	public ObjectConnectionManager(TimeService timeService,	Dispatcher dispatcher, PowerObject object) {
+	public ObjectConnectionManager(TimeService timeService,	Dispatcher dispatcher, PowerObject object){
 		if(timeService == null){
 			String message = String.format("ObjectConnectionManager constructor: timeService must "
 					+ "not be null.");
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}else if(dispatcher == null){
 			String message = "ObjectConnectionManager constructor: dispatcher must not be null.";
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}else if(object == null){
 			String message = "ObjectConnectionManager constructor: PowerObject must not be null.";
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}
 		
 		this.timeService = timeService;
@@ -40,37 +44,41 @@ public class ObjectConnectionManager{
 		objectClass = object.getClass().getSimpleName();
 		filter = new MessageFilter(object.getClass());
 		objectId = object.getId();
-		timeWhenRecievedLastMessage = LocalDateTime.MIN;
+		timeWhenRecievedLastCommand = LocalDateTime.MIN;
 		timeWhenSentLastMessage = LocalDateTime.MIN;
 		logger = LoggerFactory.getLogger(ObjectConnectionManager.class);
 	}
 	
-	public void process(Message message) {
-		if(message == null){
+	public void executeCommand(Command command) {
+		if(command == null){
 			logger.warn("ObjectConnectionManager#{} recieved null from dispatcher.", objectId);
-		}else if(isCommandMessageTypeEqualsToExpected(message)){
-			setTimeWhenReceivedLastMessage();
-			object.executeCommand(message);
+		}else if(isCommandTypeEqualsToExpected(command)){
+			setTimeWhenReceivedLastCommand();
+			passCommandToObject(command);
 			
 			logger.info("ObjectConnectionManager#{} recieved {} from dispatcher.", 
-					objectId, getMessageClassName(message));
+					objectId, getMessageClassName(command));
 		}else{
-			logger.warn("ObjectConnectionManager#{} recieved from dispatcher wrong message class: "
-					+ "expected {}, but was {}.", objectId, filter.getExpectedCommandMessageClassName(),
-					getMessageClassName(message));
+			logger.warn("ObjectConnectionManager#{} recieved from dispatcher wrong command class: "
+					+ "expected {}, but was {}.", objectId, 
+					filter.getExpectedCommandClassName(), getMessageClassName(command));
 		}
+	}
+	
+	private void passCommandToObject(Command command){
+		object.executeCommand(command);
 	}
 	
 	private String getMessageClassName(Message message){
 		return message.getClass().getSimpleName();
 	}
 	
-	private boolean isCommandMessageTypeEqualsToExpected(Message message){
-		return filter.isCommandMessageValid(message);
+	private boolean isCommandTypeEqualsToExpected(Command command){
+		return filter.isCommandAppropriate(command);
 	}
 	
-	private void setTimeWhenReceivedLastMessage(){
-		timeWhenRecievedLastMessage = timeService.getCurrentTime();
+	private void setTimeWhenReceivedLastCommand(){
+		timeWhenRecievedLastCommand = timeService.getCurrentTime();
 	}
 	
 	public final void sendMessageIfItNecessary(){
@@ -92,7 +100,7 @@ public class ObjectConnectionManager{
 	}
 	
 	private boolean isConnectionWithDispatcherActive(){
-		return timeWhenRecievedLastMessage.plusSeconds(
+		return timeWhenRecievedLastCommand.plusSeconds(
 				GlobalConstants.ACCEPTABLE_PAUSE_BETWEEN_MESSAGES_FROM_DISPATCHER_IN_SECCONDS)
 				.isAfter(currentTime);
 	}
@@ -104,26 +112,26 @@ public class ObjectConnectionManager{
 	}
 	
 	private void sendStateToDispatcher(){
-		Message state = object.getState();
+		State state = object.getState();
 		
 		if(state == null){
 			String message =  String.format("%s#%d returned null instead %s.", objectClass,
-					objectId, filter.getExpectedStateMessageClassName());
-			throw new DispatchingException(message);
-		}else if(isStateMessageTypeEqualsToExpected(state)){
-			dispatcher.acceptMessage(state);
+					objectId, filter.getExpectedStateClassName());
+			throw new IllegalArgumentException(message);
+		}else if(isStateTypeEqualsToExpected(state)){
+			dispatcher.acceptState(state);
 			
 			logger.info("%s#{} sent {} to dispatcher.", objectId, objectClass,
-					filter.getExpectedStateMessageClassName());
+					filter.getExpectedStateClassName());
 		}else{
 			String message = String.format("%s#%d returned %s instead %s.", objectClass,
-					objectId, getMessageClassName(state), filter.getExpectedStateMessageClassName());
-			throw new DispatchingException(message);
+					objectId, getMessageClassName(state), filter.getExpectedStateClassName());
+			throw new IllegalArgumentException(message);
 		}		
 	}
 	
-	private boolean isStateMessageTypeEqualsToExpected(Message message){
-		return filter.isStateMessageValid(message);
+	private boolean isStateTypeEqualsToExpected(Message message){
+		return filter.isStateAppropriate(message);
 	}
 	
 	private void setTimeWhenSentLastMessage(){
@@ -131,26 +139,26 @@ public class ObjectConnectionManager{
 	}
 	
 	private void establishConnectionToDispatcher(){
-		Message parameters = object.getParameters();
+		Parameters parameters = object.getParameters();
 		if(parameters == null){
 			String message =  String.format("%s#%d returned null instead %s.", objectClass,
-					objectId, filter.getExpectedParametersMessageClassName());
-			throw new DispatchingException(message);
-		}else if(isParametersMessageTypeEqualsToExpected(parameters)){
-			dispatcher.acceptMessage(parameters);
+					objectId, filter.getExpectedParametersClassName());
+			throw new IllegalArgumentException(message);
+		}else if(isParametersTypeEqualsToExpected(parameters)){
+			dispatcher.establishConnection(parameters);
 			setTimeWhenSentLastMessage();
 			
 			logger.info("{}#{} sent {} to dispatcher.", objectClass, objectId,
-					filter.getExpectedParametersMessageClassName());
+					filter.getExpectedParametersClassName());
 		}else{
 			String message = String.format("%s#%d returned %s instead %s.", objectClass,
 					objectId, getMessageClassName(parameters), 
-					filter.getExpectedParametersMessageClassName());
-			throw new DispatchingException(message);
+					filter.getExpectedParametersClassName());
+			throw new IllegalArgumentException(message);
 		}
 	}
 	
-	private boolean isParametersMessageTypeEqualsToExpected(Message message){
-		return filter.isParametersMessageValid(message);
+	private boolean isParametersTypeEqualsToExpected(Message message){
+		return filter.isParametersAppropriate(message);
 	}
 }

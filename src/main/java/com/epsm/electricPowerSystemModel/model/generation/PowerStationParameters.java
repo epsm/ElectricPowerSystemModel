@@ -11,7 +11,7 @@ public class PowerStationParameters extends Parameters{
 	public PowerStationParameters(long powerObjectId, LocalDateTime realTimeStamp,
 			LocalTime simulationTimeStamp,	int quantityOfInclusions) {
 		
-		super(powerObjectId, realTimeStamp, simulationTimeStamp, quantityOfInclusions);
+		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 	}
 
 	public void addGeneratorParameters(GeneratorParameters parameters){

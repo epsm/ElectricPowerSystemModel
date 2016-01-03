@@ -127,6 +127,6 @@ public class ShockLoadConsumer extends Consumer{
 
 	@Override
 	public Message getParameters() {
-		return new ConsumerParameters(id, timeService.getCurrentTime(), currentTime);
+		return new ConsumerParametersStub(id, timeService.getCurrentTime(), currentTime);
 	}
 }

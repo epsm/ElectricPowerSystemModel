@@ -8,9 +8,9 @@ import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 
 public class PowerStationGenerationSchedule extends Command{
 	public PowerStationGenerationSchedule(long powerObjectId, LocalDateTime realTimeStamp,
-			LocalTime simulationTimeStamp, int quantityOfGeneratorSchedules) {
+			LocalTime simulationTimeStamp, int quanityOfGenerators) {
 		
-		super(powerObjectId, realTimeStamp, simulationTimeStamp, quantityOfGeneratorSchedules);
+		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 	}
 
 	@Override

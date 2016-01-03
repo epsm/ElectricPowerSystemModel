@@ -5,10 +5,15 @@ import java.time.LocalTime;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 
-public abstract class ConsumerParameters extends Parameters{
-	public ConsumerParameters(long powerObjectId, LocalDateTime realTimeStamp, 
+public class ConsumerParametersStub extends Parameters{
+	public ConsumerParametersStub(long powerObjectId, LocalDateTime realTimeStamp, 
 			LocalTime simulationTimeStamp){
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
+	}
+
+	@Override
+	public String toString() {
+		return "ConsumerParametersStub toString() stub";
 	}
 }

@@ -3,15 +3,13 @@ package com.epsm.electricPowerSystemModel.model.generation;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Container;
-import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 
 public class PowerStationState extends State{
 	public PowerStationState(long powerObjectId, LocalDateTime realTimeStamp, LocalTime simulationTimeStamp,
 			int quantityOfInclusions, float frequency) {
 		
-		super(powerObjectId, realTimeStamp, simulationTimeStamp, quantityOfInclusions);
+		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		this.frequency = frequency;
 	}
 

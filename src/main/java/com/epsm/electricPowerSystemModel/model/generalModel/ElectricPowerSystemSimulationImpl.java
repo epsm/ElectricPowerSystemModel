@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
-import com.epsm.electricPowerSystemModel.model.consumption.ConsumerParameters;
+import com.epsm.electricPowerSystemModel.model.consumption.ConsumerParametersStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationParameters;
 
@@ -102,7 +102,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 
 	@Override
-	public void createConsumer(ConsumerParameters parameters) {
+	public void createConsumer(ConsumerParametersStub parameters) {
 		// TODO Auto-generated method stub
 		
 	}
