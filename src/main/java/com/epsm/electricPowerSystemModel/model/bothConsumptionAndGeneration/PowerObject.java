@@ -49,7 +49,7 @@ public abstract class PowerObject implements SimulationObject{
 		return id;
 	}
 	
-	public final Parameters getParameters(){
+	public Parameters getParameters(){
 		return parameters;
 	}
 	
