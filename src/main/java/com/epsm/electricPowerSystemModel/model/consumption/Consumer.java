@@ -4,16 +4,18 @@ import java.time.LocalTime;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public abstract class Consumer extends PowerObject{
-	protected float degreeOnDependingOfFrequency;
-	
-	public Consumer(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher) {
-		super(simulation, timeService, dispatcher);
+	public Consumer(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher,
+			Parameters parameters) {
+		super(simulation, timeService, dispatcher, parameters);
 	}
+
+	protected float degreeOnDependingOfFrequency;
 
 	protected float calculateLoadCountingFrequency(float load, float frequency){
 		return (float)Math.pow((frequency / GlobalConstants.STANDART_FREQUENCY),
@@ -31,6 +33,4 @@ public abstract class Consumer extends PowerObject{
 	protected ConsumerState prepareState(LocalTime simulationTimeStamp, float load){
 		return new ConsumerState(id, timeService.getCurrentTime(), simulationTimeStamp, load);
 	}
-	
-	public abstract float calculateCurrentLoadInMW();
 }

@@ -3,8 +3,10 @@ package com.epsm.electricPowerSystemModel.model.consumption;
 import java.time.LocalTime;
 import java.util.Random;
 
-import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Message;
+import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
@@ -21,11 +23,12 @@ public class ShockLoadConsumer extends Consumer{
 	private volatile ConsumerState state;
 	private Random random = new Random();
 	
-	public ShockLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher) {
-		super(simulation, timeService, dispatcher);
+	public ShockLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
+			Dispatcher dispatcher,	Parameters parameters) {
+		
+		super(simulation, timeService, dispatcher, parameters);
 	}
 	
-	@Override
 	public float calculateCurrentLoadInMW(){
 		getNecessaryParametersFromPowerSystem();
 
@@ -104,7 +107,7 @@ public class ShockLoadConsumer extends Consumer{
 	}
 	
 	@Override
-	public Message getState() {
+	public State getState() {
 		return state;
 	}
 	
@@ -121,12 +124,13 @@ public class ShockLoadConsumer extends Consumer{
 	}
 
 	@Override
-	public void executeCommand(Message message) {
+	public void executeCommand(Command command) {
 		//TODO turn off/on user by dispatcher command. 
 	}
 
 	@Override
-	public Message getParameters() {
-		return new ConsumerParametersStub(id, timeService.getCurrentTime(), currentTime);
+	public float calculatePowerBalance() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

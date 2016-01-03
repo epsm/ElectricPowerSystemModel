@@ -11,11 +11,15 @@ import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Message;
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
+import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class PowerStation extends PowerObject{
+
 	private MainControlPanel controlPanel;
 	private Map<Integer, Generator> generators;
 	private LocalTime currentTime;
@@ -26,8 +30,9 @@ public class PowerStation extends PowerObject{
 	private PowerStationState state;
 	private Logger logger = LoggerFactory.getLogger(PowerStation.class);
 	
-	public PowerStation(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher){
-		super(simulation, timeService, dispatcher);
+	public PowerStation(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher,
+			Parameters parameters) {
+		super(simulation, timeService, dispatcher, parameters);
 		
 		generators = new HashMap<Integer, Generator>();
 		controlPanel = new MainControlPanel(simulation, this);
@@ -83,14 +88,6 @@ public class PowerStation extends PowerObject{
 		state.addGeneratorState(generatorState);
 	}
 	
-	@Override
-	public Message getParameters(){
-		createStationParameters();
-		createAndSaveParametersForEveryGenerator();
-		
-		return stationParameters;
-	}
-	
 	public void createStationParameters(){
 		stationParameters = new PowerStationParameters(id, timeService.getCurrentTime(),
 				currentTime, generators.size());
@@ -142,7 +139,7 @@ public class PowerStation extends PowerObject{
 	}
 	
 	@Override
-	public Message getState(){
+	public State getState(){
 		return state;
 	}
 	
@@ -155,7 +152,13 @@ public class PowerStation extends PowerObject{
 	}
 
 	@Override
-	public void executeCommand(Message message) {
-		controlPanel.acceptGenerationSchedule(message);
+	public void executeCommand(Command command) {
+		controlPanel.acceptGenerationSchedule(command);
+	}
+
+	@Override
+	public float calculatePowerBalance() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

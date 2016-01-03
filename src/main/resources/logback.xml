@@ -7,38 +7,16 @@
 		</encoder>
 	</appender>
 
-	<appender name="Model" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-12([%thread]) %-47(%logger{48}) - %msg%n</Pattern>
-		</encoder>
-
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>/C:/logs/Model.%d{dd-MM-yyy}.log.zip</fileNamePattern>
-      		<maxHistory>7</maxHistory>
-    	</rollingPolicy>
-	</appender>
-	
-	<appender name="InteractionWithDispatcher" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-8([%thread]) %-30(%logger{40}) - %msg%n</Pattern>
-		</encoder>
-
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>/C:/logs/InteractionWithDispatcher.%d{dd-MM-yyy}.log.zip</fileNamePattern>
-      		<maxHistory>7</maxHistory>
-    	</rollingPolicy>
-	</appender>
-
 	<logger name="main.java.com.epsm.electricPowerSystemModel.model" level="INFO" additivity="false">
-		<appender-ref ref="Model" />
+		<appender-ref ref="STDOUT" />
 	</logger>
 	
 	<logger name="main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel" level="INFO" additivity="false">
-		<appender-ref ref="InteractionWithDispatcher" />
+		<appender-ref ref="STDOUT" />
 	</logger>
 	
 	<logger name="main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender" level="INFO" additivity="false">
-		<appender-ref ref="InteractionWithDispatcher" />
+		<appender-ref ref="STDOUT" />
 	</logger>
 
 	<root level="INFO">

@@ -31,6 +31,9 @@ public abstract class PowerObject implements SimulationObject{
 		}else if(dispatcher == null){
 			String message = "PowerObject constructor: dispatcher can't be null.";
 			throw new DispatchingException(message);
+		}else if(parameters == null){
+			String message = "PowerObject constructor: parameters can't be null.";
+			throw new DispatchingException(message);
 		}
 		
 		id = simulation.generateId();
@@ -46,13 +49,13 @@ public abstract class PowerObject implements SimulationObject{
 		return id;
 	}
 	
-	public Parameters GeneratorParameters(){
+	public final Parameters getParameters(){
 		return parameters;
 	}
 	
 	@Override
 	public final void doRealTimeDependingOperations(){
-		manager.interactWithDispatcher();
+		manager.manageConnection();
 	}
 	
 	protected abstract State getState();

@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Message;
+import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
+import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
@@ -25,15 +27,14 @@ public class ScheduledLoadConsumer extends Consumer{
 	private Logger logger;
 	
 	public ScheduledLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher) {
-		
-		super(simulation, timeService, dispatcher);
+			Dispatcher dispatcher, Parameters parameters) {
+		super(simulation, timeService, dispatcher, parameters);
 		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
 		logger.info("Scheduled load consumer created with id {}.", id);
 	}
 	
 	@Override
-	public float calculateCurrentLoadInMW(){
+	public float calculatePowerBalance(){
 		getNecessaryParametersFromPowerSystem();
 		
 		if(isItANewDay()){
@@ -41,9 +42,9 @@ public class ScheduledLoadConsumer extends Consumer{
 		}
 		
 		saveRequestTime();
-		calculateLoadForThisMoment();
-		currentLoad = calculateLoadCountingFrequency(currentLoad, currentFrequency);
-		state = prepareState(currentTime, currentLoad);
+		getLoadFromCurve();
+		countFrequency();
+		prepareState();
 		
 		return currentLoad;
 	}
@@ -66,12 +67,20 @@ public class ScheduledLoadConsumer extends Consumer{
 		previousLoadRequestTime = currentTime;
 	}
 	
-	private void calculateLoadForThisMoment(){
+	private void getLoadFromCurve(){
 		currentLoad = loadCurveOnDay.getPowerOnTimeInMW(currentTime);
 	}
 	
+	private void countFrequency(){
+		currentLoad = calculateLoadCountingFrequency(currentLoad, currentFrequency);
+	}
+	
+	private void prepareState(){
+		state = prepareState(currentTime, currentLoad);
+	}
+	
 	@Override
-	public Message getState() {
+	public State getState() {
 		return state;
 	}
 	
@@ -96,12 +105,7 @@ public class ScheduledLoadConsumer extends Consumer{
 	}
 
 	@Override
-	public void executeCommand(Message message) {
+	public void executeCommand(Command message) {
 		//TODO turn off/on user by dispatcher command. 
-	}
-
-	@Override
-	public Message getParameters() {
-		return new ConsumerParametersStub(id, timeService.getCurrentTime(), currentTime);
 	}
 }

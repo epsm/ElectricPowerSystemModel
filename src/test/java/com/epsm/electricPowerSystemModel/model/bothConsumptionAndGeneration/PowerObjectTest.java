@@ -19,6 +19,7 @@ public class PowerObjectTest{
 	private ElectricPowerSystemSimulation simulation;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
+	private Parameters parameters;
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -28,6 +29,7 @@ public class PowerObjectTest{
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);
+		parameters = mock(Parameters.class);
 	}
 
 	@Test
@@ -35,7 +37,7 @@ public class PowerObjectTest{
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerObject constructor: simulation can't be null.");
 	
-	    new AbstractImpl(null, timeService, dispatcher);
+	    new AbstractImpl(null, timeService, dispatcher, parameters);
 	}
 	
 	@Test
@@ -43,7 +45,7 @@ public class PowerObjectTest{
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerObject constructor: timeService can't be null.");
 	
-	    new AbstractImpl(simulation, null, dispatcher);
+	    new AbstractImpl(simulation, null, dispatcher, parameters);
 	}
 	
 	@Test
@@ -51,14 +53,21 @@ public class PowerObjectTest{
 		expectedEx.expect(DispatchingException.class);
 	    expectedEx.expectMessage("PowerObject constructor: dispatcher can't be null.");
 	
-	    new AbstractImpl(simulation, timeService, null);
+	    new AbstractImpl(simulation, timeService, null, parameters);
+	}
+	
+	@Test
+	public void exceptionInConstructorIfParametersIsNull(){
+		expectedEx.expect(DispatchingException.class);
+	    expectedEx.expectMessage("PowerObject constructor: parameters can't be null.");
+	
+	    new AbstractImpl(simulation, timeService, dispatcher, null);
 	}
 
 	private class AbstractImpl extends PowerObject{
-		public AbstractImpl(ElectricPowerSystemSimulation simulation, TimeService timeService,
-				Dispatcher dispatcher) {
-			
-			super(simulation, timeService, dispatcher);
+		public AbstractImpl(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher,
+				Parameters parameters) {
+			super(simulation, timeService, dispatcher, parameters);
 		}
 
 		@Override
@@ -72,11 +81,6 @@ public class PowerObjectTest{
 
 		@Override
 		protected State getState() {
-			return null;
-		}
-
-		@Override
-		protected Parameters getParameters() {
 			return null;
 		}
 	}

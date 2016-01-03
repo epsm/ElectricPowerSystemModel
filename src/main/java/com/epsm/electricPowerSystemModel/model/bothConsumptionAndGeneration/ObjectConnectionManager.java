@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
@@ -25,10 +24,12 @@ public class ObjectConnectionManager{
 	private String objectClass;
 	private Logger logger;
 
-	public ObjectConnectionManager(TimeService timeService,	Dispatcher dispatcher, PowerObject object){
+	public ObjectConnectionManager(TimeService timeService,	Dispatcher dispatcher, 
+			PowerObject object){
+		
 		if(timeService == null){
-			String message = String.format("ObjectConnectionManager constructor: timeService must "
-					+ "not be null.");
+			String message = String.format("ObjectConnectionManager constructor: timeService "
+					+ "must not be null.");
 			throw new IllegalArgumentException(message);
 		}else if(dispatcher == null){
 			String message = "ObjectConnectionManager constructor: dispatcher must not be null.";
@@ -74,14 +75,14 @@ public class ObjectConnectionManager{
 	}
 	
 	private boolean isCommandTypeEqualsToExpected(Command command){
-		return filter.isCommandAppropriate(command);
+		return filter.isCommandTypeAppropriate(command);
 	}
 	
 	private void setTimeWhenReceivedLastCommand(){
 		timeWhenRecievedLastCommand = timeService.getCurrentTime();
 	}
 	
-	public final void interactWithDispatcher(){
+	public final void manageConnection(){
 		getCurrentTime();
 		
 		if(isConnectionWithDispatcherActive()){
@@ -100,13 +101,13 @@ public class ObjectConnectionManager{
 	
 	private boolean isConnectionWithDispatcherActive(){
 		return timeWhenRecievedLastCommand.plusSeconds(
-				GlobalConstants.ACCEPTABLE_PAUSE_BETWEEN_MESSAGES_FROM_DISPATCHER_IN_SECCONDS)
+				GlobalConstants.MAX_PAUSE_BETWEEN_MESSAGES_FROM_DISPATCHER_IN_SECONDS)
 				.isAfter(currentTime);
 	}
 	
 	private boolean isItTimeToSentMessage(){
 		return timeWhenSentLastMessage.plusSeconds(
-				GlobalConstants.PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECCONDS)
+				GlobalConstants.PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECONDS)
 				.isBefore(currentTime);
 	}
 	
@@ -129,8 +130,8 @@ public class ObjectConnectionManager{
 		}		
 	}
 	
-	private boolean isStateTypeEqualsToExpected(Message message){
-		return filter.isStateAppropriate(message);
+	private boolean isStateTypeEqualsToExpected(State state){
+		return filter.isStateTypeAppropriate(state);
 	}
 	
 	private void setTimeWhenSentLastMessage(){
@@ -157,7 +158,7 @@ public class ObjectConnectionManager{
 		}
 	}
 	
-	private boolean isParametersTypeEqualsToExpected(Message message){
-		return filter.isParametersAppropriate(message);
+	private boolean isParametersTypeEqualsToExpected(Parameters parameters){
+		return filter.isParametersTypeAppropriate(parameters);
 	}
 }

@@ -17,7 +17,6 @@ import com.epsm.electricPowerSystemModel.model.consumption.ConsumptionPermission
 import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
@@ -42,6 +41,7 @@ public class MessageFilterTest {
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);
+		parameters = mock(Parameters.class);
 	}
 	
 	@Rule
@@ -56,18 +56,18 @@ public class MessageFilterTest {
 	}
 	
 	@Test
-	public void exceptionInIsCommandAppropriateMethodIfCommandIsNull(){
+	public void exceptionInIsCommandTypeAppropriateMethodIfCommandIsNull(){
 		expectedEx.expect(IllegalArgumentException.class);
-	    expectedEx.expectMessage("MessageFilter isCommandAppropriate(...) method: command"
+	    expectedEx.expectMessage("MessageFilter isCommandTypeAppropriate(...) method: command"
 	    		+ " can't be null.");
 	    
 	    createPowerStationAndFilterForIt();
 		createPowerStationGenerationSchedule();
-		filter.isCommandAppropriate(null);
+		filter.isCommandTypeAppropriate(null);
 	}
 	
 	private void createPowerStationAndFilterForIt(){
-		object = new PowerStation(simulation, timeService, dispatcher);
+		object = new PowerStation(simulation, timeService, dispatcher, parameters);
 		filter = new MessageFilter(object.getClass());
 	}
 	
@@ -76,25 +76,25 @@ public class MessageFilterTest {
 	}
 	
 	@Test
-	public void exceptionInIsStateAppropriateMethodIfStateIsNull(){
+	public void exceptionInIsStateTypeAppropriateMethodIfStateIsNull(){
 		expectedEx.expect(IllegalArgumentException.class);
-		expectedEx.expectMessage("MessageFilter isStateAppropriate(...) method: state"
+		expectedEx.expectMessage("MessageFilter isStateTypeAppropriate(...) method: state"
 				+ " can't be null.");
 	    
 	    createPowerStationAndFilterForIt();
 		createPowerStationGenerationSchedule();
-		filter.isStateAppropriate(null);
+		filter.isStateTypeAppropriate(null);
 	}
 	
 	@Test
-	public void exceptionInIsParametersAppropriateMethodIfMessageIsNull(){
+	public void exceptionInIsParametersTypeAppropriateMethodIfMessageIsNull(){
 		expectedEx.expect(IllegalArgumentException.class);
-		expectedEx.expectMessage("MessageFilter isParametersAppropriate(...) method:"
+		expectedEx.expectMessage("MessageFilter isParametersTypeAppropriate(...) method:"
 	    		+ " parameters can't be null.");
 	    
 	    createPowerStationAndFilterForIt();
 		createPowerStationGenerationSchedule();
-		filter.isParametersAppropriate(null);
+		filter.isParametersTypeAppropriate(null);
 	}
 
 	@Test
@@ -102,7 +102,7 @@ public class MessageFilterTest {
 		createPowerStationAndFilterForIt();
 		createPowerStationGenerationSchedule();
 		
-		Assert.assertTrue(filter.isCommandAppropriate(command));
+		Assert.assertTrue(filter.isCommandTypeAppropriate(command));
 	}
 	
 	@Test
@@ -110,7 +110,7 @@ public class MessageFilterTest {
 		createPowerStationAndFilterForIt();
 		createPowerStationState();
 		
-		Assert.assertTrue(filter.isStateAppropriate(state));
+		Assert.assertTrue(filter.isStateTypeAppropriate(state));
 	}
 	
 	private void createPowerStationState(){
@@ -121,7 +121,7 @@ public class MessageFilterTest {
 	public void trueIfObjectIsPowerStationAndParametersIsPowerStationParameters(){
 		createPowerStationAndFilterForIt();
 		createPowerStationParameters();
-		Assert.assertTrue(filter.isParametersAppropriate(parameters));
+		Assert.assertTrue(filter.isParametersTypeAppropriate(parameters));
 	}
 	
 	private void createPowerStationParameters(){
@@ -132,11 +132,11 @@ public class MessageFilterTest {
 	public void trueIfObjectIsInstanceOfConsumerAndCommandIsConsumptionPermission (){
 		createConsumerAndFilterForIt();
 		createConsumerPermisson();
-		Assert.assertTrue(filter.isCommandAppropriate(command));
+		Assert.assertTrue(filter.isCommandTypeAppropriate(command));
 	}
 	
 	private void createConsumerAndFilterForIt(){
-		object = new ShockLoadConsumer(simulation, timeService, dispatcher);
+		object = new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);
 		filter = new MessageFilter(object.getClass());
 	}
 	
@@ -148,7 +148,7 @@ public class MessageFilterTest {
 	public void trueIfObjectIsInstanceOfConsumerAndStateIsConsumerState(){
 		createConsumerAndFilterForIt();
 		createConsumerState();
-		Assert.assertTrue(filter.isStateAppropriate(state));
+		Assert.assertTrue(filter.isStateTypeAppropriate(state));
 	}
 	
 	private void createConsumerState(){
@@ -159,7 +159,7 @@ public class MessageFilterTest {
 	public void trueIfObjectIsInstanceOfConsumerAndParametersIsConsumerParameters(){
 		createConsumerAndFilterForIt();
 		createConsumerParameters();
-		Assert.assertTrue(filter.isParametersAppropriate(parameters));
+		Assert.assertTrue(filter.isParametersTypeAppropriate(parameters));
 	}
 	
 	private void createConsumerParameters(){
@@ -176,10 +176,10 @@ public class MessageFilterTest {
 	}
 	
 	private class UnsuportedPowerObject extends PowerObject{
-		public UnsuportedPowerObject(ElectricPowerSystemSimulation simulation,
-				TimeService timeService,Dispatcher dispatcher) {
-			super(simulation, timeService, dispatcher);
-
+		public UnsuportedPowerObject(ElectricPowerSystemSimulation simulation, TimeService timeService,
+				Dispatcher dispatcher, Parameters parameters) {
+			
+			super(simulation, timeService, dispatcher, parameters);
 		}
 
 		@Override
@@ -195,31 +195,26 @@ public class MessageFilterTest {
 		protected State getState() {
 			return null;
 		}
-
-		@Override
-		protected Parameters getParameters() {
-			return null;
-		}
 	}
 	
 	@Test
 	public void falseIfObjectIsPowerStationAndCommandIsConsumptionPermission (){
 		createPowerStationAndFilterForIt();
 		createConsumerPermisson();
-		Assert.assertFalse(filter.isCommandAppropriate(command));
+		Assert.assertFalse(filter.isCommandTypeAppropriate(command));
 	}
 	
 	@Test
 	public void falseIfObjectIsPowerStationAndStateIsConsumerState(){
 		createPowerStationAndFilterForIt();
 		createConsumerState();
-		Assert.assertFalse(filter.isStateAppropriate(state));
+		Assert.assertFalse(filter.isStateTypeAppropriate(state));
 	}
 	
 	@Test
 	public void falseIfObjectIsPowerStationAndParametersIsConsumerParameters(){
 		createPowerStationAndFilterForIt();
 		createConsumerParameters();
-		Assert.assertFalse(filter.isParametersAppropriate(parameters));
+		Assert.assertFalse(filter.isParametersTypeAppropriate(parameters));
 	}
 }

@@ -46,9 +46,9 @@ public class MessageFilter {
 		return Consumer.class.isAssignableFrom(objectClass);
 	}
 	
-	public boolean isCommandAppropriate(Command command){
+	public boolean isCommandTypeAppropriate(Command command){
 		if(command == null){
-			String exceptionMessage = "MessageFilter isCommandAppropriate(...) method:"
+			String exceptionMessage = "MessageFilter isCommandTypeAppropriate(...) method:"
 					+ " command can't be null.";
 			throw new IllegalArgumentException(exceptionMessage);	
 		}
@@ -56,9 +56,9 @@ public class MessageFilter {
 		return command.getClass() == expectedCommandClass;
 	}
 	
-	public boolean isStateAppropriate(State state){
+	public boolean isStateTypeAppropriate(State state){
 		if(state == null){
-			String exceptionMessage = "MessageFilter isStateAppropriate(...) method:"
+			String exceptionMessage = "MessageFilter isStateTypeAppropriate(...) method:"
 					+ " state can't be null.";
 			throw new IllegalArgumentException(exceptionMessage);	
 		}
@@ -66,9 +66,9 @@ public class MessageFilter {
 		return state.getClass() == expectedStateClass;
 	}
 
-	public boolean isParametersAppropriate(Parameters parameters){
+	public boolean isParametersTypeAppropriate(Parameters parameters){
 		if(parameters == null){
-			String exceptionMessage = "MessageFilter isParametersAppropriate(...) method:"
+			String exceptionMessage = "MessageFilter isParametersTypeAppropriate(...) method:"
 					+ " parameters can't be null.";
 			throw new IllegalArgumentException(exceptionMessage);	
 		}
