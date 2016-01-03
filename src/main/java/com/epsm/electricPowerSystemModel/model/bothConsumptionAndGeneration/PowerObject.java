@@ -13,13 +13,14 @@ import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public abstract class PowerObject implements SimulationObject{
 	protected long id;//must not bee changed after creation
+	protected Parameters parameters;
 	protected ElectricPowerSystemSimulation simulation;
 	protected TimeService timeService;
 	private ObjectConnectionManager manager;
 	protected Logger logger;
 
 	public PowerObject(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher) {
+			Dispatcher dispatcher, Parameters parameters) {
 		
 		if(simulation == null){
 			String message = "PowerObject constructor: simulation can't be null.";
@@ -35,6 +36,7 @@ public abstract class PowerObject implements SimulationObject{
 		id = simulation.generateId();
 		this.simulation = simulation;
 		this.timeService = timeService;
+		this.parameters = parameters;
 		manager = new ObjectConnectionManager(timeService, dispatcher, this);
 		logger = LoggerFactory.getLogger(PowerObject.class);
 		logger.info("{}#{} was created.", getClass().getSimpleName(), id);
@@ -44,11 +46,14 @@ public abstract class PowerObject implements SimulationObject{
 		return id;
 	}
 	
+	public Parameters GeneratorParameters(){
+		return parameters;
+	}
+	
 	@Override
 	public final void doRealTimeDependingOperations(){
-		manager.sendMessageIfItNecessary();
+		manager.interactWithDispatcher();
 	}
 	
 	protected abstract State getState();
-	protected abstract Parameters getParameters();
 }

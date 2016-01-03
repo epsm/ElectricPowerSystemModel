@@ -7,8 +7,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
+import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
@@ -59,16 +62,21 @@ public class PowerObjectTest{
 		}
 
 		@Override
-		public void executeCommand(Message message) {
+		public float calculatePowerBalance() {
+			return 0;
 		}
 
 		@Override
-		public Message getState() {
+		public void executeCommand(Command command) {
+		}
+
+		@Override
+		protected State getState() {
 			return null;
 		}
 
 		@Override
-		public Message getParameters() {
+		protected Parameters getParameters() {
 			return null;
 		}
 	}

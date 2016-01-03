@@ -81,8 +81,7 @@ public class ObjectConnectionManager{
 		timeWhenRecievedLastCommand = timeService.getCurrentTime();
 	}
 	
-	public final void sendMessageIfItNecessary(){
-		
+	public final void interactWithDispatcher(){
 		getCurrentTime();
 		
 		if(isConnectionWithDispatcherActive()){
