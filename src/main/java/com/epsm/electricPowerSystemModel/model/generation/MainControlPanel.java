@@ -5,11 +5,10 @@ import java.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Message;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 
 public class MainControlPanel{
-	private ElectricPowerSystemSimulation sumulation;
+	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station;
 	private GeneratorsController controller;
 	private PowerStationGenerationSchedule curentSchedule;
@@ -19,6 +18,7 @@ public class MainControlPanel{
 	private Logger logger;
 
 	public MainControlPanel(ElectricPowerSystemSimulation simulation, PowerStation station){
+		this.simulation = simulation;
 		this.station = station;
 		controller = new GeneratorsController(station);
 		validator = new GenerationScheduleValidator();
@@ -39,9 +39,7 @@ public class MainControlPanel{
 	}
 	
 	private void getStationParameters(){
-		if(parameters == null){
-			parameters = (PowerStationParameters) station.getParameters();
-		}
+		parameters = (PowerStationParameters) station.getParameters();
 	}
 	
 	private boolean isReceivedScheduleValid(){
@@ -70,7 +68,7 @@ public class MainControlPanel{
 	}
 	
 	private void getTimeAndAdjustGenerators(){
-		LocalTime currentTime = sumulation.getTimeInSimulation();
+		LocalTime currentTime = simulation.getTimeInSimulation();
 		controller.adjustGenerators(curentSchedule, currentTime);
 	}
 }

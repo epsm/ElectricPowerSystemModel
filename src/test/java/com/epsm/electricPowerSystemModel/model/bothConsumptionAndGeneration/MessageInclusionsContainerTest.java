@@ -1,8 +1,5 @@
 package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,7 +34,7 @@ public class MessageInclusionsContainerTest {
 	    expectedEx.expectMessage("MessageInclusionsContainer constructor: "
 	    		+ "quantityOfInclusions must be more than zero, but was 0.");
 	    
-	    container = new MessageInclusionsContainer(0);
+	    container = new MessageInclusionsContainer<MessageInclusionImpl>(0);
 	}
 	
 	@Test
