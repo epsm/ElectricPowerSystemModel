@@ -4,38 +4,31 @@ import java.time.LocalTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
-import com.epsm.electricPowerSystemModel.model.consumption.ConsumerParametersStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.CreationParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStationParameters;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
 	private Map<Long, PowerObject> objects;
 	private float frequencyInPowerSystem;
 	private LocalTime currentTimeInSimulation;
-	private AtomicLong idSource;
+	private PowerObjectFactory powerObjectFactory;
 	private final float TIME_CONASTNT = 2_000;
 	private final int SIMULATION_STEP_IN_NANOS = 100_000_000;
 	private final float ACCEPTABLE_FREQUENCY_DELTA = 0.03f;
 	private Logger logger;
 
 	public ElectricPowerSystemSimulationImpl() {
-		objects = new HashMap<Long, PowerObject>();
+		objects = new ConcurrentHashMap<Long, PowerObject>();
 		frequencyInPowerSystem = GlobalConstants.STANDART_FREQUENCY;
 		currentTimeInSimulation = LocalTime.NOON;
-		idSource = new AtomicLong();
+		powerObjectFactory = new PowerObjectFactory(objects);
 		logger = LoggerFactory.getLogger(ElectricPowerSystemSimulationImpl.class);
-	}
-	
-	@Override
-	public long generateId() {
-		return idSource.getAndIncrement();
 	}
 	
 	@Override
@@ -104,7 +97,6 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 
 	@Override
 	public void createPowerObject(CreationParameters parameters) {
-		// TODO Auto-generated method stub
-		
+		powerObjectFactory.build(parameters);
 	}
 }

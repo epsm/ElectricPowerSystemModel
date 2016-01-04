@@ -9,7 +9,6 @@ import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationParameters;
 
 public interface ElectricPowerSystemSimulation{
-	public long generateId();
 	public void calculateNextStep();
 	public float getFrequencyInPowerSystem();
 	public LocalTime getTimeInSimulation();

@@ -25,7 +25,6 @@ import com.epsm.electricPowerSystemModel.model.consumption.ConsumptionPermission
 import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumer;
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
@@ -41,7 +40,7 @@ public class ObjectConnectionManagerTest{
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private Command command;
-	private Parameters parameters;
+	private ConsumerParametersStub parameters;
 	private ArgumentCaptor<State> captor;
 	private final LocalDateTime START_TIME = LocalDateTime.of(2000, 01, 01, 00, 00);
 	
