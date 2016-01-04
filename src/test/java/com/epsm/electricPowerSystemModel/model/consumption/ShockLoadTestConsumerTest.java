@@ -39,13 +39,12 @@ public class ShockLoadTestConsumerTest {
 	public void initialize(){
 		ConsumerParametersStub parameters 
 			= new ConsumerParametersStub(CONSUMER_NUMBER, LocalDateTime.MIN, LocalTime.MIN);
-		simulation = spy(new ElectricPowerSystemSimulationImpl());
-		when(simulation.generateId()).thenReturn(CONSUMER_NUMBER);
-		turnOnTime = null;
-		turnOffTime = null;
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentTime()).thenReturn(LocalDateTime.of(2000, 01, 01, 00, 00));
 		dispatcher = mock(Dispatcher.class);
+		simulation = spy(new ElectricPowerSystemSimulationImpl(timeService, dispatcher));
+		turnOnTime = null;
+		turnOffTime = null;
 		consumer = new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);

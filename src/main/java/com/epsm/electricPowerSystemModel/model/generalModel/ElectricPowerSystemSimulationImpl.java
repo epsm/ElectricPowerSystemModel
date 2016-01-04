@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
 import com.epsm.electricPowerSystemModel.model.dispatch.CreationParameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
@@ -23,11 +24,11 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private final float ACCEPTABLE_FREQUENCY_DELTA = 0.03f;
 	private Logger logger;
 
-	public ElectricPowerSystemSimulationImpl() {
+	public ElectricPowerSystemSimulationImpl(TimeService timeService, Dispatcher dispatcher) {
 		objects = new ConcurrentHashMap<Long, PowerObject>();
 		frequencyInPowerSystem = GlobalConstants.STANDART_FREQUENCY;
 		currentTimeInSimulation = LocalTime.NOON;
-		powerObjectFactory = new PowerObjectFactory(objects);
+		powerObjectFactory = new PowerObjectFactory(objects, this, timeService, dispatcher);
 		logger = LoggerFactory.getLogger(ElectricPowerSystemSimulationImpl.class);
 	}
 	

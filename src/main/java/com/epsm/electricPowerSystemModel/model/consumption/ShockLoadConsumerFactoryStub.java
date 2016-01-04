@@ -14,19 +14,18 @@ public class ShockLoadConsumerFactoryStub extends AbstractPowerObjectFactory{
 	private long powerObjectId;
 	private ConsumerParametersStub parameters;
 	
-	
 	public ShockLoadConsumerFactoryStub(ElectricPowerSystemSimulation simulation,
 			TimeService timeService, Dispatcher dispatcher) {
 		
 		super(simulation, timeService, dispatcher);
 	}
-	
+
 	public synchronized PowerObject createConsumer(long id,
 			ShockLoadConsumerCreationParametersStub parameters) {
 		
 		saveValues(id);
-		createShockLOadConsumerParameters();
-		createShockLOadConsumer();
+		createShockLoadConsumerParameters();
+		createShockLoadConsumer();
 	
 		return consumer;
 	}
@@ -35,7 +34,7 @@ public class ShockLoadConsumerFactoryStub extends AbstractPowerObjectFactory{
 		this.powerObjectId = powerObjectId;
 	}
 	
-	private void createShockLOadConsumer(){
+	private void createShockLoadConsumer(){
 		consumer= new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);
 		consumer.setDegreeOfDependingOnFrequency(2);
 		consumer.setMaxLoad(10f);
@@ -43,7 +42,7 @@ public class ShockLoadConsumerFactoryStub extends AbstractPowerObjectFactory{
 		consumer.setMaxPauseBetweenWorkInSeconds(200);
 	}
 	
-	private void createShockLOadConsumerParameters(){
+	private void createShockLoadConsumerParameters(){
 		LocalDateTime realTimeStamp = timeService.getCurrentTime();
 		LocalTime simulationTimeStamp = simulation.getTimeInSimulation();
 		

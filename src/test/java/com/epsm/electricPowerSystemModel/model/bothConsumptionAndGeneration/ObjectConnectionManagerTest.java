@@ -50,10 +50,10 @@ public class ObjectConnectionManagerTest{
 	@Before
 	public void initialize(){
 		State state = new ConsumerState(0, START_TIME, LocalTime.MIN, 0);
-		simulation = new ElectricPowerSystemSimulationImpl();
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentTime()).thenReturn(START_TIME);
 		dispatcher = mock(Dispatcher.class);
+		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher);
 		parameters = new ConsumerParametersStub(0, START_TIME, LocalTime.MIN);
 		object = spy(new ShockLoadConsumer(simulation, timeService, dispatcher, parameters));
 		when(object.getState()).thenReturn(state);

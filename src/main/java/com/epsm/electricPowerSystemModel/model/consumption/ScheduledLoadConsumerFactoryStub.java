@@ -27,7 +27,7 @@ public class ScheduledLoadConsumerFactoryStub extends AbstractPowerObjectFactory
 	}
 	
 	public synchronized PowerObject createConsumer(long id,
-			ShockLoadConsumerCreationParametersStub parameters) {
+			ScheduledLoadConsumerCreationParametersStub parameters) {
 		
 		saveValues(id);
 		createScheduledLadConsumerParameters();

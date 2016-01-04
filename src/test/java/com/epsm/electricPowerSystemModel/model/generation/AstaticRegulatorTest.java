@@ -8,9 +8,11 @@ import static org.mockito.Mockito.*;
 
 import java.time.LocalTime;
 
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.AstaticRegulator;
 import com.epsm.electricPowerSystemModel.model.generation.StaticRegulator;
 import com.epsm.electricPowerSystemModel.model.generation.Generator;
@@ -25,7 +27,9 @@ public class AstaticRegulatorTest {
 	
 	@Before
 	public void initialize(){
-		simulation = spy(new ElectricPowerSystemSimulationImpl());
+		TimeService timeService = new TimeService();
+		Dispatcher dispatcher = mock(Dispatcher.class);
+		simulation = spy(new ElectricPowerSystemSimulationImpl(timeService, dispatcher));
 		generator = new Generator(simulation, 1);
 		astaticRegulator = new AstaticRegulator(simulation, generator);
 		staticRegulator = new StaticRegulator(simulation, generator);

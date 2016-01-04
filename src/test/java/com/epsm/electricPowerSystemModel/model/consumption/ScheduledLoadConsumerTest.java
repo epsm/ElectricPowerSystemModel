@@ -31,11 +31,11 @@ public class ScheduledLoadConsumerTest{
 	
 	@Before
 	public void initialize(){
-		ConsumerParametersStub parameters 
-				= new ConsumerParametersStub(CONSUMER_NUMBER, LocalDateTime.MIN, LocalTime.MIN); 
-		simulation = new EPSMImplStub();
+		ConsumerParametersStub parameters = new ConsumerParametersStub(
+				CONSUMER_NUMBER, LocalDateTime.MIN, LocalTime.MIN); 
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
+		simulation = new EPSMImplStub(timeService, dispatcher);
 		consumer = new ScheduledLoadConsumer(simulation, timeService, dispatcher, parameters);
 		approximateLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 		currentTime = LocalTime.MIDNIGHT;
@@ -46,6 +46,10 @@ public class ScheduledLoadConsumerTest{
 	}
 	
 	private class EPSMImplStub extends ElectricPowerSystemSimulationImpl{
+		public EPSMImplStub(TimeService timeService, Dispatcher dispatcher) {
+			super(timeService, dispatcher);
+		}
+
 		@Override
 		public void calculateNextStep(){
 			currentTime = currentTime.plusHours(1);
@@ -59,11 +63,6 @@ public class ScheduledLoadConsumerTest{
 		@Override
 		public LocalTime getTimeInSimulation(){
 			return currentTime;
-		}
-		
-		@Override
-		public long generateId(){
-			return	CONSUMER_NUMBER;
 		}
 	}
 	

@@ -31,9 +31,9 @@ public class MainControlPanelTest{
 		PowerStationParameters stationParameters 
 				= new PowerStationParameters(0, LocalDateTime.MIN, LocalTime.MIN, 1);
 		GeneratorParameters generatorParameters = new GeneratorParameters(1, 100, 0);
-		simulation = new ElectricPowerSystemSimulationImpl();
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
+		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher);
 		station = new PowerStation(simulation, timeService, dispatcher, stationParameters);
 		controlPanel= new MainControlPanel(simulation, station);
 		stationSchedule 

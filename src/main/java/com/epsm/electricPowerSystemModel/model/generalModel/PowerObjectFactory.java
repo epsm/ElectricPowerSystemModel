@@ -9,6 +9,7 @@ import com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumer
 import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumerCreationParametersStub;
 import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumerFactoryStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.CreationParameters;
+import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationCreationParametersStub;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationFactoryStub;
 
@@ -19,11 +20,17 @@ public class PowerObjectFactory {
 	private ScheduledLoadConsumerFactoryStub scheduledConsumerFactory;
 	private AtomicLong idSource;
 	
-	public PowerObjectFactory(Map<Long, PowerObject> powerSystemObjects) {
+	public PowerObjectFactory(Map<Long, PowerObject> powerSystemObjects,
+			ElectricPowerSystemSimulation simulation, TimeService timeService,
+			Dispatcher dispatcher) {
+		
 		this.powerSystemObjects = powerSystemObjects;
-		this.powerStationFactory = new PowerStationFactoryStub();
-		this.shockConsumerFactory = new ShockLoadConsumerFactoryStub();
-		this.scheduledConsumerFactory = new ScheduledLoadConsumerFactoryStub();
+		this.powerStationFactory = new PowerStationFactoryStub(
+				simulation, timeService, dispatcher);
+		this.shockConsumerFactory = new ShockLoadConsumerFactoryStub(
+				simulation, timeService, dispatcher);
+		this.scheduledConsumerFactory = new ScheduledLoadConsumerFactoryStub(
+				simulation, timeService, dispatcher);
 		idSource = new AtomicLong();
 	}
 

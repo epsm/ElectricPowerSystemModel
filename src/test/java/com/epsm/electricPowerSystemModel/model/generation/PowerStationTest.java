@@ -48,7 +48,6 @@ public class PowerStationTest{
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		when(simulation.getTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
-		when(simulation.generateId()).thenReturn(POWER_STATION_ID);
 		
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentTime()).thenReturn(CONSTANT_REAL_TIME);

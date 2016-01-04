@@ -35,7 +35,6 @@ public class GeneratorControllerTest {
 	
 	@Before
 	public void initialize(){
-		simulation = new ElectricPowerSystemSimulationImpl();
 		stationSchedule = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 2);
 		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		
@@ -47,6 +46,8 @@ public class GeneratorControllerTest {
 		
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
+		
+		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher);
 		station = new PowerStation(simulation, timeService, dispatcher, parameters);
 		controlPanel = new MainControlPanel(simulation, station);
 		
