@@ -25,8 +25,7 @@ public class MainControlPanel{
 		logger = LoggerFactory.getLogger(MainControlPanelTest.class);
 	}
 	
-	public void acceptGenerationSchedule(Message message) {
-		PowerStationGenerationSchedule schedule = (PowerStationGenerationSchedule) message;
+	public void acceptGenerationSchedule(PowerStationGenerationSchedule schedule) {
 		performGenerationSchedule(schedule);
 	}
 	

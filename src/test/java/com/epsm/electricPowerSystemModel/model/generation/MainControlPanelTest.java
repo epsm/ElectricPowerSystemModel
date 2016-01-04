@@ -24,26 +24,26 @@ public class MainControlPanelTest{
 	private GeneratorGenerationSchedule generatorSchedule;
 	private Generator generator;
 	
-	
 	@Before
 	public void initialize(){
+		PowerStationParameters parameters 
+				= new PowerStationParameters(0, LocalDateTime.MIN, LocalTime.MIN, 1);
 		simulation = new ElectricPowerSystemSimulationImpl();
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
-		station = new PowerStation(simulation, timeService, dispatcher);
+		station = new PowerStation(simulation, timeService, dispatcher, parameters);
 		controlPanel= new MainControlPanel(simulation, station);
 		stationSchedule = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 1);
 		generatorSchedule = new GeneratorGenerationSchedule(1);
 		generator = new Generator(simulation, 1);
 		
 		station.addGenerator(generator);
-		stationSchedule.addInclusion(generatorSchedule);
-		simulation.addPowerStation(station);
+		stationSchedule.addGeneratorSchedule(generatorSchedule);
 	}
 	
 	@Test
 	public void controlPanelAcceptsValidSchedule(){
-		station.executeCommand(stationSchedule);
+		controlPanel.acceptGenerationSchedule(stationSchedule);
 		doNextStep();
 		
 		Assert.assertTrue(generator.isTurnedOn());
@@ -57,13 +57,14 @@ public class MainControlPanelTest{
 	@Test
 	public void controlPanelDoesnNotAcceptInvalidSchedule(){
 		createInvalidGenerationSchedule();
-		controlPanel.process(stationSchedule);
+		controlPanel.acceptGenerationSchedule(stationSchedule);
 		doNextStep();
 		
 		Assert.assertFalse(generator.isTurnedOn());
 	}
 	
 	private void createInvalidGenerationSchedule(){
-		stationSchedule = new PowerStationGenerationSchedule(2);
+		stationSchedule 
+				= new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 2);
 	}
 }
