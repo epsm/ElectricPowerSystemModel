@@ -22,14 +22,14 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory{
 	public synchronized PowerStation createPowerStation(long powerObjectId,
 			PowerStationCreationParametersStub parameters){
 		
-		saveValues(powerObjectId, parameters);
+		saveValues(powerObjectId);
 		createPowerStationParameters();
 		createPowerStation();
 		
 		return powerStation;
 	}
 	
-	private void saveValues(long powerObjectId, PowerStationCreationParametersStub parameters){
+	private void saveValues(long powerObjectId){
 		this.powerObjectId = powerObjectId;
 	}
 	
