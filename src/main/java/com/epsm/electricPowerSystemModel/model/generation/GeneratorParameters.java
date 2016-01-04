@@ -20,4 +20,9 @@ public class GeneratorParameters extends MessageInclusion{
 	public float getMinimalTechnologyPower() {
 		return minimalTechnologyPower;
 	}
+
+	@Override
+	public String toString() {
+		return "GeneratorParameters toString() stub";
+	}
 }

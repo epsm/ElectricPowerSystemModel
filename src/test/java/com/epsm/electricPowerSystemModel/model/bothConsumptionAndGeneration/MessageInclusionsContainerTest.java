@@ -23,6 +23,11 @@ public class MessageInclusionsContainerTest {
 		public MessageInclusionImpl(int powerUnitNumber) {
 			super(powerUnitNumber);
 		}
+
+		@Override
+		public String toString() {
+			return null;
+		}
 	}
 	
 	@Rule

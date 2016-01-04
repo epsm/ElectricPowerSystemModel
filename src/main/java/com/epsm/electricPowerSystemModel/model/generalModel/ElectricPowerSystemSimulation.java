@@ -12,4 +12,5 @@ public interface ElectricPowerSystemSimulation{
 	public LocalTime getTimeInSimulation();
 	public void createPowerObject(CreationParameters parameters);
 	public Map<Long, DispatchingObject> getDispatchingObjects();
+	public Map<Long, RealTimeOperations> getRealTimeDependingObjects();
 }

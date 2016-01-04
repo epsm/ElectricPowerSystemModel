@@ -3,15 +3,17 @@ package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
+import com.epsm.electricPowerSystemModel.model.generalModel.RealTimeOperations;
 import com.epsm.electricPowerSystemModel.model.generalModel.SimulationObject;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
-public abstract class PowerObject implements SimulationObject{
+public abstract class PowerObject implements SimulationObject, RealTimeOperations{
 	protected long id;//must not bee changed after creation
 	protected Parameters parameters;
 	protected ElectricPowerSystemSimulation simulation;
@@ -58,6 +60,13 @@ public abstract class PowerObject implements SimulationObject{
 	public final void doRealTimeDependingOperations(){
 		manager.manageConnection();
 	}
+	
+	@Override
+	public final void executeCommand(Command command){
+		manager.executeCommand(command);
+	}
+	
+	protected abstract void performDispatcheCommand(Command command);
 	
 	protected abstract State getState();
 }

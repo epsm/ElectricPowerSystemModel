@@ -40,18 +40,18 @@ public class ScheduledLoadConsumerFactoryStub extends AbstractPowerObjectFactory
 		this.powerObjectId = powerObjectId;
 	}
 	
+	private void createScheduledLadConsumerParameters(){
+		LocalDateTime realTimeStamp = timeService.getCurrentTime();
+		LocalTime simulationTimeStamp = simulation.getTimeInSimulation();
+		
+		parameters = new ConsumerParametersStub(powerObjectId, realTimeStamp, simulationTimeStamp);
+	}
+	
 	private void createScheduledLoadConsumer(){
 		consumer = new ScheduledLoadConsumer(simulation, timeService, dispatcher, parameters);
 		consumer.setDegreeOfDependingOnFrequency(2);
 		consumer.setApproximateLoadByHoursOnDayInPercent(LOAD_BY_HOURS);
 		consumer.setMaxLoadWithoutRandomInMW(100);
 		consumer.setRandomFluctuationsInPercent(10);
-	}
-	
-	private void createScheduledLadConsumerParameters(){
-		LocalDateTime realTimeStamp = timeService.getCurrentTime();
-		LocalTime simulationTimeStamp = simulation.getTimeInSimulation();
-		
-		parameters = new ConsumerParametersStub(powerObjectId, realTimeStamp, simulationTimeStamp);
 	}
 }

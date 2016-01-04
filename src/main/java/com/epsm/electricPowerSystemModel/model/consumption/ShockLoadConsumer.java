@@ -131,7 +131,7 @@ public final class ShockLoadConsumer extends Consumer{
 	}
 
 	@Override
-	public void executeCommand(Command command) {
+	protected void performDispatcheCommand(Command command) {
 		//TODO turn off/on user by dispatcher command. 
 	}
 }

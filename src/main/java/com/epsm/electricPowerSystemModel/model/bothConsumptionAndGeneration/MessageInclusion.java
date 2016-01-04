@@ -60,4 +60,6 @@ public abstract class MessageInclusion implements Comparable<MessageInclusion>{
 		
 		return 0;
 	}
+	
+	public abstract String toString();
 }

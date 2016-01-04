@@ -17,11 +17,11 @@ public class GeneratorState extends MessageInclusion{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("№");
+		stringBuilder.append("#");
 		stringBuilder.append(getInclusionNumber());
 		stringBuilder.append(" ");
 		stringBuilder.append(numberFormatter.format(generationInWM));
-		stringBuilder.append("MW");
+		stringBuilder.append("MW ");
 		return stringBuilder.toString();
 	}
 }

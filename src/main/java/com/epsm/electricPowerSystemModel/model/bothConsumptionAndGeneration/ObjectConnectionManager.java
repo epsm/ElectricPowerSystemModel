@@ -50,7 +50,7 @@ public class ObjectConnectionManager{
 		logger = LoggerFactory.getLogger(ObjectConnectionManager.class);
 	}
 	
-	public void executeCommand(Command command) {
+	public void executeCommand(Command command){
 		if(command == null){
 			logger.warn("ObjectConnectionManager#{} recieved null from dispatcher.", objectId);
 		}else if(isCommandTypeEqualsToExpected(command)){
@@ -67,7 +67,7 @@ public class ObjectConnectionManager{
 	}
 	
 	private void passCommandToObject(Command command){
-		object.executeCommand(command);
+		object.performDispatcheCommand(command);
 	}
 	
 	private String getMessageClassName(Message message){

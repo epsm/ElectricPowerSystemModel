@@ -28,4 +28,18 @@ public class GeneratorGenerationSchedule extends MessageInclusion{
 	public LoadCurve getCurve() {
 		return generationCurve;
 	}
+
+	@Override
+	public String toString() {
+		stringBuilder.setLength(0);
+		stringBuilder.append("Generator#");
+		stringBuilder.append(inclusionNumber);
+		stringBuilder.append(", turnedOn: ");
+		stringBuilder.append(isGeneratorTurnedOn());
+		stringBuilder.append(", astatic regulation: ");
+		stringBuilder.append(astaticRegulatorTurnedOn);
+		stringBuilder.append(". ");
+		
+		return stringBuilder.toString();
+	}
 }

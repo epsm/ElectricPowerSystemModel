@@ -95,7 +95,7 @@ public final class PowerStation extends PowerObject{
 		verifyIsGeneratorNotNull();
 		verifyIfGeneartorWithTheSameNumberExists();
 		addGenerator();
-		logger.info("Generator №{} added to power station", generator.getNumber());
+		logger.info("Generator #{} added to power station", generator.getNumber());
 	}
 	
 	private void verifyIsGeneratorNotNull(){
@@ -110,7 +110,8 @@ public final class PowerStation extends PowerObject{
 		Generator existingGenerator = generators.get(generatorNumber);
 		
 		if(existingGenerator != null){
-			String message = "Generator with number " + generatorNumber + " already installed.";
+			String message = String.format("Generator with number#d already installed.",
+					generatorNumber);
 			throw new GenerationException(message);
 		}
 	}
@@ -134,7 +135,7 @@ public final class PowerStation extends PowerObject{
 	}
 
 	@Override
-	public void executeCommand(Command command) {
+	protected void performDispatcheCommand(Command command) {
 		controlPanel.acceptGenerationSchedule((PowerStationGenerationSchedule) command);
 	}
 }

@@ -49,9 +49,10 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		float balance = 0;
 
 		for(PowerObject object: objects.values()){
-			float bal = object.calculatePowerBalance();
-			balance += bal;//object.calculatePowerBalance();
+			balance += object.calculatePowerBalance();
 		}
+		
+		System.out.println("bal=" + balance);
 		
 		return balance;
 	}
@@ -100,10 +101,15 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 
 	@Override
+	public Map<Long, RealTimeOperations> getRealTimeDependingObjects() {
+		return Collections.unmodifiableMap(new HashMap<Long, RealTimeOperations>(objects));
+	}
+	
+	@Override
 	public void createPowerObject(CreationParameters parameters) {
 		powerObjectFactory.build(parameters);
 	}
-
+	
 	/*
 	 * Non public for unit testing. When PowerObjects factories will be implemented it will
 	 * be possible to remove this two methods from here and create appropriate objects

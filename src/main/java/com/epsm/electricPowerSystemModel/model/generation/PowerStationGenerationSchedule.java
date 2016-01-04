@@ -36,6 +36,13 @@ public class PowerStationGenerationSchedule extends Command{
 	
 	@Override
 	public String toString(){
-		return "PowerStationGenerationSchedule toString() stub.";
+		stringBuilder.setLength(0);
+		stringBuilder.append("Power st.#");
+		stringBuilder.append(powerObjectId);
+		stringBuilder.append(" generation schedule [");
+		stringBuilder.append(schedules.toString());
+		stringBuilder.append("]");
+		
+		return stringBuilder.toString();
 	}
 }

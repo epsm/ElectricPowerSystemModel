@@ -76,12 +76,12 @@ public class PowerObjectTest{
 		}
 
 		@Override
-		public void executeCommand(Command command) {
+		protected State getState() {
+			return null;
 		}
 
 		@Override
-		protected State getState() {
-			return null;
+		protected void performDispatcheCommand(Command command) {
 		}
 	}
 }

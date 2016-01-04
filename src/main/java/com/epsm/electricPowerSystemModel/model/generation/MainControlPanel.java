@@ -11,7 +11,7 @@ public class MainControlPanel{
 	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station;
 	private GeneratorsController controller;
-	private PowerStationGenerationSchedule curentSchedule;
+	private PowerStationGenerationSchedule currentSchedule;
 	private PowerStationGenerationSchedule receivedSchedule;
 	private GenerationScheduleValidator validator;
 	private PowerStationParameters parameters;
@@ -22,7 +22,7 @@ public class MainControlPanel{
 		this.station = station;
 		controller = new GeneratorsController(station);
 		validator = new GenerationScheduleValidator();
-		logger = LoggerFactory.getLogger(MainControlPanelTest.class);
+		logger = LoggerFactory.getLogger(MainControlPanel.class);
 	}
 	
 	public void acceptGenerationSchedule(PowerStationGenerationSchedule schedule) {
@@ -48,17 +48,17 @@ public class MainControlPanel{
 			return true;
 		}catch (GenerationException exception){
 			//TODO send request to dispatcher
-			logger.warn("Received ", exception);
+			logger.warn("Recieved wrong schedule: ", exception);
 			return false;
 		}
 	}
 	
 	private void replaceCurrentSchedule(){
-		curentSchedule = receivedSchedule;
+		currentSchedule = receivedSchedule;
 	}
 	
 	private boolean isThereValidSchedule(){
-		return curentSchedule != null;
+		return currentSchedule != null;
 	}
 	
 	public void adjustGenerators(){
@@ -69,6 +69,6 @@ public class MainControlPanel{
 	
 	private void getTimeAndAdjustGenerators(){
 		LocalTime currentTime = simulation.getTimeInSimulation();
-		controller.adjustGenerators(curentSchedule, currentTime);
+		controller.adjustGenerators(currentSchedule, currentTime);
 	}
 }
