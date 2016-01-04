@@ -6,15 +6,15 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import com.epsm.electricPowerSystemModel.model.consumption.LoadCurveBuilder;
+import com.epsm.electricPowerSystemModel.model.consumption.LoadCurveFactory;
 import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 
-public class LoadCurveBuilderTest {
+public class LoadCurveFactoryTest {
 	private float[] originalLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 	private float maxLoadWithoutRandomInMW = 100;
 	private float randomFluctuaton = 10;
 	private LoadCurve curve;
-	private LoadCurveBuilder builder = new LoadCurveBuilder();
+	private LoadCurveFactory builder = new LoadCurveFactory();
 
 	@Test
 	public void conformityOriginalLoadAndLoadAccordingToCurveCountingRandomFluctuations(){

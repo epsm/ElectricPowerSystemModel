@@ -1,7 +1,5 @@
 package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,19 +7,22 @@ import java.util.Set;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 
-public abstract class MessageInclusionsContainer{
+public class MessageInclusionsContainer<E extends MessageInclusion>{
 	private int expectedQuantityOfInclusions;
-	private Map<Integer, MessageInclusion> inclusions;
+	private Map<Integer, E> inclusions;
+	protected StringBuilder stringBuilder;
 	
 	public MessageInclusionsContainer(int quantityOfInclusions) {
 		if(quantityOfInclusions < 1){
-			String message = String.format("%s constructor: quantityOfInclusions must be more than zero,"
-					+ " but was %d.", getNameOfThisClass(), quantityOfInclusions);
-			throw new DispatchingException(message);
+			String message = String.format("MessageInclusionsContainer constructor: "
+					+ "quantityOfInclusions must be more than zero, but was %d."
+					, quantityOfInclusions);
+			throw new IllegalArgumentException(message);
 		}
 		
-		inclusions = new HashMap<Integer, MessageInclusion>();
+		inclusions = new HashMap<Integer, E>();
 		expectedQuantityOfInclusions = quantityOfInclusions;
+		stringBuilder = new StringBuilder();
 	}
 
 	public final int getQuantityOfInclusions(){
@@ -40,13 +41,10 @@ public abstract class MessageInclusionsContainer{
 	}
 	
 	private void throwWrongInclusionQuantityException(){
-		String message = String.format("%s keeps %d inclusion(s) but expected %d inclusion(s).",
-				getNameOfThisClass(), inclusions.size(), expectedQuantityOfInclusions);
+		String message = String.format("MessageInclusionsContainer keeps %d inclusion(s) but"
+				+ " expected %d inclusion(s).", inclusions.size()
+				, expectedQuantityOfInclusions);
 		throw new DispatchingException(message);
-	}
-	
-	private String getNameOfThisClass(){
-		return this.getClass().getSimpleName();
 	}
 	
 	public final Set<Integer> getInclusionsNumbers(){
@@ -54,7 +52,7 @@ public abstract class MessageInclusionsContainer{
 		return Collections.unmodifiableSet(inclusions.keySet());
 	}
 	
-	public final MessageInclusion getInclusion(int inclusionNumber){
+	public final E getInclusion(int inclusionNumber){
 		throwExceptionIfQuantityOfInclusionsNotAsDefinedInConstructor();
 		throwExceptionIfRequestedInclusionDoesNotExist(inclusionNumber);
 		return inclusions.get(inclusionNumber);
@@ -62,25 +60,25 @@ public abstract class MessageInclusionsContainer{
 	
 	private void throwExceptionIfRequestedInclusionDoesNotExist(int inclusionNumber){
 		if(! inclusions.containsKey(inclusionNumber)){
-			String message = String.format("%s: there isn't inclusion with number %d, presents only inclusions "
-					+ "with numbers: %s.",
-					getNameOfThisClass(), inclusionNumber, inclusions.keySet());
+			String message = String.format("MessageInclusionsContainer: there isn't inclusion"
+					+ " with number %d, presents only inclusions with numbers: %s."
+					, inclusionNumber, inclusions.keySet());
 			throw new DispatchingException(message);
 		}
 	}
 	
-	public final void addInclusion(MessageInclusion inclusion){
+	public final void addInclusion(E inclusion){
 		if(inclusion == null){
-			String message = String.format("%s addInclusion(...): inclusion can't be null.",
-					getNameOfThisClass());
+			String message = "MessageInclusionsContainer addInclusion(...): inclusion can't "
+					+ "be null.";
 			throw new DispatchingException(message);
 		}
 		
 		int inclusionNumber = inclusion.getInclusionNumber();
 		
 		if(isInclusionToAddAlreadyInContainer(inclusionNumber)){
-			String message = String.format("%s already contain inclusion with this number.",
-					getNameOfThisClass());
+			String message = "MessageInclusionsContainer already contain inclusion with this"
+					+ " number.";
 			throw new DispatchingException(message);
 		}
 
@@ -93,8 +91,6 @@ public abstract class MessageInclusionsContainer{
 	
 	@Override
 	public String toString(){
-		stringBuilder.setLength(0);
-		
 		for(MessageInclusion inclusion: inclusions.values()){
 			stringBuilder.append(inclusion.toString());
 		}

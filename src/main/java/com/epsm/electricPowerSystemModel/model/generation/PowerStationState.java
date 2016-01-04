@@ -1,16 +1,22 @@
 package com.epsm.electricPowerSystemModel.model.generation;
 
+import java.util.List;
+import java.util.Set;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 
 public class PowerStationState extends State{
+	private MessageInclusionsContainer<GeneratorState> states;
+	
 	public PowerStationState(long powerObjectId, LocalDateTime realTimeStamp, LocalTime simulationTimeStamp,
 			int quantityOfInclusions, float frequency) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		this.frequency = frequency;
+		states = new MessageInclusionsContainer<GeneratorState>(quantityOfInclusions);
 	}
 
 	private float frequency;
@@ -20,11 +26,15 @@ public class PowerStationState extends State{
 	}
 	
 	public void addGeneratorState(GeneratorState state){
-		addInclusion(state);
+		states.addInclusion(state);
 	}
 	
 	public GeneratorState getGeneratorState(int generatorNumber){
-		return (GeneratorState)getInclusion(generatorNumber);
+		return states.getInclusion(generatorNumber);
+	}
+	
+	public Set<Integer> getGeneratorsNumbers(){
+		return states.getInclusionsNumbers();
 	}
 
 	@Override
@@ -38,7 +48,7 @@ public class PowerStationState extends State{
 		stringBuilder.append(numberFormatter.format(frequency));
 		stringBuilder.append("Hz");
 		stringBuilder.append(" gener.: ");
-		stringBuilder.append(super.toString());
+		stringBuilder.append(states.toString());
 		stringBuilder.append("]");
 
 		return stringBuilder.toString();

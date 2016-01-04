@@ -2,19 +2,15 @@ package com.epsm.electricPowerSystemModel.model.consumption;
 
 import java.time.LocalTime;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
-public class ScheduledLoadConsumer extends Consumer{
-	private LoadCurveBuilder factory = new LoadCurveBuilder();
+public final class ScheduledLoadConsumer extends Consumer{
+	private LoadCurveFactory factory = new LoadCurveFactory();
 	private float[] approximateLoadByHoursOnDayInPercent;
 	private float maxLoadWithoutFluctuationsInMW;
 	private float randomFluctuationsInPercent;
@@ -24,17 +20,22 @@ public class ScheduledLoadConsumer extends Consumer{
 	private LocalTime currentTime;
 	private float currentLoad;
 	private float currentFrequency;
-	private Logger logger;
 	
 	public ScheduledLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher, Parameters parameters) {
+			Dispatcher dispatcher, ConsumerParametersStub parameters) {
+		
 		super(simulation, timeService, dispatcher, parameters);
-		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
-		logger.info("Scheduled load consumer created with id {}.", id);
 	}
 	
 	@Override
-	public float calculatePowerBalance(){
+	public float calculatePowerBalance() {
+		calculateCurrentLoadInMW();
+		prepareState();
+		
+		return -currentLoad;
+	}
+	
+	private void calculateCurrentLoadInMW(){
 		getNecessaryParametersFromPowerSystem();
 		
 		if(isItANewDay()){
@@ -43,10 +44,7 @@ public class ScheduledLoadConsumer extends Consumer{
 		
 		saveRequestTime();
 		getLoadFromCurve();
-		countFrequency();
-		prepareState();
-		
-		return currentLoad;
+		countFrequency();	
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){
@@ -76,7 +74,7 @@ public class ScheduledLoadConsumer extends Consumer{
 	}
 	
 	private void prepareState(){
-		state = prepareState(currentTime, currentLoad);
+		state = prepareState(currentTime, -currentLoad);
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package com.epsm.electricPowerSystemModel.model.consumption;
 
 import static org.mockito.Mockito.mock;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.junit.Assert;
@@ -30,10 +31,12 @@ public class ScheduledLoadConsumerTest{
 	
 	@Before
 	public void initialize(){
+		ConsumerParametersStub parameters 
+				= new ConsumerParametersStub(CONSUMER_NUMBER, LocalDateTime.MIN, LocalTime.MIN); 
 		simulation = new EPSMImplStub();
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
-		consumer = new ScheduledLoadConsumer(simulation, timeService, dispatcher);
+		consumer = new ScheduledLoadConsumer(simulation, timeService, dispatcher, parameters);
 		approximateLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 		currentTime = LocalTime.MIDNIGHT;
 		
@@ -67,9 +70,9 @@ public class ScheduledLoadConsumerTest{
 	@Test
 	public void ConsumerLoadIsInExpectingRange(){
 		do{
-			float expectedLoad = approximateLoadByHoursInPercent[currentTime.getHour()];
-			float calculatedLoad = consumer.calculateCurrentLoadInMW();
-			float permissibleDelta = expectedLoad * RANDOM_FLUCTUATION_IN_PERCENT / 100;
+			float expectedLoad = -approximateLoadByHoursInPercent[currentTime.getHour()];
+			float calculatedLoad = consumer.calculatePowerBalance();
+			float permissibleDelta = -expectedLoad * RANDOM_FLUCTUATION_IN_PERCENT / 100;
 			simulation.calculateNextStep();
 			
 			Assert.assertEquals(expectedLoad, calculatedLoad, permissibleDelta);
@@ -84,9 +87,9 @@ public class ScheduledLoadConsumerTest{
 		
 		for(; hour < 48 ; hour ++){
 			if(isItFirstDay(hour)){
-				firstDayLoad += consumer.calculateCurrentLoadInMW();
+				firstDayLoad += consumer.calculatePowerBalance();
 			}else{
-				seconsDayLoad += consumer.calculateCurrentLoadInMW();
+				seconsDayLoad += consumer.calculatePowerBalance();
 			}
 			
 			simulation.calculateNextStep();
@@ -108,7 +111,7 @@ public class ScheduledLoadConsumerTest{
 	}
 	
 	private void getExpectedValues(){
-		expectedLoad = consumer.calculateCurrentLoadInMW();
+		expectedLoad = consumer.calculatePowerBalance();
 		expectedTime = simulation.getTimeInSimulation();
 	}
 	

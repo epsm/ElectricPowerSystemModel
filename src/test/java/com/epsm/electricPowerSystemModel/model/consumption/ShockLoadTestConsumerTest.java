@@ -31,8 +31,8 @@ public class ShockLoadTestConsumerTest {
 	private ConsumerState state;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
-	private final int WORK_TIME = 300; 
-	private final int PAUSE_TIME = 500;
+	private final int WORK_TIME = 4;
+	private final int PAUSE_TIME = 6;
 	private final long CONSUMER_NUMBER = 664;
 	
 	@Before
@@ -76,7 +76,7 @@ public class ShockLoadTestConsumerTest {
 	}
 	
 	private boolean wasLoadTurnedOn(){
-		return previousLoad == 0 && currentLoad > 0;
+		return previousLoad == 0 && currentLoad < 0;
 	}
 	
 	private boolean wasLoadChanged(){
@@ -107,7 +107,7 @@ public class ShockLoadTestConsumerTest {
 	}
 	
 	private boolean wasLoadTurnedOff(){
-		return previousLoad > 0 &&  currentLoad == 0;
+		return previousLoad < 0 &&  currentLoad == 0;
 	}
 	
 	@Test
@@ -167,7 +167,7 @@ public class ShockLoadTestConsumerTest {
 		rememberCurrentLoadAsPreviousAndDoNextStep();
 		
 		Assert.assertTrue(turnOnTime != null);
-		Assert.assertTrue(previousLoad > currentLoad);
+		Assert.assertTrue(previousLoad < currentLoad);
 	}
 	
 	public void prepareMockSimulationWithDecreasingFrequency(){

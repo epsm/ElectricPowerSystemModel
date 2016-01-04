@@ -33,7 +33,7 @@ public final class ShockLoadConsumer extends Consumer{
 		calculateCurrentLoadInMW();
 		prepareState();
 		
-		return currentLoad;
+		return -currentLoad;
 	}
 	
 	private void  calculateCurrentLoadInMW(){
@@ -55,7 +55,7 @@ public final class ShockLoadConsumer extends Consumer{
 	}
 
 	private void prepareState(){
-		state = prepareState(currentTime, currentLoad);
+		state = prepareState(currentTime, -currentLoad);
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){

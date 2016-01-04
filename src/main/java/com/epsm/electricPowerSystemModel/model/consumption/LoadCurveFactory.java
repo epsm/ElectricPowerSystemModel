@@ -5,7 +5,7 @@ import java.util.Random;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 
-public class LoadCurveBuilder {
+public class LoadCurveFactory {
 	private Random random = new Random();
 	private float[] newLoadByHoursInMW = new float[24];
 	private float[] originalLoadByHoursInPercent;

@@ -8,29 +8,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
+
 public class MessageInclusionsContainerTest {
-	private MessageInclusionsContainer container;
+	private MessageInclusionsContainer<MessageInclusionImpl> container;
 	private MessageInclusionImpl inclusion_1;
 	private MessageInclusionImpl inclusion_2;
 	
 	@Before
 	public void initialize(){
-		container = new MessageInclusionsContainerImpl(1, LocalDateTime.MIN, LocalTime.MIN, 2);
+		container = new MessageInclusionsContainer<MessageInclusionImpl>(2);
 		inclusion_1 = new MessageInclusionImpl(1);
 		inclusion_2 = new MessageInclusionImpl(2);
-	}
-	
-	private class MessageInclusionsContainerImpl extends MessageInclusionsContainer{
-		MessageInclusionsContainerImpl(long powerObjectId, LocalDateTime realTimeStamp, 
-				LocalTime simulationTimeStamp, 	int quantityOfPowerUnits){
-			
-			super(powerObjectId, realTimeStamp, simulationTimeStamp, quantityOfPowerUnits);
-		}
-
-		@Override
-		public String toString() {
-			return null;
-		}
 	}
 	
 	private class MessageInclusionImpl extends MessageInclusion{
@@ -44,17 +33,17 @@ public class MessageInclusionsContainerTest {
 	
 	@Test
 	public void exceptionInConstructorIfQuantityOfInclusionsLessThanOne(){
-		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("MessageInclusionsContainerImpl constructor: "
+		expectedEx.expect(IllegalArgumentException.class);
+	    expectedEx.expectMessage("MessageInclusionsContainer constructor: "
 	    		+ "quantityOfInclusions must be more than zero, but was 0.");
 	    
-	    container = new MessageInclusionsContainerImpl(0, LocalDateTime.MIN, LocalTime.MIN, 0);
+	    container = new MessageInclusionsContainer(0);
 	}
 	
 	@Test
 	public void exceptionInGetQuantityOfInclusionsMethodIfContainerContainsNonExpectedQuantityOfInclusion(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("MessageInclusionsContainerImpl keeps 1 inclusion(s) but expected 2 "
+	    expectedEx.expectMessage("MessageInclusionsContainer keeps 1 inclusion(s) but expected 2 "
 	    		+ "inclusion(s).");
 	    
 	    addOneInclusionToContainer();
@@ -68,7 +57,7 @@ public class MessageInclusionsContainerTest {
 	@Test
 	public void exceptionInGetInclusionsNumbersMethodIfContainerContainsNonExpectedQuantityOfInclusion(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("MessageInclusionsContainerImpl keeps 1 inclusion(s) but expected 2 "
+	    expectedEx.expectMessage("MessageInclusionsContainer keeps 1 inclusion(s) but expected 2 "
 	    		+ "inclusion(s).");
 	    
 	    addOneInclusionToContainer();
@@ -78,7 +67,7 @@ public class MessageInclusionsContainerTest {
 	@Test
 	public void exceptionInGetInclusionMethodIfContainerContainsNonExpectedQuantityOfInclusion(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("MessageInclusionsContainerImpl keeps 1 inclusion(s) but expected 2 "
+	    expectedEx.expectMessage("MessageInclusionsContainer keeps 1 inclusion(s) but expected 2 "
 	    		+ "inclusion(s).");
 	    
 	    addOneInclusionToContainer();
@@ -88,7 +77,7 @@ public class MessageInclusionsContainerTest {
 	@Test
 	public void exceptionInGetInclusionMesthodIfRequestedInclusionDoesNotExist(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("MessageInclusionsContainerImpl: there isn't inclusion with number 3,"
+	    expectedEx.expectMessage("MessageInclusionsContainer: there isn't inclusion with number 3,"
 	    		+ " presents only inclusions with numbers: [1, 2]");
 	    
 	    addTwoInclusionsToContainer();
@@ -109,7 +98,7 @@ public class MessageInclusionsContainerTest {
 	@Test
 	public void exceptionIfTryToAddNullInclusion(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("MessageInclusionsContainerImpl addInclusion(...): inclusion "
+	    expectedEx.expectMessage("MessageInclusionsContainer addInclusion(...): inclusion "
 	    		+ "can't be null.");
 	    
 	    container.addInclusion(null);
@@ -118,7 +107,7 @@ public class MessageInclusionsContainerTest {
 	@Test
 	public void exceptionIfTryToAddInclusionWithTheSameNumberAsExist(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("MessageInclusionsContainerImpl already contain inclusion with this number.");
+	    expectedEx.expectMessage("MessageInclusionsContainer already contain inclusion with this number.");
 	    
 	    addTwoInclusionsWithTheSameNumbersToContainer();
 	}
