@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.junit.Assert;
@@ -20,38 +21,42 @@ import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class GeneratorControllerTest {
 	private ElectricPowerSystemSimulation simulation;
-	private MainControlPanel stationControlPanel;
-	private PowerStationGenerationSchedule stationGenerationSchedule;
+	private MainControlPanel controlPanel;
+	private PowerStationGenerationSchedule stationSchedule;
 	private GeneratorGenerationSchedule genrationSchedule_1;
 	private GeneratorGenerationSchedule genrationSchedule_2;
+	private PowerStationParameters parameters;
+	private PowerStation station;
 	private LoadCurve generationCurve;
 	private Generator generator_1;
 	private Generator generator_2;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
-	private Class<? extends DispatcherMessage> expectedMessageType;
 	
 	@Before
 	public void initialize(){
 		simulation = new ElectricPowerSystemSimulationImpl();
-		stationGenerationSchedule = new PowerStationGenerationSchedule(0);
+		stationSchedule = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 2);
+		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
+		
+		parameters = new PowerStationParameters(0, LocalDateTime.MIN, LocalTime.MIN, 2);
+		GeneratorParameters parameter_1 = new GeneratorParameters(1, 100, 0);
+		GeneratorParameters parameter_2 = new GeneratorParameters(2, 100, 0);
+		parameters.addGeneratorParameters(parameter_1);
+		parameters.addGeneratorParameters(parameter_2);
+		
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
-		expectedMessageType = PowerStationGenerationSchedule.class;
-		PowerStation station = new PowerStation();
-		stationControlPanel = new MainControlPanel(simulation, timeService, dispatcher,
-				expectedMessageType, station);
-		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
-		Generator g_1 = new Generator(simulation, 1);
-		Generator g_2 = new Generator(simulation, 2);
-		generator_1 = spy(g_1);
-		generator_2 = spy(g_2);
+		station = new PowerStation(simulation, timeService, dispatcher, parameters);
+		controlPanel = new MainControlPanel(simulation, station);
 		
+		generator_1 = spy( new Generator(simulation, 1));
+		generator_2 = spy( new Generator(simulation, 2));
 		generator_1.setNominalPowerInMW(200);
 		generator_2.setNominalPowerInMW(200);
+		
 		station.addGenerator(generator_1);
 		station.addGenerator(generator_2);
-		simulation.addPowerStation(station);
 	}
 	
 	@Test
@@ -66,20 +71,15 @@ public class GeneratorControllerTest {
 	}
 	
 	private void doNextStep(){
-		stationControlPanel.process(stationGenerationSchedule);
-		simulation.calculateNextStep();
+		controlPanel.acceptGenerationSchedule(stationSchedule);
+		controlPanel.adjustGenerators();
 	}
 	
 	private void prepareGenerationScheduleWithTurnedOnGenerators(){
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, false, generationCurve);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
-		fillStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);
-	}
-	
-	private void fillStationGenerationSchedule(
-			GeneratorGenerationSchedule genrationSchedule_1, GeneratorGenerationSchedule genrationSchedule_2){
-		stationGenerationSchedule.addGeneratorGenerationSchedule(genrationSchedule_1);
-		stationGenerationSchedule.addGeneratorGenerationSchedule(genrationSchedule_2);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_1);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_2);
 	}
 	
 	private void turnOnfirstAndTurnOffsecondGenerators(){
@@ -101,7 +101,8 @@ public class GeneratorControllerTest {
 	private void prepareGenerationScheduleWithTwoTurnedOffGenerators(){
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, false, false, generationCurve);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, false, false, generationCurve);
-		fillStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_1);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_2);
 	}
 	
 	@Test
@@ -119,7 +120,8 @@ public class GeneratorControllerTest {
 	private void prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOnAstaticRegulation(){
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, true, generationCurve);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, true, generationCurve);
-		fillStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);;
+		stationSchedule.addGeneratorSchedule(genrationSchedule_1);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_2);
 	}
 	
 	private void turnOnBothGenerators(){
@@ -147,7 +149,8 @@ public class GeneratorControllerTest {
 	private void prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOffAstaticRegulation(){
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, false, generationCurve);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
-		fillStationGenerationSchedule(genrationSchedule_1, genrationSchedule_2);;
+		stationSchedule.addGeneratorSchedule(genrationSchedule_1);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_2);
 	}
 	
 	@Test

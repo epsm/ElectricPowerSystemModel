@@ -135,6 +135,6 @@ public final class PowerStation extends PowerObject{
 
 	@Override
 	public void executeCommand(Command command) {
-		controlPanel.acceptGenerationSchedule(command);
+		controlPanel.acceptGenerationSchedule((PowerStationGenerationSchedule) command);
 	}
 }
