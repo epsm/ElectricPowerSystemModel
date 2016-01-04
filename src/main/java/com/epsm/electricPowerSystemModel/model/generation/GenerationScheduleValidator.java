@@ -21,7 +21,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 	public void validate(PowerStationGenerationSchedule schedule,
 			PowerStationParameters parameters) throws GenerationException{
 		
-		validate(schedule, parameters);
+		super.validate(schedule, parameters);
 		saveMessagesToValidate(schedule, parameters);
 		getStationAndScheduledGeneratorNumbers();
 		validateOnEqualsGeneratorsNumbers();
@@ -43,9 +43,9 @@ public class GenerationScheduleValidator extends CommandValidator{
 	
 	private void validateOnEqualsGeneratorsNumbers(){
 		if(!(stationGeneratorsNumbers.equals(scheduleGeneratorsNumbers))){
-			String message = String.format("GenerationScheduleValidator: parameters has %s"
-					+ " numbers, but schedule has %s numbers.", stationGeneratorsNumbers
-					, scheduleGeneratorsNumbers);
+			String message = String.format("GenerationScheduleValidator: parameters has"
+					+ " generator(s) with number(s) %s, but schedule has generator(s)"
+					+ " with number(s) %s.", stationGeneratorsNumbers, scheduleGeneratorsNumbers);
 			throw new GenerationException(message);
 		}
 	}
@@ -157,7 +157,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 		float generatorNominalPower = generatorParameters.getNominalPowerInMW();
 
 		if(maxGenerationPower > generatorNominalPower){
-			String message = String.format("GenerationScheduleValidator: scheduled generation "
+			String message = String.format("GenerationScheduleValidator: scheduled generation"
 					+ " power for generator#%d is more than nominal.", generatorNumber);
 			throw new GenerationException(message);
 		}
@@ -170,6 +170,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 			String message = String.format("GenerationScheduleValidator: scheduled generation"
 					+ " power for generator#%d is less than minimal technology.",
 					generatorNumber);
+
 			throw new GenerationException(message);
 		}
 	}

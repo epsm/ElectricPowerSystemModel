@@ -38,31 +38,10 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	@Test
-	public void exceptionIfStationParametersAndScheduleHaveDifferentAmountOfGenerators(){
-		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("wrong schedule: station has 2 generator(s) but schedule has "
-	    		+ "3 generator(s).");
-		
-		prepareScheduleWithThreeGenerators();
-		prepareStationWithTwoGenerators();
-		
-		validator.validate(stationSchedule, stationParameters);
-	}
-	
-	private void prepareScheduleWithThreeGenerators(){
-		stationSchedule = mock(PowerStationGenerationSchedule.class);
-		when(stationSchedule.getQuantityOfGenerators()).thenReturn(3);
-	}
-	
-	private void prepareStationWithTwoGenerators(){
-		stationParameters = mock(PowerStationParameters.class);
-		when(stationParameters.getQuantityOfGenerators()).thenReturn(2);
-	}
-	
-	@Test
 	public void exceptionIfStationParametersAndScheduleHaveGeneratorsWithDifferentNumbers(){
 		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("wrong schedule: station and schedule has different generator numbers.");
+	    expectedEx.expectMessage("GenerationScheduleValidator: parameters has generator(s)"
+	    		+ " with number(s) [2], but schedule has generator(s) with number(s) [1].");
 	    
 		prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNull();
 		prepareStationWithOnlyOneSecondGenerator();
@@ -72,7 +51,7 @@ public class GenerationScheduleValidatorTest {
 	
 	private void prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNull(){
 		GeneratorGenerationSchedule generatorSchedule = 
-				new GeneratorGenerationSchedule(1);
+				new GeneratorGenerationSchedule(1, true, false, null);
 		createStationScheduleWithFirstGenerator(generatorSchedule);
 	} 
 	
@@ -85,13 +64,13 @@ public class GenerationScheduleValidatorTest {
 		Set<Integer> numbers = new HashSet<Integer>();
 		numbers.add(2);
 		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
-		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
 	}
 	
 	@Test
 	public void exceptionIfgenerationCurveIsAbsentWhenAstaticRegulationTurnedOff(){
 		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("wrong schedule: there is no necessary generation curve for generator 1.");
+	    expectedEx.expectMessage("GenerationScheduleValidator: there is no necessary"
+	    		+ " generation curve for generator#1.");
 		
 	    prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNull();
 		prepareMockedStationParametersWithFirstGenerator();
@@ -102,15 +81,14 @@ public class GenerationScheduleValidatorTest {
 	private void prepareMockedStationParametersWithFirstGenerator(){
 		Set<Integer> numbers = new HashSet<Integer>();
 		numbers.add(1);
-		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
 		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
 	}
 	
 	@Test
 	public void powerInGenerationCurveTooHighForGenerator(){
 		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("wrong schedule: scheduled generation power for generator 1 is"
-	    		+ " more than nominal.");
+	    expectedEx.expectMessage("GenerationScheduleValidator: scheduled generation power"
+	    		+ " for generator#1 is more than nominal.");
 		
 		GeneratorParameters parameters = prepareGeneratorParametersForTooWeakGenerator();
 		preparePowerStation(parameters);
@@ -131,7 +109,6 @@ public class GenerationScheduleValidatorTest {
 		Set<Integer> numbers = new HashSet<Integer>();
 		numbers.add(1);
 		
-		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
 		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
 		when(stationParameters.getGeneratorParameters(anyInt())).thenReturn(parameters);
 	}
@@ -139,15 +116,15 @@ public class GenerationScheduleValidatorTest {
 	private void prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNotNull(){
 		LoadCurve generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		GeneratorGenerationSchedule generatorSchedule = 
-				new GeneratorGenerationSchedule(1);
+				new GeneratorGenerationSchedule(1, true, false, generationCurve);
 		createStationScheduleWithFirstGenerator(generatorSchedule);
 	} 
 	
 	@Test
 	public void powerInGenerationCurveTooLowForGenerator(){
 		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("wrong schedule: scheduled generation power for generator 1 is"
-	    		+ " less than minimal technology.");
+	    expectedEx.expectMessage("GenerationScheduleValidator: scheduled generation power"
+	    		+ " for generator#1 is less than minimal technology.");
 		
 		GeneratorParameters parameters = prepareGeneratorParametersForTooPowerfullGenerator();
 		preparePowerStation(parameters);
@@ -194,5 +171,25 @@ public class GenerationScheduleValidatorTest {
 		GeneratorGenerationSchedule generatorSchedule = 
 				new GeneratorGenerationSchedule(1, true, true, null);
 		createStationScheduleWithFirstGenerator(generatorSchedule);
+	}
+	
+	@Test
+	public void noExceptionIfGeneratorScheduledBeTurnedOff(){
+	    prepareStationSchedule_FirstGeneratorOffAstaticRegulationOffCurveNotNull();
+	    prepareStationWithOnlyOneFirstGenerator();
+	    
+		validator.validate(stationSchedule, stationParameters);
+	}
+	
+	private void prepareStationSchedule_FirstGeneratorOffAstaticRegulationOffCurveNotNull(){
+		GeneratorGenerationSchedule generatorSchedule = 
+				new GeneratorGenerationSchedule(1, false, false, null);
+		createStationScheduleWithFirstGenerator(generatorSchedule);
+	} 
+	
+	private void prepareStationWithOnlyOneFirstGenerator(){
+		Set<Integer> numbers = new HashSet<Integer>();
+		numbers.add(1);
+		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
 	}
 }

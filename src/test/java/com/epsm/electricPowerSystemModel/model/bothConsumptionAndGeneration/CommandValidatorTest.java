@@ -12,7 +12,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 
-public class MessageValidatorTest {
+public class CommandValidatorTest {
 	private  Command command;
 	private  Parameters parameters;
 	private CommandValidator validator;
