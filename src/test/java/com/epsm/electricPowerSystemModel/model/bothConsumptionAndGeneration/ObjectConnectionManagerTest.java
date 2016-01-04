@@ -4,7 +4,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,7 +16,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.epsm.electricPowerSystemModel.model.consumption.ConsumerParametersStub;
 import com.epsm.electricPowerSystemModel.model.consumption.ConsumerState;
@@ -33,6 +36,8 @@ import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationGenerationSchedule;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationState;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ShockLoadConsumer.class)
 public class ObjectConnectionManagerTest{
 	private ObjectConnectionManager manager;
 	private ElectricPowerSystemSimulation simulation;
@@ -55,7 +60,7 @@ public class ObjectConnectionManagerTest{
 		dispatcher = mock(Dispatcher.class);
 		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher);
 		parameters = new ConsumerParametersStub(0, START_TIME, LocalTime.MIN);
-		object = spy(new ShockLoadConsumer(simulation, timeService, dispatcher, parameters));
+		object = PowerMockito.spy(new ShockLoadConsumer(simulation, timeService, dispatcher, parameters));
 		when(object.getState()).thenReturn(state);
 		command = new ConsumptionPermissionStub(0, LocalDateTime.MIN, 
 				simulation.getTimeInSimulation());

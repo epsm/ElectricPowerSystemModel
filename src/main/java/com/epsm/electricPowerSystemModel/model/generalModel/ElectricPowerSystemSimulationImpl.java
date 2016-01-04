@@ -10,9 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
+import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
 import com.epsm.electricPowerSystemModel.model.dispatch.CreationParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
+import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
 	private Map<Long, PowerObject> objects;
@@ -47,7 +49,8 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		float balance = 0;
 
 		for(PowerObject object: objects.values()){
-			balance += object.calculatePowerBalance();
+			float bal = object.calculatePowerBalance();
+			balance += bal;//object.calculatePowerBalance();
 		}
 		
 		return balance;
@@ -99,5 +102,20 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	@Override
 	public void createPowerObject(CreationParameters parameters) {
 		powerObjectFactory.build(parameters);
+	}
+
+	/*
+	 * Non public for unit testing. When PowerObjects factories will be implemented it will
+	 * be possible to remove this two methods from here and create appropriate objects
+	 * for testing.
+	 */
+	void addPowerStation(PowerStation station) {
+		long powerObjectId = station.getId();
+		objects.put(powerObjectId, station);
+	}
+
+	void addPowerConsumer(Consumer consumer) {
+		long powerObjectId = consumer.getId();
+		objects.put(powerObjectId, consumer);
 	}
 }
