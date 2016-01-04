@@ -4,8 +4,12 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,41 +30,11 @@ public class GenerationScheduleValidatorTest {
 	@Before
 	public void Initialize(){
 		validator = new GenerationScheduleValidator();
-		stationSchedule = new PowerStationGenerationSchedule(1);
+		stationSchedule 
+			= new PowerStationGenerationSchedule(1, LocalDateTime.MIN, LocalTime.MIN, 1);
 		stationParameters = mock(PowerStationParameters.class);
 		
 		when(stationParameters.getPowerObjectId()).thenReturn(1L);
-	}
-	
-	@Test
-	public void exceptionIfStationParameterIsNull(){
-		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("station parameters is null.");
-		
-		stationSchedule = mock(PowerStationGenerationSchedule.class);
-		stationParameters = null;
-		
-		validator.validate(stationSchedule, stationParameters);
-	}
-	
-	@Test
-	public void exceptionIfStationScheduleIsNull(){
-		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("station schedule is null.");
-		
-		stationSchedule = null;
-		
-		validator.validate(stationSchedule, stationParameters);
-	}
-	
-	@Test
-	public void exceptionIfPowerAndScheduleHaveDifferentNumbers(){
-		expectedEx.expect(GenerationException.class);
-		expectedEx.expectMessage("wrong schedule: station id is 3 but schedule id is 1.");
-		
-		when(stationParameters.getPowerObjectId()).thenReturn(3L);
-		
-		validator.validate(stationSchedule, stationParameters);
 	}
 	
 	@Test
@@ -98,18 +72,19 @@ public class GenerationScheduleValidatorTest {
 	
 	private void prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNull(){
 		GeneratorGenerationSchedule generatorSchedule = 
-				new GeneratorGenerationSchedule(1, true, false, null);
+				new GeneratorGenerationSchedule(1);
 		createStationScheduleWithFirstGenerator(generatorSchedule);
 	} 
 	
 	private void createStationScheduleWithFirstGenerator(
 			GeneratorGenerationSchedule generatorSchedule){
-		stationSchedule.addGeneratorGenerationSchedule((generatorSchedule));
+		stationSchedule.addGeneratorSchedule((generatorSchedule));
 	}
 	
 	private void prepareStationWithOnlyOneSecondGenerator(){
-		Collection<Integer> numbers = Arrays.asList(new Integer[] {2});
-		when(stationParameters.getGeneratorsNumbers()).thenReturn(numbers);
+		Set<Integer> numbers = new HashSet<Integer>();
+		numbers.add(2);
+		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
 		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
 	}
 	
@@ -125,8 +100,10 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private void prepareMockedStationParametersWithFirstGenerator(){
+		Set<Integer> numbers = new HashSet<Integer>();
+		numbers.add(1);
 		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
-		when(stationParameters.getGeneratorsNumbers()).thenReturn(Arrays.asList(new Integer[] {1}));
+		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
 	}
 	
 	@Test
@@ -151,15 +128,18 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private void preparePowerStation(GeneratorParameters parameters){
+		Set<Integer> numbers = new HashSet<Integer>();
+		numbers.add(1);
+		
 		when(stationParameters.getQuantityOfGenerators()).thenReturn(1);
-		when(stationParameters.getGeneratorsNumbers()).thenReturn(Arrays.asList(new Integer[] {1}));
+		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
 		when(stationParameters.getGeneratorParameters(anyInt())).thenReturn(parameters);
 	}
 	
 	private void prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNotNull(){
 		LoadCurve generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		GeneratorGenerationSchedule generatorSchedule = 
-				new GeneratorGenerationSchedule(1, true, false, generationCurve);
+				new GeneratorGenerationSchedule(1);
 		createStationScheduleWithFirstGenerator(generatorSchedule);
 	} 
 	

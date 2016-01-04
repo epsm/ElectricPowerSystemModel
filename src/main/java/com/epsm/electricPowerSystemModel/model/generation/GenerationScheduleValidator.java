@@ -6,11 +6,10 @@ import java.util.HashSet;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.CommandValidator;
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 
 public class GenerationScheduleValidator extends CommandValidator{
-	private PowerStationGenerationSchedule stationSchedule;
-	private PowerStationParameters stationParameters;
+	private PowerStationGenerationSchedule schedule;
+	private PowerStationParameters parameters;
 	private Collection<Integer> stationGeneratorsNumbers;
 	private Collection<Integer> scheduleGeneratorsNumbers;
 	private GeneratorGenerationSchedule currentGeneratorSchedule;
@@ -18,83 +17,35 @@ public class GenerationScheduleValidator extends CommandValidator{
 	private HashSet<Integer> turnedOnGeneratorsNumbers;
 	private float maxGenerationPower;
 	private float minGenerationPower;
-	private final String HEADER = "wrong schedule: ";
 	
 	public void validate(PowerStationGenerationSchedule schedule,
-			PowerStationParameters stationParameters) throws GenerationException{
-		this.stationSchedule = schedule;
-		this.stationParameters = stationParameters;
+			PowerStationParameters parameters) throws GenerationException{
 		
-		validateOnNullValues();
-		getNecessaryDataFromStationScheduleAndStationParameters();
-		validateOnConformityGeneratorsNumberInStationAndInSchedule();
+		validate(schedule, parameters);
+		saveMessagesToValidate(schedule, parameters);
+		getStationAndScheduledGeneratorNumbers();
+		validateOnEqualsGeneratorsNumbers();
+		
 		removeTurnedOffGeneratorsFromValidating();
 		validateGenerationScheduleOnCorectness();
 	}
 	
-	private void validateOnNullValues(){
-		stationParametersIsNotNull();
-		generationScheduleIsNotNull();
+	private void saveMessagesToValidate(PowerStationGenerationSchedule schedule,
+			PowerStationParameters parameters){
+		this.schedule = schedule;
+		this.parameters = parameters;
 	}
 	
-	public void stationParametersIsNotNull(){
-		if(stationParameters == null){
-			String message = "station parameters is null.";
-			throw new GenerationException(message);
-		}
+	private void getStationAndScheduledGeneratorNumbers(){
+		stationGeneratorsNumbers = parameters.getGeneratorParametersNumbers();
+		scheduleGeneratorsNumbers = schedule.getGeneratorsNumbers();
 	}
 	
-	public void generationScheduleIsNotNull(){
-		if(stationSchedule == null){
-			String message = "station schedule is null.";
-			throw new GenerationException(message);
-		}
-	}
-	
-	private void getNecessaryDataFromStationScheduleAndStationParameters(){
-		getStationAndScheduledGeneraorNumbers();
-	}
-	
-	private void getStationAndScheduledGeneraorNumbers(){
-		stationGeneratorsNumbers = stationParameters.getGeneratorsNumbers();
-		scheduleGeneratorsNumbers = stationSchedule.getGeneratorsNumbers();
-	}
-	
-	private void validateOnConformityGeneratorsNumberInStationAndInSchedule(){
-		IdInScheduleAndInPowerStationIsTheSame();
-		quantityOfGeneratorsOnStationConformsToTheirQuantityInSchedule();
-		scheduleContainsTheSameGeneratorsNumbersAsPowerStation();
-	}
-	
-	private void IdInScheduleAndInPowerStationIsTheSame(){
-		long numberInParameters = stationParameters.getPowerObjectId();
-		long numberInSchedule = stationSchedule.getPowerObjectId();
-		
-		if(numberInParameters != numberInSchedule){
-			String message = HEADER + "station id is " + numberInParameters 
-					+ " but schedule id is " + numberInSchedule + ".";
-			throw new GenerationException(message);
-		}
-	}
-	
-	private void quantityOfGeneratorsOnStationConformsToTheirQuantityInSchedule(){
-		int generatorsInStation = stationParameters.getQuantityOfGenerators();
-		int generatorsInSchedule = stationSchedule.getQuantityOfGenerators();
-		
-		if(generatorsInSchedule != generatorsInStation){
-			String message = HEADER + "station has " + generatorsInStation 
-					+ " generator(s) but schedule has " + generatorsInSchedule + " generator(s).";
-			throw new GenerationException(message);
-		}
-	}
-	
-	private void scheduleContainsTheSameGeneratorsNumbersAsPowerStation(){
-		//collections with the same elements but added in different order can be not equal
-		HashSet<Integer> stationGeneratorsNumbersSet = new HashSet<Integer>(stationGeneratorsNumbers);
-		HashSet<Integer> scheduleGeneratorsNumbersSet = new HashSet<Integer>(scheduleGeneratorsNumbers); 
-		
-		if(!stationGeneratorsNumbersSet.equals(scheduleGeneratorsNumbersSet)){
-			String message = HEADER + "station and schedule has different generator numbers.";
+	private void validateOnEqualsGeneratorsNumbers(){
+		if(!(stationGeneratorsNumbers.equals(scheduleGeneratorsNumbers))){
+			String message = String.format("GenerationScheduleValidator: parameters has %s"
+					+ " numbers, but schedule has %s numbers.", stationGeneratorsNumbers
+					, scheduleGeneratorsNumbers);
 			throw new GenerationException(message);
 		}
 	}
@@ -118,7 +69,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 	}
 	
 	private boolean isGeneratorScheduledBeTurnedOff(int generatorNumber){
-		currentGeneratorSchedule = stationSchedule.getGeneratorGenerationSchedule(generatorNumber);
+		currentGeneratorSchedule = schedule.getGeneratorSchedule(generatorNumber);
 		return !currentGeneratorSchedule.isGeneratorTurnedOn();
 	}
 	
@@ -137,15 +88,15 @@ public class GenerationScheduleValidator extends CommandValidator{
 	
 	private void thereIsGenerationCurvesIfAstaticRegulationTurnedOff(){
 		for(Integer generatorNumber: scheduleGeneratorsNumbers){
-			verifyGeneratorIsCurvePresentIfAstaticRegulationTurnedOff(generatorNumber);
+			IsCurvePresentIfAstaticRegulationTurnedOff(generatorNumber);
 		}
 	}
 	
-	private void verifyGeneratorIsCurvePresentIfAstaticRegulationTurnedOff(int generatorNumber){
-		currentGeneratorSchedule = stationSchedule.getGeneratorGenerationSchedule(generatorNumber);
+	private void IsCurvePresentIfAstaticRegulationTurnedOff(int generatorNumber){
+		currentGeneratorSchedule = schedule.getGeneratorSchedule(generatorNumber);
 		if(isAstaticRegulationTurnedOffAndThereIsNotGenerationCurve(currentGeneratorSchedule)){
-			String message = HEADER + "there is no necessary generation curve for generator "
-					+ generatorNumber + ".";
+			String message = String.format("GenerationScheduleValidator: there is no necessary"
+					+ " generation curve for generator#%d.", generatorNumber);
 			throw new GenerationException(message);
 		}
 	}
@@ -165,13 +116,13 @@ public class GenerationScheduleValidator extends CommandValidator{
 	
 	private void verifyEveryGeneratorIsPowerInGenerationCurveWithinGeneratorCapabilities(
 			int generatorNumber){
-		currentGeneratorSchedule = stationSchedule.getGeneratorGenerationSchedule(generatorNumber);
-		generatorParameters = stationParameters.getGeneratorParameters(generatorNumber);
+		currentGeneratorSchedule = schedule.getGeneratorSchedule(generatorNumber);
+		generatorParameters = parameters.getGeneratorParameters(generatorNumber);
 		
 		if(isAstaticRegulationTurnedOffAndThereIsGenerationCurve(currentGeneratorSchedule)){
 			findMinAndMaxPowerInGenerationCurve();
-			verifyIsPowerInGenerationCurveNotHigherThanGeneratorNominalPower(generatorNumber);
-			verifyIsPowerInGenerationCurveNotLowerThanGeneratorNominalPower(generatorNumber);
+			IsPowerInGenerationCurveNotHigherThanGeneratorNominalPower(generatorNumber);
+			IsPowerInGenerationCurveNotLowerThanGeneratorNominalPower(generatorNumber);
 		}
 	}
 	
@@ -202,22 +153,23 @@ public class GenerationScheduleValidator extends CommandValidator{
 		}while(pointer.isAfter(LocalTime.MIDNIGHT));
 	}
 	
-	private void verifyIsPowerInGenerationCurveNotHigherThanGeneratorNominalPower(int generatorNumber){
+	private void IsPowerInGenerationCurveNotHigherThanGeneratorNominalPower(int generatorNumber){
 		float generatorNominalPower = generatorParameters.getNominalPowerInMW();
 
 		if(maxGenerationPower > generatorNominalPower){
-			String message = HEADER + "scheduled generation power for generator " + generatorNumber
-					+ " is more than nominal.";
+			String message = String.format("GenerationScheduleValidator: scheduled generation "
+					+ " power for generator#%d is more than nominal.", generatorNumber);
 			throw new GenerationException(message);
 		}
 	}
 
-	private void verifyIsPowerInGenerationCurveNotLowerThanGeneratorNominalPower(int generatorNumber){
+	private void IsPowerInGenerationCurveNotLowerThanGeneratorNominalPower(int generatorNumber){
 		float minimalGeneratorTechnologyPower = generatorParameters.getMinimalTechnologyPower();
 
 		if(minGenerationPower < minimalGeneratorTechnologyPower){
-			String message = HEADER + "scheduled generation power for generator " + generatorNumber
-					+ " is less than minimal technology.";
+			String message = String.format("GenerationScheduleValidator: scheduled generation"
+					+ " power for generator#%d is less than minimal technology.",
+					generatorNumber);
 			throw new GenerationException(message);
 		}
 	}

@@ -4,23 +4,28 @@ import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Load
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.MessageInclusion;
 
 public class GeneratorGenerationSchedule extends MessageInclusion{
-	private boolean GeneratorTurnedOn;
-	private boolean AstaticRegulatorTurnedOn;
-	private LoadCurve curve;
+	private boolean generatorTurnedOn;
+	private boolean astaticRegulatorTurnedOn;
+	private LoadCurve generationCurve;
 	
-	public GeneratorGenerationSchedule(int generatorNumber) {
+	public GeneratorGenerationSchedule(int generatorNumber, boolean isGeneratorTurnedOn,
+			boolean isAstaticRegulatorTurnedOn, LoadCurve generationCurve) {
+		
 		super(generatorNumber);
+		generatorTurnedOn = isGeneratorTurnedOn;
+		astaticRegulatorTurnedOn = isAstaticRegulatorTurnedOn;
+		this.generationCurve = generationCurve;
 	}
 	
 	public boolean isGeneratorTurnedOn() {
-		return GeneratorTurnedOn;
+		return generatorTurnedOn;
 	}
 
 	public boolean isAstaticRegulatorTurnedOn() {
-		return AstaticRegulatorTurnedOn;
+		return astaticRegulatorTurnedOn;
 	}
 
 	public LoadCurve getCurve() {
-		return curve;
+		return generationCurve;
 	}
 }

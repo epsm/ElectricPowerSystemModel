@@ -31,7 +31,8 @@ public class GeneratorsController{
 		for(Integer generatorNumber: generatorNumbers){
 			Generator generator = station.getGenerator(generatorNumber);
 			rememberCurrentGenerator(generator);
-			GeneratorGenerationSchedule generatorSchedule = getGeneratorGenerationSchedule(generator);
+			GeneratorGenerationSchedule generatorSchedule 
+					= getGeneratorGenerationSchedule(generatorNumber);
 			adjustGenerationAccordingToSchedule(generatorSchedule);
 		}
 	}
@@ -40,9 +41,8 @@ public class GeneratorsController{
 		this.generator = generator;
 	}
 	
-	private GeneratorGenerationSchedule getGeneratorGenerationSchedule(Generator generator){
-		int generatorNumber = generator.getNumber();
-		return powerstationGenerationSchedule.getGeneratorGenerationSchedule(generatorNumber);
+	private GeneratorGenerationSchedule getGeneratorGenerationSchedule(int generatorNumber){
+		return powerstationGenerationSchedule.getGeneratorSchedule(generatorNumber);
 	}
 	
 	private void adjustGenerationAccordingToSchedule(GeneratorGenerationSchedule generatorSchedule){
@@ -71,18 +71,18 @@ public class GeneratorsController{
 		}
 	}
 	
-	private void vefifyAndTurnOffGenerator() {
-		if(generator.isTurnedOn()){
-			generator.turnOffGenerator();
-		}
-	}
-	
 	private void adjustGeneration(){
 		if(shouldAstaticRegulationBeTurnedOn){
 			vefifyAndTurnOnAstaticRegulation();
 		}else{
 			vefifyAndTurnOffAstaticRegulation();
 			adjustGenerationPower();
+		}
+	}
+	
+	private void vefifyAndTurnOffGenerator() {
+		if(generator.isTurnedOn()){
+			generator.turnOffGenerator();
 		}
 	}
 	

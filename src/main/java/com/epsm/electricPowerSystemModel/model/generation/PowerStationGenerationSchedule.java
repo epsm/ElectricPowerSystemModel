@@ -14,10 +14,12 @@ public class PowerStationGenerationSchedule extends Command{
 			LocalTime simulationTimeStamp, int quanityOfGenerators) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
+		schedules = new MessageInclusionsContainer<GeneratorGenerationSchedule>(
+				quanityOfGenerators);
 	}
 
-	public void addGeneratorSchedule(GeneratorGenerationSchedule state){
-		schedules.addInclusion(state);
+	public void addGeneratorSchedule(GeneratorGenerationSchedule schedule){
+		schedules.addInclusion(schedule);
 	}
 	
 	public GeneratorGenerationSchedule getGeneratorSchedule(int generatorNumber){
@@ -28,8 +30,12 @@ public class PowerStationGenerationSchedule extends Command{
 		return schedules.getInclusionsNumbers();
 	}
 	
+	public int getQuantityOfGenerators(){
+		return schedules.getQuantityOfInclusions();
+	}
+	
 	@Override
-	public String toString() {
+	public String toString(){
 		return "PowerStationGenerationSchedule toString() stub.";
 	}
 }

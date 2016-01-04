@@ -12,7 +12,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 
-public class CommandValidatorTest {
+public class MessageValidatorTest {
 	private  Command command;
 	private  Parameters parameters;
 	private CommandValidator validator;
@@ -28,10 +28,30 @@ public class CommandValidatorTest {
 	}
 	
 	@Test
+	public void exceptionIfCommandIsNull(){
+		expectedEx.expect(IllegalArgumentException.class);
+	    expectedEx.expectMessage("validate(...) method: command is null.");
+	    
+	    command = null;
+		
+	    validator.validate(command, parameters);
+	}
+	
+	@Test
+	public void exceptionIfParametersIsNull(){
+		expectedEx.expect(IllegalArgumentException.class);
+	    expectedEx.expectMessage("validate(...) method: parameters is null.");
+	    
+	    parameters = null;
+		
+	    validator.validate(command, parameters);
+	}
+	
+	@Test
 	public void exceptionIfIdNumbersDifferent(){
 		expectedEx.expect(DispatchingException.class);
-	    expectedEx.expectMessage("validatePowerObjectsId(...): id numbers in command#1 and parameters#2 are"
-	    		+ " different.");
+	    expectedEx.expectMessage("validatePowerObjectsId(...): id numbers in command#1 and"
+	    		+ " parameters#2 are different.");
 	    
 	    when(command.getPowerObjectId()).thenReturn(1L);
 		when(parameters.getPowerObjectId()).thenReturn(2L);
