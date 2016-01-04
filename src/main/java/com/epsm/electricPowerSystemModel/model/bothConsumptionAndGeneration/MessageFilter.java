@@ -1,21 +1,17 @@
 package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 
 import com.epsm.electricPowerSystemModel.model.consumption.Consumer;
-import com.epsm.electricPowerSystemModel.model.consumption.ConsumerParametersStub;
 import com.epsm.electricPowerSystemModel.model.consumption.ConsumerState;
 import com.epsm.electricPowerSystemModel.model.consumption.ConsumptionPermissionStub;
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
-import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationGenerationSchedule;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStationParameters;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationState;
 
 public class MessageFilter {
 	private Class<? extends Command> expectedCommandClass;
 	private Class<? extends State> expectedStateClass;
-	private Class<? extends Parameters> expectedParametersClass;
 	
 	public MessageFilter(Class<? extends PowerObject> objectClass) {
 		if(objectClass == null){
@@ -26,11 +22,9 @@ public class MessageFilter {
 		if(isObjectPowerStation(objectClass)){
 			expectedCommandClass = PowerStationGenerationSchedule.class;
 			expectedStateClass = PowerStationState.class;
-			expectedParametersClass = PowerStationParameters.class;
 		}else if(isObjectInstanceOfConsumer(objectClass)){
 			expectedCommandClass = ConsumptionPermissionStub.class;
 			expectedStateClass = ConsumerState.class;
-			expectedParametersClass = ConsumerParametersStub.class;
 		}else{
 			String message = String.format("MessageFilter constructor: %s.class is not supported.", 
 					objectClass.getSimpleName());
@@ -65,16 +59,6 @@ public class MessageFilter {
 		
 		return state.getClass() == expectedStateClass;
 	}
-
-	public boolean isParametersTypeAppropriate(Parameters parameters){
-		if(parameters == null){
-			String exceptionMessage = "MessageFilter isParametersTypeAppropriate(...) method:"
-					+ " parameters can't be null.";
-			throw new IllegalArgumentException(exceptionMessage);	
-		}
-		
-		return parameters.getClass() == expectedParametersClass;
-	}
 	
 	public String getExpectedCommandClassName(){
 		return expectedCommandClass.getSimpleName();
@@ -82,9 +66,5 @@ public class MessageFilter {
 	
 	public String getExpectedStateClassName(){
 		return expectedStateClass.getSimpleName();
-	}
-	
-	public String getExpectedParametersClassName(){
-		return expectedParametersClass.getSimpleName();
 	}
 }

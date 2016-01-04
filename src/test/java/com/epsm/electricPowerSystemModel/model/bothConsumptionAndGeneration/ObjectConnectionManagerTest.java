@@ -32,7 +32,6 @@ import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemS
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationGenerationSchedule;
-import com.epsm.electricPowerSystemModel.model.generation.PowerStationParameters;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationState;
 
 public class ObjectConnectionManagerTest{
@@ -206,25 +205,5 @@ public class ObjectConnectionManagerTest{
 	    when(object.getState()).thenReturn(state);
 	    
 	    makeObjectSendState();
-	}
-	
-	@Test
-	public void exceptionIfObjectGetParametersReturnsNull(){
-		expectedEx.expect(IllegalArgumentException.class);
-	    expectedEx.expectMessage("returned null instead ConsumerParametersStub.");
-	    
-	    when(object.getParameters()).thenReturn(null);
-	    
-	    manager.manageConnection();
-	}
-	
-	@Test
-	public void exceptionIfObjectGetParametersReturnedWrongParametersClass(){
-		expectedEx.expect(IllegalArgumentException.class);
-	    expectedEx.expectMessage("returned PowerStationParameters instead ConsumerParametersStub.");
-
-	    PowerStationParameters parameters = new PowerStationParameters(0, START_TIME, LocalTime.MIN, 1);
-	    when(object.getParameters()).thenReturn(parameters);
-	    manager.manageConnection();
 	}
 }

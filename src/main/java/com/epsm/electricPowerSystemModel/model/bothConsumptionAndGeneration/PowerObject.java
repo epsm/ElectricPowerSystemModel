@@ -36,11 +36,12 @@ public abstract class PowerObject implements SimulationObject{
 			throw new DispatchingException(message);
 		}
 		
-		id = simulation.generateId();
 		this.simulation = simulation;
 		this.timeService = timeService;
 		this.parameters = parameters;
+		id = parameters.getPowerObjectId();
 		manager = new ObjectConnectionManager(timeService, dispatcher, this);
+		
 		logger = LoggerFactory.getLogger(PowerObject.class);
 		logger.info("{}#{} was created.", getClass().getSimpleName(), id);
 	}
@@ -49,7 +50,7 @@ public abstract class PowerObject implements SimulationObject{
 		return id;
 	}
 	
-	public Parameters getParameters(){
+	public final Parameters getParameters(){
 		return parameters;
 	}
 	

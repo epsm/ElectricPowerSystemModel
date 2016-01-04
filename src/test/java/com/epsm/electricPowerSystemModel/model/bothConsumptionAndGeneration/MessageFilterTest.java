@@ -34,14 +34,15 @@ public class MessageFilterTest {
 	private MessageFilter filter;
 	private Command command;
 	private State state;
-	private Parameters parameters;
+	private ConsumerParametersStub consumerParameters;
+	private PowerStationParameters powerStationParameters;
 	
 	@Before
 	public void init(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);
-		parameters = mock(Parameters.class);
+		consumerParameters = mock(ConsumerParametersStub.class);
 	}
 	
 	@Rule
@@ -67,7 +68,10 @@ public class MessageFilterTest {
 	}
 	
 	private void createPowerStationAndFilterForIt(){
-		object = new PowerStation(simulation, timeService, dispatcher, parameters);
+		powerStationParameters 
+			= new PowerStationParameters(0, LocalDateTime.MIN, LocalTime.MIN, 1);
+
+		object = new PowerStation(simulation, timeService, dispatcher, powerStationParameters);
 		filter = new MessageFilter(object.getClass());
 	}
 	
@@ -84,17 +88,6 @@ public class MessageFilterTest {
 	    createPowerStationAndFilterForIt();
 		createPowerStationGenerationSchedule();
 		filter.isStateTypeAppropriate(null);
-	}
-	
-	@Test
-	public void exceptionInIsParametersTypeAppropriateMethodIfMessageIsNull(){
-		expectedEx.expect(IllegalArgumentException.class);
-		expectedEx.expectMessage("MessageFilter isParametersTypeAppropriate(...) method:"
-	    		+ " parameters can't be null.");
-	    
-	    createPowerStationAndFilterForIt();
-		createPowerStationGenerationSchedule();
-		filter.isParametersTypeAppropriate(null);
 	}
 
 	@Test
@@ -116,17 +109,6 @@ public class MessageFilterTest {
 	private void createPowerStationState(){
 		state = new PowerStationState(0, LocalDateTime.MIN, LocalTime.MIN, 1, 0);
 	}
-	
-	@Test
-	public void trueIfObjectIsPowerStationAndParametersIsPowerStationParameters(){
-		createPowerStationAndFilterForIt();
-		createPowerStationParameters();
-		Assert.assertTrue(filter.isParametersTypeAppropriate(parameters));
-	}
-	
-	private void createPowerStationParameters(){
-		parameters = new PowerStationParameters(0, LocalDateTime.MIN, LocalTime.MIN, 1);
-	}
 
 	@Test
 	public void trueIfObjectIsInstanceOfConsumerAndCommandIsConsumptionPermission (){
@@ -136,7 +118,9 @@ public class MessageFilterTest {
 	}
 	
 	private void createConsumerAndFilterForIt(){
-		object = new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);
+		consumerParameters = new ConsumerParametersStub(0, LocalDateTime.MIN, LocalTime.MIN);
+		
+		object = new ShockLoadConsumer(simulation, timeService, dispatcher, consumerParameters);
 		filter = new MessageFilter(object.getClass());
 	}
 	
@@ -153,17 +137,6 @@ public class MessageFilterTest {
 	
 	private void createConsumerState(){
 		state = new ConsumerState(0, LocalDateTime.MIN, LocalTime.MIN, 0);
-	}
-	
-	@Test
-	public void trueIfObjectIsInstanceOfConsumerAndParametersIsConsumerParameters(){
-		createConsumerAndFilterForIt();
-		createConsumerParameters();
-		Assert.assertTrue(filter.isParametersTypeAppropriate(parameters));
-	}
-	
-	private void createConsumerParameters(){
-		parameters = new ConsumerParametersStub(0, LocalDateTime.MIN, LocalTime.MIN);
 	}
 	
 	@Test
@@ -209,12 +182,5 @@ public class MessageFilterTest {
 		createPowerStationAndFilterForIt();
 		createConsumerState();
 		Assert.assertFalse(filter.isStateTypeAppropriate(state));
-	}
-	
-	@Test
-	public void falseIfObjectIsPowerStationAndParametersIsConsumerParameters(){
-		createPowerStationAndFilterForIt();
-		createConsumerParameters();
-		Assert.assertFalse(filter.isParametersTypeAppropriate(parameters));
 	}
 }

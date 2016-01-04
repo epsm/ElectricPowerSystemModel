@@ -5,12 +5,11 @@ import java.util.Random;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
-public class ShockLoadConsumer extends Consumer{
+public final class ShockLoadConsumer extends Consumer{
 	private int maxWorkDurationInSeconds;
 	private int maxPauseBetweenWorkInSeconds;
 	private float maxLoad;
@@ -24,12 +23,20 @@ public class ShockLoadConsumer extends Consumer{
 	private Random random = new Random();
 	
 	public ShockLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher,	Parameters parameters) {
+			Dispatcher dispatcher,	ConsumerParametersStub parameters) {
 		
 		super(simulation, timeService, dispatcher, parameters);
 	}
 	
-	public float calculateCurrentLoadInMW(){
+	@Override
+	public float calculatePowerBalance() {
+		calculateCurrentLoadInMW();
+		prepareState();
+		
+		return currentLoad;
+	}
+	
+	private void  calculateCurrentLoadInMW(){
 		getNecessaryParametersFromPowerSystem();
 
 		if(isTurnedOn){
@@ -45,12 +52,12 @@ public class ShockLoadConsumer extends Consumer{
 		if(currentLoad != 0){
 			currentLoad = calculateLoadCountingFrequency(currentLoad, currentFrequency);
 		}
-		
-		state = prepareState(currentTime, currentLoad);
-		
-		return currentLoad;
 	}
 
+	private void prepareState(){
+		state = prepareState(currentTime, currentLoad);
+	}
+	
 	private void getNecessaryParametersFromPowerSystem(){
 		currentTime = simulation.getTimeInSimulation();
 		currentFrequency = simulation.getFrequencyInPowerSystem();
@@ -126,11 +133,5 @@ public class ShockLoadConsumer extends Consumer{
 	@Override
 	public void executeCommand(Command command) {
 		//TODO turn off/on user by dispatcher command. 
-	}
-
-	@Override
-	public float calculatePowerBalance() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

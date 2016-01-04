@@ -10,7 +10,9 @@ import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
@@ -35,6 +37,8 @@ public class ShockLoadTestConsumerTest {
 	
 	@Before
 	public void initialize(){
+		ConsumerParametersStub parameters 
+			= new ConsumerParametersStub(CONSUMER_NUMBER, LocalDateTime.MIN, LocalTime.MIN);
 		simulation = spy(new ElectricPowerSystemSimulationImpl());
 		when(simulation.generateId()).thenReturn(CONSUMER_NUMBER);
 		turnOnTime = null;
@@ -42,7 +46,7 @@ public class ShockLoadTestConsumerTest {
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentTime()).thenReturn(LocalDateTime.of(2000, 01, 01, 00, 00));
 		dispatcher = mock(Dispatcher.class);
-		consumer = new ShockLoadConsumer(simulation, timeService, dispatcher);
+		consumer = new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
 		consumer.setMaxLoad(100f);
@@ -50,6 +54,9 @@ public class ShockLoadTestConsumerTest {
 		consumer.setMaxPauseBetweenWorkInSeconds(PAUSE_TIME);
 		consumer.setDegreeOfDependingOnFrequency(2);
 	}
+	
+	@Rule
+	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Test
 	public void loadChargesInstantlyAndThenConstant(){
@@ -79,7 +86,7 @@ public class ShockLoadTestConsumerTest {
 	private void rememberCurrentLoadAsPreviousAndDoNextStep(){
 		previousLoad = currentLoad;
 		simulation.calculateNextStep();
-		currentLoad = consumer.calculateCurrentLoadInMW();
+		currentLoad = consumer.calculatePowerBalance();
 	}
 	
 	@Test
@@ -176,7 +183,7 @@ public class ShockLoadTestConsumerTest {
 	}
 	
 	private void getExpectedValues(){
-		expectedLoad = consumer.calculateCurrentLoadInMW();
+		expectedLoad = consumer.calculatePowerBalance();
 		expectedTime = simulation.getTimeInSimulation();
 	}
 	

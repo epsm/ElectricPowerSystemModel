@@ -140,25 +140,10 @@ public class ObjectConnectionManager{
 	
 	private void establishConnectionToDispatcher(){
 		Parameters parameters = object.getParameters();
-		if(parameters == null){
-			String message =  String.format("%s#%d returned null instead %s.", objectClass,
-					objectId, filter.getExpectedParametersClassName());
-			throw new IllegalArgumentException(message);
-		}else if(isParametersTypeEqualsToExpected(parameters)){
-			dispatcher.establishConnection(parameters);
-			setTimeWhenSentLastMessage();
+		dispatcher.establishConnection(parameters);
+		setTimeWhenSentLastMessage();
 			
-			logger.info("{}#{} sent {} to dispatcher.", objectClass, objectId,
-					filter.getExpectedParametersClassName());
-		}else{
-			String message = String.format("%s#%d returned %s instead %s.", objectClass,
-					objectId, getMessageClassName(parameters), 
-					filter.getExpectedParametersClassName());
-			throw new IllegalArgumentException(message);
-		}
-	}
-	
-	private boolean isParametersTypeEqualsToExpected(Parameters parameters){
-		return filter.isParametersTypeAppropriate(parameters);
+		logger.info("{}#{} sent {} to dispatcher.", objectClass, objectId,
+				parameters.getClass().getSimpleName());
 	}
 }
