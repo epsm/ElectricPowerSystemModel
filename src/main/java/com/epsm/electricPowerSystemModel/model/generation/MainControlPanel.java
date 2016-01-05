@@ -48,7 +48,7 @@ public class MainControlPanel{
 			return true;
 		}catch (GenerationException exception){
 			//TODO send request to dispatcher
-			logger.warn("Recieved wrong schedule: ", exception);
+			logger.warn("Wrong schedule - {}",exception.getMessage());
 			return false;
 		}
 	}

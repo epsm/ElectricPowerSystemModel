@@ -125,7 +125,7 @@ public class PowerStationTest{
 	@Test
 	public void exceptionIfTryToAddGeneratorWithTheSameNumberAsPreviouslyInstalled(){
 		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("Generator with number 1 already installed.");
+	    expectedEx.expectMessage("Generator#1 already installed.");
 		
 		prepareAndInstallFirstGenerator();
 		prepareAndInstallFirstGenerator();

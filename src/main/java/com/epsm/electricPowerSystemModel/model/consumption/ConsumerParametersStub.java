@@ -14,6 +14,6 @@ public class ConsumerParametersStub extends Parameters{
 
 	@Override
 	public String toString() {
-		return "ConsumerParametersStub toString() stub";
+		return String.format("ConsumerParametersStub#%d toString() stub", powerObjectId);
 	}
 }

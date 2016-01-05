@@ -169,7 +169,7 @@ public class ObjectConnectionManagerTest{
 	public void passesRightCommandToObject(){
 		makeConnectionEstablished();
 		
-		verify(object).executeCommand(isA(ConsumptionPermissionStub.class));
+		verify(object).performDispatcheCommand(isA(ConsumptionPermissionStub.class));
 	}
 	
 	@Test

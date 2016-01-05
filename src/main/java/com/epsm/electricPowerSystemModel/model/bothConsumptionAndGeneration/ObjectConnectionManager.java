@@ -20,8 +20,6 @@ public class ObjectConnectionManager{
 	private volatile LocalDateTime timeWhenRecievedLastCommand;
 	private LocalDateTime timeWhenSentLastMessage;
 	private LocalDateTime currentTime;
-	private long objectId;
-	private String objectClass;
 	private Logger logger;
 
 	public ObjectConnectionManager(TimeService timeService,	Dispatcher dispatcher, 
@@ -42,9 +40,7 @@ public class ObjectConnectionManager{
 		this.timeService = timeService;
 		this.dispatcher = dispatcher;
 		this.object = object;
-		objectClass = object.getClass().getSimpleName();
 		filter = new MessageFilter(object.getClass());
-		objectId = object.getId();
 		timeWhenRecievedLastCommand = LocalDateTime.MIN;
 		timeWhenSentLastMessage = LocalDateTime.MIN;
 		logger = LoggerFactory.getLogger(ObjectConnectionManager.class);
@@ -52,17 +48,17 @@ public class ObjectConnectionManager{
 	
 	public void executeCommand(Command command){
 		if(command == null){
-			logger.warn("ObjectConnectionManager#{} recieved null from dispatcher.", objectId);
+			logger.warn("{} recieved null from dispatcher.", object);
 		}else if(isCommandTypeEqualsToExpected(command)){
 			setTimeWhenReceivedLastCommand();
 			passCommandToObject(command);
 			
-			logger.info("ObjectConnectionManager#{} recieved {} from dispatcher.", 
-					objectId, getMessageClassName(command));
+			logger.info("{} recieved {} from dispatcher.", 
+					object, getMessageClassName(command));
 		}else{
-			logger.warn("ObjectConnectionManager#{} recieved from dispatcher wrong command class: "
-					+ "expected {}, but was {}.", objectId, 
-					filter.getExpectedCommandClassName(), getMessageClassName(command));
+			logger.warn("{} recieved from dispatcher wrong command class: expected {},"
+					+ " but was {}.",
+					object, filter.getExpectedCommandClassName(),getMessageClassName(command));
 		}
 	}
 	
@@ -84,14 +80,17 @@ public class ObjectConnectionManager{
 	
 	public final void manageConnection(){
 		getCurrentTime();
-		
-		if(isConnectionWithDispatcherActive()){
-			if(isItTimeToSentMessage()){
+		logger.debug("{}, last sent time: {}, last recieced time: {}, conn.active: {}",
+				object, timeWhenSentLastMessage.toLocalTime(),
+				timeWhenRecievedLastCommand.toLocalTime(), isConnectionWithDispatcherActive());
+		if(isItTimeToSentMessage()){
+			if(isConnectionWithDispatcherActive()){
 				sendStateToDispatcher();
 				setTimeWhenSentLastMessage();
+			}else{
+				establishConnectionToDispatcher();
+				setTimeWhenSentLastMessage();
 			}
-		}else{
-			establishConnectionToDispatcher();
 		}
 	}
 	
@@ -115,17 +114,17 @@ public class ObjectConnectionManager{
 		State state = object.getState();
 		
 		if(state == null){
-			String message =  String.format("%s#%d returned null instead %s.", objectClass,
-					objectId, filter.getExpectedStateClassName());
+			String message =  String.format("%s returned null instead %s.", object,
+					filter.getExpectedStateClassName());
 			throw new IllegalArgumentException(message);
 		}else if(isStateTypeEqualsToExpected(state)){
 			dispatcher.acceptState(state);
 			
-			logger.info("%s#{} sent {} to dispatcher.", objectId, objectClass,
+			logger.info("{} sent {} to dispatcher.", object,
 					filter.getExpectedStateClassName());
 		}else{
-			String message = String.format("%s#%d returned %s instead %s.", objectClass,
-					objectId, getMessageClassName(state), filter.getExpectedStateClassName());
+			String message = String.format("%s returned %s instead %s.", object,
+					getMessageClassName(state), filter.getExpectedStateClassName());
 			throw new IllegalArgumentException(message);
 		}		
 	}
@@ -141,9 +140,7 @@ public class ObjectConnectionManager{
 	private void establishConnectionToDispatcher(){
 		Parameters parameters = object.getParameters();
 		dispatcher.establishConnection(parameters);
-		setTimeWhenSentLastMessage();
 			
-		logger.info("{}#{} sent {} to dispatcher.", objectClass, objectId,
-				parameters.getClass().getSimpleName());
+		logger.info("{} sent {} to dispatcher.", object, parameters.getClass().getSimpleName());
 	}
 }

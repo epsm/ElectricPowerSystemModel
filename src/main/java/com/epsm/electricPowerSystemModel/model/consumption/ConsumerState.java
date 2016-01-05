@@ -22,12 +22,12 @@ public class ConsumerState extends State{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("Consumer with id ");
+		stringBuilder.append("Consumer#");
 		stringBuilder.append(powerObjectId);
-		stringBuilder.append(" [time: ");
+		stringBuilder.append(" [sim.time: ");
 		stringBuilder.append(simulationTimeStamp.format(timeFormatter));
 		stringBuilder.append(" load MW: ");
-		stringBuilder.append(numberFormatter.format(load));
+		stringBuilder.append(numberFormatter.format(-load));
 		stringBuilder.append("]");
 
 		return stringBuilder.toString();

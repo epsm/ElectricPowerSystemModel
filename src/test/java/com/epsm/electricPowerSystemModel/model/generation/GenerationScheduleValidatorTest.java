@@ -38,7 +38,7 @@ public class GenerationScheduleValidatorTest {
 	@Test
 	public void exceptionIfStationParametersAndScheduleHaveGeneratorsWithDifferentNumbers(){
 		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("GenerationScheduleValidator: parameters has generator(s)"
+	    expectedEx.expectMessage("GenerationScheduleValidator: station has generator(s)"
 	    		+ " with number(s) [2], but schedule has generator(s) with number(s) [1].");
 	    
 		prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNull();

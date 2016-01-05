@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Map;
 
+import com.epsm.electricPowerSystemModel.model.consumption.ConsumerParametersStub;
+import com.epsm.electricPowerSystemModel.model.consumption.ConsumptionPermissionStub;
 import com.epsm.electricPowerSystemModel.model.consumption.ScheduledLoadConsumerCreationParametersStub;
 import com.epsm.electricPowerSystemModel.model.consumption.ShockLoadConsumerCreationParametersStub;
 import com.epsm.electricPowerSystemModel.model.control.SimulationRunner;
@@ -43,6 +45,9 @@ public class ManualTest {
 	private class DispatherImpl implements Dispatcher{
 		private boolean firstTime = true;
 		private Map<Long, DispatchingObject> objects;
+		private PowerStationGenerationSchedule stationSchedule;
+		private GeneratorGenerationSchedule generatorSchedule;
+		private ConsumptionPermissionStub permision;
 		
 		@Override
 		public void establishConnection(Parameters parameters) {
@@ -55,15 +60,24 @@ public class ManualTest {
 			DispatchingObject object = objects.get(parameters.getPowerObjectId());
 			
 			if(parameters instanceof PowerStationParameters){
-				PowerStationGenerationSchedule stationSchedule 
-					= new PowerStationGenerationSchedule(parameters.getPowerObjectId(),
-							LocalDateTime.MIN, LocalTime.MIN, 1);
-				GeneratorGenerationSchedule generatorSchedule = new GeneratorGenerationSchedule(8, false, false, null); 
-				stationSchedule.addGeneratorSchedule(generatorSchedule);
-				
+				prepareWrongSchedule(parameters);
 				object.executeCommand(stationSchedule);
+			}else if(parameters instanceof ConsumerParametersStub){
+				preparePermission(parameters);
+				object.executeCommand(permision);
 			}
-			System.out.println("here");
+		}
+		
+		private void prepareWrongSchedule(Parameters parameters){
+			stationSchedule = new PowerStationGenerationSchedule(parameters.getPowerObjectId(),
+					LocalDateTime.MIN, LocalTime.MIN, 1);
+			generatorSchedule = new GeneratorGenerationSchedule(8, false, false, null); 
+			stationSchedule.addGeneratorSchedule(generatorSchedule);
+		}
+		
+		private void preparePermission(Parameters parameters){
+			long objectId = parameters.getPowerObjectId();
+			permision = new ConsumptionPermissionStub(objectId, LocalDateTime.now(), LocalTime.MIN);
 		}
 		
 		private void gerObjectsMap(){

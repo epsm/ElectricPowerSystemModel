@@ -40,8 +40,6 @@ public abstract class CommandValidator{
 					+ " command#%d and parameters#%d are different.", className, 
 					message_1_Id, message_2_Id);
 			
-			System.out.println(message);
-			
 			throw new DispatchingException(message);
 		}
 	}

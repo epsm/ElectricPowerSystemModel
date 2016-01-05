@@ -110,7 +110,7 @@ public final class PowerStation extends PowerObject{
 		Generator existingGenerator = generators.get(generatorNumber);
 		
 		if(existingGenerator != null){
-			String message = String.format("Generator with number#d already installed.",
+			String message = String.format("Generator#%d already installed.",
 					generatorNumber);
 			throw new GenerationException(message);
 		}

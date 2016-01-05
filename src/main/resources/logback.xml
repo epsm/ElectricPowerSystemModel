@@ -2,24 +2,41 @@
 <configuration>
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n
-			</pattern>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %-12([%thread]) %-47(%logger{48}) - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-	<logger name="main.java.com.epsm.electricPowerSystemModel.model" level="INFO" additivity="false">
-		<appender-ref ref="STDOUT" />
+	<appender name="Model" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-12([%thread]) %-48(%logger{48}) - %msg%n</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      		<fileNamePattern>/home/anonimous/programming/projects/current/ElectricPowerSystemModel/logs/Model.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<maxHistory>7</maxHistory>
+    	</rollingPolicy>
+	</appender>
+	
+	<appender name="InteractionWithDispatcher" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-11([%thread]) %-30(%logger{40}) - %msg%n</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      		<fileNamePattern>/home/anonimous/programming/projects/current/ElectricPowerSystemModel/logs/InteractionWithDispatcher.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<maxHistory>7</maxHistory>
+    	</rollingPolicy>
+	</appender>
+
+	<logger name="com.epsm.electricPowerSystemModel.model" level="INFO" additivity="false">
+		<appender-ref ref="Model" />
 	</logger>
 	
-	<logger name="main.java.com.epsm.electricPowerSystemModel.model.dispatch.MainControlPanel" level="INFO" additivity="false">
-		<appender-ref ref="STDOUT" />
-	</logger>
-	
-	<logger name="main.java.com.epsm.electricPowerSystemModel.model.dispatch.ReportSender" level="INFO" additivity="false">
-		<appender-ref ref="STDOUT" />
+	<logger name="com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.ObjectConnectionManager" level="INFO" additivity="false">
+		<appender-ref ref="InteractionWithDispatcher" />
 	</logger>
 
 	<root level="INFO">
-		<appender-ref ref="STDOUT"/>
+		<appender-ref ref="STDOUT"/>add methods for unit tests
 	</root>
 </configuration>

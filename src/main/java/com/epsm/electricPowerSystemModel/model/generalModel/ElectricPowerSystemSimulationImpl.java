@@ -21,7 +21,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private float frequencyInPowerSystem;
 	private LocalTime currentTimeInSimulation;
 	private PowerObjectFactory powerObjectFactory;
-	private final float TIME_CONASTNT = 2_000;
+	private final float TIME_CONASTNT = 5_000;
 	private final int SIMULATION_STEP_IN_NANOS = 100_000_000;
 	private final float ACCEPTABLE_FREQUENCY_DELTA = 0.03f;
 	private Logger logger;
@@ -52,7 +52,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 			balance += object.calculatePowerBalance();
 		}
 		
-		System.out.println("bal=" + balance);
+		logger.debug("sim.time: {}, power balance: {} MW.", currentTimeInSimulation, balance);
 		
 		return balance;
 	}
@@ -82,7 +82,8 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 	
 	private void logFrequency(){
-		logger.warn("Frqueency is unacceptable: {} Hz.", frequencyInPowerSystem);
+		logger.warn("sim.time: {}, unnacept. frequency: {} Hz.",
+				getTimeInSimulation(), frequencyInPowerSystem);
 	}
 	
 	@Override

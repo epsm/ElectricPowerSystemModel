@@ -45,7 +45,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 		manager = new ObjectConnectionManager(timeService, dispatcher, this);
 		
 		logger = LoggerFactory.getLogger(PowerObject.class);
-		logger.info("{}#{} was created.", getClass().getSimpleName(), id);
+		logger.info("{} was created.", this);
 	}
 
 	public long getId(){
@@ -69,4 +69,9 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 	protected abstract void performDispatcheCommand(Command command);
 	
 	protected abstract State getState();
+	
+	@Override
+	public String toString() {
+		return String.format("%s#%d", getClass().getSimpleName(), id);
+	}
 }

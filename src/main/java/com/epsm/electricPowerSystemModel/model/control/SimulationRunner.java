@@ -10,8 +10,9 @@ import com.epsm.electricPowerSystemModel.model.generalModel.RealTimeOperations;
 
 public class SimulationRunner{
 	private ElectricPowerSystemSimulation simulation;
+	private long stepCounter;
 	private Logger logger = LoggerFactory.getLogger(SimulationRunner.class);
-	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 100;
+	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 5;
 	private final int PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS = 500;
 	
 	public void runSimulation(ElectricPowerSystemSimulation simulation){
@@ -41,10 +42,11 @@ public class SimulationRunner{
 		
 		@Override
 		public void run() {
-			Thread.currentThread().setName("Simulation time");
+			Thread.currentThread().setName("Sim. time");
 			
 			while(true){
 				simulation.calculateNextStep();
+				stepCounter++;
 				pause();
 			}
 		}
@@ -65,17 +67,23 @@ public class SimulationRunner{
 		
 		@Override
 		public void run() {
-			Thread.currentThread().setName("RealTime");
+			Thread.currentThread().setName("Real time");
 			
 			while(true){
-				objects = simulation.getRealTimeDependingObjects();
-				
-				for(RealTimeOperations operations: objects.values()){
-					operations.doRealTimeDependingOperations();
+				if(isModelInitialized()){
+					objects = simulation.getRealTimeDependingObjects();
+					
+					for(RealTimeOperations operations: objects.values()){
+						operations.doRealTimeDependingOperations();
+					}
 				}
-				
+			
 				pause();
 			}
+		}
+		
+		private boolean isModelInitialized(){
+			return stepCounter > 1;
 		}
 		
 		private void pause(){

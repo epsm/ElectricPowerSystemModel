@@ -39,9 +39,9 @@ public class PowerStationState extends State{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("PowerSt. with id ");
+		stringBuilder.append("PowerSt.#");
 		stringBuilder.append(powerObjectId);
-		stringBuilder.append(" [time: ");
+		stringBuilder.append(" [sim.time: ");
 		stringBuilder.append(simulationTimeStamp.format(timeFormatter));
 		stringBuilder.append(" freq.: ");
 		stringBuilder.append(numberFormatter.format(frequency));

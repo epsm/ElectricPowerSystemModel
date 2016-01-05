@@ -43,7 +43,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 	
 	private void validateOnEqualsGeneratorsNumbers(){
 		if(!(stationGeneratorsNumbers.equals(scheduleGeneratorsNumbers))){
-			String message = String.format("GenerationScheduleValidator: parameters has"
+			String message = String.format("GenerationScheduleValidator: station has"
 					+ " generator(s) with number(s) %s, but schedule has generator(s)"
 					+ " with number(s) %s.", stationGeneratorsNumbers, scheduleGeneratorsNumbers);
 			throw new GenerationException(message);

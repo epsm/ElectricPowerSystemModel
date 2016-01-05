@@ -13,7 +13,7 @@ public class GlobalConstants {
 	public static final int PAUSE_BETWEEN_STATE_REPORTS_TRANSFERS_IN_MILLISECONDS = 1000;
 	
 	public static final int MAX_PAUSE_BETWEEN_MESSAGES_FROM_DISPATCHER_IN_SECONDS = 10;
-	public static final int PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECONDS = 5;
+	public static final int PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECONDS = 2;
 	
 	public static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols(Locale.US);
 }
