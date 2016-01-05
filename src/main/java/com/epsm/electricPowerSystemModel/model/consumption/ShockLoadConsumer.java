@@ -3,6 +3,9 @@ package com.epsm.electricPowerSystemModel.model.consumption;
 import java.time.LocalTime;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
@@ -21,17 +24,23 @@ public final class ShockLoadConsumer extends Consumer{
 	private float currentFrequency;
 	private volatile ConsumerState state;
 	private Random random = new Random();
+	private Logger logger;
 	
 	public ShockLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
 			Dispatcher dispatcher,	ConsumerParametersStub parameters) {
 		
 		super(simulation, timeService, dispatcher, parameters);
+		logger = LoggerFactory.getLogger(ShockLoadConsumer.class);
 	}
 	
 	@Override
 	public float calculatePowerBalance() {
 		calculateCurrentLoadInMW();
 		prepareState();
+		
+		logger.debug("sim.time: {}, freq.: {}, cur.load:{} MW, timeToTurnOn: {},"
+				+ "timeToTurnOff: {}, turnedOn: {}.", currentTime, currentFrequency,
+				currentLoad, timeToTurnOn, timeToTurnOff, isTurnedOn);
 		
 		return -currentLoad;
 	}

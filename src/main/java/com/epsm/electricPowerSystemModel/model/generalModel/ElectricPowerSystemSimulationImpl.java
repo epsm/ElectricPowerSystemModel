@@ -82,8 +82,14 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 	
 	private void logFrequency(){
-		logger.warn("sim.time: {}, unnacept. frequency: {} Hz.",
-				getTimeInSimulation(), frequencyInPowerSystem);
+		if(isItExactlySecond()){
+			logger.warn("sim.time: {}, unnacept. frequency: {} Hz.",
+					getTimeInSimulation(), frequencyInPowerSystem);
+		}
+	}
+	
+	private boolean isItExactlySecond(){
+		return currentTimeInSimulation.getNano() == 0;
 	}
 	
 	@Override

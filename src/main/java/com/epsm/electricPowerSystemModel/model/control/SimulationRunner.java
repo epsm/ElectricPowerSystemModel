@@ -12,7 +12,7 @@ public class SimulationRunner{
 	private ElectricPowerSystemSimulation simulation;
 	private long stepCounter;
 	private Logger logger = LoggerFactory.getLogger(SimulationRunner.class);
-	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 5;
+	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 1;
 	private final int PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS = 500;
 	
 	public void runSimulation(ElectricPowerSystemSimulation simulation){

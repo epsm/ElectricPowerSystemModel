@@ -25,7 +25,7 @@ public final class PowerStation extends PowerObject{
 	private float currentGenerationInMW;
 	private Generator generatorToAdd;
 	private PowerStationState state;
-	private Logger logger = LoggerFactory.getLogger(PowerStation.class);
+	private Logger logger;
 	
 	public PowerStation(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher,
 			PowerStationParameters parameters) {
@@ -33,6 +33,7 @@ public final class PowerStation extends PowerObject{
 		
 		generators = new HashMap<Integer, Generator>();
 		controlPanel = new MainControlPanel(simulation, this);
+		logger = LoggerFactory.getLogger(PowerStation.class);
 	}
 	
 	@Override
@@ -61,7 +62,13 @@ public final class PowerStation extends PowerObject{
 	
 	private void getTotalGeneratorGeneration(){
 		for(Generator generator: generators.values()){
-			currentGenerationInMW += generator.calculateGeneration();
+			float generatorGeneration = generator.calculateGeneration();
+			currentGenerationInMW += generatorGeneration;
+			
+			logger.debug("sim.time: {}, freq.: {}, generator#{} gen: {} MW,"
+					+ " power at req. freq.: {}, ast.reg.On: {}",
+					currentTime, currentFrequency, generator.getNumber(), generatorGeneration,
+					generator.getPowerAtRequiredFrequency(), generator.isAstaticRegulationTurnedOn());
 		}
 	}
 	

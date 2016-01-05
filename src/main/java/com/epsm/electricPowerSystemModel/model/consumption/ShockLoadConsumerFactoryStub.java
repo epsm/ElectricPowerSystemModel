@@ -42,7 +42,7 @@ public class ShockLoadConsumerFactoryStub extends AbstractPowerObjectFactory{
 	}
 	
 	private void createShockLoadConsumer(){
-		consumer= new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);
+		consumer = new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);
 		consumer.setDegreeOfDependingOnFrequency(2);
 		consumer.setMaxLoad(10f);
 		consumer.setMaxWorkDurationInSeconds(300);

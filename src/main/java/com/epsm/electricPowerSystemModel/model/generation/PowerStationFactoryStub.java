@@ -77,6 +77,7 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory{
 		generator_1.setNominalPowerInMW(40);
 		generator_2.setMinimalPowerInMW(25);
 		generator_2.setNominalPowerInMW(100);
+		generator_1.setReugulationSpeedInMWPerMinute(20);
 		powerStation.addGenerator(generator_1);
 		powerStation.addGenerator(generator_2);
 		powerStation.executeCommand(generationSchedule);

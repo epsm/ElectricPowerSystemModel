@@ -2,6 +2,9 @@ package com.epsm.electricPowerSystemModel.model.consumption;
 
 import java.time.LocalTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
@@ -20,17 +23,22 @@ public final class ScheduledLoadConsumer extends Consumer{
 	private LocalTime currentTime;
 	private float currentLoad;
 	private float currentFrequency;
+	private Logger logger;
 	
 	public ScheduledLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
 			Dispatcher dispatcher, ConsumerParametersStub parameters) {
 		
 		super(simulation, timeService, dispatcher, parameters);
+		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
 	}
 	
 	@Override
 	public float calculatePowerBalance() {
 		calculateCurrentLoadInMW();
 		prepareState();
+		
+		logger.debug("sim.time: {}, freq.: {}, load:{} MW.", currentTime,
+				currentFrequency,currentLoad);
 		
 		return -currentLoad;
 	}
