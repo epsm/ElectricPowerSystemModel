@@ -1,4 +1,4 @@
 package com.epsm.electricPowerSystemModel.model.dispatch;
 
-public class CreationParameters {
+public abstract class CreationParameters {
 }

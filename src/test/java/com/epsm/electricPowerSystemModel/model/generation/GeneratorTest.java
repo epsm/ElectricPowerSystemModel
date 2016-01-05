@@ -74,7 +74,7 @@ public class GeneratorTest{
 	
 	@Test
 	public void exceptionInConstructorIfSimulationIsNull(){
-		expectedEx.expect(GenerationException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("Generator constructor: simulation must not be null.");
 	    
 	    new Generator(null, 1);

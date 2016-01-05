@@ -71,7 +71,7 @@ public class MessageInclusionsContainer<E extends MessageInclusion>{
 		if(inclusion == null){
 			String message = "MessageInclusionsContainer addInclusion(...): inclusion can't "
 					+ "be null.";
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}
 		
 		int inclusionNumber = inclusion.getInclusionNumber();

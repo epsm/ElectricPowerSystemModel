@@ -116,7 +116,7 @@ public class PowerStationTest{
 	
 	@Test
 	public void exceptionIfTryToAddNullInsteadGenerator(){
-		expectedEx.expect(GenerationException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("Generator must not be null.");
 		
 		station.addGenerator(null);

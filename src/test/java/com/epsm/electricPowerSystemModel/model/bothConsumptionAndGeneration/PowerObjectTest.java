@@ -9,7 +9,6 @@ import org.junit.rules.ExpectedException;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
@@ -34,7 +33,7 @@ public class PowerObjectTest{
 
 	@Test
 	public void exceptionInConstructorIfSimulationIsNull(){
-		expectedEx.expect(DispatchingException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("PowerObject constructor: simulation can't be null.");
 	
 	    new AbstractImpl(null, timeService, dispatcher, parameters);
@@ -42,7 +41,7 @@ public class PowerObjectTest{
 	
 	@Test
 	public void exceptionInConstructorIfTimeServiseIsNull(){
-		expectedEx.expect(DispatchingException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("PowerObject constructor: timeService can't be null.");
 	
 	    new AbstractImpl(simulation, null, dispatcher, parameters);
@@ -50,7 +49,7 @@ public class PowerObjectTest{
 	
 	@Test
 	public void exceptionInConstructorIfDispatcherIsNull(){
-		expectedEx.expect(DispatchingException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("PowerObject constructor: dispatcher can't be null.");
 	
 	    new AbstractImpl(simulation, timeService, null, parameters);
@@ -58,7 +57,7 @@ public class PowerObjectTest{
 	
 	@Test
 	public void exceptionInConstructorIfParametersIsNull(){
-		expectedEx.expect(DispatchingException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("PowerObject constructor: parameters can't be null.");
 	
 	    new AbstractImpl(simulation, timeService, dispatcher, null);

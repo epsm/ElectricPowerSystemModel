@@ -99,7 +99,7 @@ public class MessageInclusionsContainerTest {
 	
 	@Test
 	public void exceptionIfTryToAddNullInclusion(){
-		expectedEx.expect(DispatchingException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("MessageInclusionsContainer addInclusion(...): inclusion "
 	    		+ "can't be null.");
 	    

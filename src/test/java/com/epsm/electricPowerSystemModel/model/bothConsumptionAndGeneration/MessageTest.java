@@ -7,8 +7,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
-
 public class MessageTest {
 	
 	@Rule
@@ -16,7 +14,7 @@ public class MessageTest {
 	
 	@Test
 	public void exceptionInConstructorIfRealTimeStampIsNull(){
-		expectedEx.expect(DispatchingException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("Message constructor: realTimeStamp can't be null.");
 	    
 	    new MessageImpl(0, null, LocalTime.MIN);
@@ -24,7 +22,7 @@ public class MessageTest {
 	
 	@Test
 	public void exceptionInConstructorIfSimulationTimeStamppIsNull(){
-		expectedEx.expect(DispatchingException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("Message constructor: simulationTimeStamp can't be null.");
 	    
 	    new MessageImpl(0, LocalDateTime.MIN, null);

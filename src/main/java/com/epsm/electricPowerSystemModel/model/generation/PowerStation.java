@@ -108,7 +108,7 @@ public final class PowerStation extends PowerObject{
 	private void verifyIsGeneratorNotNull(){
 		if(generatorToAdd == null){
 			String message = "Generator must not be null.";
-			throw new GenerationException(message);
+			throw new IllegalArgumentException(message);
 		}
 	}
 	

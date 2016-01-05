@@ -24,17 +24,31 @@ public class PowerObjectFactory {
 			ElectricPowerSystemSimulation simulation, TimeService timeService,
 			Dispatcher dispatcher) {
 		
+		if(powerSystemObjects == null){
+			String message = "PowerObjectFactory constructor: powerSystemObjects can't be null.";
+			throw new IllegalArgumentException(message);
+		}else if(simulation == null){
+			String message = "PowerObjectFactory constructor: simulation can't be null.";
+			throw new IllegalArgumentException(message);
+		}else if(timeService == null){
+			String message = "PowerObjectFactory constructor: timeService can't be null.";
+			throw new IllegalArgumentException(message);
+		}else if(dispatcher == null){
+			String message = "PowerObjectFactory constructor: dispatcher can't be null.";
+			throw new IllegalArgumentException(message);
+		}
+		
 		this.powerSystemObjects = powerSystemObjects;
-		this.powerStationFactory = new PowerStationFactoryStub(
+		powerStationFactory = new PowerStationFactoryStub(
 				simulation, timeService, dispatcher);
-		this.shockConsumerFactory = new ShockLoadConsumerFactoryStub(
+		shockConsumerFactory = new ShockLoadConsumerFactoryStub(
 				simulation, timeService, dispatcher);
-		this.scheduledConsumerFactory = new ScheduledLoadConsumerFactoryStub(
+		scheduledConsumerFactory = new ScheduledLoadConsumerFactoryStub(
 				simulation, timeService, dispatcher);
 		idSource = new AtomicLong();
 	}
 
-	public void build(CreationParameters parameters){
+	public void create(CreationParameters parameters){
 		if(parameters instanceof PowerStationCreationParametersStub){
 			PowerObject object = powerStationFactory.createPowerStation(getId(),
 					(PowerStationCreationParametersStub) parameters);
@@ -48,7 +62,7 @@ public class PowerObjectFactory {
 					(ScheduledLoadConsumerCreationParametersStub) parameters);
 			addPowerObjectToSimulation(object);
 		}else{
-			String message = String.format("PowerObjectFactory: {} is unsupported.", 
+			String message = String.format("PowerObjectFactory: %s is unsupported.", 
 					parameters.getClass().getSimpleName());
 			throw new IllegalArgumentException(message);
 		}

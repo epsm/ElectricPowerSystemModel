@@ -63,7 +63,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	 * system will be sustainable, it will be possible to get system frequency.
 	 */
 	private void calculateFrequencyInPowerSystem(float powerBalance){
-		frequencyInPowerSystem = frequencyInPowerSystem + ((powerBalance) / TIME_CONASTNT)
+		frequencyInPowerSystem = frequencyInPowerSystem + (powerBalance / TIME_CONASTNT)
 				* ((float)SIMULATION_STEP_IN_NANOS / GlobalConstants.NANOS_IN_SECOND);
 	}
 	
@@ -114,7 +114,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	
 	@Override
 	public void createPowerObject(CreationParameters parameters) {
-		powerObjectFactory.build(parameters);
+		powerObjectFactory.create(parameters);
 	}
 	
 	/*

@@ -33,7 +33,7 @@ public class GeneratorGenerationSchedule extends MessageInclusion{
 	public String toString() {
 		stringBuilder.setLength(0);
 		stringBuilder.append("Generator#");
-		stringBuilder.append(inclusionNumber);
+		stringBuilder.append(getInclusionNumber());
 		stringBuilder.append(", turnedOn: ");
 		stringBuilder.append(isGeneratorTurnedOn());
 		stringBuilder.append(", astatic regulation: ");

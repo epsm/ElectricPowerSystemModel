@@ -29,7 +29,7 @@ public class AbstractPowerObjectFactoryTest {
 
 	@Test
 	public void exceptionInConstructorIfSimulationIsNull(){
-		expectedEx.expect(DispatchingException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("AbstractPowerObjectFactory constructor: simulation can't be null.");
 	
 	    new AbstractImpl(null, timeService, dispatcher);
@@ -37,7 +37,7 @@ public class AbstractPowerObjectFactoryTest {
 	
 	@Test
 	public void exceptionInConstructorIfTimeServiseIsNull(){
-		expectedEx.expect(DispatchingException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("AbstractPowerObjectFactory constructor: timeService can't be null.");
 	
 	    new AbstractImpl(simulation, null, dispatcher);
@@ -45,7 +45,7 @@ public class AbstractPowerObjectFactoryTest {
 	
 	@Test
 	public void exceptionInConstructorIfDispatcherIsNull(){
-		expectedEx.expect(DispatchingException.class);
+		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("AbstractPowerObjectFactory constructor: dispatcher can't be null.");
 	
 	    new AbstractImpl(simulation, timeService, null);

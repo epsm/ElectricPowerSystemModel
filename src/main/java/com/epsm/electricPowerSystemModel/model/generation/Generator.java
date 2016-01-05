@@ -16,7 +16,8 @@ public class Generator{
 
 	public Generator(ElectricPowerSystemSimulation simulation, int number){
 		if(simulation == null){
-			throw new GenerationException("Generator constructor: simulation must not be null.");
+			throw new IllegalArgumentException("Generator constructor: simulation must not be"
+					+ " null.");
 		}
 		
 		this.number = number;

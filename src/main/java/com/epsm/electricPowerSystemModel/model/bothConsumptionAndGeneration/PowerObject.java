@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
@@ -26,16 +25,16 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 		
 		if(simulation == null){
 			String message = "PowerObject constructor: simulation can't be null.";
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}else if(timeService == null){
 			String message = "PowerObject constructor: timeService can't be null.";
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}else if(dispatcher == null){
 			String message = "PowerObject constructor: dispatcher can't be null.";
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}else if(parameters == null){
 			String message = "PowerObject constructor: parameters can't be null.";
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}
 		
 		this.simulation = simulation;

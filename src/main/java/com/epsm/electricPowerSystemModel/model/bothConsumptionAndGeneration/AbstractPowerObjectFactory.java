@@ -15,13 +15,13 @@ public abstract class AbstractPowerObjectFactory {
 		
 		if(simulation == null){
 			String message = "AbstractPowerObjectFactory constructor: simulation can't be null.";
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}else if(timeService == null){
 			String message = "AbstractPowerObjectFactory constructor: timeService can't be null.";
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}else if(dispatcher == null){
 			String message = "AbstractPowerObjectFactory constructor: dispatcher can't be null.";
-			throw new DispatchingException(message);
+			throw new IllegalArgumentException(message);
 		}
 		
 		this.simulation = simulation;

@@ -7,10 +7,10 @@ import com.epsm.electricPowerSystemModel.model.dispatch.CreationParameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
 
 public interface ElectricPowerSystemSimulation{
-	public void calculateNextStep();
-	public float getFrequencyInPowerSystem();
-	public LocalTime getTimeInSimulation();
-	public void createPowerObject(CreationParameters parameters);
-	public Map<Long, DispatchingObject> getDispatchingObjects();
-	public Map<Long, RealTimeOperations> getRealTimeDependingObjects();
+	void calculateNextStep();
+	float getFrequencyInPowerSystem();
+	LocalTime getTimeInSimulation();
+	void createPowerObject(CreationParameters parameters);
+	Map<Long, DispatchingObject> getDispatchingObjects();
+	Map<Long, RealTimeOperations> getRealTimeDependingObjects();
 }
