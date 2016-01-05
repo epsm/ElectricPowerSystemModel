@@ -9,3 +9,4 @@ logs/
 .project
 *.class
 *.war
+.gitignore~
