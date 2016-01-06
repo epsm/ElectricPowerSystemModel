@@ -35,5 +35,4 @@ public class PowerStationParametersJsonSerializer extends JsonSerializer<PowerSt
 		jGenerator.writeEndObject();
 		jGenerator.writeEndObject();
 	}
-	
 }

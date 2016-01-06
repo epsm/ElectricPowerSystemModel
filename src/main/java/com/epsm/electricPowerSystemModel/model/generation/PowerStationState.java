@@ -6,7 +6,13 @@ import java.util.Set;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
+import com.epsm.electricPowerSystemModel.util.PowerStationStateJsonDeserializer;
+import com.epsm.electricPowerSystemModel.util.PowerStationStateJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = PowerStationStateJsonSerializer.class)
+@JsonDeserialize(using = PowerStationStateJsonDeserializer.class)
 public class PowerStationState extends State{
 	private MessageInclusionsContainer<GeneratorState> states;
 	
@@ -34,6 +40,10 @@ public class PowerStationState extends State{
 	
 	public Set<Integer> getGeneratorsNumbers(){
 		return states.getInclusionsNumbers();
+	}
+	
+	public int getQuantityOfGenerators(){
+		return states.getQuantityOfInclusions();
 	}
 
 	@Override

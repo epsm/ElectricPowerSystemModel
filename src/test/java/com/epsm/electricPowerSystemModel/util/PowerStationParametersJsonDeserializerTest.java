@@ -17,50 +17,71 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PowerStationParametersJsonDeserializerTest {
 	private ObjectMapper mapper;
 	private PowerStationParameters stationParameters;
-	private GeneratorParameters generator_1;
-	private GeneratorParameters generator_2;
+	private GeneratorParameters firstGeneratorParameters;
+	private GeneratorParameters secondGeneratorParameters;
 	private String source;
 
 	@Before
 	public void setUp() throws JsonParseException, JsonMappingException, IOException{
 		mapper = new ObjectMapper();
-		source = 
-				"{\"powerObjectId\":995"
-				+ ",\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\""
-				+ ",\"simulationTimeStamp\":3723000000004,"
-				+ "\"generatorQuantity\":2,"
-				+ "\"generators\":{"
-				+ "\"1\":{\"nominalPowerInMW\":40.0,\"minimalTechnologyPower\":5.0,"
-				+ "\"generatorNumber\":1},"
-				+ "\"2\":{\"nominalPowerInMW\":100.0,\"minimalTechnologyPower\":25.0,"
-				+ "\"generatorNumber\":2}}}";
+		source = "{\"powerObjectId\":995"
+				 + ",\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\""
+				 + ",\"simulationTimeStamp\":3723000000004,"
+				 + "\"generatorQuantity\":2,"
+				 + "\"generators\":{"
+				 + "\"1\":{\"nominalPowerInMW\":40.0,\"minimalTechnologyPower\":5.0,"
+				 + "\"generatorNumber\":1},"
+				 + "\"2\":{\"nominalPowerInMW\":100.0,\"minimalTechnologyPower\":25.0,"
+				 + "\"generatorNumber\":2}}}";
 		
 		stationParameters = mapper.readValue(source, PowerStationParameters.class);
-		generator_1 = stationParameters.getGeneratorParameters(1);
-		generator_2 = stationParameters.getGeneratorParameters(2);
+		firstGeneratorParameters = stationParameters.getGeneratorParameters(1);
+		secondGeneratorParameters = stationParameters.getGeneratorParameters(2);
 	}
 
 	@Test
-	public void deserializedGeneralDataCorrect() throws IOException{
+	public void objectIdCorrect(){
 		Assert.assertEquals(995, stationParameters.getPowerObjectId());
-		Assert.assertNotNull(stationParameters.getGeneratorParameters(1));
-		Assert.assertNotNull(stationParameters.getGeneratorParameters(2));
+	}
+
+	@Test
+	public void realTimeStampCorrect(){
 		Assert.assertEquals(LocalDateTime.of(1, 2, 3, 4, 5, 6, 7), stationParameters
 				.getRealTimeStamp());
+	}
+	
+	@Test
+	public void simulationTimeStampCorrect(){
 		Assert.assertEquals(LocalTime.of(1, 2, 3, 4), stationParameters.getSimulationTimeStamp());
 	}
 	
 	@Test
-	public void deserializedDataForFirstGeneratorCorrect() throws IOException{
-		Assert.assertEquals(1, generator_1.getGeneratorNumber());
-		Assert.assertEquals(40, generator_1.getNominalPowerInMW(), 0);
-		Assert.assertEquals(5, generator_1.getMinimalTechnologyPower(), 0);
+	public void firstGeneratorNumberCorrect(){
+		Assert.assertEquals(1, firstGeneratorParameters.getGeneratorNumber());
 	}
 	
 	@Test
-	public void deserializedDataForSecondGeneratorCorrect() throws IOException{
-		Assert.assertEquals(2, generator_2.getGeneratorNumber());
-		Assert.assertEquals(100, generator_2.getNominalPowerInMW(), 0);
-		Assert.assertEquals(25, generator_2.getMinimalTechnologyPower(), 0);
+	public void firstGeneratorNominalPowerCorrect(){
+		Assert.assertEquals(40, firstGeneratorParameters.getNominalPowerInMW(), 0);
+	}
+	
+	@Test
+	public void firstGeneratorMinimalTechnologyPowerCorrect(){
+		Assert.assertEquals(5, firstGeneratorParameters.getMinimalTechnologyPower(), 0);
+	}
+	
+	@Test
+	public void secondGeneratorNumberCorrect(){
+		Assert.assertEquals(2, secondGeneratorParameters.getGeneratorNumber());
+	}
+	
+	@Test
+	public void secondGeneratorNominalPowerCorrect(){
+		Assert.assertEquals(100, secondGeneratorParameters.getNominalPowerInMW(), 0);
+	}
+	
+	@Test
+	public void secondGeneratorMinimalTechnologyPowerCorrect(){
+		Assert.assertEquals(25, secondGeneratorParameters.getMinimalTechnologyPower(), 0);
 	}
 }
