@@ -1,7 +1,6 @@
 package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
 
 public abstract class Message{

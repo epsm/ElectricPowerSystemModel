@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
-import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 

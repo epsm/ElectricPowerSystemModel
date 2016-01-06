@@ -8,8 +8,8 @@ import com.epsm.electricPowerSystemModel.model.dispatch.State;
 public class ConsumerState extends State{
 	private float load;
 	
-	public ConsumerState(long powerObjectId, LocalDateTime realTimeStamp, LocalTime simulationTimeStamp, 
-			float load) {
+	public ConsumerState(long powerObjectId, LocalDateTime realTimeStamp,
+			LocalTime simulationTimeStamp, float load) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		this.load = load;
