@@ -18,7 +18,7 @@ public abstract class MessageInclusion implements Comparable<MessageInclusion>{
 		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 	}
 	
-	public int getInclusionNumber() {
+	protected int getInclusionNumber() {
 		return inclusionNumber;
 	}
 	

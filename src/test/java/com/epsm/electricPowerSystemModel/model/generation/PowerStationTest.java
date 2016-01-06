@@ -162,11 +162,11 @@ public class PowerStationTest{
 		for(Integer number: stationState.getGeneratorsNumbers()){
 			GeneratorState generatorStateReport = stationState.getGeneratorState(number);
 			
-			if(generatorStateReport.getInclusionNumber() == 2){
-				secondtGeneratorNumber = generatorStateReport.getInclusionNumber();
+			if(generatorStateReport.getGeneratorNumber() == 2){
+				secondtGeneratorNumber = generatorStateReport.getGeneratorNumber();
 				secondGeneratorGeneration = generatorStateReport.getGenerationInWM();
-			}else if(generatorStateReport.getInclusionNumber() == 3){
-				thirdGeneratorNumber = generatorStateReport.getInclusionNumber();
+			}else if(generatorStateReport.getGeneratorNumber() == 3){
+				thirdGeneratorNumber = generatorStateReport.getGeneratorNumber();
 				thirdGeneratorGeneration = generatorStateReport.getGenerationInWM();
 			}
 		}

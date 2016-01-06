@@ -6,12 +6,15 @@ import java.util.Set;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
+import com.epsm.electricPowerSystemModel.util.PowerStationParametersJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = PowerStationParametersJsonSerializer.class, as = PowerStationParameters.class )
 public class PowerStationParameters extends Parameters{
 	private MessageInclusionsContainer<GeneratorParameters> generatorParameters;
 	
 	public PowerStationParameters(long powerObjectId, LocalDateTime realTimeStamp,
-			LocalTime simulationTimeStamp,	int quantityOfGeneratorParameters) {
+			LocalTime simulationTimeStamp, int quantityOfGeneratorParameters) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		generatorParameters = new MessageInclusionsContainer<GeneratorParameters>(

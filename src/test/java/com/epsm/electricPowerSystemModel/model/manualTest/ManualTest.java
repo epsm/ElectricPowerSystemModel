@@ -1,4 +1,4 @@
-package com.epsm.electricPowerSystemModel.model;
+package com.epsm.electricPowerSystemModel.model.manualTest;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;

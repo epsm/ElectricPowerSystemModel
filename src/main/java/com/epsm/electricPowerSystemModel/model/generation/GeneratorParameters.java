@@ -13,6 +13,10 @@ public class GeneratorParameters extends MessageInclusion{
 	private float nominalPowerInMW;
 	private float minimalTechnologyPower;
 
+	public int getGeneratorNumber(){
+		return getInclusionNumber();
+	}
+	
 	public float getNominalPowerInMW() {
 		return nominalPowerInMW;
 	}

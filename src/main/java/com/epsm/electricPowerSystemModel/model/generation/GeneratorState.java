@@ -10,6 +10,10 @@ public class GeneratorState extends MessageInclusion{
 		this.generationInWM = generationInWM;
 	}
 
+	public int getGeneratorNumber(){
+		return getInclusionNumber();
+	}
+	
 	public float getGenerationInWM() {
 		return generationInWM;
 	}
