@@ -20,16 +20,19 @@ public class PowerStationParametersJsonSerializer extends JsonSerializer<PowerSt
 		
 		jGenerator.writeStartObject();
 		jGenerator.writeNumberField("powerObjectId", parameters.getPowerObjectId());
-		//in string because LocalDateTime fields serializes in random order that brakes test.
+		//toString because LocalDateTime fields serializes in random order that brakes test
 		jGenerator.writeStringField("realTimeStamp", parameters.getRealTimeStamp().toString());
-		jGenerator.writeObjectField("simulationTimeStamp", parameters.getSimulationTimeStamp());
+		jGenerator.writeNumberField("simulationTimeStamp", parameters.getSimulationTimeStamp()
+				.toNanoOfDay());
 		jGenerator.writeNumberField("generatorQuantity", generatorQuantity);
+		jGenerator.writeObjectFieldStart("generators");
 		
-		for(int generatorNumber: parameters.getGeneratorParametersNumbers()){
+		for(Integer generatorNumber: parameters.getGeneratorParametersNumbers()){
 			generatorParameters = parameters.getGeneratorParameters(generatorNumber);
-			jGenerator.writeObjectField("generatorParameters", generatorParameters);
+			jGenerator.writeObjectField(generatorNumber.toString(), generatorParameters);
 		}
 		
+		jGenerator.writeEndObject();
 		jGenerator.writeEndObject();
 	}
 	

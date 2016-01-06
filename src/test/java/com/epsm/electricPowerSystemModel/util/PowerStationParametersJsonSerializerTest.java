@@ -20,9 +20,9 @@ public class PowerStationParametersJsonSerializerTest {
 	public void setUp(){
 		mapper = new ObjectMapper();
 		
-		LocalDateTime realTimeStamp = LocalDateTime.MIN;
-		LocalTime simulationTimeStamp = LocalTime.MIN;
-		parameters = new PowerStationParameters(1, realTimeStamp, simulationTimeStamp, 2);
+		LocalDateTime realTimeStamp = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
+		LocalTime simulationTimeStamp = LocalTime.of(1, 2, 3, 4);
+		parameters = new PowerStationParameters(995, realTimeStamp, simulationTimeStamp, 2);
 		GeneratorParameters parameters_1 = new GeneratorParameters(1, 40, 5);
 		GeneratorParameters parameters_2 = new GeneratorParameters(2, 100, 25);
 			
@@ -32,17 +32,18 @@ public class PowerStationParametersJsonSerializerTest {
 	
 	@Test
 	public void serializesCorrect() throws JsonProcessingException{
-		String expected = "{\"powerObjectId\":1,\"realTimeStamp\":"
-			+ "\"-999999999-01-01T00:00\","
-			+ "\"simulationTimeStamp\":{\"hour\":0,\"minute\":0,\"second\":0,\"nano\":0},"
-			+ "\"generatorQuantity\":2,"
-			+ "\"generatorParameters\":"
-			+ "{\"nominalPowerInMW\":40.0,\"minimalTechnologyPower\":5.0,\"generatorNumber\":1},"
-			+ "\"generatorParameters\":"
-			+ "{\"nominalPowerInMW\":100.0,\"minimalTechnologyPower\":25.0,\"generatorNumber\":2}}";
-		
+		String expected = 
+				"{\"powerObjectId\":995"
+				+ ",\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\""
+				+ ",\"simulationTimeStamp\":3723000000004,"
+				+ "\"generatorQuantity\":2,"
+				+ "\"generators\":{"
+				+ "\"1\":{\"nominalPowerInMW\":40.0,\"minimalTechnologyPower\":5.0,"
+				+ "\"generatorNumber\":1},"
+				+ "\"2\":{\"nominalPowerInMW\":100.0,\"minimalTechnologyPower\":25.0,"
+				+ "\"generatorNumber\":2}}}";
 		String serialized = mapper.writeValueAsString(parameters);
-		System.out.println(serialized);
+	
 		Assert.assertEquals(expected, serialized);
 	}
 }
