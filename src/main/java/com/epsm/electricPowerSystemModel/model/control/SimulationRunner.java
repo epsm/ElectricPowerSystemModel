@@ -16,12 +16,12 @@ public class SimulationRunner{
 	private final int PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS = 500;
 	
 	public void runSimulation(ElectricPowerSystemSimulation simulation){
-		this.simulation = simulation;
-		
 		if(simulation == null){
 			logger.error("SimulationRunner: attempt to run null model.");
 			throw new IllegalArgumentException("SimulationRunner: simulation must not be null.");
 		}
+		
+		this.simulation = simulation;
 		
 		runSimulation();
 		
@@ -30,9 +30,9 @@ public class SimulationRunner{
 	
 	private void runSimulation(){
 		Runnable simulationToRun = new SimulationTimeRunner();
-		Runnable realTimeOperaations = new RealTimeRunner();
+		Runnable realTimeOperations = new RealTimeRunner();
 		Thread runningSimulation = new Thread(simulationToRun);
-		Thread runningRealTime = new Thread(realTimeOperaations);
+		Thread runningRealTime = new Thread(realTimeOperations);
 		
 		runningSimulation.start();
 		runningRealTime.start();
