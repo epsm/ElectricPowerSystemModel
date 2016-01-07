@@ -13,7 +13,6 @@ import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
-import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.GeneratorGenerationSchedule;
@@ -22,7 +21,7 @@ import com.epsm.electricPowerSystemModel.model.generation.PowerStationGeneration
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationParameters;
 
 public class ManualTest {
-	private ElectricPowerSystemSimulation simulation;
+	private ElectricPowerSystemSimulationImpl simulation;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private SimulationRunner runner;

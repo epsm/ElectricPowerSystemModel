@@ -17,6 +17,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingObject;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{
+	
 	private Map<Long, PowerObject> objects;
 	private float frequencyInPowerSystem;
 	private LocalTime currentTimeInSimulation;
