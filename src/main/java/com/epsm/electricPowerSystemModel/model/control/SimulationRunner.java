@@ -25,7 +25,7 @@ public class SimulationRunner{
 		
 		runSimulation();
 		
-		logger.info("Simulation was created and run.");
+		logger.info("Simulation run.");
 	}
 	
 	private void runSimulation(){
