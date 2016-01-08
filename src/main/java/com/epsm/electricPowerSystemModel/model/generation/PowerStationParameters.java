@@ -42,6 +42,6 @@ public class PowerStationParameters extends Parameters{
 	
 	@Override
 	public String toString() {
-		return "PowerStationParameters toString() stub";
+		return String.format("PowerStationParameters#%d toString() stub", powerObjectId);
 	}
 }
