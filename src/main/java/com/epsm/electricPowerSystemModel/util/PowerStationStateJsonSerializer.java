@@ -2,6 +2,10 @@ package com.epsm.electricPowerSystemModel.util;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
 import com.epsm.electricPowerSystemModel.model.generation.GeneratorState;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationState;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -11,6 +15,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 public class PowerStationStateJsonSerializer extends JsonSerializer<PowerStationState>{
 	private GeneratorState generatorState;
 	private int generatorQuantity;
+	private Logger logger = LoggerFactory.getLogger(PowerStationStateJsonSerializer.class);
 	
 	@Override
 	public void serialize(PowerStationState state, JsonGenerator jGenerator,
@@ -35,5 +40,7 @@ public class PowerStationStateJsonSerializer extends JsonSerializer<PowerStation
 		
 		jGenerator.writeEndObject();
 		jGenerator.writeEndObject();
+		
+		logger.debug("{} serialized to JSON.", state);
 	}
 }

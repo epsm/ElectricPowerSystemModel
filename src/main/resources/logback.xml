@@ -30,7 +30,7 @@
 	
 	<appender name="System" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-11([%thread]) %-30(%logger{40}) - %msg%n</Pattern>
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-8([%thread]) %-44(%logger{44}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">

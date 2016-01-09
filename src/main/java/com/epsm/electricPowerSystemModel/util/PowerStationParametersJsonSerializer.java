@@ -2,6 +2,9 @@ package com.epsm.electricPowerSystemModel.util;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.epsm.electricPowerSystemModel.model.generation.GeneratorParameters;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationParameters;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -11,6 +14,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 public class PowerStationParametersJsonSerializer extends JsonSerializer<PowerStationParameters>{
 	private int generatorQuantity;
 	private GeneratorParameters generatorParameters;
+	private Logger logger = LoggerFactory.getLogger(PowerStationParametersJsonSerializer.class);
 	
 	@Override
 	public void serialize(PowerStationParameters parameters, JsonGenerator jGenerator,
@@ -34,5 +38,7 @@ public class PowerStationParametersJsonSerializer extends JsonSerializer<PowerSt
 		
 		jGenerator.writeEndObject();
 		jGenerator.writeEndObject();
+		
+		logger.debug("{} serialized to JSON.", parameters);
 	}
 }

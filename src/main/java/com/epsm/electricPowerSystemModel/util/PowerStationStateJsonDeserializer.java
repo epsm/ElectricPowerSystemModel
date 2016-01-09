@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.epsm.electricPowerSystemModel.model.generation.GeneratorState;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationState;
 import com.fasterxml.jackson.core.JsonParser;
@@ -29,6 +32,7 @@ public class PowerStationStateJsonDeserializer extends JsonDeserializer<PowerSta
 	private JsonNode generatorsNode;
 	private Iterator<JsonNode> iterator;
 	private JsonNode generatorNode;
+	private Logger logger = LoggerFactory.getLogger(PowerStationStateJsonDeserializer.class);
 	
 	@Override
 	public PowerStationState deserialize(JsonParser jParser, DeserializationContext ctxt)
@@ -40,6 +44,8 @@ public class PowerStationStateJsonDeserializer extends JsonDeserializer<PowerSta
 		createPowerStationState();
 		getNodeForCreatingGeneratorsStates();
 		createGeneratorsStates();
+		
+		logger.debug("{} deserialized from JSON.", stationState);
 		
 		return stationState;
 	}
