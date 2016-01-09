@@ -9,7 +9,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.Command;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class ObjectConnectionManager{
@@ -100,13 +100,13 @@ public class ObjectConnectionManager{
 	
 	private boolean isConnectionWithDispatcherActive(){
 		return timeWhenRecievedLastCommand.plusSeconds(
-				GlobalConstants.MAX_PAUSE_BETWEEN_MESSAGES_FROM_DISPATCHER_IN_SECONDS)
+				Constants.CONNECTION_TIMEOUT_IN_SECONDS)
 				.isAfter(currentTime);
 	}
 	
 	private boolean isItTimeToSentMessage(){
 		return timeWhenSentLastMessage.plusSeconds(
-				GlobalConstants.PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECONDS)
+				Constants.PAUSE_BETWEEN_SENDING_MESSAGES_IN_SECONDS)
 				.isBefore(currentTime);
 	}
 	

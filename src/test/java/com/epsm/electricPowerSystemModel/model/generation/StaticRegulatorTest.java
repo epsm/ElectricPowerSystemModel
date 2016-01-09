@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 
 public class StaticRegulatorTest {
 	private ElectricPowerSystemSimulation simulation;
@@ -63,7 +63,7 @@ public class StaticRegulatorTest {
 	}
 	
 	private void prepareMockSimulationWithNormalFrequency(){
-		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
+		when(simulation.getFrequencyInPowerSystem()).thenReturn(Constants.STANDART_FREQUENCY);
 	}
 	
 	@Test 

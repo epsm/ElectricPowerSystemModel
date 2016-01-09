@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 
 public class AstaticRegulator {
 	private ElectricPowerSystemSimulation simulation;
@@ -39,13 +39,13 @@ public class AstaticRegulator {
 	}
 
 	private boolean isFrequencyInNonSensivityLimit(){
-		float deviation = Math.abs(currentFrequency - GlobalConstants.STANDART_FREQUENCY);
+		float deviation = Math.abs(currentFrequency - Constants.STANDART_FREQUENCY);
 		
 		return deviation <= ASTATIC_REGULATION_SENSIVITY;
 	}
 
 	private void adjustPowerAtRequiredFrequency(){
-		if(currentFrequency < GlobalConstants.STANDART_FREQUENCY){
+		if(currentFrequency < Constants.STANDART_FREQUENCY){
 			increasePowerAtRequiredFrequency();
 		}else{
 			decreasePowerAtRequiredFrequency();

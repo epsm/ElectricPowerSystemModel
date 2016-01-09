@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 
 public abstract class Message{
 	protected long powerObjectId;
@@ -26,7 +26,7 @@ public abstract class Message{
 		this.realTimeStamp = realTimeStamp;
 		this.simulationTimeStamp = simulationTimeStamp;
 		stringBuilder = new StringBuilder();
-		numberFormatter = new DecimalFormat("0000.000", GlobalConstants.SYMBOLS);
+		numberFormatter = new DecimalFormat("0000.000", Constants.SYMBOLS);
 		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 	}
 

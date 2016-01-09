@@ -29,7 +29,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 
 	public ElectricPowerSystemSimulationImpl(TimeService timeService, Dispatcher dispatcher) {
 		objects = new ConcurrentHashMap<Long, PowerObject>();
-		frequencyInPowerSystem = GlobalConstants.STANDART_FREQUENCY;
+		frequencyInPowerSystem = Constants.STANDART_FREQUENCY;
 		currentTimeInSimulation = LocalTime.NOON;
 		powerObjectFactory = new PowerObjectFactory(objects, this, timeService, dispatcher);
 		logger = LoggerFactory.getLogger(ElectricPowerSystemSimulationImpl.class);
@@ -65,7 +65,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	 */
 	private void calculateFrequencyInPowerSystem(float powerBalance){
 		frequencyInPowerSystem = frequencyInPowerSystem + (powerBalance / TIME_CONASTNT)
-				* ((float)SIMULATION_STEP_IN_NANOS / GlobalConstants.NANOS_IN_SECOND);
+				* ((float)SIMULATION_STEP_IN_NANOS / Constants.NANOS_IN_SECOND);
 	}
 	
 	private void changeTimeForStep(){
@@ -73,7 +73,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 
 	private boolean isFrequencyLowerThanNormal(){
-		float delta = Math.abs(GlobalConstants.STANDART_FREQUENCY - frequencyInPowerSystem);
+		float delta = Math.abs(Constants.STANDART_FREQUENCY - frequencyInPowerSystem);
 		
 		if(delta > ACCEPTABLE_FREQUENCY_DELTA){
 			return true;

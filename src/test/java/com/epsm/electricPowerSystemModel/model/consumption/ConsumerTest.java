@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 
 public class ConsumerTest {
 	private Consumer consumer;
@@ -33,7 +33,7 @@ public class ConsumerTest {
 	}
 	
 	private float calculateLoadCountingFrequency(float load, float frequency){
-		return (float)Math.pow((frequency / GlobalConstants.STANDART_FREQUENCY),
+		return (float)Math.pow((frequency / Constants.STANDART_FREQUENCY),
 				DEGREE_DEPENDENCY_ON_FREQUENCY) * load;
 	}
 }

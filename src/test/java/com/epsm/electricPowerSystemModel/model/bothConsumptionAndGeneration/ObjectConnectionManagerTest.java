@@ -31,7 +31,7 @@ import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationGenerationSchedule;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationState;
@@ -115,7 +115,7 @@ public class ObjectConnectionManagerTest{
 	
 	private void addToSystemTimeValueLessThanAcceptablePauseBetweenDispatcherMessages(){
 		when(timeService.getCurrentTime()).thenReturn(START_TIME.plusSeconds(
-				(long)(GlobalConstants.MAX_PAUSE_BETWEEN_MESSAGES_FROM_DISPATCHER_IN_SECONDS * 0.9)));
+				(long)(Constants.CONNECTION_TIMEOUT_IN_SECONDS * 0.9)));
 	}
 	
 	@Test
@@ -134,7 +134,7 @@ public class ObjectConnectionManagerTest{
 	
 	private void addToSystemTimeValueMoreThanPauseBetweenSendingMessages(){
 		when(timeService.getCurrentTime()).thenReturn(START_TIME.plusSeconds(
-			(GlobalConstants.PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECONDS + 1)));
+			(Constants.PAUSE_BETWEEN_SENDING_MESSAGES_IN_SECONDS + 1)));
 	}
 	
 	@Test
@@ -148,7 +148,7 @@ public class ObjectConnectionManagerTest{
 	
 	private void addToSystemTimeValueLessThanPauseBetweenSending(){
 		when(timeService.getCurrentTime()).thenReturn(START_TIME.plusSeconds((long)
-			(GlobalConstants.PAUSE_BETWEEN_SENDING_MESSAGES_TO_DISPATCHER_IN_SECONDS * 0.9)));
+			(Constants.PAUSE_BETWEEN_SENDING_MESSAGES_IN_SECONDS * 0.9)));
 	}
 	
 	@Test
@@ -162,7 +162,7 @@ public class ObjectConnectionManagerTest{
 	
 	private void addToSystemTimeValueMoreThanAcceptablePauseBetweenDispatcherMessages(){
 		when(timeService.getCurrentTime()).thenReturn(START_TIME.plusSeconds(
-			(GlobalConstants.MAX_PAUSE_BETWEEN_MESSAGES_FROM_DISPATCHER_IN_SECONDS * 2)));
+			(Constants.CONNECTION_TIMEOUT_IN_SECONDS * 2)));
 	}
 	
 	@Test

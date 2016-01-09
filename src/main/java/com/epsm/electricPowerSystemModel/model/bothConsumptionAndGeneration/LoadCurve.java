@@ -2,7 +2,7 @@ package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 
 import java.time.LocalTime;
 
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 
 public class LoadCurve{
@@ -52,7 +52,7 @@ public class LoadCurve{
 	}
 	
 	private float interpolateValuesWithinHour(){
-		return loadOnRequestedHour + (nanosFromStartOfRequestedHour / GlobalConstants.NANOS_IN_HOUR) *
+		return loadOnRequestedHour + (nanosFromStartOfRequestedHour / Constants.NANOS_IN_HOUR) *
 				(loadOnNextHour - loadOnRequestedHour);
 	}
 }

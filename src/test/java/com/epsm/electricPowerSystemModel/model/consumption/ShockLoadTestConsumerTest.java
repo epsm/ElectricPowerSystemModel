@@ -16,7 +16,7 @@ import org.junit.rules.ExpectedException;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class ShockLoadTestConsumerTest {
@@ -47,7 +47,7 @@ public class ShockLoadTestConsumerTest {
 		turnOffTime = null;
 		consumer = new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);
 		
-		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
+		when(simulation.getFrequencyInPowerSystem()).thenReturn(Constants.STANDART_FREQUENCY);
 		consumer.setMaxLoad(100f);
 		consumer.setMaxWorkDurationInSeconds(WORK_TIME);
 		consumer.setMaxPauseBetweenWorkInSeconds(PAUSE_TIME);

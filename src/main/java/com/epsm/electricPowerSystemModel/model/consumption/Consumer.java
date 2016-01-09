@@ -6,7 +6,7 @@ import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.Powe
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public abstract class Consumer extends PowerObject{
@@ -18,7 +18,7 @@ public abstract class Consumer extends PowerObject{
 	protected float degreeOnDependingOfFrequency;
 
 	protected float calculateLoadCountingFrequency(float load, float frequency){
-		return (float)Math.pow((frequency / GlobalConstants.STANDART_FREQUENCY),
+		return (float)Math.pow((frequency / Constants.STANDART_FREQUENCY),
 				degreeOnDependingOfFrequency) * load;
 	}
 

@@ -13,7 +13,7 @@ import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulationImpl;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class ScheduledLoadConsumerTest{
@@ -57,7 +57,7 @@ public class ScheduledLoadConsumerTest{
 		
 		@Override
 		public float getFrequencyInPowerSystem(){
-			return GlobalConstants.STANDART_FREQUENCY;
+			return Constants.STANDART_FREQUENCY;
 		}
 		
 		@Override

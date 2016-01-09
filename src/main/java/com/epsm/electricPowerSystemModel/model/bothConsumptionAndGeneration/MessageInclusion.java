@@ -3,7 +3,7 @@ package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 
 public abstract class MessageInclusion implements Comparable<MessageInclusion>{
 	private int inclusionNumber;
@@ -14,7 +14,7 @@ public abstract class MessageInclusion implements Comparable<MessageInclusion>{
 	public MessageInclusion(int inclusionNumber) {
 		this.inclusionNumber = inclusionNumber;
 		stringBuilder = new StringBuilder();
-		numberFormatter = new DecimalFormat("0000.000", GlobalConstants.SYMBOLS);
+		numberFormatter = new DecimalFormat("0000.000", Constants.SYMBOLS);
 		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 	}
 	

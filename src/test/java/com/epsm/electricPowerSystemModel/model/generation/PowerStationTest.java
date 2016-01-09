@@ -15,7 +15,7 @@ import org.junit.rules.ExpectedException;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.Dispatcher;
 import com.epsm.electricPowerSystemModel.model.generalModel.ElectricPowerSystemSimulation;
-import com.epsm.electricPowerSystemModel.model.generalModel.GlobalConstants;
+import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 import com.epsm.electricPowerSystemModel.model.generalModel.TimeService;
 
 public class PowerStationTest{
@@ -46,7 +46,7 @@ public class PowerStationTest{
 		PowerStationParameters parameters
 				= new PowerStationParameters(POWER_STATION_ID, LocalDateTime.MIN, LocalTime.MIN, 1);
 		simulation = mock(ElectricPowerSystemSimulation.class);
-		when(simulation.getFrequencyInPowerSystem()).thenReturn(GlobalConstants.STANDART_FREQUENCY);
+		when(simulation.getFrequencyInPowerSystem()).thenReturn(Constants.STANDART_FREQUENCY);
 		when(simulation.getTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 		
 		timeService = mock(TimeService.class);
