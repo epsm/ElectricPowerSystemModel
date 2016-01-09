@@ -6,34 +6,49 @@
 		</encoder>
 	</appender>
 
-	<appender name="Model" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="Application_model" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-12([%thread]) %-48(%logger{48}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>/home/anonimous/programming/projects/current/ElectricPowerSystemModel/logs/Model.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<fileNamePattern>/home/anonimous/programming/projects/current/ElectricPowerSystemModel/logs/Application_model.%d{dd-MM-yyy}.log.zip</fileNamePattern>
       		<maxHistory>7</maxHistory>
     	</rollingPolicy>
 	</appender>
 	
-	<appender name="InteractionWithDispatcher" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="Application_dispatcher" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-11([%thread]) %-30(%logger{40}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>/home/anonimous/programming/projects/current/ElectricPowerSystemModel/logs/InteractionWithDispatcher.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<fileNamePattern>/home/anonimous/programming/projects/current/ElectricPowerSystemModel/logs/Application_dispatcher.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<maxHistory>7</maxHistory>
+    	</rollingPolicy>
+	</appender>
+	
+	<appender name="System" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-11([%thread]) %-30(%logger{40}) - %msg%n</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      		<fileNamePattern>/home/anonimous/programming/projects/current/ElectricPowerSystemModel/logs/System.%d{dd-MM-yyy}.log.zip</fileNamePattern>
       		<maxHistory>7</maxHistory>
     	</rollingPolicy>
 	</appender>
 
 	<logger name="com.epsm.electricPowerSystemModel.model" level="INFO" additivity="false">
-		<appender-ref ref="Model" />
+		<appender-ref ref="Application_model" />
 	</logger>
 	
 	<logger name="com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.ObjectConnectionManager" level="INFO" additivity="false">
-		<appender-ref ref="InteractionWithDispatcher" />
+		<appender-ref ref="Application_dispatcher" />
+	</logger>
+	
+	<logger name="com.epsm.electricPowerSystemModel.util" level="INFO" additivity="false">
+		<appender-ref ref="System" />
 	</logger>
 
 	<root level="INFO">
