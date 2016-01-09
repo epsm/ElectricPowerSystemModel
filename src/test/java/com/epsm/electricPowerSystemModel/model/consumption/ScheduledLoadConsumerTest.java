@@ -30,7 +30,7 @@ public class ScheduledLoadConsumerTest{
 	private final float RANDOM_FLUCTUATION_IN_PERCENT = 10;
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		ConsumerParametersStub parameters = new ConsumerParametersStub(
 				CONSUMER_NUMBER, LocalDateTime.MIN, LocalTime.MIN); 
 		timeService = new TimeService();
@@ -121,7 +121,7 @@ public class ScheduledLoadConsumerTest{
 	private void compareValues(){
 		long actualConsumerNumber = state.getPowerObjectId();
 		LocalTime actualTime = state.getSimulationTimeStamp();
-		float actualLoad = state.getTotalLoad();
+		float actualLoad = state.getLoad();
 		
 		Assert.assertEquals(CONSUMER_NUMBER, actualConsumerNumber);
 		Assert.assertEquals(expectedTime, actualTime);

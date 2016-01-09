@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.PowerObject;
 import com.epsm.electricPowerSystemModel.model.generation.GeneratorState;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationState;
 import com.fasterxml.jackson.core.JsonGenerator;

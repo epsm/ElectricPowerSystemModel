@@ -26,7 +26,7 @@ public class AstaticRegulatorTest {
 	private final float GENERATOR_REGULATION_SPEED_IN_MW_PER_MINUTE = 2;
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		TimeService timeService = new TimeService();
 		Dispatcher dispatcher = mock(Dispatcher.class);
 		simulation = spy(new ElectricPowerSystemSimulationImpl(timeService, dispatcher));

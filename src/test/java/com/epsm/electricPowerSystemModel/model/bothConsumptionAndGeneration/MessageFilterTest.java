@@ -38,7 +38,7 @@ public class MessageFilterTest {
 	private PowerStationParameters powerStationParameters;
 	
 	@Before
-	public void init(){
+	public void setUp(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);

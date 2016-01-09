@@ -42,7 +42,7 @@ public class PowerStationTest{
 	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		PowerStationParameters parameters
 				= new PowerStationParameters(POWER_STATION_ID, LocalDateTime.MIN, LocalTime.MIN, 1);
 		simulation = mock(ElectricPowerSystemSimulation.class);

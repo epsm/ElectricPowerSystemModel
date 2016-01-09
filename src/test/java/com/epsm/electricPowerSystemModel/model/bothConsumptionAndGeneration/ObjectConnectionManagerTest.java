@@ -53,7 +53,7 @@ public class ObjectConnectionManagerTest{
 	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		State state = new ConsumerState(0, START_TIME, LocalTime.MIN, 0);
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentTime()).thenReturn(START_TIME);

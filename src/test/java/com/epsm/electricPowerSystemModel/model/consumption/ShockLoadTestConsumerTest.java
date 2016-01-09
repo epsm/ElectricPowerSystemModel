@@ -36,7 +36,7 @@ public class ShockLoadTestConsumerTest {
 	private final long CONSUMER_NUMBER = 664;
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		ConsumerParametersStub parameters 
 			= new ConsumerParametersStub(CONSUMER_NUMBER, LocalDateTime.MIN, LocalTime.MIN);
 		timeService = mock(TimeService.class);
@@ -193,7 +193,7 @@ public class ShockLoadTestConsumerTest {
 	private void compareValues(){
 		long actualConsumerNumber = state.getPowerObjectId();
 		LocalTime actualInState = state.getSimulationTimeStamp();
-		float actualLoad = state.getTotalLoad();
+		float actualLoad = state.getLoad();
 		
 		Assert.assertEquals(CONSUMER_NUMBER, actualConsumerNumber, 0);
 		Assert.assertEquals(expectedTime, actualInState);

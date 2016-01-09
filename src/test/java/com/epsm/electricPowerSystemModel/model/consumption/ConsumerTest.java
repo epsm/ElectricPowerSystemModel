@@ -17,7 +17,7 @@ public class ConsumerTest {
 	private final float LOAD = 100;
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		consumer = mock(Consumer.class);
 
 		when(consumer.calculateLoadCountingFrequency(anyFloat(), anyFloat())).thenCallRealMethod();

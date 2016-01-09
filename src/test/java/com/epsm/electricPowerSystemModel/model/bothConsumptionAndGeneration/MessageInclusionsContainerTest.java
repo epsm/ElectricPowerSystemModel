@@ -13,7 +13,7 @@ public class MessageInclusionsContainerTest {
 	private MessageInclusionImpl inclusion_2;
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		container = new MessageInclusionsContainer<MessageInclusionImpl>(2);
 		inclusion_1 = new MessageInclusionImpl(1);
 		inclusion_2 = new MessageInclusionImpl(2);

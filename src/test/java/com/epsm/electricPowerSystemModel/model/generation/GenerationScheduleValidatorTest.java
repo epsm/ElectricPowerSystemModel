@@ -26,7 +26,7 @@ public class GenerationScheduleValidatorTest {
 	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Before
-	public void Initialize(){
+	public void setUp(){
 		validator = new GenerationScheduleValidator();
 		stationSchedule 
 			= new PowerStationGenerationSchedule(1, LocalDateTime.MIN, LocalTime.MIN, 1);

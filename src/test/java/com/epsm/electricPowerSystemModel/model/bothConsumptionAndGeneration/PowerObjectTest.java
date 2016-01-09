@@ -24,7 +24,7 @@ public class PowerObjectTest{
 	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);

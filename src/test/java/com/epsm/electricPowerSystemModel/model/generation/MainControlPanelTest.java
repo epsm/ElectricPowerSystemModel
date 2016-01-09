@@ -27,7 +27,7 @@ public class MainControlPanelTest{
 	private Generator generator;
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		PowerStationParameters stationParameters 
 				= new PowerStationParameters(0, LocalDateTime.MIN, LocalTime.MIN, 1);
 		GeneratorParameters generatorParameters = new GeneratorParameters(1, 100, 0);

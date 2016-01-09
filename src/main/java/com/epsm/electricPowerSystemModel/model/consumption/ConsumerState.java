@@ -21,7 +21,7 @@ public class ConsumerState extends State{
 		this.load = load;
 	}
 
-	public float getTotalLoad() {
+	public float getLoad() {
 		return load;
 	}
 	

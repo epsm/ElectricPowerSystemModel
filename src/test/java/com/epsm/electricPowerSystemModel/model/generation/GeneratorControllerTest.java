@@ -34,7 +34,7 @@ public class GeneratorControllerTest {
 	private Dispatcher dispatcher;
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		stationSchedule = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 2);
 		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		

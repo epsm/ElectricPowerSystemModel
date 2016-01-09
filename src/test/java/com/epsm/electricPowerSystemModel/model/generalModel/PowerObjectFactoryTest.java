@@ -33,7 +33,7 @@ public class PowerObjectFactoryTest {
 	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		powerSystemObjects = new HashMap<Long, PowerObject>();
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);

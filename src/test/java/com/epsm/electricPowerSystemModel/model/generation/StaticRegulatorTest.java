@@ -17,7 +17,7 @@ public class StaticRegulatorTest {
 	private final float GENERATOR_POWER_AT_REQUAIRED_FREQUENCY = 100;
 	
 	@Before
-	public void init(){
+	public void setUp(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		generator = new Generator(simulation, 1);
 		staticRegulator = new StaticRegulator(simulation, generator);

@@ -29,7 +29,7 @@ public class ElectricPowerSystemSimulationImplTest {
 	private float currentFrequency;
 	
 	@Before
-	public void initialize(){
+	public void setUp(){
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
 		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher);
