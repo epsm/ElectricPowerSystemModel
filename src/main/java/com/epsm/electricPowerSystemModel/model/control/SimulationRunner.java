@@ -17,7 +17,7 @@ public class SimulationRunner{
 	
 	public void runSimulation(ElectricPowerSystemSimulation simulation){
 		if(simulation == null){
-			logger.error("SimulationRunner: attempt to run null model.");
+			logger.error("Attempt to run null model.");
 			throw new IllegalArgumentException("SimulationRunner: simulation must not be null.");
 		}
 		
@@ -47,6 +47,9 @@ public class SimulationRunner{
 			while(true){
 				simulation.calculateNextStep();
 				stepCounter++;
+				
+				logger.debug("Step performed.");
+				
 				pause();
 			}
 		}
@@ -77,7 +80,9 @@ public class SimulationRunner{
 						operations.doRealTimeDependingOperations();
 					}
 				}
-			
+				
+				logger.debug("Step performed.");
+				
 				pause();
 			}
 		}
