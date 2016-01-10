@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 
-public abstract class MessageInclusion implements Comparable<MessageInclusion>{
+public abstract class MessageInclusion{
 	private int inclusionNumber;
 	protected StringBuilder stringBuilder;
 	protected DecimalFormat numberFormatter;
@@ -20,45 +20,6 @@ public abstract class MessageInclusion implements Comparable<MessageInclusion>{
 	
 	protected int getInclusionNumber() {
 		return inclusionNumber;
-	}
-	
-	@Override
-	public final int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + inclusionNumber;
-		return result;
-	}
-
-	@Override
-	public final boolean equals(Object obj) {
-		if(this == obj){
-			return true;
-		}
-		if(obj == null){
-			return false;
-		}
-		if(!(obj instanceof MessageInclusion)){
-			return false;
-		}
-		
-		MessageInclusion other = (MessageInclusion) obj;
-		
-		if(inclusionNumber != other.inclusionNumber){
-			return false;
-		}
-		return true;
-	}
-	
-	@Override
-	public final int compareTo(MessageInclusion other) {
-		if(inclusionNumber - other.inclusionNumber < 0){
-			return -1;
-		}else if(inclusionNumber - other.inclusionNumber > 0){
-			return +1;
-		}
-		
-		return 0;
 	}
 	
 	public abstract String toString();

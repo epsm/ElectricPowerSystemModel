@@ -1,9 +1,9 @@
 package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import com.epsm.electricPowerSystemModel.model.dispatch.DispatchingException;
 
@@ -20,7 +20,7 @@ public class MessageInclusionsContainer<E extends MessageInclusion>{
 			throw new IllegalArgumentException(message);
 		}
 		
-		inclusions = new HashMap<Integer, E>();
+		inclusions = new TreeMap<Integer, E>();
 		expectedQuantityOfInclusions = quantityOfInclusions;
 		stringBuilder = new StringBuilder();
 	}
