@@ -6,7 +6,10 @@ import java.util.Set;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.electricPowerSystemModel.model.dispatch.Command;
+import com.epsm.electricPowerSystemModel.util.PowerStationGenerationScheduleJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = PowerStationGenerationScheduleJsonSerializer.class)
 public class PowerStationGenerationSchedule extends Command{
 	private MessageInclusionsContainer<GeneratorGenerationSchedule> schedules;
 	

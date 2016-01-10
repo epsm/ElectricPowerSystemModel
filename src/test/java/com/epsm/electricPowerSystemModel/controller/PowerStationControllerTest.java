@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 import com.epsm.electricPowerSystemModel.model.generation.GeneratorGenerationSchedule;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationGenerationSchedule;
 import com.epsm.electricPowerSystemModel.service.IncomingMessageService;
@@ -32,12 +33,6 @@ public class PowerStationControllerTest {
 	private ObjectMapper mapper;
 	private String objectInJsonString;
 	private Object objectToSerialize;
-	private final float[] GENERATION_BY_HOURS = new float[]{
-			55.15f,  50.61f,  47.36f,  44.11f, 	41.20f,  41.52f,
-			40.87f,  48.66f,  64.89f,  77.86f,  85.00f,  84.34f,
-			77.86f,  77.86f,  77.53f,  77.20f,  77.20f,  77.20f,
-			77.20f,  77.20f,  77.20f,  77.20f,  77.20f,  77.20f 
-	};
 	
 	@InjectMocks
 	private PowerStationController controller;
@@ -66,7 +61,7 @@ public class PowerStationControllerTest {
 	private void prepareScheduleAsJSONString() throws JsonProcessingException{
 		PowerStationGenerationSchedule generationSchedule = 
 				new PowerStationGenerationSchedule(1, LocalDateTime.MIN, LocalTime.MIN, 2);
-		LoadCurve generationCurve = new LoadCurve(GENERATION_BY_HOURS);
+		LoadCurve generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		GeneratorGenerationSchedule genrationSchedule_1 = new GeneratorGenerationSchedule(
 				1, true, true, null);
 		GeneratorGenerationSchedule genrationSchedule_2 = new GeneratorGenerationSchedule(

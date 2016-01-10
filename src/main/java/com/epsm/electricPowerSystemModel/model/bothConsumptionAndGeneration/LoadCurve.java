@@ -1,10 +1,14 @@
 package com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 
 import com.epsm.electricPowerSystemModel.model.generalModel.Constants;
 import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
+import com.epsm.electricPowerSystemModel.util.LoadCurveJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = LoadCurveJsonSerializer.class)
 public class LoadCurve{
 	private float[] loadByHoursInMW;
 	private LocalTime requestedTime;
@@ -54,5 +58,10 @@ public class LoadCurve{
 	private float interpolateValuesWithinHour(){
 		return loadOnRequestedHour + (nanosFromStartOfRequestedHour / Constants.NANOS_IN_HOUR) *
 				(loadOnNextHour - loadOnRequestedHour);
+	}
+	
+	public String toString(){
+		return String.format("LoadCurve: load in MW on day by hours, starts on 00.00: %s.",
+				Arrays.toString(loadByHoursInMW));
 	}
 }
