@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
 import com.epsm.electricPowerSystemModel.model.generation.GeneratorGenerationSchedule;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationGenerationSchedule;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -24,23 +26,26 @@ public class PowerStationGenerationScheduleJsonDeserializerTest {
 	@Before
 	public void setUp() throws JsonParseException, JsonMappingException, IOException{
 		mapper = new ObjectMapper();
-		source = "{\"powerObjectId\":995,"
-				+ "\"realTimeStamp\":\"-999999999-01-01T00:00\","
-				+ "\"simulationTimeStamp\":0,"
+		source = "{"
+				+ "\"powerObjectId\":995,"
+				+ "\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\","
+				+ "\"simulationTimeStamp\":3723000000004,"
 				+ "\"generatorQuantity\":2,"
 				+ "\"generators\":{"
-				+ "\"1\":"
-				+ "{\"generatorTurnedOn\":true,"
+				+ "\"1\":{"
+				+ "\"generatorTurnedOn\":true,"
 				+ "\"astaticRegulatorTurnedOn\":true,"
+				+ "\"generatorNumber\":1,"
 				+ "\"curve\":null},"
-				+ "\"2\":"
-				+ "{\"generatorTurnedOn\":true,"
+				+ "\"2\":{"
+				+ "\"generatorTurnedOn\":true,"
 				+ "\"astaticRegulatorTurnedOn\":false,"
+				+ "\"generatorNumber\":2,"
 				+ "\"curve\":{"
-				+ "\"loadByHoursInMW\":"
-				+ "[64.88,59.54,55.72,51.9,48.47,48.85,48.09,57.25,76.35,91.6,100.0,99.23,"
-				+ "91.6,91.6,91.22,90.83,90.83,90.83,90.83,90.83,90.83,90.83,90.83,83.96]"
-				+ "}}}}";
+				+ "\"loadByHoursInMW\":["
+				+ "64.88,59.54,55.72,51.9,48.47,48.85,48.09,57.25,76.35,91.6,100.0,99.23,"
+				+ "91.6,91.6,91.22,90.83,90.83,90.83,90.83,90.83,90.83,90.83,90.83,83.96"
+				+ "]}}}}";
 		
 		schedule = mapper.readValue(source, PowerStationGenerationSchedule.class);
 		firstGeneratorSchedule = schedule.getGeneratorSchedule(1);
@@ -69,36 +74,46 @@ public class PowerStationGenerationScheduleJsonDeserializerTest {
 	
 	@Test
 	public void firstGeneratorTunedOnCorrect(){
-		Assert.assertEquals(40, firstGeneratorSchedule.isGeneratorTurnedOn());
+		Assert.assertTrue(firstGeneratorSchedule.isGeneratorTurnedOn());
 	}
 	
 	@Test
 	public void firstGeneratorAstaticRegulationTurnedOnCorrect(){
-		Assert.assertEquals(5, firstGeneratorSchedule.isAstaticRegulatorTurnedOn());
+		Assert.assertTrue(firstGeneratorSchedule.isAstaticRegulatorTurnedOn());
 	}
 	
 	@Test
 	public void firstGeneratorGenerationCurveCorrect(){
-		Assert.assertEquals(5, firstGeneratorSchedule.isAstaticRegulatorTurnedOn());
+		Assert.assertNull(firstGeneratorSchedule.getCurve());
 	}
 	
 	@Test
 	public void secondGeneratorNumberCorrect(){
-		Assert.assertEquals(1, secondGeneratorSchedule.getGeneratorNumber());
+		Assert.assertEquals(2, secondGeneratorSchedule.getGeneratorNumber());
 	}
 	
 	@Test
 	public void secondGeneratorTunedOnCorrect(){
-		Assert.assertEquals(40, secondGeneratorSchedule.isGeneratorTurnedOn());
+		Assert.assertTrue(secondGeneratorSchedule.isGeneratorTurnedOn());
 	}
 	
 	@Test
 	public void secondGeneratorAstaticRegulationTurnedOnCorrect(){
-		Assert.assertEquals(5, secondGeneratorSchedule.isAstaticRegulatorTurnedOn());
+		Assert.assertFalse(secondGeneratorSchedule.isAstaticRegulatorTurnedOn());
 	}
 	
 	@Test
 	public void secondGeneratorGenerationCurveCorrect(){
-		Assert.assertEquals(5, secondGeneratorSchedule.isAstaticRegulatorTurnedOn());
+		LocalTime pointer = LocalTime.MIDNIGHT;
+		LoadCurve generationCurve = secondGeneratorSchedule.getCurve();
+		
+		do{
+			float actualGenerationOnThisHour = generationCurve.getPowerOnTimeInMW(pointer); 
+			float expectedGenerationOnThisHour = TestsConstants.LOAD_BY_HOURS[pointer.getHour()];
+			
+			
+			Assert.assertEquals(expectedGenerationOnThisHour, actualGenerationOnThisHour, 0);
+			pointer = pointer.plusHours(1);
+		}while(pointer.isAfter(LocalTime.MIDNIGHT));
 	}
 }

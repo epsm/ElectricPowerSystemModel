@@ -22,7 +22,9 @@ public class PowerStationGenerationScheduleJsonSerializerTest {
 	public void setUp(){
 		mapper = new ObjectMapper();
 		
-		schedule = new PowerStationGenerationSchedule(1, LocalDateTime.MIN, LocalTime.MIN, 2);
+		LocalDateTime realTimeStamp = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
+		LocalTime simulationTimeStamp = LocalTime.of(1, 2, 3, 4);
+		schedule = new PowerStationGenerationSchedule(1, realTimeStamp, simulationTimeStamp, 2);
 		LoadCurve generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		GeneratorGenerationSchedule genrationSchedule_1 = new GeneratorGenerationSchedule(
 				1, true, true, null);
@@ -35,23 +37,26 @@ public class PowerStationGenerationScheduleJsonSerializerTest {
 	@Test
 	public void serializesCorrect() throws JsonProcessingException{
 		String expected = 
-			"{\"powerObjectId\":1,"
-			+ "\"realTimeStamp\":\"-999999999-01-01T00:00\","
-			+ "\"simulationTimeStamp\":0,"
+			"{"
+			+ "\"powerObjectId\":1,"
+			+ "\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\","
+			+ "\"simulationTimeStamp\":3723000000004,"
 			+ "\"generatorQuantity\":2,"
 			+ "\"generators\":{"
-			+ "\"1\":"
-			+ "{\"generatorTurnedOn\":true,"
+			+ "\"1\":{"
+			+ "\"generatorTurnedOn\":true,"
 			+ "\"astaticRegulatorTurnedOn\":true,"
+			+ "\"generatorNumber\":1,"
 			+ "\"curve\":null},"
-			+ "\"2\":"
-			+ "{\"generatorTurnedOn\":true,"
+			+ "\"2\":{"
+			+ "\"generatorTurnedOn\":true,"
 			+ "\"astaticRegulatorTurnedOn\":false,"
+			+ "\"generatorNumber\":2,"
 			+ "\"curve\":{"
-			+ "\"loadByHoursInMW\":"
-			+ "[64.88,59.54,55.72,51.9,48.47,48.85,48.09,57.25,76.35,91.6,100.0,99.23,"
-			+ "91.6,91.6,91.22,90.83,90.83,90.83,90.83,90.83,90.83,90.83,90.83,83.96]"
-			+ "}}}}";
+			+ "\"loadByHoursInMW\":["
+			+ "64.88,59.54,55.72,51.9,48.47,48.85,48.09,57.25,76.35,91.6,100.0,99.23,"
+			+ "91.6,91.6,91.22,90.83,90.83,90.83,90.83,90.83,90.83,90.83,90.83,83.96"
+			+ "]}}}}";
 		
 		String serialized = mapper.writeValueAsString(schedule);
 		Assert.assertEquals(expected, serialized);
