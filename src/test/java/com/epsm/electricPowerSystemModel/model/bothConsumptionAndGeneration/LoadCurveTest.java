@@ -7,9 +7,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.LoadCurve;
-import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 import com.epsm.electricPowerSystemModel.model.constantsForTests.TestsConstants;
+import com.epsm.electricPowerSystemModel.model.generation.GenerationException;
 
 public class LoadCurveTest{
 	private float[] loadByHours = TestsConstants.LOAD_BY_HOURS;
@@ -78,7 +77,7 @@ public class LoadCurveTest{
 	@Test
 	public void constructorThrowsExceptionIfIncomingArrayIsNull(){
 		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("There is null instead incoming values.");
+	    expectedEx.expectMessage("LoadCurve constructor: loadByHoursInMW must not be null.");
 	    
 		new LoadCurve(null);
 	}

@@ -17,6 +17,10 @@ public class GeneratorGenerationSchedule extends MessageInclusion{
 		this.generationCurve = generationCurve;
 	}
 	
+	public int getGeneratorNumber(){
+		return getInclusionNumber();
+	}
+	
 	public boolean isGeneratorTurnedOn() {
 		return generatorTurnedOn;
 	}

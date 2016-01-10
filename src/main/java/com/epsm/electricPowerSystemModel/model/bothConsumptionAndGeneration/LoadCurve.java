@@ -9,7 +9,7 @@ import com.epsm.electricPowerSystemModel.util.LoadCurveJsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonSerialize(using = LoadCurveJsonSerializer.class)
-public class LoadCurve{
+public final class LoadCurve{
 	private float[] loadByHoursInMW;
 	private LocalTime requestedTime;
 	private float loadOnRequestedHour;
@@ -20,7 +20,7 @@ public class LoadCurve{
 	
 	public LoadCurve(float[] loadByHoursInMW){
 		if(loadByHoursInMW == null){
-			String message = "There is null instead incoming values.";
+			String message = "LoadCurve constructor: loadByHoursInMW must not be null.";
 			throw new GenerationException(message);
 		}else if(loadByHoursInMW.length != 24){
 			String message = "Incoming array length must be 24.";
