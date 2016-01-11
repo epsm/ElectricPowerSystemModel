@@ -15,7 +15,7 @@ import com.epsm.electricPowerSystemModel.model.generation.PowerStationParameters
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationState;
 
 @Component
-public class OutgoingMessageServiceImpl implements OutgoingMessageSrvice {
+public class OutgoingMessageServiceImpl implements OutgoingMessageService {
 
 	@Autowired
 	private PowerStationParametersClient stationParametersClient;
