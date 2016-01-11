@@ -7,6 +7,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 
 @Configuration
+@ComponentScan("com.epsm.electricPowerSystemModel")
 public class ApplicationConfig {
 	@Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
