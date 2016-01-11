@@ -33,7 +33,7 @@ public class UrlRequestSender<T> {
 			outStream.close();
 			connection.getResponseCode();
 		}catch(Exception e){
-			logger.warn("Error sending POST request. ", e);
+			logger.warn("Error sending POST request to url {}. ",url, e);
 		}
 	}
 	
