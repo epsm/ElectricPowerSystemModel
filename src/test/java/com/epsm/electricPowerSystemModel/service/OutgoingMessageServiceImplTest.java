@@ -1,5 +1,7 @@
 package com.epsm.electricPowerSystemModel.service;
 
+import static org.mockito.Mockito.verify;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -7,10 +9,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.mockito.Mockito.*;
 
 import com.epsm.electricPowerSystemModel.client.ConsumerParametersClient;
 import com.epsm.electricPowerSystemModel.client.ConsumerStateClient;
@@ -22,7 +23,6 @@ import com.epsm.electricPowerSystemModel.model.dispatch.Parameters;
 import com.epsm.electricPowerSystemModel.model.dispatch.State;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationParameters;
 import com.epsm.electricPowerSystemModel.model.generation.PowerStationState;
-import com.fasterxml.jackson.annotation.JacksonInject;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OutgoingMessageServiceImplTest {
@@ -33,7 +33,7 @@ public class OutgoingMessageServiceImplTest {
 	private PowerStationState powerStationState;
 	private ConsumerState consumerState;
 	
-	@JacksonInject
+	@InjectMocks
 	private OutgoingMessageServiceImpl service;
 	
 	@Mock
@@ -78,6 +78,7 @@ public class OutgoingMessageServiceImplTest {
 	@Test
 	public void usesConsumerStateClientForSendingConsumerState(){
 		consumerState = new ConsumerState(1, LocalDateTime.MIN, LocalTime.MIN, 0);
+		service.acceptState(consumerState);
 		
 		verify(consumerStateClient).sendConsumerState(consumerState);
 	}
