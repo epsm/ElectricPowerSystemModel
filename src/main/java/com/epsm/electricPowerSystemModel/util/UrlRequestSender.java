@@ -25,13 +25,13 @@ public class UrlRequestSender<T> {
 		
 			connection.setRequestProperty("Content-Type", "application/json");
 			connection.setRequestMethod("POST");
-			connection.getResponseCode();
 			connection.setDoOutput(true);
 			outStream = connection.getOutputStream();
 			serialize(outStream, object);
 			outStream.flush();
 			outStream.close();
 			connection.getResponseCode();
+			connection.disconnect();
 		}catch(Exception e){
 			logger.warn("Error sending POST request to url {}. ",url, e);
 		}

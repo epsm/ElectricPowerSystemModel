@@ -47,7 +47,11 @@
 		<appender-ref ref="Application_dispatcher" />
 	</logger>
 	
-	<logger name="com.epsm.electricPowerSystemModel.util" level="INFO" additivity="false">
+	<logger name="com.epsm.electricPowerSystemModel.util" level="DEBUG" additivity="false">
+		<appender-ref ref="System" />
+	</logger>
+	
+	<logger name="com.epsm.electricPowerSystemModel.client" level="DEBUG" additivity="false">
 		<appender-ref ref="System" />
 	</logger>
 

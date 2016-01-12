@@ -48,15 +48,15 @@ public class ObjectConnectionManager{
 	
 	public void executeCommand(Command command){
 		if(command == null){
-			logger.warn("{} recieved null from dispatcher.", object);
+			logger.warn("Recieved: {} null from dispatcher.", object);
 		}else if(isCommandTypeEqualsToExpected(command)){
 			setTimeWhenReceivedLastCommand();
 			passCommandToObject(command);
 			
-			logger.info("{} recieved {} from dispatcher.", 
+			logger.info("Recieved: {} {} from dispatcher.", 
 					object, getMessageClassName(command));
 		}else{
-			logger.warn("{} recieved from dispatcher wrong command class: expected {},"
+			logger.warn("Recieved: {} from dispatcher wrong command class: expected {},"
 					+ " but was {}.",
 					object, filter.getExpectedCommandClassName(),getMessageClassName(command));
 		}
@@ -80,7 +80,7 @@ public class ObjectConnectionManager{
 	
 	public final void manageConnection(){
 		getCurrentTime();
-		logger.debug("{}, last sent time: {}, last recieced time: {}, conn.active: {}",
+		logger.debug("Sent: {}, last sent time: {}, last recieced time: {}, conn.active: {}",
 				object, timeWhenSentLastMessage.toLocalTime(),
 				timeWhenRecievedLastCommand.toLocalTime(), isConnectionWithDispatcherActive());
 		if(isItTimeToSentMessage()){
@@ -120,7 +120,7 @@ public class ObjectConnectionManager{
 		}else if(isStateTypeEqualsToExpected(state)){
 			dispatcher.acceptState(state);
 			
-			logger.info("{} sent {} to dispatcher.", object,
+			logger.info("Sent: {} {} to dispatcher.", object,
 					filter.getExpectedStateClassName());
 		}else{
 			String message = String.format("%s returned %s instead %s.", object,
@@ -141,6 +141,6 @@ public class ObjectConnectionManager{
 		Parameters parameters = object.getParameters();
 		dispatcher.establishConnection(parameters);
 			
-		logger.info("{} sent {} to dispatcher.", object, parameters.getClass().getSimpleName());
+		logger.info("Sent: {} {} to dispatcher.", object, parameters.getClass().getSimpleName());
 	}
 }
