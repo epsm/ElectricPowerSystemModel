@@ -52,6 +52,6 @@
 	</logger>
 
 	<root level="INFO">
-		<appender-ref ref="STDOUT"/>add methods for unit tests
+		<appender-ref ref="STDOUT"/>
 	</root>
 </configuration>
