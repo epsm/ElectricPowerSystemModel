@@ -33,7 +33,7 @@ public class PowerStationParametersJsonDeserializer extends
 	private JsonNode generatorsNode;
 	private Iterator<JsonNode> iterator;
 	private JsonNode generatorNode;
-	private Logger logger = LoggerFactory.getLogger(PowerStationStateJsonDeserializer.class);
+	private Logger logger = LoggerFactory.getLogger(PowerStationParametersJsonDeserializer.class);
 	
 	@Override
 	public PowerStationParameters deserialize(JsonParser jParser, DeserializationContext ctxt)
