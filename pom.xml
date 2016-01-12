@@ -10,7 +10,6 @@
 	<name>Electric Power System Model</name>
 	<description>Very simple model of electric power system</description>
 	
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.2.4.RELEASE</spring.version>
@@ -59,7 +58,8 @@
     	<dependency>
    			<groupId>javax.servlet</groupId>
    			<artifactId>javax.servlet-api</artifactId>
-    		<version>3.0.1</version>
+    		<version>3.1.0</version>
+    		<scope>provided</scope>
 		</dependency>
 		
 		<!-- Tests -->
@@ -88,12 +88,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>nl.jqno.equalsverifier</groupId>
-			<artifactId>equalsverifier</artifactId>
-			<version>1.7.6</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
@@ -119,6 +113,29 @@
           			<failOnMissingWebXml>false</failOnMissingWebXml>
         		</configuration>
       		</plugin>
+      		<!-- it's necessary to hide firstly webmvc dispatcher servlet from EPSD when packaging jar, othrewise it won't start with exception--> 
+      		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.4.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<relocations>
+								<relocation>
+									<pattern>com.epsm.electricPowerSystemModel.configuration</pattern>
+									<pattern>com.epsm.electricPowerSystemModel.controller</pattern>
+									<pattern>com.epsm.electricPowerSystemModel.service</pattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>
