@@ -6,13 +6,7 @@ import java.util.Set;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.epsmCore.model.dispatch.Command;
-import com.epsm.epsmCore.util.PowerStationGenerationScheduleJsonDeserializer;
-import com.epsm.epsmCore.util.PowerStationGenerationScheduleJsonSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonSerialize(using = PowerStationGenerationScheduleJsonSerializer.class)
-@JsonDeserialize(using = PowerStationGenerationScheduleJsonDeserializer.class)
 public class PowerStationGenerationSchedule extends Command{
 	private MessageInclusionsContainer<GeneratorGenerationSchedule> schedules;
 	

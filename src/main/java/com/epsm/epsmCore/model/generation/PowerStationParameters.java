@@ -6,13 +6,7 @@ import java.util.Set;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.epsmCore.model.dispatch.Parameters;
-import com.epsm.epsmCore.util.PowerStationParametersJsonDeserializer;
-import com.epsm.epsmCore.util.PowerStationParametersJsonSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonSerialize(using = PowerStationParametersJsonSerializer.class)
-@JsonDeserialize(using = PowerStationParametersJsonDeserializer.class)
 public class PowerStationParameters extends Parameters{
 	private MessageInclusionsContainer<GeneratorParameters> generatorParameters;
 	

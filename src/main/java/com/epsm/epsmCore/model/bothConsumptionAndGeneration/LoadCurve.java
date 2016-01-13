@@ -5,10 +5,7 @@ import java.util.Arrays;
 
 import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generation.GenerationException;
-import com.epsm.epsmCore.util.LoadCurveJsonSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonSerialize(using = LoadCurveJsonSerializer.class)
 public final class LoadCurve{
 	private float[] loadByHoursInMW;
 	private LocalTime requestedTime;
