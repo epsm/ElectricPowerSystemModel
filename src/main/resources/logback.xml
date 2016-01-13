@@ -6,49 +6,34 @@
 		</encoder>
 	</appender>
 
-	<appender name="Application_model" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="model" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-12([%thread]) %-48(%logger{48}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>/home/anonimous/programming/projects/current/ElectricPowerSystemModel/logs/Application_model.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<fileNamePattern>/home/anonimous/programming/projects/current/epsm-core/logs/model.%d{dd-MM-yyy}.log.zip</fileNamePattern>
       		<maxHistory>7</maxHistory>
     	</rollingPolicy>
 	</appender>
 	
-	<appender name="Application_dispatcher" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="system" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-11([%thread]) %-30(%logger{40}) - %msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>/home/anonimous/programming/projects/current/ElectricPowerSystemModel/logs/Application_dispatcher.%d{dd-MM-yyy}.log.zip</fileNamePattern>
-      		<maxHistory>7</maxHistory>
-    	</rollingPolicy>
-	</appender>
-	
-	<appender name="System" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d{HH:mm:ss.SSS}  %-5level %-8([%thread]) %-44(%logger{44}) - %msg%n</Pattern>
-		</encoder>
-
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>/home/anonimous/programming/projects/current/ElectricPowerSystemModel/logs/System.%d{dd-MM-yyy}.log.zip</fileNamePattern>
+      		<fileNamePattern>/home/anonimous/programming/projects/current/epsm-core/logs/system.%d{dd-MM-yyy}.log.zip</fileNamePattern>
       		<maxHistory>7</maxHistory>
     	</rollingPolicy>
 	</appender>
 
-	<logger name="com.epsm.electricPowerSystemModel.model" level="INFO" additivity="false">
-		<appender-ref ref="Application_model" />
+	<logger name="com.epsm.epsmCore.model" level="INFO" additivity="false">
+		<appender-ref ref="model" />
 	</logger>
 	
-	<logger name="com.epsm.electricPowerSystemModel.model.bothConsumptionAndGeneration.ObjectConnectionManager" level="INFO" additivity="false">
-		<appender-ref ref="Application_dispatcher" />
-	</logger>
-	
-	<logger name="com.epsm.electricPowerSystemModel.util" level="INFO" additivity="false">
-		<appender-ref ref="System" />
+	<logger name="com.epsm.epsmCore.model.bothConsumptionAndGeneration.ObjectConnectionManager" level="INFO" additivity="false">
+		<appender-ref ref="system" />
 	</logger>
 
 	<root level="INFO">
