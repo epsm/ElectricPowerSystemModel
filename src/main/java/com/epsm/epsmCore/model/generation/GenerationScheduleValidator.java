@@ -103,7 +103,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 	
 	private boolean isAstaticRegulationTurnedOffAndThereIsNotGenerationCurve(GeneratorGenerationSchedule schedule){
 		boolean astaticRegulationTurnedOff = !currentGeneratorSchedule.isAstaticRegulatorTurnedOn();
-		LoadCurve curve = currentGeneratorSchedule.getCurve();
+		LoadCurve curve = currentGeneratorSchedule.getGenerationCurve();
 		
 		return astaticRegulationTurnedOff && curve == null;
 	}
@@ -129,13 +129,13 @@ public class GenerationScheduleValidator extends CommandValidator{
 	private boolean isAstaticRegulationTurnedOffAndThereIsGenerationCurve(
 			GeneratorGenerationSchedule schedule){
 		boolean astaticRegulationTurnedOff = !currentGeneratorSchedule.isAstaticRegulatorTurnedOn();
-		LoadCurve curve = currentGeneratorSchedule.getCurve();
+		LoadCurve curve = currentGeneratorSchedule.getGenerationCurve();
 		
 		return astaticRegulationTurnedOff && curve != null;
 	}
 	
 	private void findMinAndMaxPowerInGenerationCurve(){
-		LoadCurve generationCurve = currentGeneratorSchedule.getCurve();
+		LoadCurve generationCurve = currentGeneratorSchedule.getGenerationCurve();
 		LocalTime pointer = LocalTime.MIDNIGHT;
 		maxGenerationPower = Float.MIN_VALUE;
 		minGenerationPower = Float.MAX_VALUE;

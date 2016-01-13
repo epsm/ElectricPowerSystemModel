@@ -29,7 +29,7 @@ public class GeneratorGenerationSchedule extends MessageInclusion{
 		return astaticRegulatorTurnedOn;
 	}
 
-	public LoadCurve getCurve() {
+	public LoadCurve getGenerationCurve() {
 		return generationCurve;
 	}
 

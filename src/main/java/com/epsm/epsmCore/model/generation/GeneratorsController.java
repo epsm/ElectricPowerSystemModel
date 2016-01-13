@@ -53,7 +53,7 @@ public class GeneratorsController{
 	private void getNewGenerationParameters(GeneratorGenerationSchedule generatorSchedule){
 		shouldGeneratorBeTurnedOn = generatorSchedule.isGeneratorTurnedOn();
 		shouldAstaticRegulationBeTurnedOn = generatorSchedule.isAstaticRegulatorTurnedOn();
-		generationCurve = generatorSchedule.getCurve();
+		generationCurve = generatorSchedule.getGenerationCurve();
 	}
 	
 	private void adjustNecessaryParameters() {
