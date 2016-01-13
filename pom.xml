@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.epsm.electricPowerSystemModel</groupId>
-	<artifactId>epsm</artifactId>
+	<groupId>com.epsm</groupId>
+	<artifactId>epsm-core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
-	<name>Electric Power System Model</name>
+	<packaging>jar</packaging>
+	<name>Electric power system model core</name>
 	<description>Very simple model of electric power system</description>
 	
 	<properties>
@@ -16,12 +16,6 @@
 	</properties>
 
 	<dependencies>
-		<!-- Spring -->    	
-    	<dependency>
-        	<groupId>org.springframework</groupId>
-        	<artifactId>spring-webmvc</artifactId>
-       		<version>${spring.version}</version>
-    	</dependency>
 		
 		<!-- Logback -->	
 		<dependency>
@@ -40,26 +34,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.13</version>
-		</dependency>
-		
-		<!-- JSON -->
-		<dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.6.4</version>
-        </dependency>
-         <dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.6.4</version>
-		</dependency>
-		
-		<!-- servlet -->
-    	<dependency>
-   			<groupId>javax.servlet</groupId>
-   			<artifactId>javax.servlet-api</artifactId>
-    		<version>3.1.0</version>
-    		<scope>provided</scope>
 		</dependency>
 		
 		<!-- Tests -->
@@ -105,36 +79,6 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
-			</plugin>
-			<plugin>
-        		<artifactId>maven-war-plugin</artifactId>
-        		<version>2.4</version>
-        		<configuration>
-          			<failOnMissingWebXml>false</failOnMissingWebXml>
-        		</configuration>
-      		</plugin>
-      		<!-- it's necessary to hide firstly webmvc dispatcher servlet from EPSD when packaging jar, othrewise it won't start with exception--> 
-      		<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.3</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<relocations>
-								<relocation>
-									<pattern>com.epsm.electricPowerSystemModel.configuration</pattern>
-									<pattern>com.epsm.electricPowerSystemModel.controller</pattern>
-									<pattern>com.epsm.electricPowerSystemModel.service</pattern>
-								</relocation>
-							</relocations>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
