@@ -11,11 +11,13 @@ import com.epsm.epsmCore.model.generalModel.RealTimeOperations;
 public class SimulationRunner{
 	private ElectricPowerSystemSimulation simulation;
 	private long stepCounter;
-	private Logger logger = LoggerFactory.getLogger(SimulationRunner.class);
 	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 1;
 	private final int PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS = 500;
+	private Logger logger;
 	
 	public void runSimulation(ElectricPowerSystemSimulation simulation){
+		logger = LoggerFactory.getLogger(SimulationRunner.class);
+		
 		if(simulation == null){
 			logger.error("Attempt to run null model.");
 			throw new IllegalArgumentException("SimulationRunner: simulation must not be null.");

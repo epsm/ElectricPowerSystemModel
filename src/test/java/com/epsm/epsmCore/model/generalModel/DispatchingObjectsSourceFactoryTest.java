@@ -6,7 +6,9 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import com.epsm.epsmCore.model.consumption.ScheduledLoadConsumer;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumer;
@@ -27,6 +29,27 @@ public class DispatchingObjectsSourceFactoryTest {
 		dispatcher = mock(Dispatcher.class);
 		factory = new DispatchingObjectsSourceFactory(timeService, dispatcher);
 		source = factory.createSource();
+	}
+	
+	@Rule
+	public ExpectedException expectedEx = ExpectedException.none();
+
+	@Test
+	public void exceptionInConstructorIfTimeServiceIsNull(){
+		expectedEx.expect(IllegalArgumentException.class);
+	    expectedEx.expectMessage("DispatchingObjectsSourceFactory constructor:"
+	    		+ " timeService can't be null.");
+	
+	    new DispatchingObjectsSourceFactory(null, dispatcher);
+	}
+	
+	@Test
+	public void exceptionInConstructorIfDispatcherIsNull(){
+		expectedEx.expect(IllegalArgumentException.class);
+	    expectedEx.expectMessage("DispatchingObjectsSourceFactory constructor:"
+	    		+ " dispatcher can't be null.");
+	
+	    new DispatchingObjectsSourceFactory(timeService, null);
 	}
 	
 	@Test
