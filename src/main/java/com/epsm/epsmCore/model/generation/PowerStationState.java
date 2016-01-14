@@ -6,7 +6,13 @@ import java.util.Set;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.epsmCore.model.dispatch.State;
+import com.epsm.epsmCore.model.utils.json.PowerStationStateJsonDeserializer;
+import com.epsm.epsmCore.model.utils.json.PowerStationStateJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = PowerStationStateJsonSerializer.class)
+@JsonDeserialize(using = PowerStationStateJsonDeserializer.class)
 public class PowerStationState extends State{
 	private MessageInclusionsContainer<GeneratorState> states;
 	
