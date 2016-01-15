@@ -37,8 +37,10 @@ public final class ScheduledLoadConsumer extends Consumer{
 		calculateCurrentLoadInMW();
 		prepareState();
 		
-		logger.debug("sim.time: {}, freq.: {}, load:{} MW.", currentTime,
-				currentFrequency,currentLoad);
+		if(isItExactlyMinute(currentTime)){
+			logger.debug("sim.time: {}, freq.: {}, load:{} MW.", currentTime,
+					currentFrequency,currentLoad);
+		}
 		
 		return -currentLoad;
 	}

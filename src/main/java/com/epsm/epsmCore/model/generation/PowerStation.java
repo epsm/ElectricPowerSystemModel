@@ -65,10 +65,12 @@ public final class PowerStation extends PowerObject{
 			float generatorGeneration = generator.calculateGeneration();
 			currentGenerationInMW += generatorGeneration;
 			
-			logger.debug("sim.time: {}, freq.: {}, generator#{} gen: {} MW,"
-					+ " power at req. freq.: {}, ast.reg.On: {}",
-					currentTime, currentFrequency, generator.getNumber(), generatorGeneration,
-					generator.getPowerAtRequiredFrequency(), generator.isAstaticRegulationTurnedOn());
+			if(isItExactlyMinute(currentTime)){
+				logger.debug("sim.time: {}, freq.: {}, generator#{} gen: {} MW,"
+						+ " power at req. freq.: {}, ast.reg.On: {}",
+						currentTime, currentFrequency, generator.getNumber(), generatorGeneration,
+						generator.getPowerAtRequiredFrequency(), generator.isAstaticRegulationTurnedOn());
+			}
 		}
 	}
 	

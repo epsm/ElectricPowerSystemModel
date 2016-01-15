@@ -10,7 +10,8 @@ import com.epsm.epsmCore.model.generalModel.RealTimeOperations;
 
 public class SimulationRunner{
 	private ElectricPowerSystemSimulation simulation;
-	private long stepCounter;
+	private long realTimeStepCounter;
+	private long simulationTimeStepCounter;
 	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 1;
 	private final int PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS = 500;
 	private Logger logger;
@@ -48,12 +49,18 @@ public class SimulationRunner{
 			
 			while(true){
 				simulation.calculateNextStep();
-				stepCounter++;
 				
-				logger.debug("Step performed.");
-				
+				if(simulationTimeStepCounter++ > 100){
+					logger.debug("100  simulation step performed.");
+					resetCounter();
+				}
+
 				pause();
 			}
+		}
+		
+		private void resetCounter(){
+			simulationTimeStepCounter = 0;
 		}
 		
 		private void pause(){
@@ -83,14 +90,21 @@ public class SimulationRunner{
 					}
 				}
 				
-				logger.debug("Step performed.");
+				if(realTimeStepCounter++ > 10){
+					logger.debug("10 real time step performed.");
+					resetCounter();
+				}
 				
 				pause();
 			}
 		}
 		
 		private boolean isModelInitialized(){
-			return stepCounter > 1;
+			return realTimeStepCounter > 1;
+		}
+		
+		private void resetCounter(){
+			realTimeStepCounter = 1;
 		}
 		
 		private void pause(){

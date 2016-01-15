@@ -38,9 +38,11 @@ public final class ShockLoadConsumer extends Consumer{
 		calculateCurrentLoadInMW();
 		prepareState();
 		
-		logger.debug("sim.time: {}, freq.: {}, cur.load:{} MW, timeToTurnOn: {},"
-				+ "timeToTurnOff: {}, turnedOn: {}.", currentTime, currentFrequency,
-				currentLoad, timeToTurnOn, timeToTurnOff, isTurnedOn);
+		if(isItExactlyMinute(currentTime)){
+			logger.debug("sim.time: {}, freq.: {}, cur.load:{} MW, timeToTurnOn: {},"
+					+ "timeToTurnOff: {}, turnedOn: {}.", currentTime, currentFrequency,
+					currentLoad, timeToTurnOn, timeToTurnOff, isTurnedOn);
+		}
 		
 		return -currentLoad;
 	}

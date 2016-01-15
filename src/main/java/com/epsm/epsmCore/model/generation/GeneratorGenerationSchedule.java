@@ -42,6 +42,8 @@ public class GeneratorGenerationSchedule extends MessageInclusion{
 		stringBuilder.append(isGeneratorTurnedOn());
 		stringBuilder.append(", astatic regulation: ");
 		stringBuilder.append(astaticRegulatorTurnedOn);
+		stringBuilder.append(", gen.curve: ");
+		stringBuilder.append(generationCurve);
 		stringBuilder.append(". ");
 		
 		return stringBuilder.toString();

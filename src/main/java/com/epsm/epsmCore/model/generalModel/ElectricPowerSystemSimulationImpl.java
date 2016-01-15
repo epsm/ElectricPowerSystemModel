@@ -53,9 +53,15 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 			balance += object.calculatePowerBalance();
 		}
 		
-		logger.debug("sim.time: {}, power balance: {} MW.", currentTimeInSimulation, balance);
+		if(isItExactlyMinute()){
+			logger.debug("sim.time: {}, power balance: {} MW.", currentTimeInSimulation, balance);
+		}
 		
 		return balance;
+	}
+	
+	private boolean isItExactlyMinute(){
+		return currentTimeInSimulation.getSecond() == 0 && currentTimeInSimulation.getNano() == 0;
 	}
 	
 	/*
