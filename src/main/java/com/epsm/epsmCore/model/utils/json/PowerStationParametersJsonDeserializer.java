@@ -46,7 +46,7 @@ public class PowerStationParametersJsonDeserializer extends
 		getNodeForCreatingGeneratorsParameters();
 		createGeneratorsParameters();
 		
-		logger.debug("{} deserialized from JSON.", stationParameters);
+		logger.debug("Deserialized: {} from JSON.", stationParameters);
 		
 		return stationParameters;
 	}

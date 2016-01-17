@@ -39,6 +39,6 @@ public class PowerStationParametersJsonSerializer extends JsonSerializer<PowerSt
 		jGenerator.writeEndObject();
 		jGenerator.writeEndObject();
 		
-		logger.debug("{} serialized to JSON.", parameters);
+		logger.debug("Serialized: {} to JSON.", parameters);
 	}
 }

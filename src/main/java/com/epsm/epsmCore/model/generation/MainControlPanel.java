@@ -55,6 +55,7 @@ public class MainControlPanel{
 	
 	private void replaceCurrentSchedule(){
 		currentSchedule = receivedSchedule;
+		logger.info("execute new schedule: {}.", currentSchedule);
 	}
 	
 	private boolean isThereValidSchedule(){

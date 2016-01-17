@@ -30,6 +30,6 @@ public class LoadCurveJsonSerializer extends JsonSerializer<LoadCurve>{
 		jGenerator.writeEndArray();
 		jGenerator.writeEndObject();
 		
-		logger.debug("{} serialized to JSON.", curve);
+		logger.debug("Serialized: {} to JSON.", curve);
 	}
 }

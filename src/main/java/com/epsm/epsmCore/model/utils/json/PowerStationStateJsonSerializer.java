@@ -40,6 +40,6 @@ public class PowerStationStateJsonSerializer extends JsonSerializer<PowerStation
 		jGenerator.writeEndObject();
 		jGenerator.writeEndObject();
 		
-		logger.debug("{} serialized to JSON.", state);
+		logger.debug("Serialized: {} to JSON.", state);
 	}
 }

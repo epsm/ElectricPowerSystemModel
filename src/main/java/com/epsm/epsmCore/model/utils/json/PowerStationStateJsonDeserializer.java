@@ -45,7 +45,7 @@ public class PowerStationStateJsonDeserializer extends JsonDeserializer<PowerSta
 		getNodeForCreatingGeneratorsStates();
 		createGeneratorsStates();
 		
-		logger.debug("{} deserialized from JSON.", stationState);
+		logger.debug("Deserialized: {} from JSON.", stationState);
 		
 		return stationState;
 	}

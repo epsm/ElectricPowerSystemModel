@@ -42,6 +42,6 @@ public class PowerStationGenerationScheduleJsonSerializer
 		jGenerator.writeEndObject();
 		jGenerator.writeEndObject();
 		
-		logger.debug("{} serialized to JSON.", schedule);
+		logger.debug("Serialized: {} to JSON.", schedule);
 	}
 }

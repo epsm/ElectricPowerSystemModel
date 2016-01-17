@@ -54,7 +54,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		}
 		
 		if(isItExactlyMinute()){
-			logger.debug("sim.time: {}, power balance: {} MW.", currentTimeInSimulation, balance);
+			logger.debug("State: simul., sim.time: {}, power balance: {} MW.", currentTimeInSimulation, balance);
 		}
 		
 		return balance;

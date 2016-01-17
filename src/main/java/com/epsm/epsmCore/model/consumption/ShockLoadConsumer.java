@@ -39,8 +39,8 @@ public final class ShockLoadConsumer extends Consumer{
 		prepareState();
 		
 		if(isItExactlyMinute(currentTime)){
-			logger.debug("sim.time: {}, freq.: {}, cur.load:{} MW, timeToTurnOn: {},"
-					+ "timeToTurnOff: {}, turnedOn: {}.", currentTime, currentFrequency,
+			logger.debug("State: con.#{}, sim.time: {}, freq.: {}, cur.load:{} MW, timeToTurnOn: {},"
+					+ "timeToTurnOff: {}, turnedOn: {}.", id, currentTime, currentFrequency,
 					currentLoad, timeToTurnOn, timeToTurnOff, isTurnedOn);
 		}
 		
