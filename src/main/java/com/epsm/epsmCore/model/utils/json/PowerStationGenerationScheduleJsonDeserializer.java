@@ -50,7 +50,7 @@ public class PowerStationGenerationScheduleJsonDeserializer extends
 		getNodeForCreatingGeneratorsSchedules();
 		createAndFillOutGeneratorsSchedules();
 		
-		logger.debug("{} deserialized from JSON.", stationSchedule);
+		logger.debug("Deserialized: {} from JSON.", stationSchedule);
 		
 		return stationSchedule;
 	}
@@ -110,7 +110,7 @@ public class PowerStationGenerationScheduleJsonDeserializer extends
 	}
 	
 	private void getNodeForCreatingCurve(){
-		curveNode = generatorNode.path("curve");
+		curveNode = generatorNode.path("generationCurve");
 		loadByHoursInMWNode = curveNode.path("loadByHoursInMW");
 	}
 	
