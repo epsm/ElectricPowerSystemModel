@@ -36,7 +36,7 @@ public class GeneratorGenerationSchedule extends MessageInclusion{
 	@Override
 	public String toString() {
 		stringBuilder.setLength(0);
-		stringBuilder.append("Generator#");
+		stringBuilder.append("<Generator#");
 		stringBuilder.append(getInclusionNumber());
 		stringBuilder.append(", turnedOn: ");
 		stringBuilder.append(isGeneratorTurnedOn());
@@ -44,7 +44,7 @@ public class GeneratorGenerationSchedule extends MessageInclusion{
 		stringBuilder.append(astaticRegulatorTurnedOn);
 		stringBuilder.append(", gen.curve: ");
 		stringBuilder.append(generationCurve);
-		stringBuilder.append(". ");
+		stringBuilder.append(">");
 		
 		return stringBuilder.toString();
 	}

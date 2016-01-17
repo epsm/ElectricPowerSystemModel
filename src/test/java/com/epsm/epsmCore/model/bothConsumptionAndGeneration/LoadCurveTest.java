@@ -89,4 +89,16 @@ public class LoadCurveTest{
 	    
 	    new LoadCurve(new float[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11});
 	}
+	
+	@Test
+	public void toStringWorksCorrect(){
+		String expected = "<LoadCurve: load in MW on day by hours, starts on 00.00: "
+				+ "[64.88, 59.54, 55.72, 51.9, 48.47, 48.85,"
+				+ " 48.09, 57.25, 76.35, 91.6, 100.0, 99.23,"
+				+ " 91.6, 91.6, 91.22, 90.83, 90.83, 90.83,"
+				+ " 90.83, 90.83, 90.83, 90.83, 90.83, 83.96]>";
+		String toStringResult = curve.toString();
+		
+		Assert.assertEquals(expected, toStringResult);
+	}
 }

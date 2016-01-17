@@ -43,11 +43,11 @@ public class PowerStationGenerationSchedule extends Command{
 	@Override
 	public String toString(){
 		stringBuilder.setLength(0);
-		stringBuilder.append("Power st.#");
+		stringBuilder.append("<Pow.St.Gen.Sch. for st.#");
 		stringBuilder.append(powerObjectId);
-		stringBuilder.append(" generation schedule [");
+		stringBuilder.append(" generators schedules: [");
 		stringBuilder.append(schedules.toString());
-		stringBuilder.append("]");
+		stringBuilder.append("]>");
 		
 		return stringBuilder.toString();
 	}

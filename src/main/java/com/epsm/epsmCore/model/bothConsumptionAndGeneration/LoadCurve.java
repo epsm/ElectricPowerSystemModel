@@ -61,7 +61,7 @@ public final class LoadCurve{
 	}
 	
 	public String toString(){
-		return String.format("LoadCurve: load in MW on day by hours, starts on 00.00: %s.",
+		return String.format("<LoadCurve: load in MW on day by hours, starts on 00.00: %s>",
 				Arrays.toString(loadByHoursInMW));
 	}
 }

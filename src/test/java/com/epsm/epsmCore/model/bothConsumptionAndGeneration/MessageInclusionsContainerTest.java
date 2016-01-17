@@ -1,5 +1,6 @@
 package com.epsm.epsmCore.model.bothConsumptionAndGeneration;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,6 +12,8 @@ public class MessageInclusionsContainerTest {
 	private MessageInclusionsContainer<MessageInclusionImpl> container;
 	private MessageInclusionImpl inclusion_1;
 	private MessageInclusionImpl inclusion_2;
+	private boolean inclusion_1_invoked;
+	private boolean inclusion_2_invoked;
 	
 	@Before
 	public void setUp(){
@@ -26,6 +29,12 @@ public class MessageInclusionsContainerTest {
 
 		@Override
 		public String toString() {
+			if(getInclusionNumber() == 1){
+				inclusion_1_invoked = true;
+			}else if(getInclusionNumber() == 2){
+				inclusion_2_invoked = true;
+			}
+			
 			return null;
 		}
 	}
@@ -119,5 +128,18 @@ public class MessageInclusionsContainerTest {
 		inclusion_2 = new MessageInclusionImpl(1);
 		container.addInclusion(inclusion_1);
 		container.addInclusion(inclusion_2);
+	}
+	
+	@Test
+	public void toStringInvokesForEveryInclusion(){
+		inclusion_1 = new MessageInclusionImpl(1);
+		inclusion_2 = new MessageInclusionImpl(2);
+		container.addInclusion(inclusion_1);
+		container.addInclusion(inclusion_2);
+		
+		container.toString();
+		
+		Assert.assertTrue(inclusion_1_invoked);
+		Assert.assertTrue(inclusion_2_invoked);
 	}
 }
