@@ -91,6 +91,8 @@ public class MessageInclusionsContainer<E extends MessageInclusion>{
 	
 	@Override
 	public String toString(){
+		stringBuilder.setLength(0);
+		
 		for(MessageInclusion inclusion: inclusions.values()){
 			stringBuilder.append(inclusion.toString());
 		}
