@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class PowerStationParametersJsonDeserializerTest {
 	private ObjectMapper mapper;
-	private SimpleModule testModule;
 	private PowerStationParameters stationParameters;
 	private GeneratorParameters firstGeneratorParameters;
 	private GeneratorParameters secondGeneratorParameters;
@@ -36,9 +35,6 @@ public class PowerStationParametersJsonDeserializerTest {
 				 + "\"2\":{\"nominalPowerInMW\":100.0,\"minimalTechnologyPower\":25.0,"
 				 + "\"generatorNumber\":2}}}";
 		
-		testModule = new SimpleModule().addDeserializer(PowerStationParameters.class,
-				new PowerStationParametersJsonDeserializer());
-		mapper.registerModule(testModule);
 		stationParameters = mapper.readValue(source, PowerStationParameters.class);
 		firstGeneratorParameters = stationParameters.getGeneratorParameters(1);
 		secondGeneratorParameters = stationParameters.getGeneratorParameters(2);
