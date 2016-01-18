@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class PowerStationGenerationScheduleJsonSerializerTest {
 	private ObjectMapper mapper;
-	private SimpleModule testModule;
 	private PowerStationGenerationSchedule schedule;
 	
 	@Before
@@ -34,12 +33,6 @@ public class PowerStationGenerationScheduleJsonSerializerTest {
 				2, true, false, generationCurve);
 		schedule.addGeneratorSchedule(genrationSchedule_1);
 		schedule.addGeneratorSchedule(genrationSchedule_2);
-		
-		testModule = new SimpleModule();
-		testModule.addSerializer(PowerStationGenerationSchedule.class,
-				new PowerStationGenerationScheduleJsonSerializer());
-		testModule.addSerializer(LoadCurve.class,	new LoadCurveJsonSerializer());
-		mapper.registerModule(testModule);
 	}
 	
 	@Test

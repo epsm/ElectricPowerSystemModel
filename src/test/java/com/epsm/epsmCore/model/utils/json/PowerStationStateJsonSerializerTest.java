@@ -7,16 +7,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.generation.GeneratorState;
 import com.epsm.epsmCore.model.generation.PowerStationState;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class PowerStationStateJsonSerializerTest {
 	private ObjectMapper mapper;
-	private SimpleModule testModule;
 	private PowerStationState state;
 	
 	@Before
@@ -31,12 +28,6 @@ public class PowerStationStateJsonSerializerTest {
 			
 		state.addGeneratorState(state_1);
 		state.addGeneratorState(state_2);
-		
-		testModule = new SimpleModule();
-		testModule.addSerializer(PowerStationState.class,
-				new PowerStationStateJsonSerializer());
-		testModule.addSerializer(LoadCurve.class,	new LoadCurveJsonSerializer());
-		mapper.registerModule(testModule);
 	}
 	
 	@Test

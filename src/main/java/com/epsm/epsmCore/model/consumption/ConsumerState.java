@@ -4,18 +4,15 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import com.epsm.epsmCore.model.dispatch.State;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.epsm.epsmCore.model.utils.json.ConsumerStateDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+@JsonDeserialize(using = ConsumerStateDeserializer.class)
 public class ConsumerState extends State{
 	private float load;
 	
-	@JsonCreator
-	public ConsumerState(
-			@JsonProperty("powerObjectId")long powerObjectId,
-			@JsonProperty("realTimeStamp")LocalDateTime realTimeStamp,
-			@JsonProperty("simulationTimeStamp")LocalTime simulationTimeStamp,
-			@JsonProperty("load")float load) {
+	public ConsumerState(long powerObjectId, LocalDateTime realTimeStamp,
+			LocalTime simulationTimeStamp, float load) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		this.load = load;

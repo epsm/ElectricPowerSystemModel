@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class PowerStationParametersJsonSerializerTest {
 	private ObjectMapper mapper;
-	private SimpleModule testModule;
 	private PowerStationParameters parameters;
 	
 	@Before
@@ -31,12 +30,6 @@ public class PowerStationParametersJsonSerializerTest {
 			
 		parameters.addGeneratorParameters(parameters_1);
 		parameters.addGeneratorParameters(parameters_2);
-		
-		testModule = new SimpleModule();
-		testModule.addSerializer(PowerStationParameters.class,
-				new PowerStationParametersJsonSerializer());
-		testModule.addSerializer(LoadCurve.class,	new LoadCurveJsonSerializer());
-		mapper.registerModule(testModule);
 	}
 	
 	@Test

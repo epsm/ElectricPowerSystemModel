@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class PowerStationGenerationScheduleJsonDeserializerTest {
 	private ObjectMapper mapper;
-	private SimpleModule testModule;
 	private PowerStationGenerationSchedule schedule;
 	private GeneratorGenerationSchedule firstGeneratorSchedule;
 	private GeneratorGenerationSchedule secondGeneratorSchedule;
@@ -49,9 +48,6 @@ public class PowerStationGenerationScheduleJsonDeserializerTest {
 				+ "91.6,91.6,91.22,90.83,90.83,90.83,90.83,90.83,90.83,90.83,90.83,83.96"
 				+ "]}}}}";
 		
-		testModule = new SimpleModule().addDeserializer(PowerStationGenerationSchedule.class,
-				new PowerStationGenerationScheduleJsonDeserializer());
-		mapper.registerModule(testModule);
 		schedule = mapper.readValue(source, PowerStationGenerationSchedule.class);
 		firstGeneratorSchedule = schedule.getGeneratorSchedule(1);
 		secondGeneratorSchedule = schedule.getGeneratorSchedule(2);

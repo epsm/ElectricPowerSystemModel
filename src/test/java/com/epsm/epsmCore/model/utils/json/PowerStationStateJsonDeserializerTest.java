@@ -14,11 +14,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class PowerStationStateJsonDeserializerTest {
 	private ObjectMapper mapper;
-	private SimpleModule testModule;
 	
 	@JsonDeserialize(using = PowerStationStateJsonDeserializer.class)
 	private PowerStationState stationState;
@@ -37,10 +35,7 @@ public class PowerStationStateJsonDeserializerTest {
 				 + "\"generators\":{"
 				 + "\"1\":{\"generationInWM\":60.0,\"generatorNumber\":1},"
 				 + "\"2\":{\"generationInWM\":70.0,\"generatorNumber\":2}}}";
-		
-		testModule = new SimpleModule().addDeserializer(PowerStationState.class,
-				new PowerStationStateJsonDeserializer());
-		mapper.registerModule(testModule);
+
 		stationState = mapper.readValue(source, PowerStationState.class);
 		firstGeneratorState = stationState.getGeneratorState(1);
 		secondGeneratorState = stationState.getGeneratorState(2);

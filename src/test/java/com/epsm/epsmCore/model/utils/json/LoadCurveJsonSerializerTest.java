@@ -8,21 +8,15 @@ import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class LoadCurveJsonSerializerTest {
 	private ObjectMapper mapper;
-	private SimpleModule testModule;
 	private LoadCurve curve;
 	
 	@Before
 	public void setUp(){
 		mapper = new ObjectMapper();
 		curve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
-		
-		testModule = new SimpleModule();
-		testModule.addSerializer(LoadCurve.class,new LoadCurveJsonSerializer());
-		mapper.registerModule(testModule);
 	}
 	
 	@Test
