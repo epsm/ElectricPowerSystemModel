@@ -44,6 +44,7 @@ public class PowerStationGenerationScheduleJsonDeserializer extends
 			throws IOException, JsonProcessingException {
 		
 		saveValue(jParser);
+		resetState();
 		getRootNode();
 		getDataForCreatingStationGenerationSchedule();
 		createPowerStationGenerationSchedule();
@@ -57,6 +58,10 @@ public class PowerStationGenerationScheduleJsonDeserializer extends
 	
 	private void saveValue(JsonParser jParser){
 		this.jParser = jParser;
+	}
+	
+	private void resetState(){
+		generationCurve = null;
 	}
 	
 	private void getRootNode() throws JsonProcessingException, IOException{

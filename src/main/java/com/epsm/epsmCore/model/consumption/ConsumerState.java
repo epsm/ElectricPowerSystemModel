@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import com.epsm.epsmCore.model.dispatch.State;
-import com.epsm.epsmCore.model.utils.json.ConsumerStateDeserializer;
+import com.epsm.epsmCore.model.utils.json.ConsumerStateJsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-@JsonDeserialize(using = ConsumerStateDeserializer.class)
+@JsonDeserialize(using = ConsumerStateJsonDeserializer.class)
 public class ConsumerState extends State{
 	private float load;
 	
@@ -29,7 +29,9 @@ public class ConsumerState extends State{
 		stringBuilder.append(powerObjectId);
 		stringBuilder.append(" [sim.time: ");
 		stringBuilder.append(simulationTimeStamp.format(timeFormatter));
-		stringBuilder.append(" load MW: ");
+		stringBuilder.append(" realtime: ");
+		stringBuilder.append(realTimeStamp.toString());
+		stringBuilder.append(", load MW: ");
 		stringBuilder.append(numberFormatter.format(-load));
 		stringBuilder.append("]");
 

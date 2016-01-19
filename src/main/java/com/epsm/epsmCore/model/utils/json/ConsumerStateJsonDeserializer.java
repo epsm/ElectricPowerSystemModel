@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
  * Temporary solution. Desereliztion works perfect with Tomcat8, but 
  * java.lang.NoSuchMethodError on OpenShift WildFly container.
  */
-public class ConsumerStateDeserializer extends 
+public class ConsumerStateJsonDeserializer extends 
 		JsonDeserializer<ConsumerState>{
 
 	private ConsumerState state;
@@ -35,7 +35,7 @@ public class ConsumerStateDeserializer extends
 	private int stsMinute;
 	private int stsSecond;
 	private int stsNanoOfSecond;
-	private Logger logger = LoggerFactory.getLogger(ConsumerStateDeserializer.class);
+	private Logger logger = LoggerFactory.getLogger(ConsumerStateJsonDeserializer.class);
 	
 	@Override
 	public ConsumerState deserialize(JsonParser jParser, DeserializationContext ctx)
@@ -65,11 +65,12 @@ public class ConsumerStateDeserializer extends
 				
 				if(jParser.nextToken() != JsonToken.END_ARRAY){
 					rtsSecond = jParser.getIntValue();
-					jParser.nextToken();
-					rtsNanoOfSecond = jParser.getIntValue();
-					jParser.nextToken();
+					
+					if(jParser.nextToken() != JsonToken.END_ARRAY){
+						rtsNanoOfSecond = jParser.getIntValue();
+						jParser.nextToken();
+					}
 				}
-				
 			}else{
 				jParser.nextToken();
 				jParser.nextToken();
@@ -79,9 +80,10 @@ public class ConsumerStateDeserializer extends
 				
 				if(jParser.nextToken() != JsonToken.END_ARRAY){
 					stsSecond = jParser.getIntValue();
-					jParser.nextToken();
-					stsNanoOfSecond = jParser.getIntValue();
-					jParser.nextToken();
+					if(jParser.nextToken() != JsonToken.END_ARRAY){
+						stsNanoOfSecond = jParser.getIntValue();
+						jParser.nextToken();
+					}
 				}
 			}
 		}

@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.epsmCore.model.consumption.ConsumerParametersStub;
+import com.epsm.epsmCore.model.consumption.ConsumptionPermissionStub;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
@@ -18,10 +18,10 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
  * Temporary solution. Desereliztion works perfect with Tomcat8, but 
  * java.lang.NoSuchMethodError on OpenShift WildFly container.
  */
-public class ConsumerParametersStubDeserializer extends 
-		JsonDeserializer<ConsumerParametersStub>{
+public class ConsumptionPermissionStubJsonDeserializer extends 
+		JsonDeserializer<ConsumptionPermissionStub>{
 
-	private ConsumerParametersStub parameters;
+	private ConsumptionPermissionStub permission;
 	private long powerObjectId;
 	private int rtsYear;
 	private int rtsMonth;
@@ -34,10 +34,10 @@ public class ConsumerParametersStubDeserializer extends
 	private int stsMinute;
 	private int stsSecond;
 	private int stsNanoOfSecond;
-	private Logger logger = LoggerFactory.getLogger(ConsumerParametersStubDeserializer.class);
+	private Logger logger = LoggerFactory.getLogger(ConsumptionPermissionStubJsonDeserializer.class);
 	
 	@Override
-	public ConsumerParametersStub deserialize(JsonParser jParser, DeserializationContext ctx)
+	public ConsumptionPermissionStub deserialize(JsonParser jParser, DeserializationContext ctx)
 			throws IOException, JsonProcessingException {
 		
 		while(jParser.nextToken() != JsonToken.END_OBJECT){
@@ -61,11 +61,12 @@ public class ConsumerParametersStubDeserializer extends
 				
 				if(jParser.nextToken() != JsonToken.END_ARRAY){
 					rtsSecond = jParser.getIntValue();
-					jParser.nextToken();
-					rtsNanoOfSecond = jParser.getIntValue();
-					jParser.nextToken();
+					
+					if(jParser.nextToken() != JsonToken.END_ARRAY){
+						rtsNanoOfSecond = jParser.getIntValue();
+						jParser.nextToken();
+					}
 				}
-				
 			}else{
 				jParser.nextToken();
 				jParser.nextToken();
@@ -75,19 +76,20 @@ public class ConsumerParametersStubDeserializer extends
 				
 				if(jParser.nextToken() != JsonToken.END_ARRAY){
 					stsSecond = jParser.getIntValue();
-					jParser.nextToken();
-					stsNanoOfSecond = jParser.getIntValue();
-					jParser.nextToken();
+					if(jParser.nextToken() != JsonToken.END_ARRAY){
+						stsNanoOfSecond = jParser.getIntValue();
+						jParser.nextToken();
+					}
 				}
 			}
 		}
 		
-		parameters = new ConsumerParametersStub(powerObjectId, LocalDateTime.of(
+		permission = new ConsumptionPermissionStub(powerObjectId, LocalDateTime.of(
 				rtsYear, rtsMonth, rtsDayOfMonth, rtsHour, rtsMinute, rtsSecond, rtsNanoOfSecond),
 				LocalTime.of(stsHour, stsMinute, stsSecond, stsNanoOfSecond));
 		
-		logger.debug("Deserialized: {} from JSON.", parameters);
+		logger.debug("Deserialized: {} from JSON.", permission);
 		
-		return parameters;
+		return permission;
 	}
 }

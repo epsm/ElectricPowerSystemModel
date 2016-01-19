@@ -8,15 +8,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.consumption.ConsumerParametersStub;
+import com.epsm.epsmCore.model.consumption.ConsumptionPermissionStub;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ConsumerParametersStubDeserializerTest {
+public class ConsumptionPermissionStubDeserializerTest {
 	private ObjectMapper mapper;
 	private String source;
-	private ConsumerParametersStub parameters;
+	private ConsumptionPermissionStub permission;
 	
 	@Before
 	public void setUp() throws JsonParseException, JsonMappingException, IOException{
@@ -25,24 +25,24 @@ public class ConsumerParametersStubDeserializerTest {
 				+ "\"realTimeStamp\":[1,2,3,4,5,6,7]}";
 		
 		mapper.findAndRegisterModules();
-		parameters = mapper.readValue(source, ConsumerParametersStub.class);
+		permission = mapper.readValue(source, ConsumptionPermissionStub.class);
 	}
 	
 	@Test
 	public void powerObjectIdCorrest(){
-		Assert.assertEquals(88, parameters.getPowerObjectId());
+		Assert.assertEquals(88, permission.getPowerObjectId());
 	}
 	
 	@Test
 	public void realTimeStampCorrest(){
 		LocalDateTime expected = LocalDateTime.of(1,2,3,4,5,6,7);
-		Assert.assertEquals(expected, parameters.getRealTimeStamp());
+		Assert.assertEquals(expected, permission.getRealTimeStamp());
 	}
 	
 	@Test
 	public void simulationTimeStampCorrest(){
 		LocalTime expected = LocalTime.of(1,2,3,4);
-		Assert.assertEquals(expected, parameters.getSimulationTimeStamp());
+		Assert.assertEquals(expected, permission.getSimulationTimeStamp());
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ public class ConsumerParametersStubDeserializerTest {
 		
 		source = "{\"powerObjectId\":88,\"simulationTimeStamp\":[1,2,3,4],"
 				+ "\"realTimeStamp\":[1,2,3,4,5]}";
-		mapper.readValue(source, ConsumerParametersStub.class);
+		mapper.readValue(source, ConsumptionPermissionStub.class);
 	}
 	
 	@Test
@@ -60,7 +60,7 @@ public class ConsumerParametersStubDeserializerTest {
 		
 		source = "{\"powerObjectId\":88,\"simulationTimeStamp\":[1,2,3,4],"
 				+ "\"realTimeStamp\":[1,2,3,4,5,6]}";
-		mapper.readValue(source, ConsumerParametersStub.class);
+		mapper.readValue(source, ConsumptionPermissionStub.class);
 	}
 	
 	@Test
@@ -69,7 +69,7 @@ public class ConsumerParametersStubDeserializerTest {
 		
 		source = "{\"powerObjectId\":88,\"simulationTimeStamp\":[1,2],"
 				+ "\"realTimeStamp\":[1,2,3,4,5,6,7]}";
-		mapper.readValue(source, ConsumerParametersStub.class);
+		mapper.readValue(source, ConsumptionPermissionStub.class);
 	}
 	
 	@Test
@@ -78,6 +78,6 @@ public class ConsumerParametersStubDeserializerTest {
 		
 		source = "{\"powerObjectId\":88,\"simulationTimeStamp\":[1,2,3],"
 				+ "\"realTimeStamp\":[1,2,3,4,5,6,7]}";
-		mapper.readValue(source, ConsumerParametersStub.class);
+		mapper.readValue(source, ConsumptionPermissionStub.class);
 	}
 }

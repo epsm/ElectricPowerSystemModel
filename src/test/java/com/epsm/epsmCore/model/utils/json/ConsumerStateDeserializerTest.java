@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.consumption.ConsumerParametersStub;
 import com.epsm.epsmCore.model.consumption.ConsumerState;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -56,19 +55,37 @@ public class ConsumerStateDeserializerTest {
 	}
 	
 	@Test
-	public void deserializesIfNotAllFielsdUsedForLocalDateTime()
+	public void deserializesLocalDateTimeFiveArgumentsConstructor()
 			throws JsonParseException, JsonMappingException, IOException{
 		
-		source = "{\"powerObjectId\":855,\"simulationTimeStamp\":[1,2,3,4],"
+		source = "{\"powerObjectId\":88,\"simulationTimeStamp\":[1,2,3,4],"
 				+ "\"realTimeStamp\":[1,2,3,4,5],\"load\":55.5}";
 		mapper.readValue(source, ConsumerState.class);
 	}
 	
 	@Test
-	public void deserializesIfNotAllFielsdUsedForLocalTime()
+	public void deserializesLocalDateTimeSixArgumentsConstructor()
 			throws JsonParseException, JsonMappingException, IOException{
 		
-		source = "{\"powerObjectId\":855,\"simulationTimeStamp\":[1,2],"
+		source = "{\"powerObjectId\":88,\"simulationTimeStamp\":[1,2,3,4],"
+				+ "\"realTimeStamp\":[1,2,3,4,5,6],\"load\":55.5}";
+		mapper.readValue(source, ConsumerState.class);
+	}
+	
+	@Test
+	public void deserializesLocalTimeTwoArgumentsConstructor()
+			throws JsonParseException, JsonMappingException, IOException{
+		
+		source = "{\"powerObjectId\":88,\"simulationTimeStamp\":[1,2],"
+				+ "\"realTimeStamp\":[1,2,3,4,5,6,7],\"load\":55.5}";
+		mapper.readValue(source, ConsumerState.class);
+	}
+	
+	@Test
+	public void deserializesLocalTimeThreeArgumentsConstructor()
+			throws JsonParseException, JsonMappingException, IOException{
+		
+		source = "{\"powerObjectId\":88,\"simulationTimeStamp\":[1,2,3],"
 				+ "\"realTimeStamp\":[1,2,3,4,5,6,7],\"load\":55.5}";
 		mapper.readValue(source, ConsumerState.class);
 	}
