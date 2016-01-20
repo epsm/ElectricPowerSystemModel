@@ -15,7 +15,6 @@ import com.epsm.epsmCore.model.generation.PowerStationGenerationSchedule;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class PowerStationGenerationScheduleJsonDeserializerTest {
 	private ObjectMapper mapper;

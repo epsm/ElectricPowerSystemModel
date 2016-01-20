@@ -7,12 +7,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.generation.GeneratorParameters;
 import com.epsm.epsmCore.model.generation.PowerStationParameters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class PowerStationParametersJsonSerializerTest {
 	private ObjectMapper mapper;

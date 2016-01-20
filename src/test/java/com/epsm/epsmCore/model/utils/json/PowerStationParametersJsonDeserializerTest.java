@@ -13,7 +13,6 @@ import com.epsm.epsmCore.model.generation.PowerStationParameters;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class PowerStationParametersJsonDeserializerTest {
 	private ObjectMapper mapper;
