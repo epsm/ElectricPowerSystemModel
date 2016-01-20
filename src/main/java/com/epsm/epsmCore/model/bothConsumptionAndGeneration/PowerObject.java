@@ -25,17 +25,23 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 	public PowerObject(ElectricPowerSystemSimulation simulation, TimeService timeService,
 			Dispatcher dispatcher, Parameters parameters) {
 		
+		logger = LoggerFactory.getLogger(PowerObject.class);
+		
 		if(simulation == null){
 			String message = "PowerObject constructor: simulation can't be null.";
+			logger.error(message);
 			throw new IllegalArgumentException(message);
 		}else if(timeService == null){
 			String message = "PowerObject constructor: timeService can't be null.";
+			logger.error(message);
 			throw new IllegalArgumentException(message);
 		}else if(dispatcher == null){
 			String message = "PowerObject constructor: dispatcher can't be null.";
+			logger.error(message);
 			throw new IllegalArgumentException(message);
 		}else if(parameters == null){
 			String message = "PowerObject constructor: parameters can't be null.";
+			logger.error(message);
 			throw new IllegalArgumentException(message);
 		}
 		
@@ -45,7 +51,6 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 		id = parameters.getPowerObjectId();
 		manager = new ObjectConnectionManager(timeService, dispatcher, this);
 		
-		logger = LoggerFactory.getLogger(PowerObject.class);
 		logger.info("{} was created.", this);
 	}
 
