@@ -75,7 +75,7 @@ public class PowerObjectTest{
 		}
 
 		@Override
-		protected State getState() {
+		public State getState() {
 			return null;
 		}
 

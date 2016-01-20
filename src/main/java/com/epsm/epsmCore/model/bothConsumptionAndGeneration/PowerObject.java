@@ -74,7 +74,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 	
 	protected abstract void performDispatcheCommand(Command command);
 	
-	protected abstract State getState();
+	public abstract State getState();
 	
 	@Override
 	public String toString() {
