@@ -42,7 +42,7 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory{
 	}
 	
 	private void createPowerStationParameters(){
-		LocalDateTime realTimeStamp = timeService.getCurrentTime();
+		LocalDateTime realTimeStamp = timeService.getCurrentDateTime();
 		LocalDateTime simulationTimeStamp = simulation.getDateTimeInSimulation();
 		parameters = new PowerStationParameters(powerObjectId, realTimeStamp,
 				simulationTimeStamp, 2);

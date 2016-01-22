@@ -19,7 +19,7 @@ public class ObjectConnectionManager{
 	private MessageFilter filter;
 	private volatile LocalDateTime timeWhenRecievedLastCommand;
 	private LocalDateTime timeWhenSentLastMessage;
-	private LocalDateTime currentTime;
+	private LocalDateTime currentDateTime;
 	private Logger logger;
 
 	public ObjectConnectionManager(TimeService timeService,	Dispatcher dispatcher, 
@@ -75,14 +75,16 @@ public class ObjectConnectionManager{
 	}
 	
 	private void setTimeWhenReceivedLastCommand(){
-		timeWhenRecievedLastCommand = timeService.getCurrentTime();
+		timeWhenRecievedLastCommand = timeService.getCurrentDateTime();
 	}
 	
 	public final void manageConnection(){
-		getCurrentTime();
+		getCurrentDateTime();
+		
 		logger.debug("{}, last sent time: {}, last recieced time: {}, conn.active: {}",
 				object, timeWhenSentLastMessage.toLocalTime(),
 				timeWhenRecievedLastCommand.toLocalTime(), isConnectionWithDispatcherActive());
+		
 		if(isItTimeToSentMessage()){
 			if(isConnectionWithDispatcherActive()){
 				sendStateToDispatcher();
@@ -94,20 +96,20 @@ public class ObjectConnectionManager{
 		}
 	}
 	
-	private void getCurrentTime(){
-		currentTime = timeService.getCurrentTime();
+	private void getCurrentDateTime(){
+		currentDateTime = timeService.getCurrentDateTime();
 	}
 	
 	private boolean isConnectionWithDispatcherActive(){
 		return timeWhenRecievedLastCommand.plusSeconds(
 				Constants.CONNECTION_TIMEOUT_IN_SECONDS)
-				.isAfter(currentTime);
+				.isAfter(currentDateTime);
 	}
 	
 	private boolean isItTimeToSentMessage(){
 		return timeWhenSentLastMessage.plusSeconds(
 				Constants.PAUSE_BETWEEN_SENDING_MESSAGES_IN_SECONDS)
-				.isBefore(currentTime);
+				.isBefore(currentDateTime);
 	}
 	
 	private void sendStateToDispatcher(){
@@ -134,7 +136,7 @@ public class ObjectConnectionManager{
 	}
 	
 	private void setTimeWhenSentLastMessage(){
-		timeWhenSentLastMessage = currentTime;
+		timeWhenSentLastMessage = currentDateTime;
 	}
 	
 	private void establishConnectionToDispatcher(){

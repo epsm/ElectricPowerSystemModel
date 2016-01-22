@@ -10,15 +10,15 @@ public class AstaticRegulator {
 	private ElectricPowerSystemSimulation simulation;
 	private Generator generator;
 	private float currentFrequency;
-	private LocalDateTime currentTime;
-	private LocalDateTime previousTime;
+	private LocalDateTime currentDateTime;
+	private LocalDateTime previousDateTime;
 	private final float ASTATIC_REGULATION_SENSIVITY = 0.03f;
 	
 
 	public AstaticRegulator(ElectricPowerSystemSimulation simulation, Generator generator) {
 		this.simulation = simulation;
 		this.generator = generator;
-		previousTime = simulation.getDateTimeInSimulation();//for fist time, otherwise NPE
+		previousDateTime = simulation.getDateTimeInSimulation();//for fist time, otherwise NPE
 		
 		generator.setAstaticRegulator(this);
 	}
@@ -34,7 +34,7 @@ public class AstaticRegulator {
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){
-		currentTime = simulation.getDateTimeInSimulation();
+		currentDateTime = simulation.getDateTimeInSimulation();
 		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 
@@ -59,12 +59,11 @@ public class AstaticRegulator {
 			generator.setPowerAtRequiredFrequency(powerAtRequiredFrequency
 					+ calculateRegulationStep());
 		}
-		
 	}
 	
 	private float calculateRegulationStep(){
 		float regulationSpeedInMWPerMills = generator.getReugulationSpeedInMWPerMinute() / 60 / 1000;
-		Duration duration = Duration.between(previousTime, currentTime);
+		Duration duration = Duration.between(previousDateTime, currentDateTime);
 		long durationInMillis = Math.abs(duration.toMillis());
 		
 		return durationInMillis * regulationSpeedInMWPerMills;
@@ -80,6 +79,6 @@ public class AstaticRegulator {
 	}
 
 	private void setPreviousTime(){
-		previousTime = currentTime;
+		previousDateTime = currentDateTime;
 	}
 }

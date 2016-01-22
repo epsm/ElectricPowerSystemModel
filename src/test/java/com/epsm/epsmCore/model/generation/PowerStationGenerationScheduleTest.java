@@ -1,7 +1,6 @@
 package com.epsm.epsmCore.model.generation;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,7 +18,7 @@ public class PowerStationGenerationScheduleTest {
 	@Before
 	public void setUp(){
 		stationSchedule = new PowerStationGenerationSchedule(
-				77, LocalDateTime.of(1, 2, 3, 4, 5, 6, 7), LocalTime.of(1, 2, 3, 4), 2);
+				77, LocalDateTime.of(1, 2, 3, 4, 5, 6, 7), LocalDateTime.of(1, 2, 3, 4, 5), 2);
 		curve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		schedule_1 = new GeneratorGenerationSchedule(99, false, true, null);
 		schedule_2 = new GeneratorGenerationSchedule(88, true, false, curve);
@@ -42,7 +41,6 @@ public class PowerStationGenerationScheduleTest {
 				+ "<Generator#99, turnedOn: false, astatic regulation: true,"
 				+ " gen.curve: null>]>";
 		String toStringResult = stationSchedule.toString();
-		System.out.println(toStringResult);
 		
 		Assert.assertEquals(expected, toStringResult);
 	}

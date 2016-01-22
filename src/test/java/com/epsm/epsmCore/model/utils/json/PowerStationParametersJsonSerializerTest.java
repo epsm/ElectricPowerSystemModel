@@ -1,7 +1,6 @@
 package com.epsm.epsmCore.model.utils.json;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,7 +20,7 @@ public class PowerStationParametersJsonSerializerTest {
 		mapper = new ObjectMapper();
 		
 		LocalDateTime realTimeStamp = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
-		LocalTime simulationTimeStamp = LocalTime.of(1, 2, 3, 4);
+		LocalDateTime simulationTimeStamp = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
 		parameters = new PowerStationParameters(995, realTimeStamp, simulationTimeStamp, 2);
 		GeneratorParameters parameters_1 = new GeneratorParameters(1, 40, 5);
 		GeneratorParameters parameters_2 = new GeneratorParameters(2, 100, 25);
@@ -35,7 +34,7 @@ public class PowerStationParametersJsonSerializerTest {
 		String expected = 
 				"{\"powerObjectId\":995"
 				+ ",\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\""
-				+ ",\"simulationTimeStamp\":3723000000004,"
+				+ ",\"simulationTimeStamp\":\"0007-06-05T04:03:02.000000001\","
 				+ "\"generatorQuantity\":2,"
 				+ "\"generators\":{"
 				+ "\"1\":{\"nominalPowerInMW\":40.0,\"minimalTechnologyPower\":5.0,"

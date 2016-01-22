@@ -20,17 +20,20 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	
 	private Map<Long, PowerObject> objects;
 	private float frequencyInPowerSystem;
-	private LocalDateTime currentTimeInSimulation;
+	private LocalDateTime currentDateTimeInSimulation;
 	private PowerObjectFactory powerObjectFactory;
 	private final float TIME_CONASTNT = 5_000;
 	private final int SIMULATION_STEP_IN_NANOS = 100_000_000;
 	private final float ACCEPTABLE_FREQUENCY_DELTA = 0.03f;
 	private Logger logger;
 
-	public ElectricPowerSystemSimulationImpl(TimeService timeService, Dispatcher dispatcher) {
+	public ElectricPowerSystemSimulationImpl(TimeService timeService, Dispatcher dispatcher,
+			LocalDateTime startDateTime) {
+		
+		currentDateTimeInSimulation = startDateTime;
+
 		objects = new ConcurrentHashMap<Long, PowerObject>();
 		frequencyInPowerSystem = Constants.STANDART_FREQUENCY;
-		currentTimeInSimulation = LocalDateTime.of(2000, 01, 01, 00, 00);
 		powerObjectFactory = new PowerObjectFactory(objects, this, timeService, dispatcher);
 		logger = LoggerFactory.getLogger(ElectricPowerSystemSimulationImpl.class);
 	}
@@ -54,14 +57,14 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 		}
 		
 		if(isItExactlyMinute()){
-			logger.debug("State: simul., sim.time: {}, power balance: {} MW.", currentTimeInSimulation, balance);
+			logger.debug("State: simul., sim.time: {}, power balance: {} MW.", currentDateTimeInSimulation, balance);
 		}
 		
 		return balance;
 	}
 	
 	private boolean isItExactlyMinute(){
-		return currentTimeInSimulation.getSecond() == 0 && currentTimeInSimulation.getNano() == 0;
+		return currentDateTimeInSimulation.getSecond() == 0 && currentDateTimeInSimulation.getNano() == 0;
 	}
 	
 	/*
@@ -75,7 +78,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 	
 	private void changeTimeForStep(){
-		currentTimeInSimulation = currentTimeInSimulation.plusNanos(SIMULATION_STEP_IN_NANOS);
+		currentDateTimeInSimulation = currentDateTimeInSimulation.plusNanos(SIMULATION_STEP_IN_NANOS);
 	}
 
 	private boolean isFrequencyLowerThanNormal(){
@@ -96,7 +99,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 	
 	private boolean isItExactlySecond(){
-		return currentTimeInSimulation.getNano() == 0;
+		return currentDateTimeInSimulation.getNano() == 0;
 	}
 	
 	@Override
@@ -106,7 +109,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	
 	@Override
 	public LocalDateTime getDateTimeInSimulation(){
-		return currentTimeInSimulation;
+		return currentDateTimeInSimulation;
 	}
 
 	@Override

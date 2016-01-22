@@ -1,7 +1,6 @@
 package com.epsm.epsmCore.model.bothConsumptionAndGeneration;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,7 +16,7 @@ public class MessageTest {
 		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("Message constructor: realTimeStamp can't be null.");
 	    
-	    new MessageImpl(0, null, LocalTime.MIN);
+	    new MessageImpl(0, null, LocalDateTime.MIN);
 	}
 	
 	@Test
@@ -29,7 +28,9 @@ public class MessageTest {
 	}
 	
 	private class MessageImpl extends Message{
-		public MessageImpl(long powerObjectId, LocalDateTime realTimeStamp, LocalTime simulationTimeStamp) {
+		public MessageImpl(long powerObjectId, LocalDateTime realTimeStamp,
+				LocalDateTime simulationTimeStamp) {
+			
 			super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		}
 

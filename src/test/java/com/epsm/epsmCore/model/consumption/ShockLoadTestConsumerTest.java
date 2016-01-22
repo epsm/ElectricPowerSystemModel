@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
 import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
@@ -39,9 +40,10 @@ public class ShockLoadTestConsumerTest {
 		ConsumerParametersStub parameters 
 			= new ConsumerParametersStub(CONSUMER_NUMBER, LocalDateTime.MIN, LocalDateTime.MIN);
 		timeService = mock(TimeService.class);
-		when(timeService.getCurrentTime()).thenReturn(LocalDateTime.of(2000, 01, 01, 00, 00));
+		when(timeService.getCurrentDateTime()).thenReturn(LocalDateTime.of(2000, 01, 01, 00, 00));
 		dispatcher = mock(Dispatcher.class);
-		simulation = spy(new ElectricPowerSystemSimulationImpl(timeService, dispatcher));
+		simulation = spy(new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
+				TestsConstants.START_DATETIME));
 		turnOnTime = null;
 		turnOffTime = null;
 		consumer = new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);

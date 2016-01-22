@@ -5,7 +5,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +28,7 @@ public class GenerationScheduleValidatorTest {
 	public void setUp(){
 		validator = new GenerationScheduleValidator();
 		stationSchedule 
-			= new PowerStationGenerationSchedule(1, LocalDateTime.MIN, LocalTime.MIN, 1);
+			= new PowerStationGenerationSchedule(1, LocalDateTime.MIN, LocalDateTime.MIN, 1);
 		stationParameters = mock(PowerStationParameters.class);
 		
 		when(stationParameters.getPowerObjectId()).thenReturn(1L);

@@ -64,7 +64,7 @@ public final class ScheduledLoadConsumer extends Consumer{
 	
 	private boolean isItANewDay(){
 		return previousLoadRequestDateTime == null 
-				|| previousLoadRequestDateTime.getDayOfMonth() < currentDateTime.getDayOfMonth();
+				|| previousLoadRequestDateTime.getDayOfMonth() != currentDateTime.getDayOfMonth();
 	}
 	
 	private void calculateLoadCurveOnThisDay(){

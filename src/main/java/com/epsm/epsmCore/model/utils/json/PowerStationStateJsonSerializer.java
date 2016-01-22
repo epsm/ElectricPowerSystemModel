@@ -24,10 +24,8 @@ public class PowerStationStateJsonSerializer extends JsonSerializer<PowerStation
 		
 		jGenerator.writeStartObject();
 		jGenerator.writeNumberField("powerObjectId", state.getPowerObjectId());
-		//toString because LocalDateTime fields serializes in random order that brakes test
 		jGenerator.writeStringField("realTimeStamp", state.getRealTimeStamp().toString());
-		jGenerator.writeNumberField("simulationTimeStamp", state.getSimulationTimeStamp()
-				.toNanoOfDay());
+		jGenerator.writeStringField("simulationTimeStamp", state.getSimulationTimeStamp().toString());
 		jGenerator.writeNumberField("generatorQuantity", generatorQuantity);
 		jGenerator.writeNumberField("frequency", state.getFrequency());
 		jGenerator.writeObjectFieldStart("generators");

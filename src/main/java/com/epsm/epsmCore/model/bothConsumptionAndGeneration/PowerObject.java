@@ -81,7 +81,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 		return String.format("%s#%d", getClass().getSimpleName(), id);
 	}
 	
-	protected boolean isItExactlyMinute(LocalDateTime currentTime){
-		return currentTime.getSecond() == 0 && currentTime.getNano() == 0;
+	protected boolean isItExactlyMinute(LocalDateTime currentDateTime){
+		return currentDateTime.getSecond() == 0 && currentDateTime.getNano() == 0;
 	}
 }

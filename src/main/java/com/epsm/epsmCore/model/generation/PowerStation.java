@@ -20,7 +20,7 @@ public final class PowerStation extends PowerObject{
 
 	private MainControlPanel controlPanel;
 	private Map<Integer, Generator> generators;
-	private LocalDateTime currentTime;
+	private LocalDateTime currentDateTime;
 	private float currentFrequency;
 	private float currentGenerationInMW;
 	private Generator generatorToAdd;
@@ -53,7 +53,7 @@ public final class PowerStation extends PowerObject{
 	}
 	
 	private void getTimeAndFrequencyFromSimulation(){
-		currentTime = simulation.getDateTimeInSimulation();
+		currentDateTime = simulation.getDateTimeInSimulation();
 		currentFrequency = simulation.getFrequencyInPowerSystem();	
 	}
 	
@@ -66,10 +66,10 @@ public final class PowerStation extends PowerObject{
 			float generatorGeneration = generator.calculateGeneration();
 			currentGenerationInMW += generatorGeneration;
 			
-			if(isItExactlyMinute(currentTime)){
+			if(isItExactlyMinute(currentDateTime)){
 				logger.debug("State:  st.#{}, sim.time: {}, freq.: {}, generator#{} gen: {} MW,"
 						+ " power at req. freq.: {}, ast.reg.On: {}",
-						id, currentTime, currentFrequency, generator.getNumber(),
+						id, currentDateTime, currentFrequency, generator.getNumber(),
 						generatorGeneration, generator.getPowerAtRequiredFrequency(),
 						generator.isAstaticRegulationTurnedOn());
 			}
@@ -86,7 +86,7 @@ public final class PowerStation extends PowerObject{
 	}
 	
 	private void createStationState(){
-		state = new PowerStationState(id, timeService.getCurrentTime(), currentTime,
+		state = new PowerStationState(id, timeService.getCurrentDateTime(), currentDateTime,
 				generators.size(), currentFrequency);
 	}
 	

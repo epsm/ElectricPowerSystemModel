@@ -34,7 +34,7 @@ public class ShockLoadConsumerFactoryStub extends AbstractPowerObjectFactory{
 	}
 	
 	private void createShockLoadConsumerParameters(){
-		LocalDateTime realTimeStamp = timeService.getCurrentTime();
+		LocalDateTime realTimeStamp = timeService.getCurrentDateTime();
 		LocalDateTime simulationTimeStamp = simulation.getDateTimeInSimulation();
 		
 		parameters = new ConsumerParametersStub(powerObjectId, realTimeStamp, simulationTimeStamp);

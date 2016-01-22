@@ -31,6 +31,6 @@ public abstract class Consumer extends PowerObject{
 	}
 	
 	protected ConsumerState prepareState(LocalDateTime simulationTimeStamp, float load){
-		return new ConsumerState(id, timeService.getCurrentTime(), simulationTimeStamp, load);
+		return new ConsumerState(id, timeService.getCurrentDateTime(), simulationTimeStamp, load);
 	}
 }

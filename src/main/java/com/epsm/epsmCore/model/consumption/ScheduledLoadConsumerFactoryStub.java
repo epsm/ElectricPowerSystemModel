@@ -40,7 +40,7 @@ public class ScheduledLoadConsumerFactoryStub extends AbstractPowerObjectFactory
 	}
 	
 	private void createScheduledLadConsumerParameters(){
-		LocalDateTime realTimeStamp = timeService.getCurrentTime();
+		LocalDateTime realTimeStamp = timeService.getCurrentDateTime();
 		LocalDateTime simulationTimeStamp = simulation.getDateTimeInSimulation();
 		
 		parameters = new ConsumerParametersStub(powerObjectId, realTimeStamp, simulationTimeStamp);

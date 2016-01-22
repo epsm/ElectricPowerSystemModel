@@ -1,7 +1,6 @@
 package com.epsm.epsmCore.model.utils.json;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,7 +22,7 @@ public class PowerStationGenerationScheduleJsonSerializerTest {
 		mapper = new ObjectMapper();
 		
 		LocalDateTime realTimeStamp = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
-		LocalTime simulationTimeStamp = LocalTime.of(1, 2, 3, 4);
+		LocalDateTime simulationTimeStamp = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
 		schedule = new PowerStationGenerationSchedule(1, realTimeStamp, simulationTimeStamp, 2);
 		LoadCurve generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		GeneratorGenerationSchedule genrationSchedule_1 = new GeneratorGenerationSchedule(
@@ -39,7 +38,7 @@ public class PowerStationGenerationScheduleJsonSerializerTest {
 		String expected = 
 			"{\"powerObjectId\":1,"
 			+ "\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\","
-			+ "\"simulationTimeStamp\":3723000000004,"
+			+ "\"simulationTimeStamp\":\"0007-06-05T04:03:02.000000001\","
 			+ "\"generatorQuantity\":2,"
 			+ "\"generators\":{"
 			+ "\"1\":{"

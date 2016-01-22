@@ -6,11 +6,11 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
@@ -29,15 +29,16 @@ public class MainControlPanelTest{
 	@Before
 	public void setUp(){
 		PowerStationParameters stationParameters 
-				= new PowerStationParameters(0, LocalDateTime.MIN, LocalTime.MIN, 1);
+				= new PowerStationParameters(0, LocalDateTime.MIN, LocalDateTime.MIN, 1);
 		GeneratorParameters generatorParameters = new GeneratorParameters(1, 100, 0);
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher);
+		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
+				TestsConstants.START_DATETIME);
 		station = new PowerStation(simulation, timeService, dispatcher, stationParameters);
 		controlPanel= new MainControlPanel(simulation, station);
 		stationSchedule 
-				= new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 1);
+				= new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalDateTime.MIN, 1);
 		generatorSchedule = new GeneratorGenerationSchedule(1, true, true, null);
 		generator = spy(new Generator(simulation, 1));
 		
@@ -69,7 +70,7 @@ public class MainControlPanelTest{
 	
 	private void createInvalidGenerationSchedule(){
 		stationSchedule = new PowerStationGenerationSchedule(
-				0, LocalDateTime.MIN, LocalTime.MIN, 2);
+				0, LocalDateTime.MIN, LocalDateTime.MIN, 2);
 		GeneratorGenerationSchedule schedule_1 = new GeneratorGenerationSchedule(
 				1, true, false, null);
 		GeneratorGenerationSchedule schedule_2 = new GeneratorGenerationSchedule(

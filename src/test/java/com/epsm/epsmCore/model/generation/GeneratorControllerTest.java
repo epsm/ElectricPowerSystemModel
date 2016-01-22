@@ -35,10 +35,10 @@ public class GeneratorControllerTest {
 	
 	@Before
 	public void setUp(){
-		stationSchedule = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 2);
+		stationSchedule = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalDateTime.MIN, 2);
 		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
 		
-		parameters = new PowerStationParameters(0, LocalDateTime.MIN, LocalTime.MIN, 2);
+		parameters = new PowerStationParameters(0, LocalDateTime.MIN, LocalDateTime.MIN, 2);
 		GeneratorParameters parameter_1 = new GeneratorParameters(1, 100, 0);
 		GeneratorParameters parameter_2 = new GeneratorParameters(2, 100, 0);
 		parameters.addGeneratorParameters(parameter_1);
@@ -47,7 +47,8 @@ public class GeneratorControllerTest {
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
 		
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher);
+		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
+				TestsConstants.START_DATETIME);
 		station = new PowerStation(simulation, timeService, dispatcher, parameters);
 		controlPanel = new MainControlPanel(simulation, station);
 		
@@ -169,7 +170,7 @@ public class GeneratorControllerTest {
 	}
 	
 	private void isAdjustedGenerationsOfGeneratorsConformsScheduled(){
-		LocalTime timeInSimulation = simulation.getDateTimeInSimulation(); 
+		LocalTime timeInSimulation = simulation.getDateTimeInSimulation().toLocalTime(); 
 		float expectedGenerations = generationCurve.getPowerOnTimeInMW(timeInSimulation);
 		float firstGeneratorGeneration = generator_1.getPowerAtRequiredFrequency();
 		float secondGeneratorGeneration = generator_2.getPowerAtRequiredFrequency();

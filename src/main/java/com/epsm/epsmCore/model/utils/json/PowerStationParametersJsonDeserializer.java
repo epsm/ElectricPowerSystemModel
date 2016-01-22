@@ -2,7 +2,6 @@ package com.epsm.epsmCore.model.utils.json;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Iterator;
 
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ public class PowerStationParametersJsonDeserializer extends
 	private GeneratorParameters generatorParameters;
 	private int powerObjectId;
 	private LocalDateTime realTimeStamp;
-	private LocalTime simulationTimeStamp;
+	private LocalDateTime simulationTimeStamp;
 	private int generatorQuantity;
 	private int generatorNumber;
 	private float nominalPowerInMW;
@@ -62,7 +61,7 @@ public class PowerStationParametersJsonDeserializer extends
 	private void getDataForCreatingPowerStationParameters(){
 		powerObjectId = rootNode.get("powerObjectId").asInt();
 		realTimeStamp = LocalDateTime.parse(rootNode.get("realTimeStamp").asText());
-		simulationTimeStamp = LocalTime.ofNanoOfDay(rootNode.get("simulationTimeStamp").asLong());
+		simulationTimeStamp = LocalDateTime.parse(rootNode.get("simulationTimeStamp").asText());
 		generatorQuantity = rootNode.get("generatorQuantity").asInt();
 	}
 	

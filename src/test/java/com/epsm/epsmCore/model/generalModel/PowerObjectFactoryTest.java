@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerObject;
+import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.consumption.ScheduledLoadConsumer;
 import com.epsm.epsmCore.model.consumption.ScheduledLoadConsumerCreationParametersStub;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumer;
@@ -37,7 +38,8 @@ public class PowerObjectFactoryTest {
 		powerSystemObjects = new HashMap<Long, PowerObject>();
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher);
+		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
+				TestsConstants.START_DATETIME);
 		factory = new PowerObjectFactory(powerSystemObjects, simulation, timeService, dispatcher);
 	}
 

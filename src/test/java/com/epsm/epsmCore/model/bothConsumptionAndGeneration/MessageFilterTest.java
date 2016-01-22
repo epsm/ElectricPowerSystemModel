@@ -3,7 +3,6 @@ package com.epsm.epsmCore.model.bothConsumptionAndGeneration;
 import static org.mockito.Mockito.mock;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -69,14 +68,14 @@ public class MessageFilterTest {
 	
 	private void createPowerStationAndFilterForIt(){
 		powerStationParameters 
-			= new PowerStationParameters(0, LocalDateTime.MIN, LocalTime.MIN, 1);
+			= new PowerStationParameters(0, LocalDateTime.MIN, LocalDateTime.MIN, 1);
 
 		object = new PowerStation(simulation, timeService, dispatcher, powerStationParameters);
 		filter = new MessageFilter(object.getClass());
 	}
 	
 	private void createPowerStationGenerationSchedule(){
-		command = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 1);
+		command = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalDateTime.MIN, 1);
 	}
 	
 	@Test
@@ -107,7 +106,7 @@ public class MessageFilterTest {
 	}
 	
 	private void createPowerStationState(){
-		state = new PowerStationState(0, LocalDateTime.MIN, LocalTime.MIN, 1, 0);
+		state = new PowerStationState(0, LocalDateTime.MIN, LocalDateTime.MIN, 1, 0);
 	}
 
 	@Test
@@ -118,14 +117,14 @@ public class MessageFilterTest {
 	}
 	
 	private void createConsumerAndFilterForIt(){
-		consumerParameters = new ConsumerParametersStub(0, LocalDateTime.MIN, LocalTime.MIN);
+		consumerParameters = new ConsumerParametersStub(0, LocalDateTime.MIN, LocalDateTime.MIN);
 		
 		object = new ShockLoadConsumer(simulation, timeService, dispatcher, consumerParameters);
 		filter = new MessageFilter(object.getClass());
 	}
 	
 	private void createConsumerPermisson(){
-		command = new ConsumptionPermissionStub(0, LocalDateTime.MIN, LocalTime.MIN);
+		command = new ConsumptionPermissionStub(0, LocalDateTime.MIN, LocalDateTime.MIN);
 	}
 	
 	@Test
@@ -136,7 +135,7 @@ public class MessageFilterTest {
 	}
 	
 	private void createConsumerState(){
-		state = new ConsumerState(0, LocalDateTime.MIN, LocalTime.MIN, 0);
+		state = new ConsumerState(0, LocalDateTime.MIN, LocalDateTime.MIN, 0);
 	}
 	
 	@Test

@@ -9,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,6 +21,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.consumption.ConsumerParametersStub;
 import com.epsm.epsmCore.model.consumption.ConsumerState;
 import com.epsm.epsmCore.model.consumption.ConsumptionPermissionStub;
@@ -29,9 +29,9 @@ import com.epsm.epsmCore.model.consumption.ShockLoadConsumer;
 import com.epsm.epsmCore.model.dispatch.Command;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
 import com.epsm.epsmCore.model.dispatch.State;
+import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
-import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 import com.epsm.epsmCore.model.generation.PowerStationGenerationSchedule;
 import com.epsm.epsmCore.model.generation.PowerStationState;
@@ -54,12 +54,13 @@ public class ObjectConnectionManagerTest{
 	
 	@Before
 	public void setUp(){
-		State state = new ConsumerState(0, START_TIME, LocalTime.MIN, 0);
+		State state = new ConsumerState(0, START_TIME, LocalDateTime.MIN, 0);
 		timeService = mock(TimeService.class);
-		when(timeService.getCurrentTime()).thenReturn(START_TIME);
+		when(timeService.getCurrentDateTime()).thenReturn(START_TIME);
 		dispatcher = mock(Dispatcher.class);
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher);
-		parameters = new ConsumerParametersStub(0, START_TIME, LocalTime.MIN);
+		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
+				TestsConstants.START_DATETIME);
+		parameters = new ConsumerParametersStub(0, START_TIME, LocalDateTime.MIN);
 		object = PowerMockito.spy(new ShockLoadConsumer(simulation, timeService, dispatcher, parameters));
 		when(object.getState()).thenReturn(state);
 		command = new ConsumptionPermissionStub(0, LocalDateTime.MIN, 
@@ -114,7 +115,7 @@ public class ObjectConnectionManagerTest{
 	}
 	
 	private void addToSystemTimeValueLessThanAcceptablePauseBetweenDispatcherMessages(){
-		when(timeService.getCurrentTime()).thenReturn(START_TIME.plusSeconds(
+		when(timeService.getCurrentDateTime()).thenReturn(START_TIME.plusSeconds(
 				(long)(Constants.CONNECTION_TIMEOUT_IN_SECONDS * 0.9)));
 	}
 	
@@ -133,7 +134,7 @@ public class ObjectConnectionManagerTest{
 	}
 	
 	private void addToSystemTimeValueMoreThanPauseBetweenSendingMessages(){
-		when(timeService.getCurrentTime()).thenReturn(START_TIME.plusSeconds(
+		when(timeService.getCurrentDateTime()).thenReturn(START_TIME.plusSeconds(
 			(Constants.PAUSE_BETWEEN_SENDING_MESSAGES_IN_SECONDS + 1)));
 	}
 	
@@ -147,7 +148,7 @@ public class ObjectConnectionManagerTest{
 	}
 	
 	private void addToSystemTimeValueLessThanPauseBetweenSending(){
-		when(timeService.getCurrentTime()).thenReturn(START_TIME.plusSeconds((long)
+		when(timeService.getCurrentDateTime()).thenReturn(START_TIME.plusSeconds((long)
 			(Constants.PAUSE_BETWEEN_SENDING_MESSAGES_IN_SECONDS * 0.9)));
 	}
 	
@@ -161,7 +162,7 @@ public class ObjectConnectionManagerTest{
 	}
 	
 	private void addToSystemTimeValueMoreThanAcceptablePauseBetweenDispatcherMessages(){
-		when(timeService.getCurrentTime()).thenReturn(START_TIME.plusSeconds(
+		when(timeService.getCurrentDateTime()).thenReturn(START_TIME.plusSeconds(
 			(Constants.CONNECTION_TIMEOUT_IN_SECONDS * 2)));
 	}
 	
@@ -174,7 +175,7 @@ public class ObjectConnectionManagerTest{
 	
 	@Test
 	public void doNothingIfAcceptedMessageClassIsNotExpected(){
-		command = new  PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalTime.MIN, 1);
+		command = new  PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalDateTime.MIN, 1);
 		
 		makeConnectionEstablished();
 		
@@ -205,7 +206,7 @@ public class ObjectConnectionManagerTest{
 		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("returned PowerStationState instead ConsumerState.");
 	    
-	    PowerStationState state = new PowerStationState(0, START_TIME, LocalTime.MIN, 1, 0);
+	    PowerStationState state = new PowerStationState(0, START_TIME, LocalDateTime.MIN, 1, 0);
 	    when(object.getState()).thenReturn(state);
 	    
 	    makeObjectSendState();

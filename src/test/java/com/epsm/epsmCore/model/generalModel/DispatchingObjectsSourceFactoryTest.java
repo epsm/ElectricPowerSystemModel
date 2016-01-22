@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.consumption.ScheduledLoadConsumer;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumer;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
@@ -27,7 +28,8 @@ public class DispatchingObjectsSourceFactoryTest {
 	public void setUp(){
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
-		factory = new DispatchingObjectsSourceFactory(timeService, dispatcher);
+		factory = new DispatchingObjectsSourceFactory(timeService, dispatcher,
+				TestsConstants.START_DATETIME);
 		source = factory.createSource();
 	}
 	
@@ -40,7 +42,7 @@ public class DispatchingObjectsSourceFactoryTest {
 	    expectedEx.expectMessage("DispatchingObjectsSourceFactory constructor:"
 	    		+ " timeService can't be null.");
 	
-	    new DispatchingObjectsSourceFactory(null, dispatcher);
+	    new DispatchingObjectsSourceFactory(null, dispatcher, TestsConstants.START_DATETIME);
 	}
 	
 	@Test
@@ -49,8 +51,18 @@ public class DispatchingObjectsSourceFactoryTest {
 	    expectedEx.expectMessage("DispatchingObjectsSourceFactory constructor:"
 	    		+ " dispatcher can't be null.");
 	
-	    new DispatchingObjectsSourceFactory(timeService, null);
+	    new DispatchingObjectsSourceFactory(timeService, null, TestsConstants.START_DATETIME);
 	}
+	
+	@Test
+	public void exceptionInConstructorIfStartDateTimeIsNull(){
+		expectedEx.expect(IllegalArgumentException.class);
+	    expectedEx.expectMessage("DispatchingObjectsSourceFactory constructor:"
+	    		+ " startDateTime can't be null.");
+	
+	    new DispatchingObjectsSourceFactory(timeService, dispatcher, null);
+	}
+	
 	
 	@Test
 	public void sourceKeepsThreeObjects(){

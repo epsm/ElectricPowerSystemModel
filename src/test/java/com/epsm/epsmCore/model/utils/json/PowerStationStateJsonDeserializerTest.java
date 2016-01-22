@@ -2,7 +2,6 @@ package com.epsm.epsmCore.model.utils.json;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,7 +28,7 @@ public class PowerStationStateJsonDeserializerTest {
 		mapper = new ObjectMapper();
 		source = "{\"powerObjectId\":884,"
 				 + "\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\","
-				 + "\"simulationTimeStamp\":3723000000004,"
+				 + "\"simulationTimeStamp\":\"0007-06-05T04:03:02.000000001\","
 				 + "\"generatorQuantity\":2,"
 				 + "\"frequency\":50.0,"
 				 + "\"generators\":{"
@@ -54,7 +53,7 @@ public class PowerStationStateJsonDeserializerTest {
 	
 	@Test
 	public void simulationTimeStampCorrect(){
-		Assert.assertEquals(LocalTime.of(1, 2, 3, 4), stationState.getSimulationTimeStamp());
+		Assert.assertEquals(LocalDateTime.of(7, 6, 5, 4, 3, 2, 1), stationState.getSimulationTimeStamp());
 	}
 	
 	@Test

@@ -3,7 +3,7 @@ package com.epsm.epsmCore.model.generalModel;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,6 +13,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.consumption.Consumer;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
 import com.epsm.epsmCore.model.generation.PowerStation;
@@ -32,7 +33,8 @@ public class ElectricPowerSystemSimulationImplTest {
 	public void setUp(){
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher);
+		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
+				TestsConstants.START_DATETIME);
 		station = PowerMockito.mock(PowerStation.class);
 		consumer = PowerMockito.mock(Consumer.class);
 		when(station.getId()).thenReturn(1L);
@@ -44,8 +46,8 @@ public class ElectricPowerSystemSimulationImplTest {
 	
 	@Test
 	public void timeGoesInTheSimulation(){
-		LocalTime previousTime;
-		LocalTime nextTime;
+		LocalDateTime previousTime;
+		LocalDateTime nextTime;
 		
 		for(int i = 0; i < 10 ;i++){
 			previousTime = simulation.getDateTimeInSimulation();

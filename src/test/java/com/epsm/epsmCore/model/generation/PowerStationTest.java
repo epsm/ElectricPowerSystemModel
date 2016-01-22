@@ -4,7 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Collection;
 
 import org.junit.Assert;
@@ -14,8 +13,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
-import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.Constants;
+import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
 public class PowerStationTest{
@@ -27,7 +26,7 @@ public class PowerStationTest{
 	private Generator generator_3;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
-	private LocalTime CONSTANT_TIME_IN_MOCK_SIMULATION = LocalTime.NOON;
+	private LocalDateTime CONSTANT_TIME_IN_MOCK_SIMULATION = LocalDateTime.of(2000, 01, 01, 12, 00);
 	private LocalDateTime CONSTANT_REAL_TIME = LocalDateTime.of(2000, 01, 01, 00, 00);
 	private final float FIRST_GENERATOR_RQUIRED_POWER = 20;
 	private final float SECOND_GENERATOR_RQUIRED_POWER = 50;
@@ -44,13 +43,13 @@ public class PowerStationTest{
 	@Before
 	public void setUp(){
 		PowerStationParameters parameters
-				= new PowerStationParameters(POWER_STATION_ID, LocalDateTime.MIN, LocalTime.MIN, 1);
+				= new PowerStationParameters(POWER_STATION_ID, LocalDateTime.MIN, LocalDateTime.MIN, 1);
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(Constants.STANDART_FREQUENCY);
 		when(simulation.getDateTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 		
 		timeService = mock(TimeService.class);
-		when(timeService.getCurrentTime()).thenReturn(CONSTANT_REAL_TIME);
+		when(timeService.getCurrentDateTime()).thenReturn(CONSTANT_REAL_TIME);
 		
 		dispatcher = mock(Dispatcher.class);
 		

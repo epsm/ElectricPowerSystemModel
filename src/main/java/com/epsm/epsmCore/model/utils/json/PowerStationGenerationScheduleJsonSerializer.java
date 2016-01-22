@@ -27,10 +27,8 @@ public class PowerStationGenerationScheduleJsonSerializer
 		
 		jGenerator.writeStartObject();
 		jGenerator.writeNumberField("powerObjectId", schedule.getPowerObjectId());
-		//toString because LocalDateTime fields serializes in random order that brakes test
 		jGenerator.writeStringField("realTimeStamp", schedule.getRealTimeStamp().toString());
-		jGenerator.writeNumberField("simulationTimeStamp", schedule.getSimulationTimeStamp()
-				.toNanoOfDay());
+		jGenerator.writeStringField("simulationTimeStamp", schedule.getSimulationTimeStamp().toString());
 		jGenerator.writeNumberField("generatorQuantity", generatorQuantity);
 		jGenerator.writeObjectFieldStart("generators");
 		
