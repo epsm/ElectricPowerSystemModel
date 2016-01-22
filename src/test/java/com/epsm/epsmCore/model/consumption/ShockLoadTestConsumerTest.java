@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,8 +14,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
-import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.epsmCore.model.generalModel.Constants;
+import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
 public class ShockLoadTestConsumerTest {
@@ -24,10 +23,10 @@ public class ShockLoadTestConsumerTest {
 	private ShockLoadConsumer consumer;
 	float previousLoad;
 	float currentLoad;
-	private LocalTime turnOnTime;
-	private LocalTime turnOffTime;
+	private LocalDateTime turnOnTime;
+	private LocalDateTime turnOffTime;
 	private float expectedLoad;
-	private LocalTime expectedTime;
+	private LocalDateTime expectedTime;
 	private ConsumerState state;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
@@ -38,7 +37,7 @@ public class ShockLoadTestConsumerTest {
 	@Before
 	public void setUp(){
 		ConsumerParametersStub parameters 
-			= new ConsumerParametersStub(CONSUMER_NUMBER, LocalDateTime.MIN, LocalTime.MIN);
+			= new ConsumerParametersStub(CONSUMER_NUMBER, LocalDateTime.MIN, LocalDateTime.MIN);
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentTime()).thenReturn(LocalDateTime.of(2000, 01, 01, 00, 00));
 		dispatcher = mock(Dispatcher.class);
@@ -125,7 +124,7 @@ public class ShockLoadTestConsumerTest {
 		for(int i = 0; i < 1_000_000; i++){
 			rememberCurrentLoadAsPreviousAndDoNextStep();
 			if(wasLoadTurnedOn()){
-				turnOnTime = simulation.getTimeInSimulation();
+				turnOnTime = simulation.getDateTimeInSimulation();
 				break;
 			}
 		}
@@ -135,7 +134,7 @@ public class ShockLoadTestConsumerTest {
 		for(int i = 0; i < 1_000_000; i++){
 			rememberCurrentLoadAsPreviousAndDoNextStep();
 			if(wasLoadTurnedOff()){
-				turnOffTime = simulation.getTimeInSimulation();
+				turnOffTime = simulation.getDateTimeInSimulation();
 				break;
 			}
 		}
@@ -183,7 +182,7 @@ public class ShockLoadTestConsumerTest {
 	
 	private void getExpectedValues(){
 		expectedLoad = consumer.calculatePowerBalance();
-		expectedTime = simulation.getTimeInSimulation();
+		expectedTime = simulation.getDateTimeInSimulation();
 	}
 	
 	private void getState(){
@@ -192,7 +191,7 @@ public class ShockLoadTestConsumerTest {
 	
 	private void compareValues(){
 		long actualConsumerNumber = state.getPowerObjectId();
-		LocalTime actualInState = state.getSimulationTimeStamp();
+		LocalDateTime actualInState = state.getSimulationTimeStamp();
 		float actualLoad = state.getLoad();
 		
 		Assert.assertEquals(CONSUMER_NUMBER, actualConsumerNumber, 0);

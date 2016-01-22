@@ -1,7 +1,6 @@
 package com.epsm.epsmCore.model.generation;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.AbstractPowerObjectFactory;
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
@@ -44,7 +43,7 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory{
 	
 	private void createPowerStationParameters(){
 		LocalDateTime realTimeStamp = timeService.getCurrentTime();
-		LocalTime simulationTimeStamp = simulation.getTimeInSimulation();
+		LocalDateTime simulationTimeStamp = simulation.getDateTimeInSimulation();
 		parameters = new PowerStationParameters(powerObjectId, realTimeStamp,
 				simulationTimeStamp, 2);
 		GeneratorParameters parameters_1 = new GeneratorParameters(1, 40, 5);
@@ -60,7 +59,7 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory{
 		GeneratorGenerationSchedule genrationSchedule_2;
 		
 		generationSchedule = new PowerStationGenerationSchedule(powerObjectId,
-				LocalDateTime.MIN, LocalTime.MIN, 2);
+				LocalDateTime.MIN, LocalDateTime.MIN, 2);
 		generationCurve = new LoadCurve(GENERATION_BY_HOURS);
 		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, true, null);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);

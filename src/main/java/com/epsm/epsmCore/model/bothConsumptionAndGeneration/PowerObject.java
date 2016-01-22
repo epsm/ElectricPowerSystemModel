@@ -1,6 +1,6 @@
 package com.epsm.epsmCore.model.bothConsumptionAndGeneration;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +81,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 		return String.format("%s#%d", getClass().getSimpleName(), id);
 	}
 	
-	protected boolean isItExactlyMinute(LocalTime currentTime){
+	protected boolean isItExactlyMinute(LocalDateTime currentTime){
 		return currentTime.getSecond() == 0 && currentTime.getNano() == 0;
 	}
 }

@@ -1,7 +1,6 @@
 package com.epsm.epsmCore.model.generation;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Set;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
@@ -17,7 +16,7 @@ public class PowerStationParameters extends Parameters{
 	private MessageInclusionsContainer<GeneratorParameters> generatorParameters;
 	
 	public PowerStationParameters(long powerObjectId, LocalDateTime realTimeStamp,
-			LocalTime simulationTimeStamp, int quantityOfGeneratorParameters) {
+			LocalDateTime simulationTimeStamp, int quantityOfGeneratorParameters) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		generatorParameters = new MessageInclusionsContainer<GeneratorParameters>(

@@ -1,6 +1,6 @@
 package com.epsm.epsmCore.model.generation;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,15 +20,16 @@ public final class PowerStation extends PowerObject{
 
 	private MainControlPanel controlPanel;
 	private Map<Integer, Generator> generators;
-	private LocalTime currentTime;
+	private LocalDateTime currentTime;
 	private float currentFrequency;
 	private float currentGenerationInMW;
 	private Generator generatorToAdd;
 	private PowerStationState state;
 	private Logger logger;
 	
-	public PowerStation(ElectricPowerSystemSimulation simulation, TimeService timeService, Dispatcher dispatcher,
-			PowerStationParameters parameters) {
+	public PowerStation(ElectricPowerSystemSimulation simulation, TimeService timeService,
+			Dispatcher dispatcher, PowerStationParameters parameters) {
+		
 		super(simulation, timeService, dispatcher, parameters);
 		
 		generators = new HashMap<Integer, Generator>();
@@ -52,7 +53,7 @@ public final class PowerStation extends PowerObject{
 	}
 	
 	private void getTimeAndFrequencyFromSimulation(){
-		currentTime = simulation.getTimeInSimulation();
+		currentTime = simulation.getDateTimeInSimulation();
 		currentFrequency = simulation.getFrequencyInPowerSystem();	
 	}
 	

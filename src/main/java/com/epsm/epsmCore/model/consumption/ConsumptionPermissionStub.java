@@ -1,7 +1,6 @@
 package com.epsm.epsmCore.model.consumption;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import com.epsm.epsmCore.model.dispatch.Command;
 import com.epsm.epsmCore.model.utils.json.ConsumptionPermissionStubJsonDeserializer;
@@ -17,7 +16,7 @@ public class ConsumptionPermissionStub extends Command{
 	public ConsumptionPermissionStub(
 			@JsonProperty("powerObjectId")long powerObjectId,
 			@JsonProperty("realTimeStamp")LocalDateTime realTimeStamp,
-			@JsonProperty("simulationTimeStamp")LocalTime simulationTimeStamp) {
+			@JsonProperty("simulationTimeStamp")LocalDateTime simulationTimeStamp) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 	}

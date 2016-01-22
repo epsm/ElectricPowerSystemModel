@@ -169,7 +169,7 @@ public class GeneratorControllerTest {
 	}
 	
 	private void isAdjustedGenerationsOfGeneratorsConformsScheduled(){
-		LocalTime timeInSimulation = simulation.getTimeInSimulation(); 
+		LocalTime timeInSimulation = simulation.getDateTimeInSimulation(); 
 		float expectedGenerations = generationCurve.getPowerOnTimeInMW(timeInSimulation);
 		float firstGeneratorGeneration = generator_1.getPowerAtRequiredFrequency();
 		float secondGeneratorGeneration = generator_2.getPowerAtRequiredFrequency();

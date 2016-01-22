@@ -1,7 +1,6 @@
 package com.epsm.epsmCore.model.consumption;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.AbstractPowerObjectFactory;
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerObject;
@@ -36,7 +35,7 @@ public class ShockLoadConsumerFactoryStub extends AbstractPowerObjectFactory{
 	
 	private void createShockLoadConsumerParameters(){
 		LocalDateTime realTimeStamp = timeService.getCurrentTime();
-		LocalTime simulationTimeStamp = simulation.getTimeInSimulation();
+		LocalDateTime simulationTimeStamp = simulation.getDateTimeInSimulation();
 		
 		parameters = new ConsumerParametersStub(powerObjectId, realTimeStamp, simulationTimeStamp);
 	}

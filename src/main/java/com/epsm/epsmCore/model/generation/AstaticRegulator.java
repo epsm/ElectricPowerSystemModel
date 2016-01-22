@@ -1,24 +1,24 @@
 package com.epsm.epsmCore.model.generation;
 
 import java.time.Duration;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
-import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.Constants;
+import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 
 public class AstaticRegulator {
 	private ElectricPowerSystemSimulation simulation;
 	private Generator generator;
 	private float currentFrequency;
-	private LocalTime currentTime;
-	private LocalTime previousTime;
+	private LocalDateTime currentTime;
+	private LocalDateTime previousTime;
 	private final float ASTATIC_REGULATION_SENSIVITY = 0.03f;
 	
 
 	public AstaticRegulator(ElectricPowerSystemSimulation simulation, Generator generator) {
 		this.simulation = simulation;
 		this.generator = generator;
-		previousTime = simulation.getTimeInSimulation();//for fist time, otherwise NPE
+		previousTime = simulation.getDateTimeInSimulation();//for fist time, otherwise NPE
 		
 		generator.setAstaticRegulator(this);
 	}
@@ -34,7 +34,7 @@ public class AstaticRegulator {
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){
-		currentTime = simulation.getTimeInSimulation();
+		currentTime = simulation.getDateTimeInSimulation();
 		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 

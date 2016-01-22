@@ -48,9 +48,9 @@ public class ElectricPowerSystemSimulationImplTest {
 		LocalTime nextTime;
 		
 		for(int i = 0; i < 10 ;i++){
-			previousTime = simulation.getTimeInSimulation();
+			previousTime = simulation.getDateTimeInSimulation();
 			simulation.calculateNextStep();
-			nextTime = simulation.getTimeInSimulation();
+			nextTime = simulation.getDateTimeInSimulation();
 			
 			Assert.assertTrue(previousTime.isBefore(nextTime));
 		}

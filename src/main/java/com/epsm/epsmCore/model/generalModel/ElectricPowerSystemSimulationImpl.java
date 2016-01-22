@@ -1,6 +1,6 @@
 package com.epsm.epsmCore.model.generalModel;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	
 	private Map<Long, PowerObject> objects;
 	private float frequencyInPowerSystem;
-	private LocalTime currentTimeInSimulation;
+	private LocalDateTime currentTimeInSimulation;
 	private PowerObjectFactory powerObjectFactory;
 	private final float TIME_CONASTNT = 5_000;
 	private final int SIMULATION_STEP_IN_NANOS = 100_000_000;
@@ -30,7 +30,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	public ElectricPowerSystemSimulationImpl(TimeService timeService, Dispatcher dispatcher) {
 		objects = new ConcurrentHashMap<Long, PowerObject>();
 		frequencyInPowerSystem = Constants.STANDART_FREQUENCY;
-		currentTimeInSimulation = LocalTime.NOON;
+		currentTimeInSimulation = LocalDateTime.of(2000, 01, 01, 00, 00);
 		powerObjectFactory = new PowerObjectFactory(objects, this, timeService, dispatcher);
 		logger = LoggerFactory.getLogger(ElectricPowerSystemSimulationImpl.class);
 	}
@@ -91,7 +91,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private void logFrequency(){
 		if(isItExactlySecond()){
 			logger.warn("sim.time: {}, unnacept. frequency: {} Hz.",
-					getTimeInSimulation(), frequencyInPowerSystem);
+					getDateTimeInSimulation(), frequencyInPowerSystem);
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	}
 	
 	@Override
-	public LocalTime getTimeInSimulation(){
+	public LocalDateTime getDateTimeInSimulation(){
 		return currentTimeInSimulation;
 	}
 

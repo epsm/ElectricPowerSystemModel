@@ -1,6 +1,6 @@
 package com.epsm.epsmCore.model.consumption;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +17,10 @@ public final class ScheduledLoadConsumer extends Consumer{
 	private float[] approximateLoadByHoursOnDayInPercent;
 	private float maxLoadWithoutFluctuationsInMW;
 	private float randomFluctuationsInPercent;
-	private LoadCurve loadCurveOnDay;
-	private LocalTime previousLoadRequestTime;
+	private LoadCurve loadCurveOnDay;//There must be LoadCurves at least for every day of week to emulate real behavior.
+	private LocalDateTime previousLoadRequestDateTime;
 	private ConsumerState state;
-	private LocalTime currentTime;
+	private LocalDateTime currentDateTime;
 	private float currentLoad;
 	private float currentFrequency;
 	private Logger logger;
@@ -37,8 +37,8 @@ public final class ScheduledLoadConsumer extends Consumer{
 		calculateCurrentLoadInMW();
 		prepareState();
 		
-		if(isItExactlyMinute(currentTime)){
-			logger.debug("State: con.#{}, sim.time: {}, freq.: {}, load:{} MW.", id, currentTime,
+		if(isItExactlyMinute(currentDateTime)){
+			logger.debug("State: con.#{}, sim.time: {}, freq.: {}, load:{} MW.", id, currentDateTime,
 					currentFrequency,currentLoad);
 		}
 		
@@ -52,18 +52,19 @@ public final class ScheduledLoadConsumer extends Consumer{
 			calculateLoadCurveOnThisDay();
 		}
 		
-		saveRequestTime();
+		saveRequestDateTime();
 		getLoadFromCurve();
 		countFrequency();	
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){
-		currentTime = simulation.getTimeInSimulation();
+		currentDateTime = simulation.getDateTimeInSimulation();
 		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 	
 	private boolean isItANewDay(){
-		return previousLoadRequestTime == null || previousLoadRequestTime.isAfter(currentTime);
+		return previousLoadRequestDateTime == null 
+				|| previousLoadRequestDateTime.getDayOfMonth() < currentDateTime.getDayOfMonth();
 	}
 	
 	private void calculateLoadCurveOnThisDay(){
@@ -71,12 +72,12 @@ public final class ScheduledLoadConsumer extends Consumer{
 				maxLoadWithoutFluctuationsInMW, randomFluctuationsInPercent);
 	}
 
-	private void saveRequestTime(){
-		previousLoadRequestTime = currentTime;
+	private void saveRequestDateTime(){
+		previousLoadRequestDateTime = currentDateTime;
 	}
 	
 	private void getLoadFromCurve(){
-		currentLoad = loadCurveOnDay.getPowerOnTimeInMW(currentTime);
+		currentLoad = loadCurveOnDay.getPowerOnTimeInMW(currentDateTime.toLocalTime());
 	}
 	
 	private void countFrequency(){
@@ -84,7 +85,7 @@ public final class ScheduledLoadConsumer extends Consumer{
 	}
 	
 	private void prepareState(){
-		state = prepareState(currentTime, -currentLoad);
+		state = prepareState(currentDateTime, -currentLoad);
 	}
 	
 	@Override

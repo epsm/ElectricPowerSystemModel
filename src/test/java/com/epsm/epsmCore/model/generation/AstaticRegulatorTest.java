@@ -77,9 +77,9 @@ public class AstaticRegulatorTest {
 	@Test
 	public void actualGeneratorRegulationSpeedNotMoreThanNominalForGenerator(){
 		prepareMockSimulationWithHighFrequency();
-		when(simulation.getTimeInSimulation()).thenReturn(LocalTime.NOON);
+		when(simulation.getDateTimeInSimulation()).thenReturn(LocalTime.NOON);
 		simulation.calculateNextStep();
-		when(simulation.getTimeInSimulation()).thenReturn(LocalTime.NOON.plusMinutes(1));
+		when(simulation.getDateTimeInSimulation()).thenReturn(LocalTime.NOON.plusMinutes(1));
 		simulation.calculateNextStep();
 		float previousPowerAtRequiredFrequency = staticRegulator.getPowerAtRequiredFrequency();
 		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();

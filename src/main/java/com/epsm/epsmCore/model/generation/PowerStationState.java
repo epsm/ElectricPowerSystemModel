@@ -1,7 +1,6 @@
 package com.epsm.epsmCore.model.generation;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Set;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
@@ -16,8 +15,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class PowerStationState extends State{
 	private MessageInclusionsContainer<GeneratorState> states;
 	
-	public PowerStationState(long powerObjectId, LocalDateTime realTimeStamp, LocalTime simulationTimeStamp,
-			int quantityOfInclusions, float frequency) {
+	public PowerStationState(long powerObjectId, LocalDateTime realTimeStamp,
+			LocalDateTime simulationTimeStamp, int quantityOfInclusions, float frequency) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		this.frequency = frequency;

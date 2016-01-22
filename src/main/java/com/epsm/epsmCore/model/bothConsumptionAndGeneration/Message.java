@@ -2,19 +2,17 @@ package com.epsm.epsmCore.model.bothConsumptionAndGeneration;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import com.epsm.epsmCore.model.generalModel.Constants;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 
 public abstract class Message{
 	protected long powerObjectId;
 	
-	@JsonSerialize(using = LocalTimeSerializer.class)
-	protected LocalTime simulationTimeStamp;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	protected LocalDateTime simulationTimeStamp;
 	
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	protected LocalDateTime realTimeStamp;
@@ -23,7 +21,7 @@ public abstract class Message{
 	protected DecimalFormat numberFormatter;
 	protected DateTimeFormatter timeFormatter;
 	
-	public Message(long powerObjectId, LocalDateTime realTimeStamp, LocalTime simulationTimeStamp){
+	public Message(long powerObjectId, LocalDateTime realTimeStamp, LocalDateTime simulationTimeStamp){
 		if(realTimeStamp == null){
 			throw new IllegalArgumentException("Message constructor: realTimeStamp can't be null.");
 		}else if(simulationTimeStamp == null){
@@ -42,7 +40,7 @@ public abstract class Message{
 		return powerObjectId;
 	}
 	
-	public LocalTime getSimulationTimeStamp() {
+	public LocalDateTime getSimulationTimeStamp() {
 		return simulationTimeStamp;
 	}
 

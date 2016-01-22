@@ -1,6 +1,6 @@
 package com.epsm.epsmCore.model.consumption;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -16,10 +16,10 @@ public final class ShockLoadConsumer extends Consumer{
 	private int maxWorkDurationInSeconds;
 	private int maxPauseBetweenWorkInSeconds;
 	private float maxLoad;
-	private LocalTime timeToTurnOn;
-	private LocalTime timeToTurnOff;
+	private LocalDateTime dateTimeToTurnOn;
+	private LocalDateTime dateTimeToTurnOff;
 	private boolean isTurnedOn;
-	private LocalTime currentTime;
+	private LocalDateTime currentDateTime;
 	private float currentLoad;
 	private float currentFrequency;
 	private volatile ConsumerState state;
@@ -38,10 +38,10 @@ public final class ShockLoadConsumer extends Consumer{
 		calculateCurrentLoadInMW();
 		prepareState();
 		
-		if(isItExactlyMinute(currentTime)){
+		if(isItExactlyMinute(currentDateTime)){
 			logger.debug("State: con.#{}, sim.time: {}, freq.: {}, cur.load:{} MW, timeToTurnOn: {},"
-					+ "timeToTurnOff: {}, turnedOn: {}.", id, currentTime, currentFrequency,
-					currentLoad, timeToTurnOn, timeToTurnOff, isTurnedOn);
+					+ "timeToTurnOff: {}, turnedOn: {}.", id, currentDateTime, currentFrequency,
+					currentLoad, dateTimeToTurnOn, dateTimeToTurnOff, isTurnedOn);
 		}
 		
 		return -currentLoad;
@@ -52,11 +52,11 @@ public final class ShockLoadConsumer extends Consumer{
 
 		if(isTurnedOn){
 			if(IsItTimeToTurnOff()){
-				turnOffAndSetTimeToTurnOn();
+				turnOffAndSetDateTimeToTurnOn();
 			}
 		}else{
 			if(IsItTimeToTurnOn()){
-				turnOnAndSetTimeToTurnOff();
+				turnOnAndSetDateTimeToTurnOff();
 			}
 		}
 		
@@ -66,30 +66,30 @@ public final class ShockLoadConsumer extends Consumer{
 	}
 
 	private void prepareState(){
-		state = prepareState(currentTime, -currentLoad);
+		state = prepareState(currentDateTime, -currentLoad);
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){
-		currentTime = simulation.getTimeInSimulation();
+		currentDateTime = simulation.getDateTimeInSimulation();
 		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 	
 	private boolean IsItTimeToTurnOn(){
 		if(isItFirstTurnOn()){
-			setTimeToTurnOn();
+			setDateTimeToTurnOn();
 			return false;
 		}else{
-			return timeToTurnOn.isBefore(currentTime);
+			return dateTimeToTurnOn.isBefore(currentDateTime);
 		}
 	}
 	
 	private boolean isItFirstTurnOn(){
-		return timeToTurnOn == null;
+		return dateTimeToTurnOn == null;
 	}
 	
-	private void turnOnAndSetTimeToTurnOff(){
+	private void turnOnAndSetDateTimeToTurnOff(){
 		turnOnWithRandomLoadValue();
-		setTimeToTurnOff();
+		setDateTimeToTurnOff();
 	}
 	
 	private void turnOnWithRandomLoadValue(){
@@ -98,19 +98,19 @@ public final class ShockLoadConsumer extends Consumer{
 		isTurnedOn = true;
 	}
 	
-	private void setTimeToTurnOff(){
+	private void setDateTimeToTurnOff(){
 		float halfOfTurnedOnDuration = maxWorkDurationInSeconds / 2; 
-		timeToTurnOff = currentTime.plusSeconds(
+		dateTimeToTurnOff = currentDateTime.plusSeconds(
 				(long)(halfOfTurnedOnDuration + halfOfTurnedOnDuration * random.nextFloat()));
 	}
 	
 	private boolean IsItTimeToTurnOff(){
-		return timeToTurnOff.isBefore(currentTime);
+		return dateTimeToTurnOff.isBefore(currentDateTime);
 	}
 	
-	private void turnOffAndSetTimeToTurnOn(){
+	private void turnOffAndSetDateTimeToTurnOn(){
 		turnOff();
-		setTimeToTurnOn();
+		setDateTimeToTurnOn();
 	}
 	
 	private void turnOff(){
@@ -118,9 +118,9 @@ public final class ShockLoadConsumer extends Consumer{
 		isTurnedOn = false;
 	}
 	
-	private void setTimeToTurnOn(){
+	private void setDateTimeToTurnOn(){
 		float halfOfTurnedOffDuration = maxPauseBetweenWorkInSeconds / 2; 
-		timeToTurnOn = currentTime.plusSeconds(
+		dateTimeToTurnOn = currentDateTime.plusSeconds(
 				(long)(halfOfTurnedOffDuration + halfOfTurnedOffDuration * random.nextFloat()));
 	}
 	

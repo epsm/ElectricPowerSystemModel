@@ -61,7 +61,7 @@ public class ScheduledLoadConsumerTest{
 		}
 		
 		@Override
-		public LocalTime getTimeInSimulation(){
+		public LocalTime getDateTimeInSimulation(){
 			return currentTime;
 		}
 	}
@@ -111,7 +111,7 @@ public class ScheduledLoadConsumerTest{
 	
 	private void getExpectedValues(){
 		expectedLoad = consumer.calculatePowerBalance();
-		expectedTime = simulation.getTimeInSimulation();
+		expectedTime = simulation.getDateTimeInSimulation();
 	}
 	
 	private void getState(){

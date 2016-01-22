@@ -1,12 +1,13 @@
 package com.epsm.epsmCore.model.generation;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 
+//This implementation does not take in account that generation schedule must be on DATE, not on day. 
 public class MainControlPanel{
 	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station;
@@ -69,7 +70,7 @@ public class MainControlPanel{
 	}
 	
 	private void getTimeAndAdjustGenerators(){
-		LocalTime currentTime = simulation.getTimeInSimulation();
-		controller.adjustGenerators(currentSchedule, currentTime);
+		LocalDateTime currentDateTime = simulation.getDateTimeInSimulation();
+		controller.adjustGenerators(currentSchedule, currentDateTime.toLocalTime());
 	}
 }

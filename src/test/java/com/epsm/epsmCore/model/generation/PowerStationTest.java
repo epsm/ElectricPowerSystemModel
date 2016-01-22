@@ -47,7 +47,7 @@ public class PowerStationTest{
 				= new PowerStationParameters(POWER_STATION_ID, LocalDateTime.MIN, LocalTime.MIN, 1);
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(Constants.STANDART_FREQUENCY);
-		when(simulation.getTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
+		when(simulation.getDateTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
 		
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentTime()).thenReturn(CONSTANT_REAL_TIME);

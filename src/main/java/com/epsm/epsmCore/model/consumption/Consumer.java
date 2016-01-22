@@ -1,12 +1,12 @@
 package com.epsm.epsmCore.model.consumption;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerObject;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
 import com.epsm.epsmCore.model.dispatch.Parameters;
-import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.Constants;
+import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
 public abstract class Consumer extends PowerObject{
@@ -30,7 +30,7 @@ public abstract class Consumer extends PowerObject{
 		return degreeOnDependingOfFrequency;
 	}
 	
-	protected ConsumerState prepareState(LocalTime simulationTimeStamp, float load){
+	protected ConsumerState prepareState(LocalDateTime simulationTimeStamp, float load){
 		return new ConsumerState(id, timeService.getCurrentTime(), simulationTimeStamp, load);
 	}
 }

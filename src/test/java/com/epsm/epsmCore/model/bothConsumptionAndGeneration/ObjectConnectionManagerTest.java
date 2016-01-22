@@ -63,7 +63,7 @@ public class ObjectConnectionManagerTest{
 		object = PowerMockito.spy(new ShockLoadConsumer(simulation, timeService, dispatcher, parameters));
 		when(object.getState()).thenReturn(state);
 		command = new ConsumptionPermissionStub(0, LocalDateTime.MIN, 
-				simulation.getTimeInSimulation());
+				simulation.getDateTimeInSimulation());
 		manager = new ObjectConnectionManager(timeService, dispatcher, object);
 		captor = ArgumentCaptor.forClass(State.class);
 	}
