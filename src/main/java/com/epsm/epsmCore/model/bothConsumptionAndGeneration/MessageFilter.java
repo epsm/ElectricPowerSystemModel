@@ -60,11 +60,12 @@ public class MessageFilter {
 		return state.getClass() == expectedStateClass;
 	}
 	
-	public String getExpectedCommandClassName(){
-		return expectedCommandClass.getSimpleName();
-	}
 	
 	public String getExpectedStateClassName(){
 		return expectedStateClass.getSimpleName();
+	}
+
+	public Object getExpectedCommandClassName() {
+		return expectedCommandClass.getSimpleName();
 	}
 }

@@ -84,4 +84,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 	protected boolean isItExactlyMinute(LocalDateTime currentDateTime){
 		return currentDateTime.getSecond() == 0 && currentDateTime.getNano() == 0;
 	}
+	
+	@Override
+	public abstract float calculatePowerBalance();
 }

@@ -8,4 +8,6 @@ public abstract class State extends Message{
 	public State(long powerObjectId, LocalDateTime realTimeStamp, LocalDateTime simulationTimeStamp) {
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 	}
+	
+	public abstract float getPowerBalanceForLastHourInMWh();
 }
