@@ -22,9 +22,6 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	private float frequencyInPowerSystem;
 	private LocalDateTime currentDateTimeInSimulation;
 	private PowerObjectFactory powerObjectFactory;
-	private final float TIME_CONASTNT = 5_000;
-	private final int SIMULATION_STEP_IN_NANOS = 100_000_000;
-	private final float ACCEPTABLE_FREQUENCY_DELTA = 0.03f;
 	private Logger logger;
 
 	public ElectricPowerSystemSimulationImpl(TimeService timeService, Dispatcher dispatcher,
@@ -73,18 +70,19 @@ public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSim
 	 * system will be sustainable, it will be possible to get system frequency.
 	 */
 	private void calculateFrequencyInPowerSystem(float powerBalance){
-		frequencyInPowerSystem = frequencyInPowerSystem + (powerBalance / TIME_CONASTNT)
-				* ((float)SIMULATION_STEP_IN_NANOS / Constants.NANOS_IN_SECOND);
+		frequencyInPowerSystem = frequencyInPowerSystem + (powerBalance / Constants.TIME_CONASTNT)
+				* ((float)Constants.SIMULATION_STEP_IN_NANOS / Constants.NANOS_IN_SECOND);
 	}
 	
 	private void changeTimeForStep(){
-		currentDateTimeInSimulation = currentDateTimeInSimulation.plusNanos(SIMULATION_STEP_IN_NANOS);
+		currentDateTimeInSimulation = currentDateTimeInSimulation.plusNanos(
+				Constants.SIMULATION_STEP_IN_NANOS);
 	}
 
 	private boolean isFrequencyLowerThanNormal(){
 		float delta = Math.abs(Constants.STANDART_FREQUENCY - frequencyInPowerSystem);
 		
-		if(delta > ACCEPTABLE_FREQUENCY_DELTA){
+		if(delta > Constants.ACCEPTABLE_FREQUENCY_DELTA){
 			return true;
 		}else{
 			return false;

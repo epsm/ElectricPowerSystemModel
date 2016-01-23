@@ -155,7 +155,7 @@ public class MessageFilterTest {
 		}
 
 		@Override
-		public float calculatePowerBalance() {
+		public float calculateCurrentPowerBalance() {
 			return 0;
 		}
 

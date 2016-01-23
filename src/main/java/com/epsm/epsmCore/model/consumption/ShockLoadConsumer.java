@@ -34,7 +34,7 @@ public final class ShockLoadConsumer extends Consumer{
 	}
 	
 	@Override
-	public float calculatePowerBalance() {
+	protected float calculateCurrentPowerBalance() {
 		calculateCurrentLoadInMW();
 		prepareState();
 		

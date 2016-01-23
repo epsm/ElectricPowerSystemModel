@@ -1,20 +1,25 @@
 package com.epsm.epsmCore.model.bothConsumptionAndGeneration;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.epsmCore.model.dispatch.Command;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
+import com.epsm.epsmCore.model.dispatch.Parameters;
 import com.epsm.epsmCore.model.dispatch.State;
 import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
-public class PowerObjectMessageManager{
+public final class PowerObjectMessageManager{
 	private PowerObject powerObject;
-	private SendingMessageManager<State> sendingManager;
-	private DispatcherRegistrationManager registrationManager;
+	private List<State> statesToSend;
+	private List<State> sentStates;
+	private Dispatcher dispatcher;
 	private TimeService timeService;
 	private MessageFilter filter;
 	private LocalDateTime timeWhenSentLastMessage;
@@ -32,6 +37,10 @@ public class PowerObjectMessageManager{
 					+ "must not be null.");
 			logger.error(message);
 			throw new IllegalArgumentException(message);
+		}else if(dispatcher == null){
+			String message = "ObjectConnectionManager constructor: dispatcher must not be null.";
+			logger.error(message);
+			throw new IllegalArgumentException(message);
 		}else if(powerObject == null){
 			String message = "ObjectConnectionManager constructor: powerObject must not be null.";
 			logger.error(message);
@@ -39,9 +48,10 @@ public class PowerObjectMessageManager{
 		}
 		
 		this.timeService = timeService;
+		this.dispatcher = dispatcher;
 		this.powerObject = powerObject;
-		sendingManager = new SendingMessageManager<State>(dispatcher, timeService);
-		registrationManager = new DispatcherRegistrationManager(dispatcher, powerObject.getParameters());
+		statesToSend = Collections.synchronizedList(new ArrayList<State>());
+		sentStates = new ArrayList<State>();
 		filter = new MessageFilter(powerObject.getClass());
 		timeWhenSentLastMessage = LocalDateTime.MIN;
 	}
@@ -71,7 +81,7 @@ public class PowerObjectMessageManager{
 		return message.getClass().getSimpleName();
 	}
 	
-	public final void manageConnection(){
+	public final void manageMessages(){
 		getCurrentTime();
 		logger.debug("{}, last sent time: {}, registered: {}",
 				powerObject, timeWhenSentLastMessage.toLocalTime(), registeredWithDispatcher);
@@ -98,7 +108,21 @@ public class PowerObjectMessageManager{
 	}
 	
 	private void sendStatesToDispatcher(){
-		sendingManager.sendStates();
+		sendAndRememberSentMessages();
+		deleteSentStates();
+	}
+	
+	private void sendAndRememberSentMessages(){
+		for(State state: statesToSend){
+			dispatcher.acceptState(state);
+			sentStates.add(state);
+			logger.info("Sent: {} to dispatcher.", state);
+		}
+	}
+	
+	private void deleteSentStates(){
+		statesToSend.removeAll(sentStates);
+		sentStates.clear();
 	}
 	
 	private void setTimeWhenSentLastMessage(){
@@ -106,16 +130,19 @@ public class PowerObjectMessageManager{
 	}
 	
 	private void registerWithDispatcher(){
-		registeredWithDispatcher = registrationManager.registerWithDispatcher();
+		Parameters parameters = powerObject.getParameters();
+		registeredWithDispatcher = dispatcher.registerObject(parameters);
+		logger.info("Sent: {} to dispatcher", parameters);
 	}
 	
 	public void acceptState(State state){
 		if(isStateTypeEqualsToExpected(state)){
-			sendingManager.acceptMessage(state);	
-			logger.debug("{} passed to SendingMessageManager.", powerObject);
+			statesToSend.add(state);
+			logger.debug("Accepted: {}.", state);
 		}else{
 			String message = String.format("%s received instead %s.",
 					getMessageClassName(state), filter.getExpectedStateClassName());
+			logger.debug(message);
 			throw new IllegalArgumentException(message);
 		}
 	}

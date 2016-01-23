@@ -15,7 +15,7 @@ import com.epsm.epsmCore.model.generalModel.SimulationObject;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
 public abstract class PowerObject implements SimulationObject, RealTimeOperations{
-	protected long id;//must not bee changed after creation
+	protected long id;//must not bee changed after creation and must be uniqe for all objects
 	protected Parameters parameters;
 	protected ElectricPowerSystemSimulation simulation;
 	protected TimeService timeService;
@@ -49,7 +49,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 		this.timeService = timeService;
 		this.parameters = parameters;
 		id = parameters.getPowerObjectId();
-		manager = new PowerObjectMessageManager(timeService, this, null, null);
+		manager = new PowerObjectMessageManager(timeService, dispatcher, this);
 		
 		logger.info("{} was created.", this);
 	}
@@ -64,7 +64,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 	
 	@Override
 	public final void doRealTimeDependingOperations(){
-		manager.manageConnection();
+		manager.manageMessages();
 	}
 	
 	@Override
@@ -86,5 +86,27 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 	}
 	
 	@Override
-	public abstract float calculatePowerBalance();
+	public final float calculatePowerBalance(){
+		float powerBalance = calculateCurrentPowerBalance();
+		
+		if(ifItExactlyTenMinute()){
+			passStateOnCurrentTimeToMessageManager();
+		}
+		
+		return powerBalance;
+	}
+	
+	protected abstract float calculateCurrentPowerBalance();
+	
+	private boolean ifItExactlyTenMinute(){
+		LocalDateTime simulationDateTime = simulation.getDateTimeInSimulation();
+		boolean nanosIsZero = simulationDateTime.getNano() == 0;
+		boolean secondsIsZero = simulationDateTime.getSecond() == 0;
+		boolean minutesIsZero = simulationDateTime.getMinute() % 10 == 0;
+		return nanosIsZero && secondsIsZero && minutesIsZero;
+	}
+	
+	private void passStateOnCurrentTimeToMessageManager(){
+		manager.acceptState(getState());
+	}
 }

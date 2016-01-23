@@ -33,7 +33,7 @@ public final class ScheduledLoadConsumer extends Consumer{
 	}
 	
 	@Override
-	public float calculatePowerBalance() {
+	protected float calculateCurrentPowerBalance() {
 		calculateCurrentLoadInMW();
 		prepareState();
 		

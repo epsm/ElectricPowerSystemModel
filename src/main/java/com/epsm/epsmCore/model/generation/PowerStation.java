@@ -38,7 +38,7 @@ public final class PowerStation extends PowerObject{
 	}
 	
 	@Override
-	public float calculatePowerBalance() {
+	protected float calculateCurrentPowerBalance() {
 		calculateGenerationInMW();
 		prepareStationState();
 		

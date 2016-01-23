@@ -3,11 +3,9 @@ package com.epsm.epsmCore.model.bothConsumptionAndGeneration;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 import org.junit.Before;
@@ -43,10 +41,8 @@ public class PowerObjectMessageManagerTest{
 	private State state;
 	private PowerObject powerObject;
 	private Command command;
-	private SendingMessageManager<State> sendingManager;
-	private DispatcherRegistrationManager registrationManager;
 	private PowerObjectMessageManager messageManager;
-	private final LocalDateTime START_TIME = LocalDateTime.of(2000, 01, 01, 00, 00);
+	private LocalDateTime timeInTest = LocalDateTime.of(2000, 01, 01, 00, 00);
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -54,29 +50,16 @@ public class PowerObjectMessageManagerTest{
 	@Before
 	public void setUp() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
 		timeService = mock(TimeService.class);
-		when(timeService.getCurrentDateTime()).thenReturn(START_TIME);
+		when(timeService.getCurrentDateTime()).thenReturn(timeInTest);
 		dispatcher = mock(Dispatcher.class);
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,	START_TIME);
-		parameters = new ConsumerParametersStub(0, START_TIME, LocalDateTime.MIN);
-		state = new ConsumerState(0, START_TIME, LocalDateTime.MIN, 0);
+		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,	timeInTest);
+		parameters = new ConsumerParametersStub(0, timeInTest, LocalDateTime.MIN);
+		state = new ConsumerState(0, timeInTest, LocalDateTime.MIN, 0);
 		powerObject = PowerMockito.mock(ShockLoadConsumer.class);
 		when(powerObject.getParameters()).thenReturn(parameters);
 		when(powerObject.getState()).thenReturn(state);
 		command = new ConsumptionPermissionStub(0, LocalDateTime.MIN, simulation.getDateTimeInSimulation());
-		sendingManager = spy(new SendingMessageManager<State>(dispatcher, timeService));
-		registrationManager = spy(new DispatcherRegistrationManager(dispatcher, parameters));
 		messageManager = new PowerObjectMessageManager(timeService, dispatcher, powerObject);
-		setPrivateFielsd();
-	}
-	
-	private void setPrivateFielsd() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
-		Field sendingManagerField = messageManager.getClass().getDeclaredField("sendingManager");
-		Field registrationField = messageManager.getClass().getDeclaredField("registrationManager");
-		
-		sendingManagerField.setAccessible(true);
-		sendingManagerField.set(messageManager, sendingManager);
-		registrationField.setAccessible(true);
-		registrationField.set(messageManager, registrationManager);
 	}
 
 	@Test
@@ -85,6 +68,14 @@ public class PowerObjectMessageManagerTest{
 	    expectedEx.expectMessage("ObjectConnectionManager constructor: timeService must not be null.");
 	
 	    messageManager = new PowerObjectMessageManager(null, dispatcher, powerObject);
+	}
+	
+	@Test
+	public void exceptionInConstructorIfDispatcherIsNull(){
+		expectedEx.expect(IllegalArgumentException.class);
+	    expectedEx.expectMessage("ObjectConnectionManager constructor: dispatcher must not be null.");
+	
+	    messageManager = new PowerObjectMessageManager(timeService, null, powerObject);
 	}
 	
 	@Test
@@ -114,7 +105,7 @@ public class PowerObjectMessageManagerTest{
 	}
 	
 	private void acceptWrongCommand(){
-		messageManager.executeCommand(new PowerStationGenerationSchedule(0, START_TIME, START_TIME, 1));
+		messageManager.executeCommand(new PowerStationGenerationSchedule(0, timeInTest, timeInTest, 1));
 	}
 	
 	@Test
@@ -129,58 +120,68 @@ public class PowerObjectMessageManagerTest{
 	}
 	
 	@Test
-	public void invocesRegisterWithDispatcherOnDispatcherRegistrationManagerIfItIsNotRegistered(){
-		messageManager.manageConnection();
+	public void registersWithDispatcherIfItIsNotRegistered(){
+		messageManager.manageMessages();
 		
-		verify(registrationManager).registerWithDispatcher();
+		verify(dispatcher).registerObject(parameters);
 	}
 	
 	@Test
 	public void doesNotTryRegisterWithDispatcherIfAlreadyRegistered(){
 		makeRegistration();
-		addToSystemTimeValueMoreThanPauseBetweenSendingMessages();
-		messageManager.manageConnection();
+		makeSendNextMessage();
 		
-		verify(registrationManager).registerWithDispatcher();
+		verify(dispatcher).registerObject(parameters);
 	}
 	
 	private void makeRegistration(){
 		when(dispatcher.registerObject(parameters)).thenReturn(true);
-		messageManager.manageConnection();
+		messageManager.manageMessages();
+	}
+	
+	private void makeSendNextMessage(){
+		addToSystemTimeValueMoreThanPauseBetweenSendingMessages();
+		messageManager.manageMessages();
 	}
 	
 	private void addToSystemTimeValueMoreThanPauseBetweenSendingMessages(){
-		when(timeService.getCurrentDateTime()).thenReturn(START_TIME.plusSeconds(
-			(Constants.PAUSE_BETWEEN_SENDING_MESSAGES_IN_SECONDS + 1)));
+		timeInTest = timeInTest.plusSeconds(
+				Constants.PAUSE_BETWEEN_SENDING_MESSAGES_IN_SECONDS + 1);
+		when(timeService.getCurrentDateTime()).thenReturn(timeInTest);
 	}
 	
 	@Test
-	public void invokeSendStatesOnSendingMessageManagerIfPauseBetweenSendingMoreThenSet(){
-		makeObjectSendState();
+	public void sendsStatesToDispatcherIfPauseBetweenSendingMoreThenSet(){
+		makeSendState();
 
-		verify(sendingManager).sendStates();
+		verify(dispatcher).acceptState(state);
 	}
 	
-	private void makeObjectSendState(){
+	private void makeSendState(){
 		makeRegistration();
 		messageManager.acceptState(state);
 		addToSystemTimeValueMoreThanPauseBetweenSendingMessages();
-		messageManager.manageConnection();
+		messageManager.manageMessages();
 	}
 	
 	@Test
-	public void doesNotInvokeSendStatesOnSendingMessageManagerIfPauseBetweenSendingLessThenSet(){
+	public void doesNotSendStatesIfPauseBetweenSendingLessThenSet(){
 		makeRegistration();
+		prepareManagerToSendStateButMakePauseLessThenNecessaryForSending();
+				
+		verify(dispatcher, never()).acceptState(state);
+	}
+	
+	private void prepareManagerToSendStateButMakePauseLessThenNecessaryForSending(){
 		messageManager.acceptState(state);
 		addToSystemTimeValueLessThanPauseBetweenSending();
-		messageManager.manageConnection();
-		
-		verify(sendingManager, never()).sendStates();
+		messageManager.manageMessages();
 	}
 	
 	private void addToSystemTimeValueLessThanPauseBetweenSending(){
-		when(timeService.getCurrentDateTime()).thenReturn(START_TIME.plusSeconds((long)
-			(Constants.PAUSE_BETWEEN_SENDING_MESSAGES_IN_SECONDS * 0.9)));
+		timeInTest = timeInTest.plusSeconds(
+				Constants.PAUSE_BETWEEN_SENDING_MESSAGES_IN_SECONDS - 1);
+		when(timeService.getCurrentDateTime()).thenReturn(timeInTest);
 	}
 	
 	@Test
@@ -188,9 +189,22 @@ public class PowerObjectMessageManagerTest{
 		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("PowerStationState received instead ConsumerState.");
 	    
-	    state = new PowerStationState(0, START_TIME, START_TIME, 1, 0);
+	    state = new PowerStationState(0, timeInTest, timeInTest, 1, 0);
 	    when(powerObject.getState()).thenReturn(state);
 	    
-	    makeObjectSendState();
+	    makeSendState();
+	}
+	
+	@Test
+	public void doesNotSendPreviouslySentMessageAgain(){
+		makeSendState();
+		makeSendStateButNotAddNewStates();
+		
+		verify(dispatcher).acceptState(any());
+	}
+	
+	private void makeSendStateButNotAddNewStates(){
+		addToSystemTimeValueMoreThanPauseBetweenSendingMessages();
+		messageManager.manageMessages();
 	}
 }
