@@ -146,7 +146,7 @@ public final class PowerStation extends PowerObject{
 	}
 
 	@Override
-	protected void performDispatcheCommand(Command command) {
+	protected void performDispatcherCommand(Command command) {
 		controlPanel.acceptGenerationSchedule((PowerStationGenerationSchedule) command);
 	}
 }

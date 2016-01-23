@@ -165,7 +165,7 @@ public class MessageFilterTest {
 		}
 
 		@Override
-		protected void performDispatcheCommand(Command command) {
+		protected void performDispatcherCommand(Command command) {
 		}
 	}
 	

@@ -114,7 +114,7 @@ public final class ScheduledLoadConsumer extends Consumer{
 	}
 
 	@Override
-	protected void performDispatcheCommand(Command command) {
+	protected void performDispatcherCommand(Command command) {
 		//TODO turn off/on user by dispatcher command. 
 	}
 }

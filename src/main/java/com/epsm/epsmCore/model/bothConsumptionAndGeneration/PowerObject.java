@@ -19,7 +19,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 	protected Parameters parameters;
 	protected ElectricPowerSystemSimulation simulation;
 	protected TimeService timeService;
-	private ObjectConnectionManager manager;
+	private PowerObjectMessageManager manager;
 	protected Logger logger;
 
 	public PowerObject(ElectricPowerSystemSimulation simulation, TimeService timeService,
@@ -49,7 +49,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 		this.timeService = timeService;
 		this.parameters = parameters;
 		id = parameters.getPowerObjectId();
-		manager = new ObjectConnectionManager(timeService, dispatcher, this);
+		manager = new PowerObjectMessageManager(timeService, this, null, null);
 		
 		logger.info("{} was created.", this);
 	}
@@ -72,7 +72,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 		manager.executeCommand(command);
 	}
 	
-	protected abstract void performDispatcheCommand(Command command);
+	protected abstract void performDispatcherCommand(Command command);
 	
 	public abstract State getState();
 	
