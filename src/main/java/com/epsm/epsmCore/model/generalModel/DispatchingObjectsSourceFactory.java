@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.consumption.ScheduledLoadConsumerCreationParametersStub;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumerCreationParametersStub;
 import com.epsm.epsmCore.model.control.SimulationRunner;
@@ -21,6 +20,7 @@ public class DispatchingObjectsSourceFactory {
 	private SimulationRunner runner;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
+	private LocalDateTime startDateTime;
 	private Logger logger;
 
 	public DispatchingObjectsSourceFactory(TimeService timeService, Dispatcher dispatcher,
@@ -47,11 +47,12 @@ public class DispatchingObjectsSourceFactory {
 		
 		this.timeService = timeService;
 		this.dispatcher = dispatcher;
+		this.startDateTime = startDateTime;
 		runner = new SimulationRunner();
 	}
 
 	public DispatchingObjectsSource createSource(){
-		makeSimulation(dispatcher);
+		createSimulation();
 		fillSimulationWithObjects();
 		runSimulation();
 		
@@ -60,9 +61,8 @@ public class DispatchingObjectsSourceFactory {
 		return simulation;
 	}
 	
-	private void makeSimulation(Dispatcher dispatcher){
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
-				TestsConstants.START_DATETIME);
+	private void createSimulation(){
+		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher, startDateTime);
 	}
 	
 	private void fillSimulationWithObjects(){

@@ -83,7 +83,7 @@ public final class PowerObjectMessageManager{
 	
 	public final void manageMessages(){
 		getCurrentTime();
-		logger.debug("{}, last sent time: {}, registered: {}",
+		logger.debug("ManageMessage(): {}, last sent time: {}, registered: {}",
 				powerObject, timeWhenSentLastMessage.toLocalTime(), registeredWithDispatcher);
 		
 		if(isItTimeToSentMessage()){
