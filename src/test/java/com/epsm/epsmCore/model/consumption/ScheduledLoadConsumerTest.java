@@ -109,7 +109,7 @@ public class ScheduledLoadConsumerTest{
 	}
 	
 	private void getExpectedValues(){
-		expectedLoad = consumer.calculatePowerBalance();
+		expectedLoad = -consumer.calculatePowerBalance();
 		expectedTime = simulation.getDateTimeInSimulation();
 	}
 	

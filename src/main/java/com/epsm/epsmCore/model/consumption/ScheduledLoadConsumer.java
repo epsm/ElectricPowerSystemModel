@@ -85,7 +85,7 @@ public final class ScheduledLoadConsumer extends Consumer{
 	}
 	
 	private void prepareState(){
-		state = prepareState(currentDateTime, -currentLoad);
+		state = prepareState(currentDateTime, currentLoad);
 	}
 	
 	@Override

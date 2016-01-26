@@ -66,7 +66,7 @@ public final class ShockLoadConsumer extends Consumer{
 	}
 
 	private void prepareState(){
-		state = prepareState(currentDateTime, -currentLoad);
+		state = prepareState(currentDateTime, currentLoad);
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){

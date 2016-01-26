@@ -31,7 +31,7 @@ public class ConsumerState extends State{
 		stringBuilder.append(" realtime: ");
 		stringBuilder.append(realTimeStamp.toString());
 		stringBuilder.append(", load MW: ");
-		stringBuilder.append(numberFormatter.format(-load));
+		stringBuilder.append(numberFormatter.format(load));
 		stringBuilder.append("]");
 
 		return stringBuilder.toString();

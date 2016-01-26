@@ -183,7 +183,7 @@ public class ShockLoadTestConsumerTest {
 	}
 	
 	private void getExpectedValues(){
-		expectedLoad = consumer.calculatePowerBalance();
+		expectedLoad = -consumer.calculatePowerBalance();
 		expectedTime = simulation.getDateTimeInSimulation();
 	}
 	
