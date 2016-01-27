@@ -12,7 +12,7 @@ public class AstaticRegulator {
 	private float currentFrequency;
 	private LocalDateTime currentDateTime;
 	private LocalDateTime previousDateTime;
-	private final float ASTATIC_REGULATION_SENSIVITY = 0.03f;
+	private final float ASTATIC_REGULATION_SENSIVITY = 0.005f;
 	
 
 	public AstaticRegulator(ElectricPowerSystemSimulation simulation, Generator generator) {
