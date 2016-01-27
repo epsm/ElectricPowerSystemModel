@@ -2,8 +2,8 @@ package com.epsm.epsmCore.model.bothConsumptionAndGeneration;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ public final class PowerObjectMessageManager{
 		this.timeService = timeService;
 		this.dispatcher = dispatcher;
 		this.powerObject = powerObject;
-		statesToSend = Collections.synchronizedList(new ArrayList<State>());
+		statesToSend = new CopyOnWriteArrayList<State>();
 		sentStates = new ArrayList<State>();
 		filter = new MessageFilter(powerObject.getClass());
 		timeWhenSentLastMessage = LocalDateTime.MIN;
