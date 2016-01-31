@@ -65,8 +65,13 @@ public class DispatchingObjectsSourceFactoryTest {
 	
 	
 	@Test
-	public void sourceKeepsThreeObjects(){
-		Assert.assertEquals(3, source.getDispatchingObjects().size());
+	public void sourceContainsAllObjects(){
+		int powerStation = 1;
+		int shockLoadConsumer = 4;
+		int scheduledLoadConsumer = 8;
+		int total = powerStation + shockLoadConsumer + scheduledLoadConsumer;
+		
+		Assert.assertEquals(total, source.getDispatchingObjects().size());
 	}
 	
 	@Test

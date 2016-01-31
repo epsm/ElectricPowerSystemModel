@@ -1,31 +1,39 @@
 package com.epsm.epsmCore.model.generation;
 
-import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.Constants;
 
-public class StaticRegulator {
-	private ElectricPowerSystemSimulation simulation;
+public class SpeedController {
 	private Generator generator;
 	private float coefficientOfStatism;
-	private float requiredFrequency;
-	private float powerAtRequiredFrequency;
-	private float frequencyInPowerSystem;
+	private final float givenFrequency;
+	private float generationAtGivenFrequency;
+	private float currentFrequency;
 
-	public StaticRegulator(ElectricPowerSystemSimulation simulation, Generator generator) {
-		this.simulation = simulation;
-		this.generator = generator;
-		requiredFrequency = Constants.STANDART_FREQUENCY;
-		coefficientOfStatism = 0.01f;
+	public SpeedController(Generator generator) {
+		if(generator == null){
+			String message = "SpeedController: generator must not be null.";
+			throw new IllegalArgumentException(message);
+		}
 		
-		generator.setStaticRegulator(this);
+		this.generator = generator;
+		givenFrequency = Constants.STANDART_FREQUENCY;
+		coefficientOfStatism = 0.01f;
 	}
 
-	public float getGeneratorPowerInMW(){
-		frequencyInPowerSystem = simulation.getFrequencyInPowerSystem();
+	public float getGenerationInMW(float frequency){
+		saveFrequency(frequency);
 		return calculateGeneratorPowerInMW();
 	}
+	
+	private void saveFrequency(float frequency){
+		currentFrequency = frequency;
+	}
 		
-	private float calculateGeneratorPowerInMW(){	
+	private float calculateGeneratorPowerInMW(){
+		if(generationAtGivenFrequency == 0){
+			return 0;
+		}
+		
 		float powerAccordingToStaticCharacteristic = countGeneratorPowerWithStaticCharacteristic();
 		
 		if(isPowerMoreThanGeneratorNominal(powerAccordingToStaticCharacteristic)){
@@ -40,8 +48,7 @@ public class StaticRegulator {
 	}
 	
 	private float countGeneratorPowerWithStaticCharacteristic(){		
-		return powerAtRequiredFrequency + (requiredFrequency - 
-				frequencyInPowerSystem) / coefficientOfStatism;
+		return generationAtGivenFrequency + (givenFrequency - currentFrequency) / coefficientOfStatism;
 	}
 	
 	private boolean isPowerMoreThanGeneratorNominal(float power){
@@ -52,11 +59,11 @@ public class StaticRegulator {
 		return power < generator.getMinimalPowerInMW();
 	}
 
-	public float getPowerAtRequiredFrequency() {
-		return powerAtRequiredFrequency;
+	public float getGenerationAtGivenFrequency() {
+		return generationAtGivenFrequency;
 	}
 	
-	public void setPowerAtRequiredFrequency(float powerAtRequiredFrequency) {
-		this.powerAtRequiredFrequency = powerAtRequiredFrequency;
+	public void setGenerationAtGivenFrequency(float generationAtGivenFrequency) {
+		this.generationAtGivenFrequency = generationAtGivenFrequency;
 	}
 }

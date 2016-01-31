@@ -3,15 +3,19 @@ package com.epsm.epsmCore.model.generation;
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusion;
 
 public class GeneratorParameters extends MessageInclusion{
-	public GeneratorParameters(int generatorNumber, float nominalPowerInMW, float minimalTechnologyPower) {
+	private final float nominalPowerInMW;
+	private final float minimalTechnologyPower;
+	private final float reugulationSpeedInMWPerMinute;
+
+	public GeneratorParameters(int generatorNumber, float nominalPowerInMW,
+			float minimalTechnologyPower, float reugulationSpeedInMWPerMinute) {
+		
 		super(generatorNumber);
 		this.nominalPowerInMW = nominalPowerInMW;
 		this.minimalTechnologyPower = minimalTechnologyPower;
+		this.reugulationSpeedInMWPerMinute = reugulationSpeedInMWPerMinute;
 	}
-
-	private float nominalPowerInMW;
-	private float minimalTechnologyPower;
-
+	
 	public int getGeneratorNumber(){
 		return getInclusionNumber();
 	}
@@ -22,6 +26,10 @@ public class GeneratorParameters extends MessageInclusion{
 
 	public float getMinimalTechnologyPower() {
 		return minimalTechnologyPower;
+	}
+	
+	public float getReugulationSpeedInMWPerMinute(){
+		return reugulationSpeedInMWPerMinute;
 	}
 
 	@Override

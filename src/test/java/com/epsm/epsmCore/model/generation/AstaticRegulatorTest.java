@@ -19,7 +19,7 @@ import com.epsm.epsmCore.model.generalModel.TimeService;
 public class AstaticRegulatorTest {
 	private ElectricPowerSystemSimulation simulation;
 	private AstaticRegulator astaticRegulator;
-	private StaticRegulator staticRegulator;
+	private SpeedController staticRegulator;
 	private Generator generator;
 	private LocalDateTime startDateTime = LocalDateTime.of(2000, 01, 01, 00,00);
 	private final float GENERATOR_POWER_AT_REQUIRED_FREQUENCY = 100;
@@ -32,13 +32,13 @@ public class AstaticRegulatorTest {
 		simulation = spy(new ElectricPowerSystemSimulationImpl(timeService, dispatcher, startDateTime));
 		generator = new Generator(simulation, 1);
 		astaticRegulator = new AstaticRegulator(simulation, generator);
-		staticRegulator = new StaticRegulator(simulation, generator);
+		staticRegulator = new SpeedController(simulation, generator);
 		
 		generator.setAstaticRegulator(astaticRegulator);
 		generator.setStaticRegulator(staticRegulator);
 		generator.setNominalPowerInMW(200);
 		generator.setReugulationSpeedInMWPerMinute(GENERATOR_REGULATION_SPEED_IN_MW_PER_MINUTE);
-		staticRegulator.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
+		staticRegulator.setGenerationAtGivenFrequency(GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
 	}
 	
 	@Test
@@ -47,7 +47,7 @@ public class AstaticRegulatorTest {
 		doNextStep();
 		
 		Assert.assertTrue(
-				staticRegulator.getPowerAtRequiredFrequency() > GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
+				staticRegulator.getGenerationAtGivenFrequency() > GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
 	}
 	
 	private void doNextStep(){
@@ -66,7 +66,7 @@ public class AstaticRegulatorTest {
 		doNextStep();
 		
 		Assert.assertTrue(
-				staticRegulator.getPowerAtRequiredFrequency() < GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
+				staticRegulator.getGenerationAtGivenFrequency() < GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
 	}
 	
 	private void prepareMockSimulationWithHighFrequency(){
@@ -78,9 +78,9 @@ public class AstaticRegulatorTest {
 	public void actualGeneratorRegulationSpeedNotMoreThanNominalForGenerator(){
 		prepareMockSimulationWithHighFrequency();
 		
-		float powerAtRequiredFrequency = staticRegulator.getPowerAtRequiredFrequency();
+		float powerAtRequiredFrequency = staticRegulator.getGenerationAtGivenFrequency();
 		passOneMinute();
-		float nextPowerAtRequiredFrequency = staticRegulator.getPowerAtRequiredFrequency();
+		float nextPowerAtRequiredFrequency = staticRegulator.getGenerationAtGivenFrequency();
 		
 		Assert.assertNotEquals(powerAtRequiredFrequency, nextPowerAtRequiredFrequency, 0);
 		Assert.assertEquals(powerAtRequiredFrequency, nextPowerAtRequiredFrequency, 
@@ -97,7 +97,7 @@ public class AstaticRegulatorTest {
 		prepareMockSimulationWithLittleLowerButPermissibleFrequency();
 		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 		
-		Assert.assertTrue(staticRegulator.getPowerAtRequiredFrequency() 
+		Assert.assertTrue(staticRegulator.getGenerationAtGivenFrequency() 
 				== GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
 	}
 	
@@ -112,7 +112,7 @@ public class AstaticRegulatorTest {
 		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 			
 		Assert.assertTrue(
-				staticRegulator.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
+				staticRegulator.getGenerationAtGivenFrequency() == GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
 	}
 	
 	private void prepareMockSimulationWithLittleHigherButPermissibleFrequency(){
@@ -127,7 +127,7 @@ public class AstaticRegulatorTest {
 		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 		
 		Assert.assertTrue(
-				staticRegulator.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
+				staticRegulator.getGenerationAtGivenFrequency() == GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
 	}
 	
 	@Test
@@ -137,6 +137,6 @@ public class AstaticRegulatorTest {
 		astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
 		
 		Assert.assertTrue(
-				staticRegulator.getPowerAtRequiredFrequency() == GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
+				staticRegulator.getGenerationAtGivenFrequency() == GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
 	}
 }

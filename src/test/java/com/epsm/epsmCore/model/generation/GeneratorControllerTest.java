@@ -1,6 +1,6 @@
 package com.epsm.epsmCore.model.generation;
 
-import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -11,55 +11,70 @@ import java.time.LocalTime;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
+import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
+import com.epsm.epsmCore.model.generalModel.SimulationException;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
 public class GeneratorControllerTest {
-	private ElectricPowerSystemSimulation simulation;
-	private MainControlPanel controlPanel;
-	private PowerStationGenerationSchedule stationSchedule;
-	private GeneratorGenerationSchedule genrationSchedule_1;
-	private GeneratorGenerationSchedule genrationSchedule_2;
-	private PowerStationParameters parameters;
-	private PowerStation station;
-	private LoadCurve generationCurve;
-	private Generator generator_1;
-	private Generator generator_2;
-	private TimeService timeService;
-	private Dispatcher dispatcher;
+	private SpeedController speedController;
+	private GeneratorController generatorController;
+	private GeneratorGenerationSchedule schedule;
+	private Generator generator;
+	private float generation;
+	private final float GENERATION_AT_GIVEN_FREQUENCY = 200;
+	private final float NORMAL_FREQUENCY = Constants.STANDART_FREQUENCY;
+	private final float LOW_FREQUENCY = Constants.STANDART_FREQUENCY - 1;
+	private final float HIGH_FREQUENCY = Constants.STANDART_FREQUENCY + 1;
+	private final LocalDateTime STEP_TIME = LocalDateTime.MIN.plusMinutes(1);
+	
 	
 	@Before
 	public void setUp(){
-		stationSchedule = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalDateTime.MIN, 2);
-		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
+		generator = mock(Generator.class);
+		when(generator.getNominalPowerInMW()).thenReturn(300f);
+		when(generator.getMinimalPowerInMW()).thenReturn(100f);
+		when(generator.getReugulationSpeedInMWPerMinute()).thenReturn(3f);
+		speedController = spy(new SpeedController(generator));
+		speedController.setGenerationAtGivenFrequency(GENERATION_AT_GIVEN_FREQUENCY);
+		generatorController = new GeneratorController(generator, speedController);
 		
-		parameters = new PowerStationParameters(0, LocalDateTime.MIN, LocalDateTime.MIN, 2);
-		GeneratorParameters parameter_1 = new GeneratorParameters(1, 100, 0);
-		GeneratorParameters parameter_2 = new GeneratorParameters(2, 100, 0);
-		parameters.addGeneratorParameters(parameter_1);
-		parameters.addGeneratorParameters(parameter_2);
-		
-		timeService = new TimeService();
-		dispatcher = mock(Dispatcher.class);
-		
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
-				TestsConstants.START_DATETIME);
-		station = new PowerStation(simulation, timeService, dispatcher, parameters);
-		controlPanel = new MainControlPanel(simulation, station);
-		
-		generator_1 = spy( new Generator(simulation, 1));
-		generator_2 = spy( new Generator(simulation, 2));
-		generator_1.setNominalPowerInMW(200);
-		generator_2.setNominalPowerInMW(200);
-		
-		station.addGenerator(generator_1);
-		station.addGenerator(generator_2);
 	}
+	
+	@Test
+	public void increaseGenerationIfFrequencyIsLowAndSecondaryFrequencyRegulationOn(){
+		prepareScheduleWithTurnedOnSecondaryFrequencyRegulationOn();
+		performStepWithLowFrequency();
+		
+		getGeneration();
+		
+		System.out.println(generation);
+		
+		Assert.assertTrue(generation > GENERATION_AT_GIVEN_FREQUENCY);
+	}
+	
+	private void prepareScheduleWithTurnedOnSecondaryFrequencyRegulationOn(){
+		schedule = new GeneratorGenerationSchedule(1, true, null);
+		generatorController.setSchedule(schedule);
+	}
+	
+	private void performStepWithLowFrequency(){
+		generatorController.adjustGenerator(STEP_TIME, LOW_FREQUENCY);
+	}
+	
+	private void getGeneration(){
+		generation = speedController.getGenerationAtGivenFrequency();
+	}
+	
+	
+	
+	
 	
 	@Test
 	public void mainControlPanelTurnsOnGeneratorIfItIsScheduledIndependentAreTheyTurnedOnOrOff()
@@ -137,7 +152,7 @@ public class GeneratorControllerTest {
 	}
 	
 	@Test
-	public void mainAstaticRegulationWillBeTurnedOffIfItIsScheduledIndependentIsItTurnedOnOrOff() 
+	public void astaticRegulationWillBeTurnedOffIfItIsScheduledIndependentIsItTurnedOnOrOff() 
 			throws InterruptedException{
 		prepareGenerationScheduleWithTurnedOnGeneratorsAndTurnedOffAstaticRegulation();
 		turnOnBothGenerators();

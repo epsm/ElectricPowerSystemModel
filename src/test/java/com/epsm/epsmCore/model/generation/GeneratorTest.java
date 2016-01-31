@@ -16,7 +16,7 @@ import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 public class GeneratorTest{
 	private ElectricPowerSystemSimulation simulation;
 	private Generator generator;
-	private StaticRegulator staticRegulator;
+	private SpeedController staticRegulator;
 	private AstaticRegulator astaticRegulator;
 	private final int GENERATOR_NUMBER = 1;
 	private final float GENERATOR_GENERATION = 1000f; 
@@ -28,7 +28,7 @@ public class GeneratorTest{
 	public void setUp(){
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		generator = new Generator(simulation, GENERATOR_NUMBER);
-		staticRegulator = mock(StaticRegulator.class);
+		staticRegulator = mock(SpeedController.class);
 		
 		when(staticRegulator.getGeneratorPowerInMW()).thenReturn(GENERATOR_GENERATION);
 		generator.setStaticRegulator(staticRegulator);

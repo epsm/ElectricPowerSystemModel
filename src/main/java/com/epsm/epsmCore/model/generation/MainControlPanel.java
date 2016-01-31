@@ -11,7 +11,7 @@ import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 public class MainControlPanel{
 	private ElectricPowerSystemSimulation simulation;
 	private PowerStation station;
-	private GeneratorsController controller;
+	private GeneratorController controller;
 	private PowerStationGenerationSchedule currentSchedule;
 	private PowerStationGenerationSchedule receivedSchedule;
 	private GenerationScheduleValidator validator;
@@ -21,7 +21,7 @@ public class MainControlPanel{
 	public MainControlPanel(ElectricPowerSystemSimulation simulation, PowerStation station){
 		this.simulation = simulation;
 		this.station = station;
-		controller = new GeneratorsController(station);
+		controller = new GeneratorController(station);
 		validator = new GenerationScheduleValidator();
 		logger = LoggerFactory.getLogger(MainControlPanel.class);
 	}

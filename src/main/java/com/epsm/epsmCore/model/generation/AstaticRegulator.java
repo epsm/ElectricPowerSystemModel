@@ -38,11 +38,7 @@ public class AstaticRegulator {
 		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 
-	private boolean isFrequencyInNonSensivityLimit(){
-		float deviation = Math.abs(currentFrequency - Constants.STANDART_FREQUENCY);
-		
-		return deviation <= ASTATIC_REGULATION_SENSIVITY;
-	}
+	
 
 	private void adjustPowerAtRequiredFrequency(){
 		if(currentFrequency < Constants.STANDART_FREQUENCY){

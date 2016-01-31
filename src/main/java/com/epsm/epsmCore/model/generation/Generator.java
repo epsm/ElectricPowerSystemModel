@@ -1,121 +1,89 @@
 package com.epsm.epsmCore.model.generation;
 
+import java.time.LocalDateTime;
+
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 
 public class Generator{
-	private int number;
-	private StaticRegulator staticRegulator;
-	private AstaticRegulator astaticRegulator;
-	private float nominalPowerInMW;
-	private float minimalPowerInMW;
-	private float reugulationSpeedInMWPerMinute;
+	private ElectricPowerSystemSimulation simulation;
+	private final int number;
+	private SpeedController speedController;
+	private GeneratorController generatorController;
+	private final float nominalPowerInMW;
+	private final float minimalPowerInMW;
+	private final float reugulationSpeedInMWPerMinute;
+	private LocalDateTime currentDateTime;
+	private float currentFrequency;
 	private float currentGeneration;
-	private boolean turnedOn;
-	private boolean astaticRegulationTurnedOn;
 	private GeneratorState state;
 
-	public Generator(ElectricPowerSystemSimulation simulation, int number){
+	public Generator(ElectricPowerSystemSimulation simulation, int number, float nominalPowerInMW,
+			float minimalPowerInMW, float reugulationSpeedInMWPerMinute){
+		
 		if(simulation == null){
-			throw new IllegalArgumentException("Generator constructor: simulation must not be"
-					+ " null.");
+			String message = "Generator constructor: simulation must not be null.";
+			throw new IllegalArgumentException(message);
+		}else if(nominalPowerInMW <= 0){
+			String message = "Generator constructor: nominalPowerInMW must be positive.";
+			throw new IllegalArgumentException(message);
+		}else if(minimalPowerInMW <= 0){
+			String message = "Generator constructor: minimalPowerInMW must be positive.";
+			throw new IllegalArgumentException(message);
+		}else if(reugulationSpeedInMWPerMinute <= 0){
+			String message = "Generator constructor: reugulationSpeedInMWPerMinute must be positive.";
+			throw new IllegalArgumentException(message);
+		}else if(minimalPowerInMW > nominalPowerInMW ){
+			String message = "Generator constructor: minimalPowerInMW can't be higher nominalPowerInMW.";
+			throw new IllegalArgumentException(message);
 		}
 		
+		this.simulation = simulation;
 		this.number = number;
-		staticRegulator = new StaticRegulator(simulation, this);
-		astaticRegulator = new AstaticRegulator(simulation, this);
+		this.nominalPowerInMW = nominalPowerInMW;
+		this.minimalPowerInMW = minimalPowerInMW;
+		this.reugulationSpeedInMWPerMinute = reugulationSpeedInMWPerMinute;
+		speedController = new SpeedController(this);
 	}
 	
 	public float calculateGeneration(){
-		if(turnedOn){
-			calculateCurrentGeneration();
-			prepareState();
-			return currentGeneration;
-		}else{
-			prepareState();
-			return 0;
-		}
+		getParametersFromSimulation();
+		calculateCurrentGeneration();
+		prepareState();
+		
+		return currentGeneration;
+	}
+	
+	private void getParametersFromSimulation(){
+		currentDateTime = simulation.getDateTimeInSimulation();
+		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 	
 	private void calculateCurrentGeneration(){
-		if(astaticRegulationTurnedOn){
-			astaticRegulator.verifyAndAdjustPowerAtRequiredFrequency();
-		}
-		currentGeneration = staticRegulator.getGeneratorPowerInMW();
-	}
-	
-	public GeneratorState getState(){
-		return state;
+		generatorController.adjustGenerator(currentDateTime, currentFrequency);
+		currentGeneration = speedController.getGenerationInMW(currentFrequency);
 	}
 	
 	private void prepareState(){
 		state = new GeneratorState(number, currentGeneration);
 	}
 	
+	public GeneratorState getState(){
+		return state;
+	}
+	
 	public int getNumber(){
 		return number;
-	}
-	
-	public void setStaticRegulator(StaticRegulator staticRegulator) {
-		this.staticRegulator = staticRegulator;
-	}
-	
-	public void setAstaticRegulator(AstaticRegulator astaticRegulator) {
-		this.astaticRegulator = astaticRegulator;
 	}
 	
 	public float getNominalPowerInMW() {
 		return nominalPowerInMW;
 	}
 
-	public void setNominalPowerInMW(float nominalPowerInMW) {
-		this.nominalPowerInMW = nominalPowerInMW;
-	}
-
 	public float getMinimalPowerInMW() {
 		return minimalPowerInMW;
-	}
-
-	public void setMinimalPowerInMW(float minimalPowerInMW) {
-		this.minimalPowerInMW = minimalPowerInMW;
 	}
 	
 	public float getReugulationSpeedInMWPerMinute() {
 		return reugulationSpeedInMWPerMinute;
-	}
-
-	public void setReugulationSpeedInMWPerMinute(float reugulationSpeedInMWPerMinute) {
-		this.reugulationSpeedInMWPerMinute = reugulationSpeedInMWPerMinute;
-	}
-
-	public boolean isTurnedOn(){
-		return turnedOn;
-	}
-
-	public void turnOnGenerator(){
-		turnedOn = true;
-	}
-	
-	public void turnOffGenerator(){
-		turnedOn = false;
-	}
-
-	public boolean isAstaticRegulationTurnedOn() {
-		return astaticRegulationTurnedOn;
-	}
-
-	public void turnOnAstaticRegulation(){
-		astaticRegulationTurnedOn = true;
-	}
-	
-	public void turnOffAstaticRegulation(){
-		astaticRegulationTurnedOn = false;
-	}
-	
-	public float getPowerAtRequiredFrequency() {
-		return staticRegulator.getPowerAtRequiredFrequency();
-	}
-
-	public void setPowerAtRequiredFrequency(float powerAtRequiredFrequency) {
-		staticRegulator.setPowerAtRequiredFrequency(powerAtRequiredFrequency);
 	}
 }

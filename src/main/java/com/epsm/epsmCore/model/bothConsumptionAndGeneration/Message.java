@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 public abstract class Message{
-	protected long powerObjectId;
+	protected final long powerObjectId;
 	
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	protected LocalDateTime simulationTimeStamp;
