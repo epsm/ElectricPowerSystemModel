@@ -20,6 +20,7 @@ public final class ShockLoadConsumer extends Consumer{
 	private LocalDateTime dateTimeToTurnOff;
 	private boolean isTurnedOn;
 	private LocalDateTime currentDateTime;
+	private float plannedLoad;
 	private float currentLoad;
 	private float currentFrequency;
 	private volatile ConsumerState state;
@@ -37,7 +38,7 @@ public final class ShockLoadConsumer extends Consumer{
 	protected float calculateCurrentPowerBalance() {
 		calculateCurrentLoadInMW();
 		prepareState();
-		
+
 		if(isItExactlyMinute(currentDateTime)){
 			logger.debug("State: con.#{}, sim.time: {}, freq.: {}, cur.load:{} MW, timeToTurnOn: {},"
 					+ "timeToTurnOff: {}, turnedOn: {}.", id, currentDateTime, currentFrequency,
@@ -60,9 +61,7 @@ public final class ShockLoadConsumer extends Consumer{
 			}
 		}
 		
-		if(currentLoad != 0){
-			currentLoad = calculateLoadCountingFrequency(currentLoad, currentFrequency);
-		}
+		calculateLoad();
 	}
 
 	private void prepareState(){
@@ -94,7 +93,7 @@ public final class ShockLoadConsumer extends Consumer{
 	
 	private void turnOnWithRandomLoadValue(){
 		float halfOfMaxLoad = maxLoad / 2;
-		currentLoad = halfOfMaxLoad + halfOfMaxLoad * random.nextFloat();
+		plannedLoad = halfOfMaxLoad + halfOfMaxLoad * random.nextFloat();
 		isTurnedOn = true;
 	}
 	
@@ -113,8 +112,16 @@ public final class ShockLoadConsumer extends Consumer{
 		setDateTimeToTurnOn();
 	}
 	
+	private void calculateLoad(){
+		if(plannedLoad != 0){
+			currentLoad = calculateLoadCountingFrequency(plannedLoad, currentFrequency);
+		}else{
+			currentLoad = 0;
+		}
+	}
+	
 	private void turnOff(){
-		currentLoad = 0;
+		plannedLoad = 0;
 		isTurnedOn = false;
 	}
 	

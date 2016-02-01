@@ -19,7 +19,7 @@ import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
-public class ShockLoadTestConsumerTest {
+public class ShockLoadConsumerTest {
 	private ElectricPowerSystemSimulationImpl simulation;
 	private ShockLoadConsumer consumer;
 	float previousLoad;
