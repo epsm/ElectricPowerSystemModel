@@ -10,6 +10,8 @@ public class AstaticRegulator {
 	private ElectricPowerSystemSimulation simulation;
 	private Generator generator;
 	private float currentFrequency;
+	private float powerAtRequiredFrequency;
+	private float regulationStep;
 	private LocalDateTime currentDateTime;
 	private LocalDateTime previousDateTime;
 	private final float ASTATIC_REGULATION_SENSIVITY = 0.005f;
@@ -18,7 +20,7 @@ public class AstaticRegulator {
 	public AstaticRegulator(ElectricPowerSystemSimulation simulation, Generator generator) {
 		this.simulation = simulation;
 		this.generator = generator;
-		previousDateTime = simulation.getDateTimeInSimulation();//for fist time, otherwise NPE
+		previousDateTime = simulation.getDateTimeInSimulation();
 		
 		generator.setAstaticRegulator(this);
 	}
@@ -45,6 +47,9 @@ public class AstaticRegulator {
 	}
 
 	private void adjustPowerAtRequiredFrequency(){
+		getPowerAtRequiredFrequency();
+		calculateRegulationStep();
+		
 		if(currentFrequency < Constants.STANDART_FREQUENCY){
 			increasePowerAtRequiredFrequency();
 		}else{
@@ -52,30 +57,36 @@ public class AstaticRegulator {
 		}
 	}
 	
-	private void increasePowerAtRequiredFrequency(){
-		float powerAtRequiredFrequency = generator.getPowerAtRequiredFrequency();
-		
-		if(powerAtRequiredFrequency < generator.getNominalPowerInMW()){
-			generator.setPowerAtRequiredFrequency(powerAtRequiredFrequency
-					+ calculateRegulationStep());
-		}
+	private void getPowerAtRequiredFrequency(){
+		powerAtRequiredFrequency = generator.getPowerAtRequiredFrequency();
 	}
 	
-	private float calculateRegulationStep(){
+	private void calculateRegulationStep(){
 		float regulationSpeedInMWPerMills = generator.getReugulationSpeedInMWPerMinute() / 60 / 1000;
 		Duration duration = Duration.between(previousDateTime, currentDateTime);
 		long durationInMillis = Math.abs(duration.toMillis());
 		
-		return durationInMillis * regulationSpeedInMWPerMills;
+		regulationStep =  durationInMillis * regulationSpeedInMWPerMills;
+	}
+	
+	private void increasePowerAtRequiredFrequency(){
+		if(powerAfterIncreasionWillBePermissible()){
+			generator.setPowerAtRequiredFrequency(powerAtRequiredFrequency + regulationStep);
+		}
+	}
+	
+	private boolean powerAfterIncreasionWillBePermissible(){
+		return powerAtRequiredFrequency + regulationStep < generator.getNominalPowerInMW();
 	}
 	
 	private void decreasePowerAtRequiredFrequency(){
-		float powerAtRequiredFrequency = generator.getPowerAtRequiredFrequency();
-		
-		if(powerAtRequiredFrequency > generator.getMinimalPowerInMW()){
-			generator.setPowerAtRequiredFrequency(powerAtRequiredFrequency 
-					- calculateRegulationStep());
+		if(powerAfterDecreasionWillBePermissible()){
+			generator.setPowerAtRequiredFrequency(powerAtRequiredFrequency - regulationStep);
 		}
+	}
+	
+	private boolean powerAfterDecreasionWillBePermissible(){
+		return powerAtRequiredFrequency - regulationStep > generator.getMinimalPowerInMW();
 	}
 
 	private void setPreviousTime(){
