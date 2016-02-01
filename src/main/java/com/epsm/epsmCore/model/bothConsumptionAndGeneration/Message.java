@@ -2,14 +2,13 @@ package com.epsm.epsmCore.model.bothConsumptionAndGeneration;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import com.epsm.epsmCore.model.generalModel.Constants;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 public abstract class Message{
-	protected long powerObjectId;
+	protected final long powerObjectId;
 	
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	protected LocalDateTime simulationTimeStamp;
@@ -19,7 +18,6 @@ public abstract class Message{
 	
 	protected StringBuilder stringBuilder;
 	protected DecimalFormat numberFormatter;
-	protected DateTimeFormatter timeFormatter;
 	
 	public Message(long powerObjectId, LocalDateTime realTimeStamp, LocalDateTime simulationTimeStamp){
 		if(realTimeStamp == null){
@@ -33,7 +31,6 @@ public abstract class Message{
 		this.simulationTimeStamp = simulationTimeStamp;
 		stringBuilder = new StringBuilder();
 		numberFormatter = new DecimalFormat("0000.000", Constants.SYMBOLS);
-		timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 	}
 
 	public long getPowerObjectId(){

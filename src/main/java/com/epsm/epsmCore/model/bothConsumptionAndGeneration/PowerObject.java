@@ -15,7 +15,7 @@ import com.epsm.epsmCore.model.generalModel.SimulationObject;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
 public abstract class PowerObject implements SimulationObject, RealTimeOperations{
-	protected long id;//must not bee changed after creation and must be uniqe for all objects
+	protected final long id;
 	protected Parameters parameters;
 	protected ElectricPowerSystemSimulation simulation;
 	protected TimeService timeService;
