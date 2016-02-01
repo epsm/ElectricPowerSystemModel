@@ -30,12 +30,17 @@ public class StaticRegulatorTest {
 	}
 
 	@Test
+	public void getGeneratorPowerInMWreturnsZeroIfPowerAtRequiredFrequencyLessThanGeneratorMinimal(){
+		staticRegulator.setPowerAtRequiredFrequency(10);
+		
+		Assert.assertEquals(0, staticRegulator.getGeneratorPowerInMW(), 0);
+	}
+	
+	@Test
 	public void PowerIncreasesWhenFrequencyIsLow(){
 		prepareMockSimulationWithLowFrequency();
-		
-		for(int i = 0; i < 3; i++){
-			Assert.assertTrue(staticRegulator.getGeneratorPowerInMW() > GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
-		}
+
+		Assert.assertTrue(staticRegulator.getGeneratorPowerInMW() > GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
 	
 	private void prepareMockSimulationWithLowFrequency(){
@@ -45,10 +50,8 @@ public class StaticRegulatorTest {
 	@Test
 	public void PowerDecreasesWhenFrequencyIsHight(){
 		prepareMockSimulationWithHighFrequency();
-		
-		for(int i = 0; i < 3; i++){
-			Assert.assertTrue(staticRegulator.getGeneratorPowerInMW() < GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
-		}
+
+		Assert.assertTrue(staticRegulator.getGeneratorPowerInMW() < GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 	}
 	
 	private void prepareMockSimulationWithHighFrequency(){

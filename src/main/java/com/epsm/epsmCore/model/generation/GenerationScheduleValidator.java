@@ -83,7 +83,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 	
 	private void validateGenerationScheduleOnCorectness(){
 		thereIsGenerationCurvesIfAstaticRegulationTurnedOff();
-		powerInGenerationCurveWithinGeneratorCapabilities();
+		generationInGenerationCurveWithinGeneratorCapabilities();
 	}
 	
 	private void thereIsGenerationCurvesIfAstaticRegulationTurnedOff(){
@@ -101,14 +101,16 @@ public class GenerationScheduleValidator extends CommandValidator{
 		}
 	}
 	
-	private boolean isAstaticRegulationTurnedOffAndThereIsNotGenerationCurve(GeneratorGenerationSchedule schedule){
+	private boolean isAstaticRegulationTurnedOffAndThereIsNotGenerationCurve(
+			GeneratorGenerationSchedule schedule){
+		
 		boolean astaticRegulationTurnedOff = !currentGeneratorSchedule.isAstaticRegulatorTurnedOn();
 		LoadCurve curve = currentGeneratorSchedule.getGenerationCurve();
 		
 		return astaticRegulationTurnedOff && curve == null;
 	}
 	
-	private void powerInGenerationCurveWithinGeneratorCapabilities(){
+	private void generationInGenerationCurveWithinGeneratorCapabilities(){
 		for(Integer generatorNumber: scheduleGeneratorsNumbers){
 			verifyEveryGeneratorIsPowerInGenerationCurveWithinGeneratorCapabilities(generatorNumber);
 		}
@@ -121,13 +123,14 @@ public class GenerationScheduleValidator extends CommandValidator{
 		
 		if(isAstaticRegulationTurnedOffAndThereIsGenerationCurve(currentGeneratorSchedule)){
 			findMinAndMaxPowerInGenerationCurve();
-			IsPowerInGenerationCurveNotHigherThanGeneratorNominalPower(generatorNumber);
-			IsPowerInGenerationCurveNotLowerThanGeneratorNominalPower(generatorNumber);
+			isPowerInGenerationCurveNotHigherThanGeneratorNominalPower(generatorNumber);
+			isPowerInGenerationCurveNotLowerThanGeneratorNominalPower(generatorNumber);
 		}
 	}
 	
 	private boolean isAstaticRegulationTurnedOffAndThereIsGenerationCurve(
 			GeneratorGenerationSchedule schedule){
+		
 		boolean astaticRegulationTurnedOff = !currentGeneratorSchedule.isAstaticRegulatorTurnedOn();
 		LoadCurve curve = currentGeneratorSchedule.getGenerationCurve();
 		
@@ -145,7 +148,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 			if(currentPower > maxGenerationPower){
 				maxGenerationPower = currentPower;
 			}
-			if(currentPower < minGenerationPower){
+			if(currentPower != 0 && currentPower < minGenerationPower){
 				minGenerationPower = currentPower;
 			}
 			
@@ -153,7 +156,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 		}while(pointer.isAfter(LocalTime.MIDNIGHT));
 	}
 	
-	private void IsPowerInGenerationCurveNotHigherThanGeneratorNominalPower(int generatorNumber){
+	private void isPowerInGenerationCurveNotHigherThanGeneratorNominalPower(int generatorNumber){
 		float generatorNominalPower = generatorParameters.getNominalPowerInMW();
 
 		if(maxGenerationPower > generatorNominalPower){
@@ -163,7 +166,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 		}
 	}
 
-	private void IsPowerInGenerationCurveNotLowerThanGeneratorNominalPower(int generatorNumber){
+	private void isPowerInGenerationCurveNotLowerThanGeneratorNominalPower(int generatorNumber){
 		float minimalGeneratorTechnologyPower = generatorParameters.getMinimalTechnologyPower();
 
 		if(minGenerationPower < minimalGeneratorTechnologyPower){
