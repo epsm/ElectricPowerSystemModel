@@ -12,11 +12,11 @@ public class ScheduledLoadConsumerFactoryStub extends AbstractPowerObjectFactory
 	private ScheduledLoadConsumer consumer;
 	private long powerObjectId;
 	private ConsumerParametersStub parameters;
-	public final float[] LOAD_BY_HOURS = new float[]{
-			64.88f,  59.54f,  55.72f,  51.90f, 	48.47f,  48.85f,
-			48.09f,  57.25f,  76.35f,  91.60f,  100.0f,  99.23f,
-			91.60f,  91.60f,  91.22f,  90.83f,  90.83f,  90.83f,
-			90.83f,  90.83f,  90.83f,  90.83f,  90.83f,  83.96f 
+	public final float[] LOAD_BY_HOURS_IN_PERCENT = new float[]{
+			 69f,  68f,  66f,  65f,	 62f,  65f,
+			 72f,  83f,  91f,  96f,  95f,  93f,
+			 91f,  92f,  92f,  93f,  94f,  98f,
+			100f,  98f,  95f,  93f,  88f,  75f 
 	};
 	
 	public ScheduledLoadConsumerFactoryStub(ElectricPowerSystemSimulation simulation,
@@ -49,8 +49,8 @@ public class ScheduledLoadConsumerFactoryStub extends AbstractPowerObjectFactory
 	private void createScheduledLoadConsumer(){
 		consumer = new ScheduledLoadConsumer(simulation, timeService, dispatcher, parameters);
 		consumer.setDegreeOfDependingOnFrequency(2);
-		consumer.setApproximateLoadByHoursOnDayInPercent(LOAD_BY_HOURS);
-		consumer.setMaxLoadWithoutRandomInMW(100);
-		consumer.setRandomFluctuationsInPercent(10);
+		consumer.setApproximateLoadByHoursOnDayInPercent(LOAD_BY_HOURS_IN_PERCENT);
+		consumer.setMaxLoadWithoutRandomInMW(95);
+		consumer.setRandomFluctuationsInPercent(5);
 	}
 }

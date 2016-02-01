@@ -12,12 +12,41 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory{
 	private PowerStation powerStation;
 	private long powerObjectId;
 	private PowerStationParameters parameters;
-	private PowerStationGenerationSchedule generationSchedule;
-	private final float[] GENERATION_BY_HOURS = new float[]{
-			55.15f,  50.61f,  47.36f,  44.11f, 	41.20f,  41.52f,
-			40.87f,  48.66f,  64.89f,  77.86f,  85.00f,  84.34f,
-			77.86f,  77.86f,  77.53f,  77.20f,  77.20f,  77.20f,
-			77.20f,  77.20f,  77.20f,  77.20f,  77.20f,  77.20f 
+	private PowerStationGenerationSchedule stationSchedule;
+	private LoadCurve generationCurveGen1;
+	private LoadCurve generationCurveGen2;
+	private LoadCurve generationCurveGen3;
+	private LoadCurve generationCurveGen4;
+	private LoadCurve generationCurveGen5;
+	private GeneratorGenerationSchedule genrationSchedule_1;
+	private GeneratorGenerationSchedule genrationSchedule_2;
+	private GeneratorGenerationSchedule genrationSchedule_3;
+	private GeneratorGenerationSchedule genrationSchedule_4;
+	private GeneratorGenerationSchedule genrationSchedule_5;
+	private GeneratorGenerationSchedule genrationSchedule_6;
+	private final float[] GENERATION_BY_HOURS_GEN_1_2 = new float[]{
+			143f,  143f,  143f,  143f, 	143f,  143f,
+			143f,  143f,  143f,  143f,  143f,  143f,
+			143f,  143f,  143f,  143f,  143f,  143f,
+			143f,  143f,  143f,  143f,  143f,  143f 
+	};
+	private final float[] GENERATION_BY_HOURS_GEN_3 = new float[]{
+			143f,  143f,  143f,  120f, 	120f,  143f,
+			125f,  143f,  143f,  143f,  143f,  143f,
+			143f,  143f,  143f,  143f,  143f,  143f,
+			143f,  143f,  143f,  143f,  143f,  135f 
+	};
+	private final float[] GENERATION_BY_HOURS_GEN_4 = new float[]{
+			  0f,    0f,    0f,    0f, 	  0f,    0f,
+			 90f,   90f,  130f,  100f,  143f,   90f,
+			 90f,  120f,   90f,   90f,  140f,  143f,
+			143f,  143f,  143f,  135f,  135f,   90f 
+	};
+	private final float[] GENERATION_BY_HOURS_GEN_5 = new float[]{
+			  0f,    0f,    0f,    0f,    0f,    0f,
+			  0f,    0f,   90f,   90f,  100f,   90f,
+			 90f,   90f,   90f,   90f,   90f,  110f,
+			120f,  100f,   90f,   90f,    0f,    0f 
 	};
 	
 	public PowerStationFactoryStub(ElectricPowerSystemSimulation simulation,
@@ -45,40 +74,79 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory{
 		LocalDateTime realTimeStamp = timeService.getCurrentDateTime();
 		LocalDateTime simulationTimeStamp = simulation.getDateTimeInSimulation();
 		parameters = new PowerStationParameters(powerObjectId, realTimeStamp,
-				simulationTimeStamp, 2);
-		GeneratorParameters parameters_1 = new GeneratorParameters(1, 40, 5);
-		GeneratorParameters parameters_2 = new GeneratorParameters(2, 100, 25);
+				simulationTimeStamp, 6);
+		GeneratorParameters parameters_1 = new GeneratorParameters(1, 150, 90);
+		GeneratorParameters parameters_2 = new GeneratorParameters(2, 150, 90);
+		GeneratorParameters parameters_3 = new GeneratorParameters(3, 150, 90);
+		GeneratorParameters parameters_4 = new GeneratorParameters(4, 150, 90);
+		GeneratorParameters parameters_5 = new GeneratorParameters(5, 150, 90);
+		GeneratorParameters parameters_6 = new GeneratorParameters(6, 150, 60);
 		
 		parameters.addGeneratorParameters(parameters_1);
 		parameters.addGeneratorParameters(parameters_2);
+		parameters.addGeneratorParameters(parameters_3);
+		parameters.addGeneratorParameters(parameters_4);
+		parameters.addGeneratorParameters(parameters_5);
+		parameters.addGeneratorParameters(parameters_6);
 	}
 	
 	private void createDefaultGenerationSchedule(){
-		LoadCurve generationCurve;
-		GeneratorGenerationSchedule genrationSchedule_1;
-		GeneratorGenerationSchedule genrationSchedule_2;
-		
-		generationSchedule = new PowerStationGenerationSchedule(powerObjectId,
-				LocalDateTime.MIN, LocalDateTime.MIN, 2);
-		generationCurve = new LoadCurve(GENERATION_BY_HOURS);
-		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, true, null);
-		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurve);
-		generationSchedule.addGeneratorSchedule(genrationSchedule_1);
-		generationSchedule.addGeneratorSchedule(genrationSchedule_2);
+		stationSchedule = new PowerStationGenerationSchedule(powerObjectId,
+				LocalDateTime.MIN, LocalDateTime.MIN, 6);
+		generationCurveGen1 = new LoadCurve(GENERATION_BY_HOURS_GEN_1_2);
+		generationCurveGen2 = new LoadCurve(GENERATION_BY_HOURS_GEN_1_2);
+		generationCurveGen3 = new LoadCurve(GENERATION_BY_HOURS_GEN_3);
+		generationCurveGen4 = new LoadCurve(GENERATION_BY_HOURS_GEN_4);
+		generationCurveGen5 = new LoadCurve(GENERATION_BY_HOURS_GEN_5);
+		genrationSchedule_1 = new GeneratorGenerationSchedule(1, true, false, generationCurveGen1);
+		genrationSchedule_2 = new GeneratorGenerationSchedule(2, true, false, generationCurveGen2);
+		genrationSchedule_3 = new GeneratorGenerationSchedule(3, true, false, generationCurveGen3);
+		genrationSchedule_4 = new GeneratorGenerationSchedule(4, true, false, generationCurveGen4);
+		genrationSchedule_5 = new GeneratorGenerationSchedule(5, true, false, generationCurveGen5);
+		genrationSchedule_6 = new GeneratorGenerationSchedule(6, true, true, null);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_1);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_2);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_3);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_4);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_5);
+		stationSchedule.addGeneratorSchedule(genrationSchedule_6);
 	}
 	
 	private void createPowerStation(){
 		powerStation = new PowerStation(simulation, timeService, dispatcher, parameters);
 		Generator generator_1 = new Generator(simulation, 1);
 		Generator generator_2 = new Generator(simulation, 2);
+		Generator generator_3 = new Generator(simulation, 3);
+		Generator generator_4 = new Generator(simulation, 4);
+		Generator generator_5 = new Generator(simulation, 5);
+		Generator generator_6 = new Generator(simulation, 6);
 		
-		generator_1.setMinimalPowerInMW(5);
-		generator_1.setNominalPowerInMW(40);
-		generator_2.setMinimalPowerInMW(25);
-		generator_2.setNominalPowerInMW(100);
-		generator_1.setReugulationSpeedInMWPerMinute(20);
+		generator_1.setMinimalPowerInMW(90);
+		generator_2.setMinimalPowerInMW(90);
+		generator_3.setMinimalPowerInMW(90);
+		generator_4.setMinimalPowerInMW(90);
+		generator_5.setMinimalPowerInMW(90);
+		generator_6.setMinimalPowerInMW(60);
+		generator_1.setNominalPowerInMW(150);
+		generator_2.setNominalPowerInMW(150);
+		generator_3.setNominalPowerInMW(150);
+		generator_4.setNominalPowerInMW(150);
+		generator_5.setNominalPowerInMW(150);
+		generator_6.setNominalPowerInMW(150);
+		generator_1.setReugulationSpeedInMWPerMinute(3);
+		generator_2.setReugulationSpeedInMWPerMinute(3);
+		generator_3.setReugulationSpeedInMWPerMinute(3);
+		generator_4.setReugulationSpeedInMWPerMinute(3);
+		generator_5.setReugulationSpeedInMWPerMinute(3);
+		generator_6.setReugulationSpeedInMWPerMinute(20);
+		
 		powerStation.addGenerator(generator_1);
 		powerStation.addGenerator(generator_2);
-		powerStation.executeCommand(generationSchedule);
+		powerStation.addGenerator(generator_3);
+		powerStation.addGenerator(generator_4);
+		powerStation.addGenerator(generator_5);
+		powerStation.addGenerator(generator_6);
+		
+		powerStation.executeCommand(stationSchedule);
 	}
 }

@@ -67,6 +67,16 @@ public class DispatchingObjectsSourceFactory {
 	
 	private void fillSimulationWithObjects(){
 		simulation.createPowerObject(new PowerStationCreationParametersStub());
+		simulation.createPowerObject(new ScheduledLoadConsumerCreationParametersStub());
+		simulation.createPowerObject(new ShockLoadConsumerCreationParametersStub());
+		simulation.createPowerObject(new ScheduledLoadConsumerCreationParametersStub());
+		simulation.createPowerObject(new ScheduledLoadConsumerCreationParametersStub());
+		simulation.createPowerObject(new ShockLoadConsumerCreationParametersStub());
+		simulation.createPowerObject(new ScheduledLoadConsumerCreationParametersStub());
+		simulation.createPowerObject(new ScheduledLoadConsumerCreationParametersStub());
+		simulation.createPowerObject(new ShockLoadConsumerCreationParametersStub());
+		simulation.createPowerObject(new ScheduledLoadConsumerCreationParametersStub());
+		simulation.createPowerObject(new ScheduledLoadConsumerCreationParametersStub());
 		simulation.createPowerObject(new ShockLoadConsumerCreationParametersStub());
 		simulation.createPowerObject(new ScheduledLoadConsumerCreationParametersStub());
 	}

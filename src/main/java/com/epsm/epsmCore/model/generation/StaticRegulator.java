@@ -15,7 +15,7 @@ public class StaticRegulator {
 		this.simulation = simulation;
 		this.generator = generator;
 		requiredFrequency = Constants.STANDART_FREQUENCY;
-		coefficientOfStatism = 0.01f;
+		coefficientOfStatism = 0.06f;
 		
 		generator.setStaticRegulator(this);
 	}
@@ -26,6 +26,10 @@ public class StaticRegulator {
 	}
 		
 	private float calculateGeneratorPowerInMW(){	
+		if(powerAtRequiredFrequency < generator.getMinimalPowerInMW()){
+			return 0;
+		}
+		
 		float powerAccordingToStaticCharacteristic = countGeneratorPowerWithStaticCharacteristic();
 		
 		if(isPowerMoreThanGeneratorNominal(powerAccordingToStaticCharacteristic)){
@@ -40,8 +44,7 @@ public class StaticRegulator {
 	}
 	
 	private float countGeneratorPowerWithStaticCharacteristic(){		
-		return powerAtRequiredFrequency + (requiredFrequency - 
-				frequencyInPowerSystem) / coefficientOfStatism;
+		return powerAtRequiredFrequency + (requiredFrequency - frequencyInPowerSystem) / coefficientOfStatism;
 	}
 	
 	private boolean isPowerMoreThanGeneratorNominal(float power){
