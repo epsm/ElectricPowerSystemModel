@@ -51,7 +51,7 @@ public class PowerStationState extends State{
 		stringBuilder.append("PowerSt.#");
 		stringBuilder.append(powerObjectId);
 		stringBuilder.append(" [sim.time: ");
-		stringBuilder.append(simulationTimeStamp.format(timeFormatter));
+		stringBuilder.append(simulationTimeStamp.toString());
 		stringBuilder.append(" freq.: ");
 		stringBuilder.append(numberFormatter.format(frequency));
 		stringBuilder.append("Hz");

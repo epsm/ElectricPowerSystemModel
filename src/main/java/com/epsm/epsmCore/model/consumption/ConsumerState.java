@@ -27,7 +27,7 @@ public class ConsumerState extends State{
 		stringBuilder.append("Consumer#");
 		stringBuilder.append(powerObjectId);
 		stringBuilder.append(" [sim.time: ");
-		stringBuilder.append(simulationTimeStamp.format(timeFormatter));
+		stringBuilder.append(simulationTimeStamp.toString());
 		stringBuilder.append(" realtime: ");
 		stringBuilder.append(realTimeStamp.toString());
 		stringBuilder.append(", load MW: ");
