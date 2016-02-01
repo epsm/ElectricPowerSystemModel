@@ -15,8 +15,8 @@ public class Constants {
 	 * at all send to dispatcher. See calculatePowerBalance() in PowerObject class.
 	 */
 	public static final int SIMULATION_STEP_IN_NANOS = 100_000_000;
-	public static final float TIME_CONASTNT = 5_000;
-	public static final float ACCEPTABLE_FREQUENCY_DELTA = 0.03f;
+	public static final float TIME_CONASTNT = 2_000;
+	public static final float ACCEPTABLE_FREQUENCY_DELTA = 0.2f;
 	
 	public static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols(Locale.US);
 }
