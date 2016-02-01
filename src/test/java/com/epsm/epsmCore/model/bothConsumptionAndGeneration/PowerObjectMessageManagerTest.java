@@ -94,7 +94,7 @@ public class PowerObjectMessageManagerTest{
 	}
 	
 	private void acceptNullCommand(){
-		messageManager.executeCommand(null);
+		messageManager.verifyCommand(null);
 	}
 	
 	@Test
@@ -105,7 +105,7 @@ public class PowerObjectMessageManagerTest{
 	}
 	
 	private void acceptWrongCommand(){
-		messageManager.executeCommand(new PowerStationGenerationSchedule(0, timeInTest, timeInTest, 1));
+		messageManager.verifyCommand(new PowerStationGenerationSchedule(0, timeInTest, timeInTest, 1));
 	}
 	
 	@Test
@@ -116,7 +116,7 @@ public class PowerObjectMessageManagerTest{
 	}
 	
 	private void acceptRigtCommand(){
-		messageManager.executeCommand(command);
+		messageManager.verifyCommand(command);
 	}
 	
 	@Test

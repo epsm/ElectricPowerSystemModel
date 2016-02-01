@@ -69,7 +69,7 @@ public abstract class PowerObject implements SimulationObject, RealTimeOperation
 	
 	@Override
 	public final void executeCommand(Command command){
-		manager.executeCommand(command);
+		manager.verifyCommand(command);
 	}
 	
 	protected abstract void performDispatcherCommand(Command command);

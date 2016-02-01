@@ -56,7 +56,7 @@ public final class PowerObjectMessageManager{
 		timeWhenSentLastMessage = LocalDateTime.MIN;
 	}
 	
-	public void executeCommand(Command command){
+	public void verifyCommand(Command command){
 		if(command == null){
 			logger.warn("{} recieved null from dispatcher.", powerObject);
 		}else if(isCommandTypeEqualsToExpected(command)){
