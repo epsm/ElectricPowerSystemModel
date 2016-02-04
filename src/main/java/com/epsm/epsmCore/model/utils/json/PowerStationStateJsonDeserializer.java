@@ -2,15 +2,19 @@ package com.epsm.epsmCore.model.utils.json;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.epsm.epsmCore.model.generation.GeneratorState;
 import com.epsm.epsmCore.model.generation.PowerStationState;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,82 +23,78 @@ public class PowerStationStateJsonDeserializer extends JsonDeserializer<PowerSta
 
 	private PowerStationState stationState;
 	private GeneratorState generatorState;
-	private int powerObjectId;
+	private List<GeneratorState> generatorStatesList = new ArrayList<GeneratorState>();
+	private long powerObjectId;
 	private LocalDateTime realTimeStamp;
 	private LocalDateTime simulationTimeStamp;
 	private float frequency;
 	private int generatorQuantity;
 	private int generatorNumber;
 	private float generationInWM;
-	private JsonParser jParser;
-	private JsonNode rootNode;
-	private JsonNode generatorsNode;
-	private Iterator<JsonNode> iterator;
-	private JsonNode generatorNode;
+
 	private Logger logger = LoggerFactory.getLogger(PowerStationStateJsonDeserializer.class);
 	
 	@Override
 	public PowerStationState deserialize(JsonParser jParser, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 		
-		saveValue(jParser);
-		getRootNode();
-		getDataForCreatingPowerStationState();
+		resetState();
+		parseJson(jParser);
 		createPowerStationState();
-		getNodeForCreatingGeneratorsStates();
-		createGeneratorsStates();
-		
-		logger.debug("Deserialized: {} from JSON.", stationState);
+		addGeneratorStates();
+		logger.debug("Deserialized: {}." + stationState);
 		
 		return stationState;
 	}
 	
-	private void saveValue(JsonParser jParser){
-		this.jParser = jParser;
+	private void resetState(){
+		generatorStatesList.clear();
 	}
 	
-	private void getRootNode() throws JsonProcessingException, IOException{
-		rootNode = jParser.getCodec().readTree(jParser);
-	}
-	
-	private void getDataForCreatingPowerStationState(){
-		powerObjectId = rootNode.get("powerObjectId").asInt();
-		realTimeStamp = LocalDateTime.parse(rootNode.get("realTimeStamp").asText());
-		simulationTimeStamp = LocalDateTime.parse(rootNode.get("simulationTimeStamp").asText());
-		generatorQuantity = rootNode.get("generatorQuantity").asInt();
-		frequency = (float) rootNode.get("frequency").asDouble();
-	}
-	
-	private void createPowerStationState(){
-		stationState = new PowerStationState(powerObjectId, realTimeStamp,
-				simulationTimeStamp, generatorQuantity, frequency);
-	}
-	
-	private void getNodeForCreatingGeneratorsStates(){
-		generatorsNode = rootNode.path("generators");
-		iterator = generatorsNode.elements();
-	}
-	
-	private void createGeneratorsStates(){
-		while(iterator.hasNext()){
-			generatorNode = iterator.next();
+	private void parseJson(JsonParser jParser) throws JsonParseException, IOException{
+		while(jParser.nextToken() != JsonToken.END_OBJECT){
+			String name = jParser.getCurrentName();
 			
-			getDataForGeneratorState();
-			createGeneratorState();
-			addGeneratorStateToStationState();
+			if("powerObjectId".equals(name)){
+				jParser.nextToken();
+				powerObjectId = jParser.getLongValue();
+			}else if("realTimeStamp".equals(name)){
+				jParser.nextToken();
+				realTimeStamp = LocalDateTime.parse(jParser.getText());
+			}else if("simulationTimeStamp".equals(name)){
+				jParser.nextToken();
+				simulationTimeStamp = LocalDateTime.parse(jParser.getText());
+			}else if("generatorQuantity".equals(name)){
+				jParser.nextToken();
+				generatorQuantity = jParser.getIntValue();
+			}else if("frequency".equals(name)){
+				jParser.nextToken();
+				frequency = jParser.getFloatValue();
+			}else if("generators".equals(name)){
+				jParser.nextToken();
+				while(jParser.nextToken() != JsonToken.END_OBJECT){
+					parseJson(jParser);
+					generatorState = new GeneratorState(generatorNumber, generationInWM);
+					generatorStatesList.add(generatorState);
+				}
+			}else if("generationInWM".equals(name)){
+				jParser.nextToken();
+				generationInWM = jParser.getFloatValue();
+			}else if("generatorNumber".equals(name)){
+				jParser.nextToken();
+				generatorNumber = jParser.getIntValue();
+			}
 		}
 	}
 	
-	private void getDataForGeneratorState(){
-		generatorNumber = generatorNode.get("generatorNumber").asInt();
-		generationInWM = (float) generatorNode.get("generationInWM").asDouble();
+	private void createPowerStationState(){
+		stationState = new PowerStationState(powerObjectId, realTimeStamp, simulationTimeStamp,
+				generatorQuantity, frequency);
 	}
 	
-	private void createGeneratorState(){
-		generatorState = new GeneratorState(generatorNumber, generationInWM);
-	}
-	
-	private void addGeneratorStateToStationState(){
-		stationState.addGeneratorState(generatorState);
+	private void addGeneratorStates(){
+		for(GeneratorState state: generatorStatesList){
+			stationState.addGeneratorState(state);
+		}
 	}
 }

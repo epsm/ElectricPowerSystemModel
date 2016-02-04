@@ -6,13 +6,22 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.epsm.epsmCore.model.dispatch.DispatchingException;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MessageInclusionsContainer<E extends MessageInclusion>{
+	
+	@JsonProperty("inclusionQuantity")
 	private int expectedQuantityOfInclusions;
+	
+	@JsonProperty("inclusions")
 	private Map<Integer, E> inclusions;
+	
 	protected StringBuilder stringBuilder;
 	
-	public MessageInclusionsContainer(int quantityOfInclusions) {
+	@JsonCreator
+	public MessageInclusionsContainer(@JsonProperty("inclusionQuantity") int quantityOfInclusions) {
 		if(quantityOfInclusions < 1){
 			String message = String.format("MessageInclusionsContainer constructor: "
 					+ "quantityOfInclusions must be more than zero, but was %d."
@@ -25,6 +34,7 @@ public class MessageInclusionsContainer<E extends MessageInclusion>{
 		stringBuilder = new StringBuilder();
 	}
 
+	@JsonIgnore
 	public final int getQuantityOfInclusions(){
 		throwExceptionIfQuantityOfInclusionsNotAsDefinedInConstructor();
 		return expectedQuantityOfInclusions;
@@ -47,6 +57,7 @@ public class MessageInclusionsContainer<E extends MessageInclusion>{
 		throw new DispatchingException(message);
 	}
 	
+	@JsonIgnore
 	public final Set<Integer> getInclusionsNumbers(){
 		throwExceptionIfQuantityOfInclusionsNotAsDefinedInConstructor();
 		return Collections.unmodifiableSet(inclusions.keySet());

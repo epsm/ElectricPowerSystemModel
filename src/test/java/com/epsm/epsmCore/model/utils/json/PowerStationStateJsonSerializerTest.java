@@ -41,6 +41,7 @@ public class PowerStationStateJsonSerializerTest {
 			+ "\"1\":{\"generationInWM\":60.0,\"generatorNumber\":1},"
 			+ "\"2\":{\"generationInWM\":70.0,\"generatorNumber\":2}}}";
 		String serialized = mapper.writeValueAsString(state);
+		System.out.println(serialized);
 		Assert.assertEquals(expected, serialized);
 	}
 }

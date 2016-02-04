@@ -26,12 +26,12 @@ public class MessageFieldsDeserializer{
 	}
 	
 	public LocalDateTime deserializeLocalDateTime(JsonParser jParser) throws IOException{
-		resetPossiblyNonRewritableFields();
+		resetState();
 		
 		return parseLocalDateTime(jParser);
 	}
 	
-	private void resetPossiblyNonRewritableFields(){
+	private void resetState(){
 		second = 0;
 		nanoOfSecond = 0;
 	}
