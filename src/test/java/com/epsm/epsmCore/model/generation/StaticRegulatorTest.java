@@ -15,6 +15,17 @@ public class StaticRegulatorTest {
 	private Generator generator;
 	private StaticRegulator staticRegulator;
 	private final float GENERATOR_POWER_AT_REQUAIRED_FREQUENCY = 100;
+	private final float NOMINAL_POWER_IN_MW = 150;
+	private final float MINIMAL_POWER_IN_MW = 50;
+	private final float POWER_LESS_THAN_NOMINAL_IN_MW = 10;
+	private final float LOW_FREQUENCY_1 = Constants.STANDART_FREQUENCY - 0.1f;
+	private final float LOW_FREQUENCY_2 = Constants.STANDART_FREQUENCY - 2f;
+	private final float LOW_FREQUENCY_3 = Constants.STANDART_FREQUENCY - 10f;
+	private final float HIGH_FREQUENCY_1 = Constants.STANDART_FREQUENCY + 0.1f;
+	private final float HIGH_FREQUENCY_2 = Constants.STANDART_FREQUENCY + 2f;
+	private final float HIGH_FREQUENCY_3 = Constants.STANDART_FREQUENCY + 10f;
+	private final float TOO_HIGH_FREQUENCY = Constants.STANDART_FREQUENCY + 100000f;
+	private final float TOO_LOW_FREQUENCY = 0.0000001f;
 	
 	@Before
 	public void setUp(){
@@ -25,13 +36,13 @@ public class StaticRegulatorTest {
 		staticRegulator.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUAIRED_FREQUENCY);
 		
 		generator.setStaticRegulator(staticRegulator);
-		generator.setMinimalPowerInMW(50);
-		generator.setNominalPowerInMW(150);
+		generator.setMinimalPowerInMW(MINIMAL_POWER_IN_MW);
+		generator.setNominalPowerInMW(NOMINAL_POWER_IN_MW);
 	}
 
 	@Test
-	public void getGeneratorPowerInMWreturnsZeroIfPowerAtRequiredFrequencyLessThanGeneratorMinimal(){
-		staticRegulator.setPowerAtRequiredFrequency(10);
+	public void getGeneratorPowerInMWReturnsZeroIfPowerAtRequiredFrequencyLessThanGeneratorMinimal(){
+		staticRegulator.setPowerAtRequiredFrequency(POWER_LESS_THAN_NOMINAL_IN_MW);
 		
 		Assert.assertEquals(0, staticRegulator.getGeneratorPowerInMW(), 0);
 	}
@@ -44,7 +55,10 @@ public class StaticRegulatorTest {
 	}
 	
 	private void prepareMockSimulationWithLowFrequency(){
-		when(simulation.getFrequencyInPowerSystem()).thenReturn(49.9f).thenReturn(49f).thenReturn(40f);
+		when(simulation.getFrequencyInPowerSystem())
+			.thenReturn(LOW_FREQUENCY_1)
+			.thenReturn(LOW_FREQUENCY_2)
+			.thenReturn(LOW_FREQUENCY_3);
 	}
 	
 	@Test
@@ -55,7 +69,10 @@ public class StaticRegulatorTest {
 	}
 	
 	private void prepareMockSimulationWithHighFrequency(){
-		when(simulation.getFrequencyInPowerSystem()).thenReturn(50.1f).thenReturn(55f).thenReturn(60f);
+		when(simulation.getFrequencyInPowerSystem())
+			.thenReturn(HIGH_FREQUENCY_1)
+			.thenReturn(HIGH_FREQUENCY_2)
+			.thenReturn(HIGH_FREQUENCY_3);
 	}
 	
 	@Test
@@ -77,7 +94,7 @@ public class StaticRegulatorTest {
 	}
 	
 	private void prepareMockSimulationWithTooHightFrequency(){
-		when(simulation.getFrequencyInPowerSystem()).thenReturn(1000f);
+		when(simulation.getFrequencyInPowerSystem()).thenReturn(TOO_HIGH_FREQUENCY);
 	}
 	
 	@Test 
@@ -88,6 +105,6 @@ public class StaticRegulatorTest {
 	}
 	
 	private void prepareMockSimulationWithTooLowtFrequency(){
-		when(simulation.getFrequencyInPowerSystem()).thenReturn(0.00000000001f);
+		when(simulation.getFrequencyInPowerSystem()).thenReturn(TOO_LOW_FREQUENCY);
 	}
 }

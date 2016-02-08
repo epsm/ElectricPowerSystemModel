@@ -7,6 +7,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class MessageTest {
+	private final int POWER_OBJECT_ID = 0;
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
+	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -16,7 +19,7 @@ public class MessageTest {
 		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("Message constructor: realTimeStamp can't be null.");
 	    
-	    new MessageImpl(0, null, LocalDateTime.MIN);
+	    new MessageImpl(POWER_OBJECT_ID, null, SIMULATION_TIMESTAMP);
 	}
 	
 	@Test
@@ -24,7 +27,7 @@ public class MessageTest {
 		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("Message constructor: simulationTimeStamp can't be null.");
 	    
-	    new MessageImpl(0, LocalDateTime.MIN, null);
+	    new MessageImpl(POWER_OBJECT_ID, REAL_TIMESTAMP, null);
 	}
 	
 	private class MessageImpl extends Message{

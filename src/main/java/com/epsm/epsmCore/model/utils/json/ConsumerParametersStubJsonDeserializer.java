@@ -13,10 +13,6 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
-/*
- * Temporary solution. Desereliztion works perfect with Tomcat8, but 
- * java.lang.NoSuchMethodError on OpenShift WildFly container.
- */
 public class ConsumerParametersStubJsonDeserializer extends 
 		JsonDeserializer<ConsumerParametersStub>{
 

@@ -15,8 +15,15 @@ public class Constants {
 	 * at all send to dispatcher. See calculatePowerBalance() in PowerObject class.
 	 */
 	public static final int SIMULATION_STEP_IN_NANOS = 100_000_000;
+	public static final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 1;
+	public static final int PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS = 500;
+	public static final int LOG_EVERY_SIMULATION_STEPS_DONE = 100;
+	public static final int LOG_EVERY_REALTIME_STEPS_DONE = 20;
 	public static final float TIME_CONASTNT = 2_000;
 	public static final float ACCEPTABLE_FREQUENCY_DELTA = 0.2f;
+	public static final int DETERMINED_HOURS_IN_DAY = 24;
+	public static final float ASTATIC_REGULATION_DEAD_ZONE = 0.005f;
+	public static final float STATIC_REGULATOR_COEFFICIENT_OF_STATISM = 0.06f;
 	
 	public static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols(Locale.US);
 }

@@ -20,6 +20,16 @@ public class GenerationScheduleValidatorTest {
 	private GenerationScheduleValidator validator;
 	private PowerStationGenerationSchedule stationSchedule;
 	private PowerStationParameters stationParameters;
+	private final long POWER_OBJECT_ID = 1;
+	private final int FIRST_GENERATOR_NUMBER = 1;
+	private final int QUANTITY_OF_GENERATORS = 1;
+	private final boolean GENERATOR_ON = true;
+	private final boolean GENERATOR_OFF = false;
+	private final boolean ASTATIC_REGULATION_OFF = false;
+	private final boolean ASTATIC_REGULATION_ON = true;
+	private final LoadCurve NULL_CURVE = null;
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
+	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -27,11 +37,11 @@ public class GenerationScheduleValidatorTest {
 	@Before
 	public void setUp(){
 		validator = new GenerationScheduleValidator();
-		stationSchedule 
-			= new PowerStationGenerationSchedule(1, LocalDateTime.MIN, LocalDateTime.MIN, 1);
+		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID, REAL_TIMESTAMP, 
+				SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS);
 		stationParameters = mock(PowerStationParameters.class);
 		
-		when(stationParameters.getPowerObjectId()).thenReturn(1L);
+		when(stationParameters.getPowerObjectId()).thenReturn(POWER_OBJECT_ID);
 	}
 	
 	@Test
@@ -47,8 +57,8 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private void prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNull(){
-		GeneratorGenerationSchedule generatorSchedule = 
-				new GeneratorGenerationSchedule(1, true, false, null);
+		GeneratorGenerationSchedule generatorSchedule = new GeneratorGenerationSchedule(
+				FIRST_GENERATOR_NUMBER, GENERATOR_ON, ASTATIC_REGULATION_OFF, NULL_CURVE);
 		createStationScheduleWithFirstGenerator(generatorSchedule);
 	} 
 	
@@ -58,8 +68,9 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private void prepareStationWithOnlyOneSecondGenerator(){
+		final int generatorNumber = 2;
 		Set<Integer> numbers = new HashSet<Integer>();
-		numbers.add(2);
+		numbers.add(generatorNumber);
 		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
 	}
 	
@@ -77,7 +88,7 @@ public class GenerationScheduleValidatorTest {
 	
 	private void prepareMockedStationParametersWithFirstGenerator(){
 		Set<Integer> numbers = new HashSet<Integer>();
-		numbers.add(1);
+		numbers.add(FIRST_GENERATOR_NUMBER);
 		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
 	}
 	
@@ -95,16 +106,15 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private GeneratorParameters prepareGeneratorParametersForTooWeakGenerator(){
-		int generatorNumber = 1;
-		float minimalPower = 1;
-		float nominalPower = 1;
+		final float MINIMAL_POWER = 1;
+		final float NOMINAL_POWER = 1;
 		
-		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);
+		return new GeneratorParameters(FIRST_GENERATOR_NUMBER, NOMINAL_POWER, MINIMAL_POWER);
 	}
 	
 	private void preparePowerStation(GeneratorParameters parameters){
 		Set<Integer> numbers = new HashSet<Integer>();
-		numbers.add(1);
+		numbers.add(FIRST_GENERATOR_NUMBER);
 		
 		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
 		when(stationParameters.getGeneratorParameters(anyInt())).thenReturn(parameters);
@@ -112,8 +122,8 @@ public class GenerationScheduleValidatorTest {
 	
 	private void prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNotNull(){
 		LoadCurve generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
-		GeneratorGenerationSchedule generatorSchedule = 
-				new GeneratorGenerationSchedule(1, true, false, generationCurve);
+		GeneratorGenerationSchedule generatorSchedule = new GeneratorGenerationSchedule(
+				FIRST_GENERATOR_NUMBER, GENERATOR_ON, ASTATIC_REGULATION_OFF, generationCurve);
 		createStationScheduleWithFirstGenerator(generatorSchedule);
 	} 
 	
@@ -131,11 +141,10 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private GeneratorParameters prepareGeneratorParametersForTooPowerfullGenerator(){
-		int generatorNumber = 1;
-		float minimalPower = 100;
-		float nominalPower = 1000;
+		final float MINIMAL_POWER = 100;
+		final float NOMINAL_POWER = 1000;
 		
-		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);
+		return new GeneratorParameters(FIRST_GENERATOR_NUMBER, NOMINAL_POWER, MINIMAL_POWER);
 	}
 	
 	@Test
@@ -149,11 +158,10 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private GeneratorParameters prepareGeneratorParametersThatConformsTestsConstants_LOAD_BY_HOURSCurve(){
-		int generatorNumber = 1;
-		float minimalPower = 10;
-		float nominalPower = 200;
+		final float MINIMAL_POWER = 10;
+		final float NOMINAL_POWER = 200;
 		
-		return new GeneratorParameters(generatorNumber, nominalPower, minimalPower);
+		return new GeneratorParameters(FIRST_GENERATOR_NUMBER, NOMINAL_POWER, MINIMAL_POWER);
 	}
 	
 	@Test
@@ -165,8 +173,8 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private void prepareStationSchedule_FirstGeneratorOnAstaticRegulationOnCurveNull(){
-		GeneratorGenerationSchedule generatorSchedule = 
-				new GeneratorGenerationSchedule(1, true, true, null);
+		GeneratorGenerationSchedule generatorSchedule = new GeneratorGenerationSchedule(
+				FIRST_GENERATOR_NUMBER, GENERATOR_ON, ASTATIC_REGULATION_ON, NULL_CURVE);
 		createStationScheduleWithFirstGenerator(generatorSchedule);
 	}
 	
@@ -179,14 +187,14 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private void prepareStationSchedule_FirstGeneratorOffAstaticRegulationOffCurveNotNull(){
-		GeneratorGenerationSchedule generatorSchedule = 
-				new GeneratorGenerationSchedule(1, false, false, null);
+		GeneratorGenerationSchedule generatorSchedule = new GeneratorGenerationSchedule(
+				FIRST_GENERATOR_NUMBER, GENERATOR_OFF, ASTATIC_REGULATION_OFF, NULL_CURVE);
 		createStationScheduleWithFirstGenerator(generatorSchedule);
 	} 
 	
 	private void prepareStationWithOnlyOneFirstGenerator(){
 		Set<Integer> numbers = new HashSet<Integer>();
-		numbers.add(1);
+		numbers.add(FIRST_GENERATOR_NUMBER);
 		when(stationParameters.getGeneratorParametersNumbers()).thenReturn(numbers);
 	}
 }

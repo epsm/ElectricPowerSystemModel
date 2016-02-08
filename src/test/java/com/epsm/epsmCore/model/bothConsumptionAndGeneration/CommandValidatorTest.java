@@ -16,6 +16,8 @@ public class CommandValidatorTest {
 	private  Command command;
 	private  Parameters parameters;
 	private CommandValidator validator;
+	private final long FIRST_POWER_OBJECT_ID = 1;
+	private final long SECOND_POWER_OBJECT_ID = 2;
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -53,16 +55,16 @@ public class CommandValidatorTest {
 	    expectedEx.expectMessage("validatePowerObjectsId(...): id numbers in command#1 and"
 	    		+ " parameters#2 are different.");
 	    
-	    when(command.getPowerObjectId()).thenReturn(1L);
-		when(parameters.getPowerObjectId()).thenReturn(2L);
+	    when(command.getPowerObjectId()).thenReturn(FIRST_POWER_OBJECT_ID);
+		when(parameters.getPowerObjectId()).thenReturn(SECOND_POWER_OBJECT_ID);
 		
 	    validator.validate(command, parameters);
 	}
 	
 	@Test
 	public void noExceptionIfIdNumbersEquals(){
-		when(command.getPowerObjectId()).thenReturn(1L);
-		when(parameters.getPowerObjectId()).thenReturn(1L);
+		when(command.getPowerObjectId()).thenReturn(FIRST_POWER_OBJECT_ID);
+		when(parameters.getPowerObjectId()).thenReturn(FIRST_POWER_OBJECT_ID);
 	    
 	    validator.validate(command, parameters);
 	}

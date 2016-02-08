@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
+import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generation.GenerationException;
 
 public class LoadCurveTest{
@@ -19,7 +20,7 @@ public class LoadCurveTest{
 	
 	@Test
 	public void loadByHoursEqualsToOriginal(){
-		for(int i = 0; i < 24; i++){
+		for(int i = 0; i < Constants.DETERMINED_HOURS_IN_DAY; i++){
 			float orginalLoad = loadByHours[i];
 			float loadReturnedByLoadCurve = curve.getPowerOnTimeInMW(LocalTime.of(i, 0));
 			
@@ -54,7 +55,7 @@ public class LoadCurveTest{
 		float maxlDelta = 0;
 		final int secondsInHour = 60 * 60;
 		
-		for(int i = 0; i < 24; i++){
+		for(int i = 0; i < Constants.DETERMINED_HOURS_IN_DAY; i++){
 			float currentLoad = curve.getPowerOnTimeInMW(LocalTime.of(i, 0));
 			
 			if(maxLoadValue < currentLoad){

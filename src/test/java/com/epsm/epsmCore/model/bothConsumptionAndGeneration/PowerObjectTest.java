@@ -37,6 +37,9 @@ public class PowerObjectTest{
 	private State state;
 	private PowerObjectMessageManager messageManager;
 	private PowerObject powerObject;
+	private final int POWER_OBJECT_ID = 0;
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
+	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -48,7 +51,7 @@ public class PowerObjectTest{
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
-		parameters = new ConsumerParametersStub(0, LocalDateTime.MIN, LocalDateTime.MIN);
+		parameters = new ConsumerParametersStub(POWER_OBJECT_ID, REAL_TIMESTAMP, SIMULATION_TIMESTAMP);
 		state = mock(State.class);
 		messageManager = PowerMockito.mock(PowerObjectMessageManager.class);
 		powerObject = new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);
@@ -119,26 +122,32 @@ public class PowerObjectTest{
 	
 	@Test
 	public void passesStateToMessageManagerIfItIsTime(){
-		prepareTimeForWorkingWithState();
+		prepareRightTimeForWorkingWithState();
 		powerObject.calculatePowerBalance();
 		
 		verify(messageManager).acceptState(any());
 	}
 	
-	private void prepareTimeForWorkingWithState(){
+	private void prepareRightTimeForWorkingWithState(){
 		when(simulation.getDateTimeInSimulation()).thenReturn(LocalDateTime.of(2000, 01, 01, 13, 40, 00, 000));
 	}
 	
 	@Test
-	public void doesNotPassStateToMessageManagerIfItIsNotTime(){
+	public void doesNotPassStateToMessageManagerIfTimeCorrectExceptNanos(){
 		when(simulation.getDateTimeInSimulation()).thenReturn(LocalDateTime.of(2000, 01, 01, 13, 0, 0, 1));
 		powerObject.calculatePowerBalance();
 		verify(messageManager, never()).acceptState(any());
-		
+	}
+	
+	@Test
+	public void doesNotPassStateToMessageManagerIfTimeCorrectExceptSeconds(){
 		when(simulation.getDateTimeInSimulation()).thenReturn(LocalDateTime.of(2000, 01, 01, 13, 0, 1, 0));
 		powerObject.calculatePowerBalance();
 		verify(messageManager, never()).acceptState(any());
-		
+	}
+	
+	@Test
+	public void doesNotPassStateToMessageManagerIfTimeCorrectExceptMinutes(){
 		when(simulation.getDateTimeInSimulation()).thenReturn(LocalDateTime.of(2000, 01, 01, 13, 1, 0, 0));
 		powerObject.calculatePowerBalance();
 		verify(messageManager, never()).acceptState(any());

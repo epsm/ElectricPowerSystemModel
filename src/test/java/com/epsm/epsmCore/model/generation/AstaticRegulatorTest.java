@@ -24,19 +24,23 @@ public class AstaticRegulatorTest {
 	private LocalDateTime startDateTime = LocalDateTime.of(2000, 01, 01, 00,00);
 	private final float GENERATOR_POWER_AT_REQUIRED_FREQUENCY = 100;
 	private final float GENERATOR_REGULATION_SPEED_IN_MW_PER_MINUTE = 2;
+	private final int GENERATOR_NUMBER = 1;
+	private final float NOMINAL_POWER_IN_MW = 200;
+	private final float DELTA_MORE_THAN_DEAT_ZONE = Constants.ASTATIC_REGULATION_DEAD_ZONE + 0.1f;
+	private final float DELTA_LESS_THAN_DEAT_ZONE = Constants.ASTATIC_REGULATION_DEAD_ZONE - 0.001f;
 	
 	@Before
 	public void setUp(){
 		TimeService timeService = new TimeService();
 		Dispatcher dispatcher = mock(Dispatcher.class);
 		simulation = spy(new ElectricPowerSystemSimulationImpl(timeService, dispatcher, startDateTime));
-		generator = new Generator(simulation, 1);
+		generator = new Generator(simulation, GENERATOR_NUMBER);
 		astaticRegulator = new AstaticRegulator(simulation, generator);
 		staticRegulator = new StaticRegulator(simulation, generator);
 		
 		generator.setAstaticRegulator(astaticRegulator);
 		generator.setStaticRegulator(staticRegulator);
-		generator.setNominalPowerInMW(200);
+		generator.setNominalPowerInMW(NOMINAL_POWER_IN_MW);
 		generator.setReugulationSpeedInMWPerMinute(GENERATOR_REGULATION_SPEED_IN_MW_PER_MINUTE);
 		staticRegulator.setPowerAtRequiredFrequency(GENERATOR_POWER_AT_REQUIRED_FREQUENCY);
 	}
@@ -57,7 +61,7 @@ public class AstaticRegulatorTest {
 	
 	private void prepareMockSimulationWithLowFrequency(){
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(
-				(float)(Constants.STANDART_FREQUENCY - 0.1));
+				(float)(Constants.STANDART_FREQUENCY - DELTA_MORE_THAN_DEAT_ZONE));
 	}
 	
 	@Test
@@ -71,7 +75,7 @@ public class AstaticRegulatorTest {
 	
 	private void prepareMockSimulationWithHighFrequency(){
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(
-				(float)(Constants.STANDART_FREQUENCY + 0.1));
+				(float)(Constants.STANDART_FREQUENCY + DELTA_MORE_THAN_DEAT_ZONE));
 	}
 	
 	@Test
@@ -103,7 +107,7 @@ public class AstaticRegulatorTest {
 	
 	private void prepareMockSimulationWithLittleLowerButPermissibleFrequency(){
 		when(simulation.getFrequencyInPowerSystem()).
-		thenReturn((float)(Constants.STANDART_FREQUENCY - 0.02));
+		thenReturn((float)(Constants.STANDART_FREQUENCY - DELTA_LESS_THAN_DEAT_ZONE));
 	}
 	
 	@Test
@@ -117,7 +121,7 @@ public class AstaticRegulatorTest {
 	
 	private void prepareMockSimulationWithLittleHigherButPermissibleFrequency(){
 		when(simulation.getFrequencyInPowerSystem()).
-		thenReturn((float)(Constants.STANDART_FREQUENCY + 0.02));
+		thenReturn((float)(Constants.STANDART_FREQUENCY + DELTA_LESS_THAN_DEAT_ZONE));
 	}
 	
 	@Test

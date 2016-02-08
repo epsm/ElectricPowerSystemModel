@@ -22,8 +22,8 @@ public final class LoadCurve{
 		if(loadByHoursInMW == null){
 			String message = "LoadCurve constructor: loadByHoursInMW must not be null.";
 			throw new GenerationException(message);
-		}else if(loadByHoursInMW.length != 24){
-			String message = "Incoming array length must be 24.";
+		}else if(loadByHoursInMW.length != Constants.DETERMINED_HOURS_IN_DAY){
+			String message = String.format("Incoming array length must be %s.", Constants.DETERMINED_HOURS_IN_DAY);
 			throw new GenerationException(message);
 		}
 		
@@ -31,10 +31,14 @@ public final class LoadCurve{
 	}
 	
 	public float getPowerOnTimeInMW(LocalTime time){
-		this.requestedTime = time;
+		saveTime(time);
 		doCalculations();
 		
 		return interpolateValuesWithinHour();
+	}
+	
+	private void saveTime(LocalTime time){
+		this.requestedTime = time;
 	}
 	
 	private void doCalculations(){
@@ -49,8 +53,8 @@ public final class LoadCurve{
 		long minutes = requestedTime.getMinute();
 		long seconds = requestedTime.getSecond();
 		long nanos = requestedTime.getNano();
-		long totalSeconds = seconds + minutes * 60;
-		long totalNanos = nanos + totalSeconds * 1_000_000_000;
+		long totalSeconds = seconds + (minutes * 60);
+		long totalNanos = nanos + (totalSeconds * Constants.NANOS_IN_SECOND);
 		
 		return totalNanos;
 	}

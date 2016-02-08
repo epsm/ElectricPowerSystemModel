@@ -43,22 +43,29 @@ public class PowerObjectMessageManagerTest{
 	private Command command;
 	private PowerObjectMessageManager messageManager;
 	private LocalDateTime timeInTest = LocalDateTime.of(2000, 01, 01, 00, 00);
+	private final int POWER_OBJECT_ID = 0;
+	private final int QUANTITY_OF_GENERATORS = 1;
+	private final float LOAD = 0;
+	private final float FREQUENCY = 0;
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
+	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Before
-	public void setUp() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
+	public void setUp() throws Exception{
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentDateTime()).thenReturn(timeInTest);
 		dispatcher = mock(Dispatcher.class);
 		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,	timeInTest);
-		parameters = new ConsumerParametersStub(0, timeInTest, LocalDateTime.MIN);
-		state = new ConsumerState(0, timeInTest, LocalDateTime.MIN, 0);
+		parameters = new ConsumerParametersStub(POWER_OBJECT_ID, timeInTest, SIMULATION_TIMESTAMP);
+		state = new ConsumerState(POWER_OBJECT_ID, timeInTest, SIMULATION_TIMESTAMP, LOAD);
 		powerObject = PowerMockito.mock(ShockLoadConsumer.class);
 		when(powerObject.getParameters()).thenReturn(parameters);
 		when(powerObject.getState()).thenReturn(state);
-		command = new ConsumptionPermissionStub(0, LocalDateTime.MIN, simulation.getDateTimeInSimulation());
+		command = new ConsumptionPermissionStub(POWER_OBJECT_ID, REAL_TIMESTAMP, 
+				simulation.getDateTimeInSimulation());
 		messageManager = new PowerObjectMessageManager(timeService, dispatcher, powerObject);
 	}
 
@@ -105,7 +112,8 @@ public class PowerObjectMessageManagerTest{
 	}
 	
 	private void acceptWrongCommand(){
-		messageManager.verifyCommand(new PowerStationGenerationSchedule(0, timeInTest, timeInTest, 1));
+		messageManager.verifyCommand(new PowerStationGenerationSchedule(POWER_OBJECT_ID, timeInTest, 
+				timeInTest, QUANTITY_OF_GENERATORS));
 	}
 	
 	@Test
@@ -189,7 +197,8 @@ public class PowerObjectMessageManagerTest{
 		expectedEx.expect(IllegalArgumentException.class);
 	    expectedEx.expectMessage("PowerStationState received instead ConsumerState.");
 	    
-	    state = new PowerStationState(0, timeInTest, timeInTest, 1, 0);
+	    state = new PowerStationState(POWER_OBJECT_ID, timeInTest, timeInTest, 
+	    		QUANTITY_OF_GENERATORS, FREQUENCY);
 	    when(powerObject.getState()).thenReturn(state);
 	    
 	    makeSendState();

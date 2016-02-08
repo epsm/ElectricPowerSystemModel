@@ -17,7 +17,6 @@ import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
 public final class PowerStation extends PowerObject{
-
 	private MainControlPanel controlPanel;
 	private Map<Integer, Generator> generators;
 	private LocalDateTime currentDateTime;

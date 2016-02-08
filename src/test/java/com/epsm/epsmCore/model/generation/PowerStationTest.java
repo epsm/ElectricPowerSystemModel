@@ -36,6 +36,12 @@ public class PowerStationTest{
 	private final float THIRD_GENERATOR_NOMINAL_POWER = 400;
 	private final float FIRST_GENERATOR_MIN_POWER = 5;
 	private final long POWER_STATION_ID = 4458;
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
+	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
+	private final int QUANTITY_OF_GENERATORS = 1;
+	private final int FIRST_GENERATOR_NUMBER = 1;
+	private final int SECOND_GENERATOR_NUMBER = 2;
+	private final int THIRD_GENERATOR_NUMBER = 3;
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -43,7 +49,9 @@ public class PowerStationTest{
 	@Before
 	public void setUp(){
 		PowerStationParameters parameters
-				= new PowerStationParameters(POWER_STATION_ID, LocalDateTime.MIN, LocalDateTime.MIN, 1);
+				= new PowerStationParameters(POWER_STATION_ID, REAL_TIMESTAMP, 
+						SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS);
+		
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(Constants.STANDART_FREQUENCY);
 		when(simulation.getDateTimeInSimulation()).thenReturn(CONSTANT_TIME_IN_MOCK_SIMULATION);
@@ -57,7 +65,7 @@ public class PowerStationTest{
 	}
 	
 	void prepareAndInstallFirstGenerator(){
-		generator_1 = new Generator(simulation, 1);
+		generator_1 = new Generator(simulation, FIRST_GENERATOR_NUMBER);
 		generator_1.setMinimalPowerInMW(FIRST_GENERATOR_MIN_POWER);
 		generator_1.setNominalPowerInMW(FIRST_GENERATOR_NOMINAL_POWER);
 		generator_1.setPowerAtRequiredFrequency(FIRST_GENERATOR_RQUIRED_POWER);
@@ -66,8 +74,8 @@ public class PowerStationTest{
 	}
 	
 	void prepareAndInstallSecondAndThirdGenerators(){
-		generator_2 = new Generator(simulation, 2);
-		generator_3 = new Generator(simulation, 3);
+		generator_2 = new Generator(simulation, SECOND_GENERATOR_NUMBER);
+		generator_3 = new Generator(simulation, THIRD_GENERATOR_NUMBER);
 		
 		generator_2.setNominalPowerInMW(SECOND_GENERATOR_NOMINAL_POWER);
 		generator_3.setNominalPowerInMW(THIRD_GENERATOR_NOMINAL_POWER);

@@ -35,6 +35,12 @@ public class MessageFilterTest {
 	private State state;
 	private ConsumerParametersStub consumerParameters;
 	private PowerStationParameters powerStationParameters;
+	private final int POWER_OBJECT_ID = 0;
+	private final int QUANTITY_OF_GENERATORS = 1;
+	private final float FREQUENCY = 1;
+	private final float LOAD = 0;
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
+	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
 	
 	@Before
 	public void setUp(){
@@ -68,14 +74,16 @@ public class MessageFilterTest {
 	
 	private void createPowerStationAndFilterForIt(){
 		powerStationParameters 
-			= new PowerStationParameters(0, LocalDateTime.MIN, LocalDateTime.MIN, 1);
+			= new PowerStationParameters(POWER_OBJECT_ID, REAL_TIMESTAMP, LocalDateTime.MIN, 
+					QUANTITY_OF_GENERATORS);
 
 		object = new PowerStation(simulation, timeService, dispatcher, powerStationParameters);
 		filter = new MessageFilter(object.getClass());
 	}
 	
 	private void createPowerStationGenerationSchedule(){
-		command = new PowerStationGenerationSchedule(0, LocalDateTime.MIN, LocalDateTime.MIN, 1);
+		command = new PowerStationGenerationSchedule(POWER_OBJECT_ID, REAL_TIMESTAMP, 
+				LocalDateTime.MIN, QUANTITY_OF_GENERATORS);
 	}
 	
 	@Test
@@ -106,7 +114,8 @@ public class MessageFilterTest {
 	}
 	
 	private void createPowerStationState(){
-		state = new PowerStationState(0, LocalDateTime.MIN, LocalDateTime.MIN, 1, 0);
+		state = new PowerStationState(POWER_OBJECT_ID, REAL_TIMESTAMP, SIMULATION_TIMESTAMP,
+				QUANTITY_OF_GENERATORS, FREQUENCY);
 	}
 
 	@Test
@@ -117,14 +126,14 @@ public class MessageFilterTest {
 	}
 	
 	private void createConsumerAndFilterForIt(){
-		consumerParameters = new ConsumerParametersStub(0, LocalDateTime.MIN, LocalDateTime.MIN);
+		consumerParameters = new ConsumerParametersStub(POWER_OBJECT_ID, REAL_TIMESTAMP, SIMULATION_TIMESTAMP);
 		
 		object = new ShockLoadConsumer(simulation, timeService, dispatcher, consumerParameters);
 		filter = new MessageFilter(object.getClass());
 	}
 	
 	private void createConsumerPermisson(){
-		command = new ConsumptionPermissionStub(0, LocalDateTime.MIN, LocalDateTime.MIN);
+		command = new ConsumptionPermissionStub(POWER_OBJECT_ID, REAL_TIMESTAMP, SIMULATION_TIMESTAMP);
 	}
 	
 	@Test
@@ -135,7 +144,7 @@ public class MessageFilterTest {
 	}
 	
 	private void createConsumerState(){
-		state = new ConsumerState(0, LocalDateTime.MIN, LocalDateTime.MIN, 0);
+		state = new ConsumerState(POWER_OBJECT_ID, REAL_TIMESTAMP, SIMULATION_TIMESTAMP, LOAD);
 	}
 	
 	@Test

@@ -49,7 +49,7 @@ public class ElectricPowerSystemSimulationImplTest {
 		LocalDateTime previousTime;
 		LocalDateTime nextTime;
 		
-		for(int i = 0; i < 10 ;i++){
+		for(int verifyTimes = 0; verifyTimes < 10 ;verifyTimes++){
 			previousTime = simulation.getDateTimeInSimulation();
 			simulation.calculateNextStep();
 			nextTime = simulation.getDateTimeInSimulation();
@@ -63,7 +63,7 @@ public class ElectricPowerSystemSimulationImplTest {
 		when(station.calculatePowerBalance()).thenReturn(99f);
 		when(consumer.calculatePowerBalance()).thenReturn(-100f);
 
-		for(int i = 0; i < 100; i++){			
+		for(int verifyTimes = 0; verifyTimes < 100; verifyTimes++){			
 			rememberOldFrequencyAndDoNextStep();
 			
 			Assert.assertTrue(previousFrequency > currentFrequency);
@@ -81,7 +81,7 @@ public class ElectricPowerSystemSimulationImplTest {
 		when(station.calculatePowerBalance()).thenReturn(100f);
 		when(consumer.calculatePowerBalance()).thenReturn(99f);
 		
-		for(int i = 0; i < 100; i++){			
+		for(int verifyTimes = 0; verifyTimes < 100; verifyTimes++){			
 			rememberOldFrequencyAndDoNextStep();
 			
 			Assert.assertTrue(previousFrequency < currentFrequency);
@@ -93,7 +93,7 @@ public class ElectricPowerSystemSimulationImplTest {
 		when(station.calculatePowerBalance()).thenReturn(100f);
 		when(consumer.calculatePowerBalance()).thenReturn(-100f);
 		
-		for(int i = 0; i < 100; i++){			
+		for(int verifyTimes = 0; verifyTimes < 100; verifyTimes++){			
 			rememberOldFrequencyAndDoNextStep();
 			
 			Assert.assertTrue(previousFrequency == currentFrequency);

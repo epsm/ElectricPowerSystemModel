@@ -8,13 +8,17 @@ import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 
 public class GeneratorGenerationScheduleTest {
-	GeneratorGenerationSchedule schedule;
-	LoadCurve curve;
+	private GeneratorGenerationSchedule schedule;
+	private LoadCurve curve;
+	private final int GENERATOR_NUMBER = 88;
+	private final boolean GENERATOR_ON = true;
+	private final boolean ASTATIC_REGULATION_OFF = false;
 	
 	@Before
 	public void setUp(){
 		curve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
-		schedule = new GeneratorGenerationSchedule(88, true, false, curve);
+		schedule = new GeneratorGenerationSchedule(GENERATOR_NUMBER, GENERATOR_ON,
+				ASTATIC_REGULATION_OFF, curve);
 	}
 	
 	@Test

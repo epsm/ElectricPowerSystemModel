@@ -5,6 +5,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.RealTimeOperations;
 
@@ -12,8 +13,6 @@ public class SimulationRunner{
 	private ElectricPowerSystemSimulation simulation;
 	private long realTimeStepCounter;
 	private long simulationTimeStepCounter;
-	private final int PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS = 1;
-	private final int PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS = 500;
 	private Logger logger;
 	
 	public void runSimulation(ElectricPowerSystemSimulation simulation){
@@ -50,8 +49,8 @@ public class SimulationRunner{
 			while(true){
 				simulation.calculateNextStep();
 				
-				if(simulationTimeStepCounter++ > 100){
-					logger.debug("100  simulation step performed.");
+				if(simulationTimeStepCounter++ > Constants.LOG_EVERY_SIMULATION_STEPS_DONE){
+					logger.debug("{}  simulation step performed.", Constants.LOG_EVERY_SIMULATION_STEPS_DONE);
 					resetCounter();
 				}
 
@@ -64,9 +63,9 @@ public class SimulationRunner{
 		}
 		
 		private void pause(){
-			if(PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS != 0){
+			if(Constants.PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS != 0){
 				try {
-					Thread.sleep(PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS);
+					Thread.sleep(Constants.PAUSE_BETWEEN_CALCULATING_STEPS_IN_MS);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -90,8 +89,8 @@ public class SimulationRunner{
 					}
 				}
 				
-				if(realTimeStepCounter++ > 10){
-					logger.debug("10 real time step performed.");
+				if(realTimeStepCounter++ > Constants.LOG_EVERY_REALTIME_STEPS_DONE){
+					logger.debug("{} real time step performed.", Constants.LOG_EVERY_REALTIME_STEPS_DONE);
 					resetCounter();
 				}
 				
@@ -108,9 +107,9 @@ public class SimulationRunner{
 		}
 		
 		private void pause(){
-			if(PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS != 0){
+			if(Constants.PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS != 0){
 				try {
-					Thread.sleep(PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS);
+					Thread.sleep(Constants.PAUSE_BETWEEN_REAL_TIME_STEPS_IN_MS);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

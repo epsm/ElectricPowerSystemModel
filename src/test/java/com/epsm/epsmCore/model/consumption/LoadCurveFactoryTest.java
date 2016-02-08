@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.consumption.LoadCurveFactory;
+import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 
 public class LoadCurveFactoryTest {
@@ -21,7 +22,7 @@ public class LoadCurveFactoryTest {
 		curve = builder.getRandomCurve(
 				originalLoadByHoursInPercent, maxLoadWithoutRandomInMW, randomFluctuaton);
 		
-		for(int i = 0; i < 24; i++){
+		for(int i = 0; i < Constants.DETERMINED_HOURS_IN_DAY; i++){
 			float originalLoadInMW = calculateOriginalLoadInMW(i);
 			float LoadAccordingToCurve = curve.getPowerOnTimeInMW(LocalTime.of(i, 0));
 			float permissibleDelta = calculatePermissibleDeltaInMW(originalLoadInMW);
@@ -48,7 +49,7 @@ public class LoadCurveFactoryTest {
 		LoadCurve curve_2 = builder.getRandomCurve(
 				originalLoadByHoursInPercent, maxLoadWithoutRandomInMW, randomFluctuaton);
 		
-		for(int i = 0; i < 24; i++){
+		for(int i = 0; i < Constants.DETERMINED_HOURS_IN_DAY; i++){
 			double valueFromCurve_1 = curve_1.getPowerOnTimeInMW(LocalTime.of(i, 0));
 			double valueFromCurve_2 = curve_2.getPowerOnTimeInMW(LocalTime.of(i, 0));
 			

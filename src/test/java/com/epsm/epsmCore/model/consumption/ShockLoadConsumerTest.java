@@ -32,13 +32,19 @@ public class ShockLoadConsumerTest {
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private final int WORK_TIME = 4;
+	private final int HALF_OF_WORK_TIME = WORK_TIME / 2;
 	private final int PAUSE_TIME = 6;
+	private final int HALF_OF_PAUSE_TIME = PAUSE_TIME / 2;
 	private final long CONSUMER_NUMBER = 664;
+	private final int DEGREE_OF_DEPENDENCY_ON_FREQUENCY = 2;
+	private final float MAX_LOAD = 100;
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
+	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
 	
 	@Before
 	public void setUp(){
 		ConsumerParametersStub parameters 
-			= new ConsumerParametersStub(CONSUMER_NUMBER, LocalDateTime.MIN, LocalDateTime.MIN);
+			= new ConsumerParametersStub(CONSUMER_NUMBER, REAL_TIMESTAMP, SIMULATION_TIMESTAMP);
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentDateTime()).thenReturn(LocalDateTime.of(2000, 01, 01, 00, 00));
 		dispatcher = mock(Dispatcher.class);
@@ -49,10 +55,10 @@ public class ShockLoadConsumerTest {
 		consumer = new ShockLoadConsumer(simulation, timeService, dispatcher, parameters);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(Constants.STANDART_FREQUENCY);
-		consumer.setMaxLoad(100f);
+		consumer.setMaxLoad(MAX_LOAD);
 		consumer.setMaxWorkDurationInSeconds(WORK_TIME);
 		consumer.setMaxPauseBetweenWorkInSeconds(PAUSE_TIME);
-		consumer.setDegreeOfDependingOnFrequency(2);
+		consumer.setDegreeOfDependingOnFrequency(DEGREE_OF_DEPENDENCY_ON_FREQUENCY);
 	}
 	
 	@Rule
@@ -112,13 +118,13 @@ public class ShockLoadConsumerTest {
 	
 	@Test
 	public void WorkDurationConformsfromHalfToTheWholeOfSet(){
-		for(int i = 0; i < 2; i++){//too much time if more
+		for(int timesVerify = 0; timesVerify < 2; timesVerify++){//too much time if more
 			findTurnOnTime();
 			findTurnOffTime();
 			long duration = getAbsSecondsBetweenTwoTimes();
 	
 			Assert.assertTrue(turnOnTime != null && turnOffTime != null);
-			Assert.assertTrue(duration >= WORK_TIME / 2 && duration <= WORK_TIME);
+			Assert.assertTrue(duration >= HALF_OF_WORK_TIME && duration <= WORK_TIME);
 		}
 	}
 	
@@ -150,13 +156,13 @@ public class ShockLoadConsumerTest {
 	
 	@Test
 	public void pauseBetweenWorksConformsFromHalfToWholeOfSet(){
-		for(int i = 0; i < 2; i++){//too much time if more
+		for(int timesVerify = 0; timesVerify < 2; timesVerify++){//too much time if more
 			findTurnOffTime();
 			findTurnOnTime();
 			long duration = getAbsSecondsBetweenTwoTimes();
 	
 			Assert.assertTrue(turnOnTime != null && turnOffTime != null);
-			Assert.assertTrue(duration >= PAUSE_TIME / 2 && duration <= PAUSE_TIME);
+			Assert.assertTrue(duration >= HALF_OF_PAUSE_TIME && duration <= PAUSE_TIME);
 		}
 	}
 	

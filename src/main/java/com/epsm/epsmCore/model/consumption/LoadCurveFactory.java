@@ -4,10 +4,11 @@ import java.util.Arrays;
 import java.util.Random;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.epsmCore.model.generalModel.Constants;
 
 public class LoadCurveFactory {
 	private Random random = new Random();
-	private float[] newLoadByHoursInMW = new float[24];
+	private float[] newLoadByHoursInMW = new float[Constants.DETERMINED_HOURS_IN_DAY];
 	private float[] originalLoadByHoursInPercent;
 	private float maxLoadWithoutRandomInMW;
 	private float randomFluctuatonInPercent;
@@ -25,7 +26,7 @@ public class LoadCurveFactory {
 	}
 	
 	private void fillNewLoadByHoursInMW(){
-		for(int i = 0; i < 24 ; i++){
+		for(int i = 0; i < Constants.DETERMINED_HOURS_IN_DAY ; i++){
 			newLoadByHoursInMW[i] = calculateLoadForHourInMW(i);
 		}
 	}

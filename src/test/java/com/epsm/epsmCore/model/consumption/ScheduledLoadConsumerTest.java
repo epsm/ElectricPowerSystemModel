@@ -27,11 +27,13 @@ public class ScheduledLoadConsumerTest{
 	private LocalDateTime expectedTime;
 	private final int CONSUMER_NUMBER = 664;
 	private final float RANDOM_FLUCTUATION_IN_PERCENT = 10;
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
+	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
 	
 	@Before
 	public void setUp(){
 		ConsumerParametersStub parameters = new ConsumerParametersStub(
-				CONSUMER_NUMBER, LocalDateTime.MIN, LocalDateTime.MIN); 
+				CONSUMER_NUMBER, REAL_TIMESTAMP, SIMULATION_TIMESTAMP); 
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
 		simulation = new EPSMImplStub(timeService, dispatcher);
@@ -82,8 +84,9 @@ public class ScheduledLoadConsumerTest{
 		float firstDayLoad = 0;
 		float seconsDayLoad = 0;
 		int hour = 0;
+		final int HOURS_IN_TWO_DAY = 48;
 		
-		for(; hour < 48 ; hour ++){
+		for(; hour < HOURS_IN_TWO_DAY ; hour ++){
 			if(isItFirstDay(hour)){
 				firstDayLoad += consumer.calculatePowerBalance();
 			}else{
@@ -93,12 +96,12 @@ public class ScheduledLoadConsumerTest{
 			simulation.calculateNextStep();
 		}
 		
-		Assert.assertEquals(hour, 48);
+		Assert.assertEquals(hour, HOURS_IN_TWO_DAY);
 		Assert.assertNotEquals(firstDayLoad, seconsDayLoad);
 	}
 	
 	private boolean isItFirstDay(int hour){
-		return hour < 24;
+		return hour < Constants.DETERMINED_HOURS_IN_DAY;
 	}
 	
 	@Test

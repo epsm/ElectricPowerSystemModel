@@ -15,7 +15,7 @@ public class StaticRegulator {
 		this.simulation = simulation;
 		this.generator = generator;
 		requiredFrequency = Constants.STANDART_FREQUENCY;
-		coefficientOfStatism = 0.06f;
+		coefficientOfStatism = Constants.STATIC_REGULATOR_COEFFICIENT_OF_STATISM;
 		
 		generator.setStaticRegulator(this);
 	}

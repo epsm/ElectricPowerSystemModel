@@ -17,9 +17,10 @@ public class MessageInclusionsContainerTest {
 	
 	@Before
 	public void setUp(){
-		container = new MessageInclusionsContainer<MessageInclusionImpl>(2);
-		inclusion_1 = new MessageInclusionImpl(1);
-		inclusion_2 = new MessageInclusionImpl(2);
+		int powerUnitNumber = 1;
+		container = new MessageInclusionsContainer<MessageInclusionImpl > (2);
+		inclusion_1 = new MessageInclusionImpl(powerUnitNumber++);
+		inclusion_2 = new MessageInclusionImpl(powerUnitNumber++);
 	}
 	
 	private class MessageInclusionImpl extends MessageInclusion{
@@ -124,19 +125,20 @@ public class MessageInclusionsContainerTest {
 	}
 	
 	private void addTwoInclusionsWithTheSameNumbersToContainer(){
-		inclusion_1 = new MessageInclusionImpl(1);
-		inclusion_2 = new MessageInclusionImpl(1);
+		final int samePowerUnitNumber = 1;
+		inclusion_1 = new MessageInclusionImpl(samePowerUnitNumber);
+		inclusion_2 = new MessageInclusionImpl(samePowerUnitNumber);
 		container.addInclusion(inclusion_1);
 		container.addInclusion(inclusion_2);
 	}
 	
 	@Test
 	public void toStringInvokesForEveryInclusion(){
-		inclusion_1 = new MessageInclusionImpl(1);
-		inclusion_2 = new MessageInclusionImpl(2);
+		int powerUnitNumber = 1;
+		inclusion_1 = new MessageInclusionImpl(powerUnitNumber++);
+		inclusion_2 = new MessageInclusionImpl(powerUnitNumber++);
 		container.addInclusion(inclusion_1);
 		container.addInclusion(inclusion_2);
-		
 		container.toString();
 		
 		Assert.assertTrue(inclusion_1_invoked);

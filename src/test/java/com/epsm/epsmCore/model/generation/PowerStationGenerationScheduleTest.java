@@ -10,18 +10,33 @@ import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 
 public class PowerStationGenerationScheduleTest {
-	PowerStationGenerationSchedule stationSchedule;
-	GeneratorGenerationSchedule schedule_1;
-	GeneratorGenerationSchedule schedule_2;
-	LoadCurve curve;
+	private PowerStationGenerationSchedule stationSchedule;
+	private GeneratorGenerationSchedule schedule_1;
+	private GeneratorGenerationSchedule schedule_2;
+	private LoadCurve curve;
+	private final long POWER_OBJECT_ID = 77;
+	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(1, 2, 3, 4, 5);
+	private final int QUANTITY_OF_GENERATORS = 2;
+	private final int FIRST_GENERATOR_NUMBER = 99;
+	private final int SECOND_GENERATOR_NUMBER = 88;
+	private final boolean GENERATOR_ON = true;
+	private final boolean GENERATOR_OFF = false;
+	private final boolean ASTATIC_REGULATION_ON = true;
+	private final boolean ASTATIC_REGULATION_OFF = false;
+	private final LoadCurve NULL_CURVE = null;
 	
 	@Before
 	public void setUp(){
-		stationSchedule = new PowerStationGenerationSchedule(
-				77, LocalDateTime.of(1, 2, 3, 4, 5, 6, 7), LocalDateTime.of(1, 2, 3, 4, 5), 2);
+		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID, 
+				REAL_TIMESTAMP, SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS);
+		
 		curve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
-		schedule_1 = new GeneratorGenerationSchedule(99, false, true, null);
-		schedule_2 = new GeneratorGenerationSchedule(88, true, false, curve);
+		
+		schedule_1 = new GeneratorGenerationSchedule(FIRST_GENERATOR_NUMBER, 
+				GENERATOR_OFF, ASTATIC_REGULATION_ON, NULL_CURVE);
+		schedule_2 = new GeneratorGenerationSchedule(SECOND_GENERATOR_NUMBER, 
+				GENERATOR_ON, ASTATIC_REGULATION_OFF, curve);
 		
 		stationSchedule.addGeneratorSchedule(schedule_1);
 		stationSchedule.addGeneratorSchedule(schedule_2);

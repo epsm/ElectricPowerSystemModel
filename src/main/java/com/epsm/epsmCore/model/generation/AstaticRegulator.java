@@ -14,8 +14,6 @@ public class AstaticRegulator {
 	private float regulationStep;
 	private LocalDateTime currentDateTime;
 	private LocalDateTime previousDateTime;
-	private final float ASTATIC_REGULATION_SENSIVITY = 0.005f;
-	
 
 	public AstaticRegulator(ElectricPowerSystemSimulation simulation, Generator generator) {
 		this.simulation = simulation;
@@ -43,7 +41,7 @@ public class AstaticRegulator {
 	private boolean isFrequencyInNonSensivityLimit(){
 		float deviation = Math.abs(currentFrequency - Constants.STANDART_FREQUENCY);
 		
-		return deviation <= ASTATIC_REGULATION_SENSIVITY;
+		return deviation <= Constants.ASTATIC_REGULATION_DEAD_ZONE;
 	}
 
 	private void adjustPowerAtRequiredFrequency(){
@@ -62,11 +60,11 @@ public class AstaticRegulator {
 	}
 	
 	private void calculateRegulationStep(){
-		float regulationSpeedInMWPerMills = generator.getReugulationSpeedInMWPerMinute() / 60 / 1000;
+		float regulationSpeedInMWPerMillis = generator.getReugulationSpeedInMWPerMinute() / 60 / 1000;
 		Duration duration = Duration.between(previousDateTime, currentDateTime);
 		long durationInMillis = Math.abs(duration.toMillis());
 		
-		regulationStep =  durationInMillis * regulationSpeedInMWPerMills;
+		regulationStep =  durationInMillis * regulationSpeedInMWPerMillis;
 	}
 	
 	private void increasePowerAtRequiredFrequency(){

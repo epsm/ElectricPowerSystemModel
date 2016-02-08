@@ -47,6 +47,7 @@ public class ScheduledLoadConsumerFactoryStub extends AbstractPowerObjectFactory
 	}
 	
 	private void createScheduledLoadConsumer(){
+		//as factory is not complete, this are previously calculated values for creation
 		consumer = new ScheduledLoadConsumer(simulation, timeService, dispatcher, parameters);
 		consumer.setDegreeOfDependingOnFrequency(2);
 		consumer.setApproximateLoadByHoursOnDayInPercent(LOAD_BY_HOURS_IN_PERCENT);

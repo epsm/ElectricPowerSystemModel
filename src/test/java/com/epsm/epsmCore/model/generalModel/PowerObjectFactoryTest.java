@@ -29,6 +29,7 @@ public class PowerObjectFactoryTest {
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private PowerObject object;
+	private final long DEFAULT_POWER_OBJECT_NUMBER = 0;
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -79,7 +80,7 @@ public class PowerObjectFactoryTest {
 	@Test
 	public void factoryCreatesPowerStationFromPowerStationCreationParametersStub(){
 		factory.create(new PowerStationCreationParametersStub());
-		object = powerSystemObjects.get(0L);
+		object = powerSystemObjects.get(DEFAULT_POWER_OBJECT_NUMBER);
 		
 		Assert.assertTrue(object instanceof PowerStation);
 	}
@@ -87,7 +88,7 @@ public class PowerObjectFactoryTest {
 	@Test
 	public void factoryCreatesShockLoadConsumerFromPowerStationCreationParametersStub(){
 		factory.create(new ShockLoadConsumerCreationParametersStub());
-		object = powerSystemObjects.get(0L);
+		object = powerSystemObjects.get(DEFAULT_POWER_OBJECT_NUMBER);
 		
 		Assert.assertTrue(object instanceof ShockLoadConsumer);
 	}
@@ -95,7 +96,7 @@ public class PowerObjectFactoryTest {
 	@Test
 	public void factoryCreatesScheduledLoadConsumerFromPowerStationCreationParametersStub(){
 		factory.create(new ScheduledLoadConsumerCreationParametersStub());
-		object = powerSystemObjects.get(0L);
+		object = powerSystemObjects.get(DEFAULT_POWER_OBJECT_NUMBER);
 		
 		Assert.assertTrue(object instanceof ScheduledLoadConsumer);
 	}
