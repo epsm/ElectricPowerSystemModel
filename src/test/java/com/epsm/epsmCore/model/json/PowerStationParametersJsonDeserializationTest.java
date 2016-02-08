@@ -1,4 +1,4 @@
-package com.epsm.epsmCore.model.utils.json;
+package com.epsm.epsmCore.model.json;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -19,11 +19,23 @@ public class PowerStationParametersJsonDeserializationTest {
 	private GeneratorParameters firstGeneratorParameters;
 	private GeneratorParameters secondGeneratorParameters;
 	private String source;
+	private final long POWER_OBJECT_ID = 995;
+	private final int QUANTITY_OF_GENERATORS = 2;
+	private final int FIRST_GENERATOR_NUMBER = 1;
+	private final int SECOND_GENERATOR_NUMBER = 2;
+	private float FIRST_GENERATOR_NOMINAL_POWER = 40;
+	private float FIRST_GENERATOR_MINIMAL_POWER = 5;
+	private float SECOND_GENERATOR_NOMINAL_POWER = 100;
+	private float SECOND_GENERATOR_MINIMAL_POWER = 25;
+	private final LocalDateTime REALTIME_STAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
+	
 
 	@Before
 	public void setUp() throws JsonParseException, JsonMappingException, IOException{
 		mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
+		
 		source = "{\"powerObjectId\":995,"
 				+ "\"realTimeStamp\":[1,2,3,4,5,6,7],"
 				+ "\"simulationTimeStamp\":[7,6,5,4,3,2,1],"
@@ -47,47 +59,55 @@ public class PowerStationParametersJsonDeserializationTest {
 
 	@Test
 	public void objectIdCorrect(){
-		Assert.assertEquals(995, stationParameters.getPowerObjectId());
+		Assert.assertEquals(POWER_OBJECT_ID, stationParameters.getPowerObjectId());
 	}
 
 	@Test
 	public void realTimeStampCorrect(){
-		Assert.assertEquals(LocalDateTime.of(1, 2, 3, 4, 5, 6, 7), stationParameters
-				.getRealTimeStamp());
+		Assert.assertEquals(REALTIME_STAMP, stationParameters.getRealTimeStamp());
 	}
 	
 	@Test
 	public void simulationTimeStampCorrect(){
-		Assert.assertEquals(LocalDateTime.of(7, 6, 5, 4, 3, 2, 1), stationParameters.getSimulationTimeStamp());
+		Assert.assertEquals(SIMULATION_TIMESTAMP, stationParameters.getSimulationTimeStamp());
+	}
+	
+	@Test
+	public void quantityOfGeneratorsCorrect(){
+		Assert.assertEquals(QUANTITY_OF_GENERATORS, stationParameters.getQuantityOfGenerators());
 	}
 	
 	@Test
 	public void firstGeneratorNumberCorrect(){
-		Assert.assertEquals(1, firstGeneratorParameters.getGeneratorNumber());
+		Assert.assertEquals(FIRST_GENERATOR_NUMBER, firstGeneratorParameters.getGeneratorNumber());
 	}
 	
 	@Test
 	public void firstGeneratorNominalPowerCorrect(){
-		Assert.assertEquals(40, firstGeneratorParameters.getNominalPowerInMW(), 0);
+		Assert.assertEquals(FIRST_GENERATOR_NOMINAL_POWER, 
+				firstGeneratorParameters.getNominalPowerInMW(), 0);
 	}
 	
 	@Test
 	public void firstGeneratorMinimalTechnologyPowerCorrect(){
-		Assert.assertEquals(5, firstGeneratorParameters.getMinimalTechnologyPower(), 0);
+		Assert.assertEquals(FIRST_GENERATOR_MINIMAL_POWER,
+				firstGeneratorParameters.getMinimalTechnologyPower(), 0);
 	}
 	
 	@Test
 	public void secondGeneratorNumberCorrect(){
-		Assert.assertEquals(2, secondGeneratorParameters.getGeneratorNumber());
+		Assert.assertEquals(SECOND_GENERATOR_NUMBER, secondGeneratorParameters.getGeneratorNumber());
 	}
 	
 	@Test
 	public void secondGeneratorNominalPowerCorrect(){
-		Assert.assertEquals(100, secondGeneratorParameters.getNominalPowerInMW(), 0);
+		Assert.assertEquals(SECOND_GENERATOR_NOMINAL_POWER, 
+				secondGeneratorParameters.getNominalPowerInMW(), 0);
 	}
 	
 	@Test
 	public void secondGeneratorMinimalTechnologyPowerCorrect(){
-		Assert.assertEquals(25, secondGeneratorParameters.getMinimalTechnologyPower(), 0);
+		Assert.assertEquals(SECOND_GENERATOR_MINIMAL_POWER,
+				secondGeneratorParameters.getMinimalTechnologyPower(), 0);
 	}
 }

@@ -1,4 +1,4 @@
-package com.epsm.epsmCore.model.utils.json;
+package com.epsm.epsmCore.model.json;
 
 import java.time.LocalDateTime;
 
@@ -14,17 +14,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PowerStationParametersJsonSerializationTest {
 	private ObjectMapper mapper;
 	private PowerStationParameters parameters;
+	private final long POWER_OBJECT_ID = 995;
+	private final int QUANTITY_OF_GENERATORS = 2;
+	private final int FIRST_GENERATOR_NUMBER = 1;
+	private final int SECOND_GENERATOR_NUMBER = 2;
+	private float FIRST_GENERATOR_NOMINAL_POWER = 40;
+	private float FIRST_GENERATOR_MINIMAL_POWER = 5;
+	private float SECOND_GENERATOR_NOMINAL_POWER = 100;
+	private float SECOND_GENERATOR_MINIMAL_POWER = 25;
+	private final LocalDateTime REALTIME_STAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
 	
 	@Before
 	public void setUp(){
 		mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
 		
-		LocalDateTime realTimeStamp = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
-		LocalDateTime simulationTimeStamp = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
-		parameters = new PowerStationParameters(995, realTimeStamp, simulationTimeStamp, 2);
-		GeneratorParameters parameters_1 = new GeneratorParameters(1, 40, 5);
-		GeneratorParameters parameters_2 = new GeneratorParameters(2, 100, 25);
+		parameters = new PowerStationParameters(POWER_OBJECT_ID, REALTIME_STAMP,
+				SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS);
+		
+		GeneratorParameters parameters_1 = new GeneratorParameters(FIRST_GENERATOR_NUMBER, 
+				FIRST_GENERATOR_NOMINAL_POWER, FIRST_GENERATOR_MINIMAL_POWER);
+		
+		GeneratorParameters parameters_2 = new GeneratorParameters(SECOND_GENERATOR_NUMBER, 
+				SECOND_GENERATOR_NOMINAL_POWER, SECOND_GENERATOR_MINIMAL_POWER);
 			
 		parameters.addGeneratorParameters(parameters_1);
 		parameters.addGeneratorParameters(parameters_2);

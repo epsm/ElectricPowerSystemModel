@@ -5,12 +5,14 @@ import java.util.Arrays;
 
 import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generation.GenerationException;
-import com.epsm.epsmCore.model.utils.json.LoadCurveJsonSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonSerialize(using = LoadCurveJsonSerializer.class)
 public final class LoadCurve{
+	
+	@JsonProperty("loadByHoursInMW")
 	private float[] loadByHoursInMW;
+	
 	private LocalTime requestedTime;
 	private float loadOnRequestedHour;
 	private float loadOnNextHour;
@@ -18,7 +20,8 @@ public final class LoadCurve{
 	private int nextHour;
 	private float nanosFromStartOfRequestedHour;
 	
-	public LoadCurve(float[] loadByHoursInMW){
+	@JsonCreator
+	public LoadCurve(@JsonProperty("loadByHoursInMW") float[] loadByHoursInMW){
 		if(loadByHoursInMW == null){
 			String message = "LoadCurve constructor: loadByHoursInMW must not be null.";
 			throw new GenerationException(message);

@@ -194,7 +194,7 @@ public class ShockLoadConsumerTest {
 	private void compareValues(){
 		long actualConsumerNumber = state.getPowerObjectId();
 		LocalDateTime actualInState = state.getSimulationTimeStamp();
-		float actualLoad = state.getLoad();
+		float actualLoad = state.getLoadInMW();
 		
 		Assert.assertEquals(CONSUMER_NUMBER, actualConsumerNumber, 0);
 		Assert.assertEquals(expectedTime, actualInState);

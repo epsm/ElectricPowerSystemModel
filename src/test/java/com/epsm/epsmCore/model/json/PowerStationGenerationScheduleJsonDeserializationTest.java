@@ -1,4 +1,4 @@
-package com.epsm.epsmCore.model.utils.json;
+package com.epsm.epsmCore.model.json;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -16,36 +16,43 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PowerStationGenerationScheduleJsonDeserializerTest {
+public class PowerStationGenerationScheduleJsonDeserializationTest {
 	private ObjectMapper mapper;
 	private PowerStationGenerationSchedule schedule;
 	private GeneratorGenerationSchedule firstGeneratorSchedule;
 	private GeneratorGenerationSchedule secondGeneratorSchedule;
 	private String source;
+	private final long POWER_OBJECT_ID = 995;
+	private final int QUANTITY_OF_GENERATORS = 2;
+	private final int FIRST_GENERATOR_NUMBER = 1;
+	private final int SECOND_GENERATOR_NUMBER = 2;
+	private final LocalDateTime REALTIME_STAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
 
 	@Before
 	public void setUp() throws JsonParseException, JsonMappingException, IOException{
 		mapper = new ObjectMapper();
-		source = "{"
-				+ "\"powerObjectId\":995,"
-				+ "\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\","
-				+ "\"simulationTimeStamp\":\"0007-06-05T04:03:02.000000001\","
-				+ "\"generatorQuantity\":2,"
-				+ "\"generators\":{"
+		mapper.findAndRegisterModules();
+		
+		source = "{\"powerObjectId\":995,"
+				+ "\"realTimeStamp\":[1,2,3,4,5,6,7],"
+				+ "\"simulationTimeStamp\":[7,6,5,4,3,2,1],"
+				+ "\"quantityOfGenerators\":2,"
+				+ "\"generators\":{\"inclusionQuantity\":2,"
+				+ "\"inclusions\":{"
 				+ "\"1\":{"
+				+ "\"generatorNumber\":1,"
 				+ "\"generatorTurnedOn\":true,"
 				+ "\"astaticRegulatorTurnedOn\":true,"
-				+ "\"generatorNumber\":1,"
 				+ "\"generationCurve\":null},"
 				+ "\"2\":{"
+				+ "\"generatorNumber\":2,"
 				+ "\"generatorTurnedOn\":true,"
 				+ "\"astaticRegulatorTurnedOn\":false,"
-				+ "\"generatorNumber\":2,"
 				+ "\"generationCurve\":{"
-				+ "\"loadByHoursInMW\":["
-				+ "64.88,59.54,55.72,51.9,48.47,48.85,48.09,57.25,76.35,91.6,100.0,99.23,"
-				+ "91.6,91.6,91.22,90.83,90.83,90.83,90.83,90.83,90.83,90.83,90.83,83.96"
-				+ "]}}}}";
+				+ "\"loadByHoursInMW\":"
+				+ "[64.88,59.54,55.72,51.9,48.47,48.85,48.09,57.25,76.35,91.6,100.0,99.23,"
+				+ "91.6,91.6,91.22,90.83,90.83,90.83,90.83,90.83,90.83,90.83,90.83,83.96]}}}}}";
 		
 		schedule = mapper.readValue(source, PowerStationGenerationSchedule.class);
 		firstGeneratorSchedule = schedule.getGeneratorSchedule(1);
@@ -54,22 +61,27 @@ public class PowerStationGenerationScheduleJsonDeserializerTest {
 
 	@Test
 	public void objectIdCorrect(){
-		Assert.assertEquals(995, schedule.getPowerObjectId());
+		Assert.assertEquals(POWER_OBJECT_ID, schedule.getPowerObjectId());
 	}
 
 	@Test
 	public void realTimeStampCorrect(){
-		Assert.assertEquals(LocalDateTime.of(1, 2, 3, 4, 5, 6, 7), schedule.getRealTimeStamp());
+		Assert.assertEquals(REALTIME_STAMP, schedule.getRealTimeStamp());
 	}
 	
 	@Test
 	public void simulationTimeStampCorrect(){
-		Assert.assertEquals(LocalDateTime.of(7, 6, 5, 4, 3, 2, 1), schedule.getSimulationTimeStamp());
+		Assert.assertEquals(SIMULATION_TIMESTAMP, schedule.getSimulationTimeStamp());
+	}
+	
+	@Test
+	public void quantityOfGeneratorsCorrect(){
+		Assert.assertEquals(QUANTITY_OF_GENERATORS, schedule.getQuantityOfGenerators());
 	}
 	
 	@Test
 	public void firstGeneratorNumberCorrect(){
-		Assert.assertEquals(1, firstGeneratorSchedule.getGeneratorNumber());
+		Assert.assertEquals(FIRST_GENERATOR_NUMBER, firstGeneratorSchedule.getGeneratorNumber());
 	}
 	
 	@Test
@@ -89,7 +101,7 @@ public class PowerStationGenerationScheduleJsonDeserializerTest {
 	
 	@Test
 	public void secondGeneratorNumberCorrect(){
-		Assert.assertEquals(2, secondGeneratorSchedule.getGeneratorNumber());
+		Assert.assertEquals(SECOND_GENERATOR_NUMBER, secondGeneratorSchedule.getGeneratorNumber());
 	}
 	
 	@Test

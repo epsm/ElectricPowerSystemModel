@@ -1,4 +1,4 @@
-package com.epsm.epsmCore.model.utils.json;
+package com.epsm.epsmCore.model.json;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -19,6 +19,15 @@ public class PowerStationStateJsonDeserializationTest {
 	private GeneratorState firstGeneratorState;
 	private GeneratorState secondGeneratorState;
 	private String source;
+	private final long POWER_OBJECT_ID = 884;
+	private final int QUANTITY_OF_GENERATORS = 2;
+	private final float FREQUENCY = 50;
+	private final int FIRST_GENERATOR_NUMBER = 1;
+	private final int SECOND_GENERATOR_NUMBER = 2;
+	private float FIRST_GENERATOR_GENERATION = 60;
+	private float SECOND_GENERATOR_GENERATION = 70;
+	private final LocalDateTime REALTIME_STAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
 
 	@Before
 	public void setUp() throws JsonParseException, JsonMappingException, IOException{
@@ -44,42 +53,46 @@ public class PowerStationStateJsonDeserializationTest {
 
 	@Test
 	public void objectIdCorrect(){
-		Assert.assertEquals(884, stationState.getPowerObjectId());
+		Assert.assertEquals(POWER_OBJECT_ID, stationState.getPowerObjectId());
 	}
 
 	@Test
 	public void realTimeStampCorrect(){
-		Assert.assertEquals(LocalDateTime.of(1, 2, 3, 4, 5, 6, 7), stationState
-				.getRealTimeStamp());
+		Assert.assertEquals(REALTIME_STAMP, stationState.getRealTimeStamp());
 	}
 	
 	@Test
 	public void simulationTimeStampCorrect(){
-		Assert.assertEquals(LocalDateTime.of(7, 6, 5, 4, 3, 2, 1), stationState.getSimulationTimeStamp());
+		Assert.assertEquals(SIMULATION_TIMESTAMP, stationState.getSimulationTimeStamp());
 	}
 	
 	@Test
 	public void frequencyCorrect(){
-		Assert.assertEquals(50, stationState.getFrequency(), 0);
+		Assert.assertEquals(FREQUENCY, stationState.getFrequency(), 0);
+	}
+	
+	@Test
+	public void quantityOfGeneratorsCorrect(){
+		Assert.assertEquals(QUANTITY_OF_GENERATORS, stationState.getQuantityOfGenerators());
 	}
 	
 	@Test
 	public void firstGeneratorNumberCorrect(){
-		Assert.assertEquals(1, firstGeneratorState.getGeneratorNumber());
+		Assert.assertEquals(FIRST_GENERATOR_NUMBER, firstGeneratorState.getGeneratorNumber());
 	}
 	
 	@Test
 	public void firstGeneratorGenerationCorrect(){
-		Assert.assertEquals(60, firstGeneratorState.getGenerationInWM(), 0);
+		Assert.assertEquals(FIRST_GENERATOR_GENERATION, firstGeneratorState.getGenerationInWM(), 0);
 	}
 	
 	@Test
 	public void secondGeneratorNumberCorrect(){
-		Assert.assertEquals(2, secondGeneratorState.getGeneratorNumber());
+		Assert.assertEquals(SECOND_GENERATOR_NUMBER, secondGeneratorState.getGeneratorNumber());
 	}
 	
 	@Test
 	public void secondGeneratorGenerationCorrect(){
-		Assert.assertEquals(70, secondGeneratorState.getGenerationInWM(), 0);
+		Assert.assertEquals(SECOND_GENERATOR_GENERATION, secondGeneratorState.getGenerationInWM(), 0);
 	}
 }

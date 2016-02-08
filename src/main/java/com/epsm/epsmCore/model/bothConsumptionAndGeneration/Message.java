@@ -4,16 +4,17 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
 import com.epsm.epsmCore.model.generalModel.Constants;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public abstract class Message{
+	
+	@JsonProperty("powerObjectId")
 	protected final long powerObjectId;
 	
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonProperty("simulationTimeStamp")
 	protected LocalDateTime simulationTimeStamp;
 	
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonProperty("realTimeStamp")
 	protected LocalDateTime realTimeStamp;
 	
 	protected StringBuilder stringBuilder;

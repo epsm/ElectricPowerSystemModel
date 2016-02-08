@@ -3,13 +3,10 @@ package com.epsm.epsmCore.model.consumption;
 import java.time.LocalDateTime;
 
 import com.epsm.epsmCore.model.dispatch.Command;
-import com.epsm.epsmCore.model.utils.json.ConsumptionPermissionStubJsonDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 //There may be methods allows consumer to be turned on/of or limit consumption.
-@JsonDeserialize(using = ConsumptionPermissionStubJsonDeserializer.class)
 public class ConsumptionPermissionStub extends Command{
 	
 	@JsonCreator

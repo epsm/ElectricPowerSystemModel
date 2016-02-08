@@ -3,22 +3,27 @@ package com.epsm.epsmCore.model.consumption;
 import java.time.LocalDateTime;
 
 import com.epsm.epsmCore.model.dispatch.State;
-import com.epsm.epsmCore.model.utils.json.ConsumerStateJsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonDeserialize(using = ConsumerStateJsonDeserializer.class)
 public class ConsumerState extends State{
-	private float load;
 	
-	public ConsumerState(long powerObjectId, LocalDateTime realTimeStamp,
-			LocalDateTime simulationTimeStamp, float load) {
+	@JsonProperty("loadInMW")
+	private float loadInMW;
+	
+	@JsonCreator
+	public ConsumerState(
+			@JsonProperty("powerObjectId") long powerObjectId,
+			@JsonProperty("realTimeStamp") LocalDateTime realTimeStamp,
+			@JsonProperty("simulationTimeStamp") LocalDateTime simulationTimeStamp,
+			@JsonProperty("loadInMW") float loadInMW) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
-		this.load = load;
+		this.loadInMW = loadInMW;
 	}
 
-	public float getLoad() {
-		return load;
+	public float getLoadInMW() {
+		return loadInMW;
 	}
 	
 	@Override
@@ -31,7 +36,7 @@ public class ConsumerState extends State{
 		stringBuilder.append(" realtime: ");
 		stringBuilder.append(realTimeStamp.toString());
 		stringBuilder.append(", load MW: ");
-		stringBuilder.append(numberFormatter.format(load));
+		stringBuilder.append(numberFormatter.format(loadInMW));
 		stringBuilder.append("]");
 
 		return stringBuilder.toString();

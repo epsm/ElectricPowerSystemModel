@@ -1,4 +1,4 @@
-package com.epsm.epsmCore.model.utils.json;
+package com.epsm.epsmCore.model.json;
 
 import java.time.LocalDateTime;
 
@@ -14,16 +14,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PowerStationStateJsonSerializationTest {
 	private ObjectMapper mapper;
 	private PowerStationState state;
+	private final long POWER_OBJECT_ID = 884;
+	private final int QUANTITY_OF_GENERATORS = 2;
+	private final float FREQUENCY = 50;
+	private final int FIRST_GENERATOR_NUMBER = 1;
+	private final int SECOND_GENERATOR_NUMBER = 2;
+	private float FIRST_GENERATOR_GENERATION = 60;
+	private float SECOND_GENERATOR_GENERATION = 70;
+	private final LocalDateTime REALTIME_STAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
 	
 	@Before
 	public void setUp(){
 		mapper = new ObjectMapper();
+		mapper.findAndRegisterModules();
 		
-		LocalDateTime realTimeStamp = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
-		LocalDateTime simulationTimeStamp = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
-		state = new PowerStationState(884, realTimeStamp, simulationTimeStamp, 2, 50);
-		GeneratorState state_1 = new GeneratorState(1, 60);
-		GeneratorState state_2 = new GeneratorState(2, 70);
+		state = new PowerStationState(POWER_OBJECT_ID, REALTIME_STAMP, SIMULATION_TIMESTAMP,
+				QUANTITY_OF_GENERATORS, FREQUENCY);
+		GeneratorState state_1 = new GeneratorState(FIRST_GENERATOR_NUMBER, FIRST_GENERATOR_GENERATION);
+		GeneratorState state_2 = new GeneratorState(SECOND_GENERATOR_NUMBER, SECOND_GENERATOR_GENERATION);
 			
 		state.addGeneratorState(state_1);
 		state.addGeneratorState(state_2);
@@ -45,7 +54,7 @@ public class PowerStationStateJsonSerializationTest {
 			+ "\"generationInWM\":70.0}}}}";
 		
 		String serialized = mapper.writeValueAsString(state);
-		System.out.println(serialized);
+
 		Assert.assertEquals(expected, serialized);
 	}
 }
