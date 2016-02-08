@@ -5,22 +5,25 @@ import java.util.Set;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.epsmCore.model.dispatch.Parameters;
-import com.epsm.epsmCore.model.utils.json.PowerStationParametersJsonDeserializer;
-import com.epsm.epsmCore.model.utils.json.PowerStationParametersJsonSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonSerialize(using = PowerStationParametersJsonSerializer.class)
-@JsonDeserialize(using = PowerStationParametersJsonDeserializer.class)
 public class PowerStationParameters extends Parameters{
+	
+	@JsonProperty("generators")
 	private MessageInclusionsContainer<GeneratorParameters> generatorParameters;
 	
-	public PowerStationParameters(long powerObjectId, LocalDateTime realTimeStamp,
-			LocalDateTime simulationTimeStamp, int quantityOfGeneratorParameters) {
+	@JsonCreator
+	public PowerStationParameters(
+			@JsonProperty("powerObjectId") long powerObjectId,
+			@JsonProperty("realTimeStamp") LocalDateTime realTimeStamp,
+			@JsonProperty("simulationTimeStamp") LocalDateTime simulationTimeStamp,
+			@JsonProperty("quantityOfGenerators") int quantityOfGenerators) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		generatorParameters = new MessageInclusionsContainer<GeneratorParameters>(
-				quantityOfGeneratorParameters);
+				quantityOfGenerators);
 	}
 
 	public void addGeneratorParameters(GeneratorParameters parameters){
@@ -31,6 +34,7 @@ public class PowerStationParameters extends Parameters{
 		return generatorParameters.getInclusion(number);
 	}
 	
+	@JsonIgnore
 	public Set<Integer> getGeneratorParametersNumbers(){
 		return generatorParameters.getInclusionsNumbers();
 	}

@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PowerStationParametersJsonDeserializerTest {
+public class PowerStationParametersJsonDeserializationTest {
 	private ObjectMapper mapper;
 	private PowerStationParameters stationParameters;
 	private GeneratorParameters firstGeneratorParameters;
@@ -23,16 +23,23 @@ public class PowerStationParametersJsonDeserializerTest {
 	@Before
 	public void setUp() throws JsonParseException, JsonMappingException, IOException{
 		mapper = new ObjectMapper();
-		source = "{\"powerObjectId\":995"
-				 + ",\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\""
-				 + ",\"simulationTimeStamp\":\"0007-06-05T04:03:02.000000001\","
-				 + "\"generatorQuantity\":2,"
-				 + "\"generators\":{"
-				 + "\"1\":{\"nominalPowerInMW\":40.0,\"minimalTechnologyPower\":5.0,"
-				 + "\"generatorNumber\":1},"
-				 + "\"2\":{\"nominalPowerInMW\":100.0,\"minimalTechnologyPower\":25.0,"
-				 + "\"generatorNumber\":2}}}";
-		
+		mapper.findAndRegisterModules();
+		source = "{\"powerObjectId\":995,"
+				+ "\"realTimeStamp\":[1,2,3,4,5,6,7],"
+				+ "\"simulationTimeStamp\":[7,6,5,4,3,2,1],"
+				+ "\"quantityOfGenerators\":2,"
+				+ "\"generators\":{"
+				+ "\"inclusionQuantity\":2,"
+				+ "\"inclusions\":{"
+				+ "\"1\":{"
+				+ "\"generatorNumber\":1,"
+				+ "\"nominalPowerInMW\":40.0,"
+				+ "\"minimalTechnologyPower\":5.0},"
+				+ "\"2\":{"
+				+ "\"generatorNumber\":2,"
+				+ "\"nominalPowerInMW\":100.0,"
+				+ "\"minimalTechnologyPower\":25.0}}}}";
+						
 		stationParameters = mapper.readValue(source, PowerStationParameters.class);
 		firstGeneratorParameters = stationParameters.getGeneratorParameters(1);
 		secondGeneratorParameters = stationParameters.getGeneratorParameters(2);

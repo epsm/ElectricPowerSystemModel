@@ -9,8 +9,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-//@JsonSerialize(using = PowerStationStateJsonSerializer.class)
-//@JsonDeserialize(using = PowerStationStateJsonDeserializer.class)
 public class PowerStationState extends State{
 	
 	@JsonProperty("generators")
@@ -24,12 +22,12 @@ public class PowerStationState extends State{
 			@JsonProperty("powerObjectId") long powerObjectId,
 			@JsonProperty("realTimeStamp") LocalDateTime realTimeStamp,
 			@JsonProperty("simulationTimeStamp") LocalDateTime simulationTimeStamp,
-			@JsonProperty("quantityOfGenerators") int quantityOfInclusions,
+			@JsonProperty("quantityOfGenerators") int quantityOfGenerators,
 			@JsonProperty("frequency") float frequency) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		this.frequency = frequency;
-		states = new MessageInclusionsContainer<GeneratorState>(quantityOfInclusions);
+		states = new MessageInclusionsContainer<GeneratorState>(quantityOfGenerators);
 	}
 
 	public float getFrequency() {

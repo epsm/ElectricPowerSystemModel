@@ -12,12 +12,9 @@ import com.epsm.epsmCore.model.generation.PowerStationState;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-public class PowerStationStateJsonDeserializerTest {
+public class PowerStationStateJsonDeserializationTest {
 	private ObjectMapper mapper;
-	
-	@JsonDeserialize(using = PowerStationStateJsonDeserializer.class)
 	private PowerStationState stationState;
 	private GeneratorState firstGeneratorState;
 	private GeneratorState secondGeneratorState;
@@ -28,17 +25,17 @@ public class PowerStationStateJsonDeserializerTest {
 		mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
 		
-		
-		source = "{\"powerObjectId\":884,\"realTimeStamp\":[1,2,3,4,5,6,7],\"simulationTimeStamp\":[7,6,5,4,3,2,1],\"quantityOfGenerators\":2,\"frequency\":50.0,\"generators\":{\"inclusionQuantity\":2,\"inclusions\":{\"1\":{\"generatorNumber\":1,\"generationInWM\":60.0},\"2\":{\"generatorNumber\":2,\"generationInWM\":70.0}}}}";
-		
-		/*source = "{\"powerObjectId\":884,"
-				 + "\"realTimeStamp\":\"0001-02-03T04:05:06.000000007\","
-				 + "\"simulationTimeStamp\":\"0007-06-05T04:03:02.000000001\","
-				 + "\"generatorQuantity\":2,"
-				 + "\"frequency\":50.0,"
-				 + "\"generators\":{"
-				 + "\"1\":{\"generationInWM\":60.0,\"generatorNumber\":1},"
-				 + "\"2\":{\"generationInWM\":70.0,\"generatorNumber\":2}}}";*/
+		source = "{\"powerObjectId\":884,"
+				+ "\"realTimeStamp\":[1,2,3,4,5,6,7],"
+				+ "\"simulationTimeStamp\":[7,6,5,4,3,2,1],"
+				+ "\"quantityOfGenerators\":2,"
+				+ "\"frequency\":50.0,"
+				+ "\"generators\":{\"inclusionQuantity\":2,\"inclusions\":{"
+				+ "\"1\":{"
+				+ "\"generatorNumber\":1,"
+				+ "\"generationInWM\":60.0},"
+				+ "\"2\":{\"generatorNumber\":2,"
+				+ "\"generationInWM\":70.0}}}}";
 
 		stationState = mapper.readValue(source, PowerStationState.class);
 		firstGeneratorState = stationState.getGeneratorState(1);
