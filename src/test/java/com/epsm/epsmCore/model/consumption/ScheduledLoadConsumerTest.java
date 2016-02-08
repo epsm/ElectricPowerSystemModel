@@ -123,7 +123,7 @@ public class ScheduledLoadConsumerTest{
 	private void compareValues(){
 		long actualConsumerNumber = state.getPowerObjectId();
 		LocalDateTime actualTime = state.getSimulationTimeStamp();
-		float actualLoad = state.getLoad();
+		float actualLoad = state.getLoadInMW();
 		
 		Assert.assertEquals(CONSUMER_NUMBER, actualConsumerNumber);
 		Assert.assertEquals(expectedTime, actualTime);

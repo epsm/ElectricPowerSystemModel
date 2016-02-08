@@ -5,25 +5,30 @@ import java.util.Set;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.epsmCore.model.dispatch.State;
-import com.epsm.epsmCore.model.utils.json.PowerStationStateJsonDeserializer;
-import com.epsm.epsmCore.model.utils.json.PowerStationStateJsonSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonSerialize(using = PowerStationStateJsonSerializer.class)
-@JsonDeserialize(using = PowerStationStateJsonDeserializer.class)
 public class PowerStationState extends State{
+	
+	@JsonProperty("generators")
 	private MessageInclusionsContainer<GeneratorState> states;
 	
-	public PowerStationState(long powerObjectId, LocalDateTime realTimeStamp,
-			LocalDateTime simulationTimeStamp, int quantityOfInclusions, float frequency) {
+	@JsonProperty("frequency")
+	private float frequency;
+	
+	@JsonCreator
+	public PowerStationState(
+			@JsonProperty("powerObjectId") long powerObjectId,
+			@JsonProperty("realTimeStamp") LocalDateTime realTimeStamp,
+			@JsonProperty("simulationTimeStamp") LocalDateTime simulationTimeStamp,
+			@JsonProperty("quantityOfGenerators") int quantityOfGenerators,
+			@JsonProperty("frequency") float frequency) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		this.frequency = frequency;
-		states = new MessageInclusionsContainer<GeneratorState>(quantityOfInclusions);
+		states = new MessageInclusionsContainer<GeneratorState>(quantityOfGenerators);
 	}
-
-	private float frequency;
 
 	public float getFrequency() {
 		return frequency;
@@ -37,6 +42,7 @@ public class PowerStationState extends State{
 		return states.getInclusion(generatorNumber);
 	}
 	
+	@JsonIgnore
 	public Set<Integer> getGeneratorsNumbers(){
 		return states.getInclusionsNumbers();
 	}

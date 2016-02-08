@@ -1,11 +1,19 @@
 package com.epsm.epsmCore.model.generation;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusion;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GeneratorState extends MessageInclusion{
+	
+	@JsonProperty("generationInWM")
 	protected float generationInWM;
 	
-	public GeneratorState(int generatorNumber, float generationInWM) {
+	@JsonCreator
+	public GeneratorState(
+			@JsonProperty("generatorNumber")int generatorNumber,
+			@JsonProperty("generationInWM") float generationInWM) {
+		
 		super(generatorNumber);
 		this.generationInWM = generationInWM;
 	}

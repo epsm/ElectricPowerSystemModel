@@ -1,4 +1,4 @@
-package com.epsm.epsmCore.model.utils.json;
+package com.epsm.epsmCore.model.json;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -12,16 +12,21 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ConsumptionPermissionStubDeserializerTest {
+public class ConsumptionPermissionStubDeserializationTest {
 	private ObjectMapper mapper;
 	private String source;
 	private ConsumptionPermissionStub permission;
+	private final long POWER_OBJECT_ID = 88;
+	private final LocalDateTime REALTIME_STAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
+	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
 	
 	@Before
 	public void setUp() throws JsonParseException, JsonMappingException, IOException{
 		mapper = new ObjectMapper();
-		source = "{\"powerObjectId\":88,\"simulationTimeStamp\":[7,6,5,4,3,2,1],"
-				+ "\"realTimeStamp\":[1,2,3,4,5,6,7]}";
+		mapper.findAndRegisterModules();
+		
+		source = "{\"powerObjectId\":88,\"realTimeStamp\":[1,2,3,4,5,6,7],"
+				+ "\"simulationTimeStamp\":[7,6,5,4,3,2,1]}";
 		
 		mapper.findAndRegisterModules();
 		permission = mapper.readValue(source, ConsumptionPermissionStub.class);
@@ -29,20 +34,16 @@ public class ConsumptionPermissionStubDeserializerTest {
 	
 	@Test
 	public void powerObjectIdCorrect() {
-		Assert.assertEquals(88, permission.getPowerObjectId());
+		Assert.assertEquals(POWER_OBJECT_ID, permission.getPowerObjectId());
 	}
 	
 	@Test
 	public void simulationTimeStampCorrect(){
-		LocalDateTime expected = LocalDateTime.of(7,6,5,4,3,2,1);
-		
-		Assert.assertEquals(expected, permission.getSimulationTimeStamp());
+		Assert.assertEquals(REALTIME_STAMP, permission.getRealTimeStamp());
 	}
 	
 	@Test
 	public void realTimeStampCorrect(){
-		LocalDateTime expected = LocalDateTime.of(1,2,3,4,5,6,7);
-		
-		Assert.assertEquals(expected, permission.getRealTimeStamp());
+		Assert.assertEquals(SIMULATION_TIMESTAMP, permission.getSimulationTimeStamp());
 	}
 }

@@ -5,18 +5,21 @@ import java.util.Set;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
 import com.epsm.epsmCore.model.dispatch.Command;
-import com.epsm.epsmCore.model.utils.json.PowerStationGenerationScheduleJsonDeserializer;
-import com.epsm.epsmCore.model.utils.json.PowerStationGenerationScheduleJsonSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonSerialize(using = PowerStationGenerationScheduleJsonSerializer.class)
-@JsonDeserialize(using = PowerStationGenerationScheduleJsonDeserializer.class)
 public class PowerStationGenerationSchedule extends Command{
+	
+	@JsonProperty("generators")
 	private MessageInclusionsContainer<GeneratorGenerationSchedule> schedules;
 	
-	public PowerStationGenerationSchedule(long powerObjectId, LocalDateTime realTimeStamp,
-			LocalDateTime simulationTimeStamp, int quanityOfGenerators) {
+	@JsonCreator
+	public PowerStationGenerationSchedule(
+			@JsonProperty("powerObjectId") long powerObjectId, 
+			@JsonProperty("realTimeStamp") LocalDateTime realTimeStamp,
+			@JsonProperty("simulationTimeStamp") LocalDateTime simulationTimeStamp, 
+			@JsonProperty("quantityOfGenerators") int quanityOfGenerators) {
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 		schedules = new MessageInclusionsContainer<GeneratorGenerationSchedule>(
@@ -31,6 +34,7 @@ public class PowerStationGenerationSchedule extends Command{
 		return schedules.getInclusion(generatorNumber);
 	}
 	
+	@JsonIgnore
 	public Set<Integer> getGeneratorsNumbers(){
 		return schedules.getInclusionsNumbers();
 	}

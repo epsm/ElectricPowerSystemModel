@@ -3,14 +3,16 @@ package com.epsm.epsmCore.model.consumption;
 import java.time.LocalDateTime;
 
 import com.epsm.epsmCore.model.dispatch.Parameters;
-import com.epsm.epsmCore.model.utils.json.ConsumerParametersStubJsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonDeserialize(using = ConsumerParametersStubJsonDeserializer.class)
 public class ConsumerParametersStub extends Parameters{
 	
-	public ConsumerParametersStub(long powerObjectId, LocalDateTime realTimeStamp, 
-			LocalDateTime simulationTimeStamp){
+	@JsonCreator
+	public ConsumerParametersStub(
+			@JsonProperty("powerObjectId") long powerObjectId,
+			@JsonProperty("realTimeStamp") LocalDateTime realTimeStamp, 
+			@JsonProperty("simulationTimeStamp") LocalDateTime simulationTimeStamp){
 		
 		super(powerObjectId, realTimeStamp, simulationTimeStamp);
 	}

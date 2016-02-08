@@ -2,14 +2,26 @@ package com.epsm.epsmCore.model.generation;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusion;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GeneratorGenerationSchedule extends MessageInclusion{
+	
+	@JsonProperty("generatorTurnedOn")
 	private boolean generatorTurnedOn;
+	
+	@JsonProperty("astaticRegulatorTurnedOn")
 	private boolean astaticRegulatorTurnedOn;
+	
+	@JsonProperty("generationCurve")
 	private LoadCurve generationCurve;
 	
-	public GeneratorGenerationSchedule(int generatorNumber, boolean isGeneratorTurnedOn,
-			boolean isAstaticRegulatorTurnedOn, LoadCurve generationCurve) {
+	@JsonCreator
+	public GeneratorGenerationSchedule(
+			@JsonProperty("generatorNumber") int generatorNumber, 
+			@JsonProperty("generatorTurnedOn") boolean isGeneratorTurnedOn,
+			@JsonProperty("astaticRegulatorTurnedOn") boolean isAstaticRegulatorTurnedOn, 
+			@JsonProperty("generationCurve") LoadCurve generationCurve) {
 		
 		super(generatorNumber);
 		generatorTurnedOn = isGeneratorTurnedOn;
