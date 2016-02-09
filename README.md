@@ -61,7 +61,7 @@ The load of almost all consumers depends on frequency. All consumers are divided
 2. power depends on the degree of frequency like Р=Рnom(Fcur/Fnom)^x.
 
 #### realization
-Here will be given class diagram with sufficient for the understanding of the program details. Also description of the program will be provided.
+Here will be given class diagrams with sufficient detalization for the understanding of the program details. Also description of the program will be provided.
 
 + model class diagram
 ![simulation class diagramm](https://cloud.githubusercontent.com/assets/16285736/12733499/e2c67916-c943-11e5-8978-c8f4e34a8a89.jpg)
@@ -100,8 +100,5 @@ The interaction between the dispatcher and the objects from the model performing
 Learn more about dispatcher [epsd-core](https://github.com/epsm/epsd-core).
 
 For now it's impossible to add objects to the model. More precisely, it's impossible to add objects with the desired parameters as factory objects are implemented as stubs. They instantiates objects with predefined options instead of accept. As a result, the model is created with a pre-configured set of objects.
-
-#### technologies
-Java core, JSON, SLF4J, Logback, Junit, Mockito, PowerMockito.
 
 Unit-test coverage according to EclEmma is 97%.
