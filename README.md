@@ -1,66 +1,90 @@
 #Electric power system model
-###Общие данные для всего проекта
-Это простая модель выделенной электроэнергетической системы, состоящая из собственно модели и диспетчера. В модели моделируется работа оборудования электрической станции, участвующего в процессе поддержания частоты в энергосистеме и два вида потребителей нагрузки. Модель получает суточные графики генерации от диспетчера. Диспетчер расчитывает (на данный момент выдаёт заглушку) суточные графики генерации для электростанций в системе и получает от электростанций и потребителей мгновенные значения вырабатываемой и потребляемой мощности через заданные промежутки времени в модели. Приложение состоит из четырех пакетов [epsm-core](https://github.com/epsm/epsm-core), [epsm-web](https://github.com/epsm/epsm-web), [epsd-core](https://github.com/epsm/epsd-core) и [epsd-web](https://github.com/epsm/epsd-web). К каждому пакету прилагается описание. Приложение запущенно на двух серверах ([модель](http://model-epsm.rhcloud.com/) и [диспетчер](http://dispatcher-epsm.rhcloud.com/app/history)) взаимодействующих между собой с помощью обмена сообщениями в формате JSON и имеющих web-интерфейсы.
+###General data for project
+This is the simple model of a dedicated electric power system. The model consist of two separate parts. There are model and dispatcher. In the model simulated working of power stations equipment, that participate in process of supporting the frequency in system.
+The model gets daily generation schedules from dispatcher. Dispatcher gets data from power stations, consumers and calculates (for now gives stub) daily generation schedules.
+
+Application consist of four packages, two models:
+
++ [epsm-core](https://github.com/epsm/epsm-core)
++ [epsd-core](https://github.com/epsm/epsd-core)
+
+and two wrappers for models that helps intarcting models using JSON. Also wrappers have web interfaces.
+
++ [epsd-web](https://github.com/epsm/epsd-web)
++ [epsm-web](https://github.com/epsm/epsm-web)
+
+
+Application launched on two servers on OpenShift:
+
++ [model](http://model-epsm.rhcloud.com/)
++ [dispatcher](http://dispatcher-epsm.rhcloud.com/app/history). 
+
+The total project size is more than 16,000 source lines of code.
 
 ##epsm-core
-#### описание предметной области
+#### subject area description
 
-Частота в энергосистеме служит показателем соответствия генерации и потребления в текущий момент времени. Чтобы поддерживать частоту постоянной, необходимо сохранять баланс мощностей генерации и потребления.
+The frequency in the power system is a measure of the matching of generation and consumption in the current time. To maintain the frequency constant, it is necessary to maintain the balance of generation and consumption.
 
-Выделяют три вида регулирования частоты:
+There are three type of frequency regulation:
 
-1. первичное регулирование, осуществляемое всеми энергоблоками в пределах имеющихся в данный момент времени резервов первичного регулирования.
-2. Вторичное регулирование частоты. Первичное регулирование частоты, обладающее определенным статизмом, принципиально не может обеспечить постоянного значения частоты в энергосистеме при отклонениях нагрузки. Восстановление ее заданного значения беспечивает вторичное регулирование частоты с помощью выделенных для этого генераторов.
-3. Третичное регулирование (не моделируется).
+1. Primary regulation is carried out by all units within the currently available reserves of primary regulation.
+2. Secondary frequency control. Primary frequency control fundamentally can not provide constant frequency in power system with variations of load. Restore it to a specified value ensures the secondary frequency control by using a dedicated generators (power stations).
+3. Tertiary regulation (not modeled).
 
-Частота в сети поддерживается регуляторами частоты вращения турбин. Характеристика регулятора в установившемся режиме представляет
-зависимость нагрузки от частоты. Регулятор можно настроить на астатическую и статическую характеристику. В первом случае регулятор поддерживает постоянную частоту вращения агрегата независимо от нагрузки, во втором случае нагрузка зависит от частоты вращения. С увеличением частоты вращения агрегата нагрузка уменьшается и наоборот.
+Frequency in a power system is supported by turbines rotation regulators. Characteristics of the regulator in steady state is
+the dependency load on frequency. The controller can be configured to astatic and static characteristic. In the first case a controller supports a constant rotation speed  regardless of a load, in the second case, the load depends on the frequency. When frequency decreases load decreases too and vice versa.
 
-При параллельной работе агрегатов распределение нагрузки происходит обратно пропорционально статизму характеристики регулирования. Если хотя бы один из агрегатов системы имеет астатическую характеристику, характеристика всей энергосистемы будет также астатической. В этом случае (при любых изменениях нагрузки) частота в энергосистеме меняться не будет, а агрегаты, имеющие статические характеристики, будут работать с постоянной нагрузкой. Все изменения нагрузки воспримет на себя агрегат с астатической характеристикой регулирования.
 
-При изменении частоты у большинства потребителей меняется их производительность. Все потребители разделяются на две группы: 
+When generators works in parallel the load distributes is inversely proportional to coefficient of statism of regulating characteristics. If at least one unit in the system has a static characteristic, the characteristic of the power system will also be astatic. In this case (with any change in load) frequency in the power system will not change, and units which have static characteristics, will work under constant load. All load changes will get themselves generator with astatic characteristic of the regulation.
 
-1. мощность не зависит от частоты;
-2. мощность зависит от степени частоты Р=Рном(Fтек/Fном)^x.
+The load of almost all consumers depends on frequency. All consumers are divided into two groups:
 
-Здесь моделируются потребители двух видов:
+1. power does not depend on the frequency;
+2. power depends on the degree of frequency like Р=Рnom(Fcur/Fnom)^x.
 
-1. мощность которых задаётся суточным графиком потребления и процентом случайного отклонения от этого графика.
-2. случайно включающиеся на заданный промежуток времени и с заданной мощностью.
+#### realization
+Here will be given class diagram with sufficient for the understanding of the program details. Also description of the program will be provided.
 
-#### особености реализации
-Здесь будут приведенны диаграммы классов c достаточной для понимания работы программы детализацией и дано описание работы программы.
-
-+ диаграмма классов управления моделью
++ model class diagram
 ![simulation class diagramm](https://cloud.githubusercontent.com/assets/16285736/12733499/e2c67916-c943-11e5-8978-c8f4e34a8a89.jpg)
 
-+ диаграмма классов для иерархии PowerObject
++ PowerObject hierarchy class diagram
 ![powerobject class diagram](https://cloud.githubusercontent.com/assets/16285736/12742632/2b6ec9e2-c990-11e5-809a-b8ca87e10bc7.jpg)
-интерфейс Dispatcher см. раздел особенности реализации пакета [epsd-core](https://github.com/epsm/epsd-core).
+interface Dispatcher see realiaztion chapter in [epsd-core](https://github.com/epsm/epsd-core).
 
-+ диаграмма классов для иерархии Message
++ Message hierarchy class diagramm
 ![message class diagram](https://cloud.githubusercontent.com/assets/16285736/12732296/8d1cedac-c93d-11e5-93cc-159af9055fad.jpg)
 
-В модели на данный момент есть три вида объектов:
+There are three kind of the power objects in the model for now:
 
-1. PowerStation - электростанция, содержит один и более генераторов.
-2. ScheduledLoadConsumer - потребитель, нагрузка которого задаётся суточным графиком (в реальности графики для будних/выходных/праздничных дней отличаются) и процентом отклонения от этого графика.
-3. ShockLoadConsumer - потребитель, который включается на заданное время, с заданной мощностью и выключается на заданное время. Время включения, бездействия и нагрузка принимают случайное значение от половины до полного значения заданного параметра.
+1. PowerStation - has one or more generators.
+2. ScheduledLoadConsumer - a consumer which load set with daily generation schedule and random deviation in percent of this schedule.
+3. ShockLoadConsumer - a consumer who is turns on for the preset time and power. Turn-on time, idle and load take a random value between half and full value of the assigned parameter.
 
-Все объекты реализуют интерфейс SimulationObject. Объект ElectricPowerSystemSimulation используя метод calculatePowerBalance() вышеназванного интерфейса запрашивает текущий баланс мощности. Он положительный для электростанций и отрицательный для потребителей. Также выполняя это метод объекты производят вычисления своего внутреннего состояния, например настраивается мощность генераторов электростанции и создают объект State, отражающий их текущее состояние. Через метод executeCommand(...) объекты получают команды диспетчера. На данный момент реализованно только получения суточного графика генерации для электростанции. Выполняя метод doRealTimeOperation() интерфейса RealTimeOperation объекты отправляют накопившиеся объекты State диспетчеру с помощью объекта PowerObjectMessageManager. Принмая и отправляя объекты PowerObjectMessageManager проверяет их соответствие данному подклассу класса PowerObject. Валидация принимаемых команд реализована в подклассах класса PowerObject с помощью объектов, являющимися экземплярами классов, унаследованных от абстрактного класса CommandValidator. 
+All of these objects implements  SimulationObject interface. Object ElectricPowerSystemSimulation using method calculatePowerBalance() gets current power balance from objects. Balance is positive for stations and negative for consumers. Also using this method the objects computing their internal state, e.g. set the power generators of the power plant and create a State object that represents their current state. 
 
-Моделирование процесса потребления и генерации электроэнергии происходит дискретно, с заданным шагом. SimulationRunner через заданный промежеток времени вызывает метод calculateNextStep() объекта,  ElectricPowerSystemSimulation, который в свою очередь вызывает метод calculatePowerBalance() для каждого объекта в симуляции. Время в симуляции не связанно с реальным и расчитывается добавлением заданной величины к предыдущей на каждом шаге. Также SimulationRunner вторым потоком вызывает метод doRealTimeOperation() для каждого объекта в симуляции. Объекты PowerObject в вышеописанной ситуации потокобезопастны, что достигается присваиванием ссылки на объект State в нити, выполняющей метод calculatePowerBalance() только после его полного заполения, т.е. нить выполняющая doRealTimeOperation() только получает ссылку на последний заполненный к этому моменту объект.
+Through the method executeCommand(...) objects gets commands from dispatcher. For now implemented only a daily generation schedule for a power plant. 
 
-Взаимодействие между диспетчером и объектами из модели происходит посредством экземпляров классов, унаследованных от абстрактного класса Message.
+Executing the doRealTimeOperation() method of interface RealTimeOperation, objects sends the accumulated by a PowerObjectMessageManager State objects to the dispatcher. 
 
-Более подробно о диспетчере см. [epsd-core](https://github.com/epsm/epsd-core).
+While receiving and sending objects PowerObjectMessageManager checks their compliance with this subclass of class PowerObject. Validation of the received commands implemented in subclasses of class PowerObject objects, which have an instances of class, derived from the abstract class CommandValidator.
 
-На данный момент нельзя добавлять объекты в модель. Точнее нельзя добавить объекты с желаемыми параметрами так как фабрики объектов реализованы в виде заглушек, создающих объекты с предопределенными параметрами вместо принимаемых. В результате модель создаётся с заранее сконфигурированным набором объекотв.
+Modeling of the process of consumption and  generation is discrete with defined steps. SimulationRunner after a specified duration of time calls the calculateNextStep method() on a ElectricPowerSystemSimulation object. This method calls a method calculatePowerBalance() for each object in the simulation. 
 
-epsm-core используется как модель для пакета [epsm-web](https://github.com/epsm/epsm-web), который является веб-приложением. epsm-web взаимодействует с помощью JSON с [epsd-web](https://github.com/epsm/epsd-web) который также является веб-приложением.
-epsm-web кроме взаимодействия с диспетчером позволяет [посмотреть](http://model-epsm.rhcloud.com) состояние модели на текущий момент. epsd-web кроме взаимодействия с моделью позволяет [посмотреть](http://dispatcher-epsm.rhcloud.com/app/history) графики частоты, генерации и потребления за прошедшие сутки.
+Time in the simulation not associated with real and is calculated by adding a predetermined value to the previous at each step.
 
-#### технологии
+So there running two threads simultaneous, one for calculation balance and the other one for sending states to dispatcher.
+
+PowerObject objects are thread safe. It is achieved by assigning a reference to an object State in thread that performs method calculatePowerBalance() only after State is created, The thread executing doRealTimeOperation() only gets a reference to the last created object.
+
+The interaction between the dispatcher and the objects from the model performing through instances of classes derived from the abstract Message class.
+
+Learn more about dispatcher [epsd-core](https://github.com/epsm/epsd-core).
+
+For now it's impossible to add objects to the model. More precisely, it's impossible to add objects with the desired parameters as factory objects are implemented as stubs. They instantiates objects with predefined options instead of accept. As a result, the model is created with a pre-configured set of objects.
+
+#### technologies
 Java core, JSON, SLF4J, Logback, Junit, Mockito, PowerMockito.
 
-Покрытие unit-тестами согласно EclEmma 97%.
+Unit-test coverage according to EclEmma is 97%.
