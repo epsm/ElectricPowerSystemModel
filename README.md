@@ -1,5 +1,5 @@
 #Electric power system model
-###General data for project
+###General data for the project
 This is the simple model of a dedicated electric power system. The model consist of two separate parts. There are model and dispatcher. In the model simulated working of power stations equipment, that participate in process of supporting the frequency in system.
 The model gets daily generation schedules from dispatcher. Dispatcher gets data from power stations, consumers and calculates (for now gives stub) daily generation schedules.
 
@@ -20,6 +20,23 @@ Application launched on two servers on OpenShift:
 + [dispatcher](http://dispatcher-epsm.rhcloud.com/app/history). 
 
 The total project size is more than 16,000 source lines of code.
+
+| technology    |  [epsm-core](https://github.com/epsm/epsm-core)    | [epsm-web](https://github.com/epsm/epsm-web)   | [epsd-core](https://github.com/epsm/epsd-core)| [epsd-web](https://github.com/epsm/epsd-web)|
+|:-----------------|:---:|:---:|:---:|:---:|
+| Java core        | yes | yes | yes | yes |
+| Spring core      | no  | yes | no  | yes |
+| MySQL            | no  | no  | no  | yes |
+| JPA (Hibernate)  | no  | no  | no  | yes |
+| JSP              | no  | yes | no  | yes |
+| Spring webmvc    | no  | yes | no  | yes |
+| JSON (fasterxml) | yes | yes | no  | yes |
+| HTML, CSS        | no  | yes | no  | yes |
+| Spring security  | no  | no  | no  | yes |
+| SLF4J, Logback   | yes | yes | yes | yes |
+| Junit, Mockito   | yes | yes | yes | yes |
+| Power Mockito    | yes | yes | no  | no  |
+| Spring test      | no  | yes | no  | yes |
+| DbUnit           | no  | no  | no  | yes |
 
 ##epsm-core
 #### subject area description
