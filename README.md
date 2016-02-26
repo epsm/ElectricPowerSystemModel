@@ -21,7 +21,7 @@ Application launched on two servers on OpenShift:
 
 The total project size is more than 16,000 source lines of code.
 
-| technology    |  [epsm-core](https://github.com/epsm/epsm-core)    | [epsm-web](https://github.com/epsm/epsm-web)   | [epsd-core](https://github.com/epsm/epsd-core)| [epsd-web](https://github.com/epsm/epsd-web)|
+| technology       | [epsm-core](https://github.com/epsm/epsm-core) | [epsm-web](https://github.com/epsm/epsm-web) | [epsd-core](https://github.com/epsm/epsd-core) | [epsd-web](https://github.com/epsm/epsd-web)|
 |:-----------------|:---:|:---:|:---:|:---:|
 | Java core        | yes | yes | yes | yes |
 | Spring core      | no  | yes | no  | yes |
@@ -37,6 +37,7 @@ The total project size is more than 16,000 source lines of code.
 | Power Mockito    | yes | yes | no  | no  |
 | Spring test      | no  | yes | no  | yes |
 | DbUnit           | no  | no  | no  | yes |
+| CI (Travis)      | [![Build Status](https://travis-ci.org/epsm/epsm-core.svg?branch=master)](https://travis-ci.org/epsm/epsm-core) | [![Build Status](https://travis-ci.org/epsm/epsm-web.svg?branch=master)](https://travis-ci.org/epsm/epsm-web) | [![Build Status](https://travis-ci.org/epsm/epsd-core.svg?branch=master)](https://travis-ci.org/epsm/epsd-core) | [![Build Status](https://travis-ci.org/epsm/epsd-web.svg?branch=master)](https://travis-ci.org/epsm/epsd-web) |
 
 ##epsm-core
 #### subject area description
