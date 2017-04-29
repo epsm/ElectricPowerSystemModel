@@ -2,12 +2,11 @@ package com.epsm.epsmCore.model.consumption;
 
 import java.time.LocalDateTime;
 
-import com.epsm.epsmCore.model.dispatch.Command;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 //There may be methods allows consumer to be turned on/of or limit consumption.
-public class ConsumptionPermissionStub extends Command{
+public class ConsumptionPermissionStub extends Message {
 	
 	@JsonCreator
 	public ConsumptionPermissionStub(

@@ -4,8 +4,7 @@ import java.time.LocalTime;
 import java.util.Collection;
 import java.util.HashSet;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.CommandValidator;
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 
 public class GenerationScheduleValidator extends CommandValidator{
 	private PowerStationGenerationSchedule schedule;
@@ -105,7 +104,7 @@ public class GenerationScheduleValidator extends CommandValidator{
 			GeneratorGenerationSchedule schedule){
 		
 		boolean astaticRegulationTurnedOff = !currentGeneratorSchedule.isAstaticRegulatorTurnedOn();
-		LoadCurve curve = currentGeneratorSchedule.getGenerationCurve();
+		PowerCurve curve = currentGeneratorSchedule.getGenerationCurve();
 		
 		return astaticRegulationTurnedOff && curve == null;
 	}
@@ -132,13 +131,13 @@ public class GenerationScheduleValidator extends CommandValidator{
 			GeneratorGenerationSchedule schedule){
 		
 		boolean astaticRegulationTurnedOff = !currentGeneratorSchedule.isAstaticRegulatorTurnedOn();
-		LoadCurve curve = currentGeneratorSchedule.getGenerationCurve();
+		PowerCurve curve = currentGeneratorSchedule.getGenerationCurve();
 		
 		return astaticRegulationTurnedOff && curve != null;
 	}
 	
 	private void findMinAndMaxPowerInGenerationCurve(){
-		LoadCurve generationCurve = currentGeneratorSchedule.getGenerationCurve();
+		PowerCurve generationCurve = currentGeneratorSchedule.getGenerationCurve();
 		LocalTime pointer = LocalTime.MIDNIGHT;
 		maxGenerationPower = Float.MIN_VALUE;
 		minGenerationPower = Float.MAX_VALUE;

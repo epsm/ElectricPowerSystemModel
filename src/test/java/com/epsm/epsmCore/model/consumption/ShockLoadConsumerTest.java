@@ -43,8 +43,8 @@ public class ShockLoadConsumerTest {
 	
 	@Before
 	public void setUp(){
-		ConsumerParametersStub parameters 
-			= new ConsumerParametersStub(CONSUMER_NUMBER, REAL_TIMESTAMP, SIMULATION_TIMESTAMP);
+		ConsumerParameters parameters
+			= new ConsumerParameters(CONSUMER_NUMBER, REAL_TIMESTAMP, SIMULATION_TIMESTAMP);
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentDateTime()).thenReturn(LocalDateTime.of(2000, 01, 01, 00, 00));
 		dispatcher = mock(Dispatcher.class);

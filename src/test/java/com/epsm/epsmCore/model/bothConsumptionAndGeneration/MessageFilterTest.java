@@ -10,14 +10,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.epsm.epsmCore.model.consumption.ConsumerParametersStub;
+import com.epsm.epsmCore.model.consumption.ConsumerParameters;
 import com.epsm.epsmCore.model.consumption.ConsumerState;
 import com.epsm.epsmCore.model.consumption.ConsumptionPermissionStub;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumer;
-import com.epsm.epsmCore.model.dispatch.Command;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
-import com.epsm.epsmCore.model.dispatch.Parameters;
-import com.epsm.epsmCore.model.dispatch.State;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 import com.epsm.epsmCore.model.generation.PowerStation;
@@ -33,7 +30,7 @@ public class MessageFilterTest {
 	private MessageFilter filter;
 	private Command command;
 	private State state;
-	private ConsumerParametersStub consumerParameters;
+	private ConsumerParameters consumerParameters;
 	private PowerStationParameters powerStationParameters;
 	private final int POWER_OBJECT_ID = 0;
 	private final int QUANTITY_OF_GENERATORS = 1;
@@ -47,7 +44,7 @@ public class MessageFilterTest {
 		simulation = mock(ElectricPowerSystemSimulation.class);
 		timeService = mock(TimeService.class);
 		dispatcher = mock(Dispatcher.class);
-		consumerParameters = mock(ConsumerParametersStub.class);
+		consumerParameters = mock(ConsumerParameters.class);
 	}
 	
 	@Rule
@@ -126,7 +123,7 @@ public class MessageFilterTest {
 	}
 	
 	private void createConsumerAndFilterForIt(){
-		consumerParameters = new ConsumerParametersStub(POWER_OBJECT_ID, REAL_TIMESTAMP, SIMULATION_TIMESTAMP);
+		consumerParameters = new ConsumerParameters(POWER_OBJECT_ID, REAL_TIMESTAMP, SIMULATION_TIMESTAMP);
 		
 		object = new ShockLoadConsumer(simulation, timeService, dispatcher, consumerParameters);
 		filter = new MessageFilter(object.getClass());

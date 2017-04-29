@@ -8,9 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.epsm.epsmCore.model.dispatch.Command;
 import com.epsm.epsmCore.model.dispatch.DispatchingException;
-import com.epsm.epsmCore.model.dispatch.Parameters;
 
 public class CommandValidatorTest {
 	private  Command command;

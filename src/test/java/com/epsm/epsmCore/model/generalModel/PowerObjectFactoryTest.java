@@ -17,7 +17,6 @@ import com.epsm.epsmCore.model.consumption.ScheduledLoadConsumer;
 import com.epsm.epsmCore.model.consumption.ScheduledLoadConsumerCreationParametersStub;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumer;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumerCreationParametersStub;
-import com.epsm.epsmCore.model.dispatch.CreationParameters;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
 import com.epsm.epsmCore.model.generation.PowerStation;
 import com.epsm.epsmCore.model.generation.PowerStationCreationParametersStub;
@@ -110,6 +109,6 @@ public class PowerObjectFactoryTest {
 	    factory.create(new UncnownPowerObjectCreationParameters());
 	}
 	
-	private class UncnownPowerObjectCreationParameters extends CreationParameters{
+	private class UncnownPowerObjectCreationParameters {
 	}
 }

@@ -3,13 +3,11 @@ package com.epsm.epsmCore.model.generation;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusionsContainer;
-import com.epsm.epsmCore.model.dispatch.Command;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PowerStationGenerationSchedule extends Command{
+public class PowerStationGenerationSchedule extends Message {
 	
 	@JsonProperty("generators")
 	private MessageInclusionsContainer<GeneratorGenerationSchedule> schedules;

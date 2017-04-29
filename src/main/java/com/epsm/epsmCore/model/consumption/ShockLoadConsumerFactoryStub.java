@@ -11,7 +11,7 @@ import com.epsm.epsmCore.model.generalModel.TimeService;
 public class ShockLoadConsumerFactoryStub extends AbstractPowerObjectFactory{
 	private ShockLoadConsumer consumer;
 	private long powerObjectId;
-	private ConsumerParametersStub parameters;
+	private ConsumerParameters parameters;
 	
 	public ShockLoadConsumerFactoryStub(ElectricPowerSystemSimulation simulation,
 			TimeService timeService, Dispatcher dispatcher) {
@@ -37,7 +37,7 @@ public class ShockLoadConsumerFactoryStub extends AbstractPowerObjectFactory{
 		LocalDateTime realTimeStamp = timeService.getCurrentDateTime();
 		LocalDateTime simulationTimeStamp = simulation.getDateTimeInSimulation();
 		
-		parameters = new ConsumerParametersStub(powerObjectId, realTimeStamp, simulationTimeStamp);
+		parameters = new ConsumerParameters(powerObjectId, realTimeStamp, simulationTimeStamp);
 	}
 	
 	private void createShockLoadConsumer(){

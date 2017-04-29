@@ -1,6 +1,5 @@
 package com.epsm.epsmCore.model.generation;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.MessageInclusion;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

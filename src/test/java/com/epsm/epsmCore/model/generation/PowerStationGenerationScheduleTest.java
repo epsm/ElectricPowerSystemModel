@@ -2,18 +2,18 @@ package com.epsm.epsmCore.model.generation;
 
 import java.time.LocalDateTime;
 
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 
 public class PowerStationGenerationScheduleTest {
 	private PowerStationGenerationSchedule stationSchedule;
 	private GeneratorGenerationSchedule schedule_1;
 	private GeneratorGenerationSchedule schedule_2;
-	private LoadCurve curve;
+	private PowerCurve curve;
 	private final long POWER_OBJECT_ID = 77;
 	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
 	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(1, 2, 3, 4, 5);
@@ -24,14 +24,14 @@ public class PowerStationGenerationScheduleTest {
 	private final boolean GENERATOR_OFF = false;
 	private final boolean ASTATIC_REGULATION_ON = true;
 	private final boolean ASTATIC_REGULATION_OFF = false;
-	private final LoadCurve NULL_CURVE = null;
+	private final PowerCurve NULL_CURVE = null;
 	
 	@Before
 	public void setUp(){
 		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID, 
 				REAL_TIMESTAMP, SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS);
 		
-		curve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
+		curve = new PowerCurve(TestsConstants.LOAD_BY_HOURS);
 		
 		schedule_1 = new GeneratorGenerationSchedule(FIRST_GENERATOR_NUMBER, 
 				GENERATOR_OFF, ASTATIC_REGULATION_ON, NULL_CURVE);
@@ -48,7 +48,7 @@ public class PowerStationGenerationScheduleTest {
 				+ " generators schedules:"
 				+ " [<Generator#88, turnedOn: true, astatic regulation: false,"
 				+ " gen.curve:"
-				+ " <LoadCurve: load in MW on day by hours, starts on 00.00:"
+				+ " <PowerCurve: load in MW on day by hours, starts on 00.00:"
 				+ " [64.88, 59.54, 55.72, 51.9, 48.47, 48.85,"
 				+ " 48.09, 57.25, 76.35, 91.6, 100.0, 99.23,"
 				+ " 91.6, 91.6, 91.22, 90.83, 90.83, 90.83,"

@@ -11,7 +11,7 @@ import com.epsm.epsmCore.model.generalModel.TimeService;
 public class ScheduledLoadConsumerFactoryStub extends AbstractPowerObjectFactory{
 	private ScheduledLoadConsumer consumer;
 	private long powerObjectId;
-	private ConsumerParametersStub parameters;
+	private ConsumerParameters parameters;
 	public final float[] LOAD_BY_HOURS_IN_PERCENT = new float[]{
 			 69f,  68f,  66f,  65f,	 62f,  65f,
 			 72f,  83f,  91f,  96f,  95f,  93f,
@@ -43,7 +43,7 @@ public class ScheduledLoadConsumerFactoryStub extends AbstractPowerObjectFactory
 		LocalDateTime realTimeStamp = timeService.getCurrentDateTime();
 		LocalDateTime simulationTimeStamp = simulation.getDateTimeInSimulation();
 		
-		parameters = new ConsumerParametersStub(powerObjectId, realTimeStamp, simulationTimeStamp);
+		parameters = new ConsumerParameters(powerObjectId, realTimeStamp, simulationTimeStamp);
 	}
 	
 	private void createScheduledLoadConsumer(){

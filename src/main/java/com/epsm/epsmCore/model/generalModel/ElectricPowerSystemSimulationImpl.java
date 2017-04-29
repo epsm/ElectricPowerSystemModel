@@ -11,9 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerObject;
 import com.epsm.epsmCore.model.consumption.Consumer;
-import com.epsm.epsmCore.model.dispatch.CreationParameters;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
-import com.epsm.epsmCore.model.dispatch.DispatchingObject;
 import com.epsm.epsmCore.model.generation.PowerStation;
 
 public class ElectricPowerSystemSimulationImpl implements ElectricPowerSystemSimulation{

@@ -32,7 +32,7 @@ public class ScheduledLoadConsumerTest{
 	
 	@Before
 	public void setUp(){
-		ConsumerParametersStub parameters = new ConsumerParametersStub(
+		ConsumerParameters parameters = new ConsumerParameters(
 				CONSUMER_NUMBER, REAL_TIMESTAMP, SIMULATION_TIMESTAMP); 
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);

@@ -8,7 +8,7 @@ import com.epsm.epsmCore.model.generation.GenerationException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public final class LoadCurve{
+public final class PowerCurve {
 	
 	@JsonProperty("loadByHoursInMW")
 	private float[] loadByHoursInMW;
@@ -21,9 +21,9 @@ public final class LoadCurve{
 	private float nanosFromStartOfRequestedHour;
 	
 	@JsonCreator
-	public LoadCurve(@JsonProperty("loadByHoursInMW") float[] loadByHoursInMW){
+	public PowerCurve(@JsonProperty("loadByHoursInMW") float[] loadByHoursInMW){
 		if(loadByHoursInMW == null){
-			String message = "LoadCurve constructor: loadByHoursInMW must not be null.";
+			String message = "PowerCurve constructor: loadByHoursInMW must not be null.";
 			throw new GenerationException(message);
 		}else if(loadByHoursInMW.length != Constants.DETERMINED_HOURS_IN_DAY){
 			String message = String.format("Incoming array length must be %s.", Constants.DETERMINED_HOURS_IN_DAY);
@@ -68,7 +68,7 @@ public final class LoadCurve{
 	}
 	
 	public String toString(){
-		return String.format("<LoadCurve: load in MW on day by hours, starts on 00.00: %s>",
+		return String.format("<PowerCurve: load in MW on day by hours, starts on 00.00: %s>",
 				Arrays.toString(loadByHoursInMW));
 	}
 }

@@ -11,9 +11,9 @@ import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generation.GenerationException;
 
-public class LoadCurveTest{
+public class PowerCurveTest {
 	private float[] loadByHours = TestsConstants.LOAD_BY_HOURS;
-	private LoadCurve curve = new LoadCurve(loadByHours);
+	private PowerCurve curve = new PowerCurve(loadByHours);
 	
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -78,9 +78,9 @@ public class LoadCurveTest{
 	@Test
 	public void constructorThrowsExceptionIfIncomingArrayIsNull(){
 		expectedEx.expect(GenerationException.class);
-	    expectedEx.expectMessage("LoadCurve constructor: loadByHoursInMW must not be null.");
+	    expectedEx.expectMessage("PowerCurve constructor: loadByHoursInMW must not be null.");
 	    
-		new LoadCurve(null);
+		new PowerCurve(null);
 	}
 	
 	@Test
@@ -88,12 +88,12 @@ public class LoadCurveTest{
 		expectedEx.expect(GenerationException.class);
 	    expectedEx.expectMessage("Incoming array length must be 24.");
 	    
-	    new LoadCurve(new float[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11});
+	    new PowerCurve(new float[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11});
 	}
 	
 	@Test
 	public void toStringWorksCorrect(){
-		String expected = "<LoadCurve: load in MW on day by hours, starts on 00.00: "
+		String expected = "<PowerCurve: load in MW on day by hours, starts on 00.00: "
 				+ "[64.88, 59.54, 55.72, 51.9, 48.47, 48.85,"
 				+ " 48.09, 57.25, 76.35, 91.6, 100.0, 99.23,"
 				+ " 91.6, 91.6, 91.22, 90.83, 90.83, 90.83,"

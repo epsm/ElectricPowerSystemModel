@@ -3,7 +3,7 @@ package com.epsm.epsmCore.model.consumption;
 import java.util.Arrays;
 import java.util.Random;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 import com.epsm.epsmCore.model.generalModel.Constants;
 
 public class LoadCurveFactory {
@@ -13,8 +13,8 @@ public class LoadCurveFactory {
 	private float maxLoadWithoutRandomInMW;
 	private float randomFluctuatonInPercent;
 	
-	public LoadCurve getRandomCurve(float[] originalLoadByHoursInPercent,
-			float MaxLoadWithoutRandomInMW, float randomFluctuationInPercent){
+	public PowerCurve getRandomCurve(float[] originalLoadByHoursInPercent,
+                                     float MaxLoadWithoutRandomInMW, float randomFluctuationInPercent){
 		
 		this.originalLoadByHoursInPercent = originalLoadByHoursInPercent;
 		this.maxLoadWithoutRandomInMW = MaxLoadWithoutRandomInMW;
@@ -22,7 +22,7 @@ public class LoadCurveFactory {
 		
 		fillNewLoadByHoursInMW();
 		
-		return new LoadCurve(Arrays.copyOf(newLoadByHoursInMW, newLoadByHoursInMW.length));
+		return new PowerCurve(Arrays.copyOf(newLoadByHoursInMW, newLoadByHoursInMW.length));
 	}
 	
 	private void fillNewLoadByHoursInMW(){

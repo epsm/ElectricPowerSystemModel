@@ -6,13 +6,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.consumption.ConsumerParametersStub;
+import com.epsm.epsmCore.model.consumption.ConsumerParameters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ConsumerParametersStubSerializationTest {
+public class ConsumerParametersSerializationTest {
 	private ObjectMapper mapper;
-	private ConsumerParametersStub parameters;
+	private ConsumerParameters parameters;
 	private final long POWER_OBJECT_ID = 88;
 	private final LocalDateTime REALTIME_STAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
 	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
@@ -22,7 +22,7 @@ public class ConsumerParametersStubSerializationTest {
 		mapper = new ObjectMapper();
 		mapper.findAndRegisterModules();
 		
-		parameters = new ConsumerParametersStub(POWER_OBJECT_ID, REALTIME_STAMP, 
+		parameters = new ConsumerParameters(POWER_OBJECT_ID, REALTIME_STAMP,
 				SIMULATION_TIMESTAMP);
 	}
 	

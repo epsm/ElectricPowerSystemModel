@@ -3,16 +3,14 @@ package com.epsm.epsmCore.model.generation;
 import java.time.LocalTime;
 import java.util.Collection;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
-import com.epsm.epsmCore.model.generation.Generator;
-import com.epsm.epsmCore.model.generation.PowerStation;
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 
 public class GeneratorsController{
 	private PowerStationGenerationSchedule powerstationGenerationSchedule;
 	private PowerStation station;
 	private LocalTime currentTime;
 	private Generator generator;
-	private LoadCurve generationCurve;
+	private PowerCurve generationCurve;
 	private boolean shouldGeneratorBeTurnedOn;
 	private boolean shouldAstaticRegulationBeTurnedOn;
 	

@@ -7,15 +7,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.consumption.ConsumerParametersStub;
+import com.epsm.epsmCore.model.consumption.ConsumerParameters;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ConsumerParametersStubDeserializationTest {
+public class ConsumerParametersDeserializationTest {
 	private ObjectMapper mapper;
 	private String source;
-	private ConsumerParametersStub parameters;
+	private ConsumerParameters parameters;
 	private final long POWER_OBJECT_ID = 88;
 	private final LocalDateTime REALTIME_STAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
 	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
@@ -29,7 +29,7 @@ public class ConsumerParametersStubDeserializationTest {
 				+ "\"simulationTimeStamp\":[7,6,5,4,3,2,1]}";
 		
 		mapper.findAndRegisterModules();
-		parameters = mapper.readValue(source, ConsumerParametersStub.class);
+		parameters = mapper.readValue(source, ConsumerParameters.class);
 	}
 	
 	@Test

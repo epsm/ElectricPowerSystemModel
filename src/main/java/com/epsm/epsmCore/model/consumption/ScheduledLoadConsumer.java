@@ -5,10 +5,8 @@ import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
-import com.epsm.epsmCore.model.dispatch.Command;
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
-import com.epsm.epsmCore.model.dispatch.State;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
@@ -17,7 +15,7 @@ public final class ScheduledLoadConsumer extends Consumer{
 	private float[] approximateLoadByHoursOnDayInPercent;
 	private float maxLoadWithoutFluctuationsInMW;
 	private float randomFluctuationsInPercent;
-	private LoadCurve loadCurveOnDay;//There must be LoadCurves at least for every day of week to emulate real behavior.
+	private PowerCurve powerCurveOnDay;//There must be LoadCurves at least for every day of week to emulate real behavior.
 	private LocalDateTime previousLoadRequestDateTime;
 	private ConsumerState state;
 	private LocalDateTime currentDateTime;
@@ -26,7 +24,7 @@ public final class ScheduledLoadConsumer extends Consumer{
 	private Logger logger;
 	
 	public ScheduledLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher, ConsumerParametersStub parameters) {
+			Dispatcher dispatcher, ConsumerParameters parameters) {
 		
 		super(simulation, timeService, dispatcher, parameters);
 		logger = LoggerFactory.getLogger(ScheduledLoadConsumer.class);
@@ -68,7 +66,7 @@ public final class ScheduledLoadConsumer extends Consumer{
 	}
 	
 	private void calculateLoadCurveOnThisDay(){
-		loadCurveOnDay = factory.getRandomCurve(approximateLoadByHoursOnDayInPercent,
+		powerCurveOnDay = factory.getRandomCurve(approximateLoadByHoursOnDayInPercent,
 				maxLoadWithoutFluctuationsInMW, randomFluctuationsInPercent);
 	}
 
@@ -77,7 +75,7 @@ public final class ScheduledLoadConsumer extends Consumer{
 	}
 	
 	private void getLoadFromCurve(){
-		currentLoad = loadCurveOnDay.getPowerOnTimeInMW(currentDateTime.toLocalTime());
+		currentLoad = powerCurveOnDay.getPowerOnTimeInMW(currentDateTime.toLocalTime());
 	}
 	
 	private void countFrequency(){

@@ -13,7 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 
 public class GenerationScheduleValidatorTest {
@@ -27,7 +27,7 @@ public class GenerationScheduleValidatorTest {
 	private final boolean GENERATOR_OFF = false;
 	private final boolean ASTATIC_REGULATION_OFF = false;
 	private final boolean ASTATIC_REGULATION_ON = true;
-	private final LoadCurve NULL_CURVE = null;
+	private final PowerCurve NULL_CURVE = null;
 	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
 	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
 	
@@ -121,7 +121,7 @@ public class GenerationScheduleValidatorTest {
 	}
 	
 	private void prepareStationSchedule_FirstGeneratorOnAstaticRegulationOffCurveNotNull(){
-		LoadCurve generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
+		PowerCurve generationCurve = new PowerCurve(TestsConstants.LOAD_BY_HOURS);
 		GeneratorGenerationSchedule generatorSchedule = new GeneratorGenerationSchedule(
 				FIRST_GENERATOR_NUMBER, GENERATOR_ON, ASTATIC_REGULATION_OFF, generationCurve);
 		createStationScheduleWithFirstGenerator(generatorSchedule);

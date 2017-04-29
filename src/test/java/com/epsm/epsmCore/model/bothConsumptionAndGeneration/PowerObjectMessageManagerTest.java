@@ -17,13 +17,11 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.epsm.epsmCore.model.consumption.ConsumerParametersStub;
+import com.epsm.epsmCore.model.consumption.ConsumerParameters;
 import com.epsm.epsmCore.model.consumption.ConsumerState;
 import com.epsm.epsmCore.model.consumption.ConsumptionPermissionStub;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumer;
-import com.epsm.epsmCore.model.dispatch.Command;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
-import com.epsm.epsmCore.model.dispatch.State;
 import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
@@ -37,7 +35,7 @@ public class PowerObjectMessageManagerTest{
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private ElectricPowerSystemSimulation simulation;
-	private ConsumerParametersStub parameters;
+	private ConsumerParameters parameters;
 	private State state;
 	private PowerObject powerObject;
 	private Command command;
@@ -59,7 +57,7 @@ public class PowerObjectMessageManagerTest{
 		when(timeService.getCurrentDateTime()).thenReturn(timeInTest);
 		dispatcher = mock(Dispatcher.class);
 		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,	timeInTest);
-		parameters = new ConsumerParametersStub(POWER_OBJECT_ID, timeInTest, SIMULATION_TIMESTAMP);
+		parameters = new ConsumerParameters(POWER_OBJECT_ID, timeInTest, SIMULATION_TIMESTAMP);
 		state = new ConsumerState(POWER_OBJECT_ID, timeInTest, SIMULATION_TIMESTAMP, LOAD);
 		powerObject = PowerMockito.mock(ShockLoadConsumer.class);
 		when(powerObject.getParameters()).thenReturn(parameters);

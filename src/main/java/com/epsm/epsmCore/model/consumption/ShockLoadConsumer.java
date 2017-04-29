@@ -6,9 +6,7 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.epsm.epsmCore.model.dispatch.Command;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
-import com.epsm.epsmCore.model.dispatch.State;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.TimeService;
 
@@ -28,7 +26,7 @@ public final class ShockLoadConsumer extends Consumer{
 	private Logger logger;
 	
 	public ShockLoadConsumer(ElectricPowerSystemSimulation simulation, TimeService timeService,
-			Dispatcher dispatcher,	ConsumerParametersStub parameters) {
+			Dispatcher dispatcher,	ConsumerParameters parameters) {
 		
 		super(simulation, timeService, dispatcher, parameters);
 		logger = LoggerFactory.getLogger(ShockLoadConsumer.class);

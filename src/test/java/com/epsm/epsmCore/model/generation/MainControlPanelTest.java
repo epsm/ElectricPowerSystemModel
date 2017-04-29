@@ -7,10 +7,10 @@ import static org.mockito.Mockito.verify;
 
 import java.time.LocalDateTime;
 
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
@@ -38,7 +38,7 @@ public class MainControlPanelTest{
 	private final boolean GENERATOR_ON = true;
 	private final boolean ASTATIC_REGULATION_ON = true;
 	private final boolean ASTATIC_REGULATION_OFF = false;
-	private final LoadCurve NULL_CURVE = null;
+	private final PowerCurve NULL_CURVE = null;
 	
 	@Before
 	public void setUp(){

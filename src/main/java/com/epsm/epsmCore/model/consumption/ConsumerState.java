@@ -2,11 +2,10 @@ package com.epsm.epsmCore.model.consumption;
 
 import java.time.LocalDateTime;
 
-import com.epsm.epsmCore.model.dispatch.State;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ConsumerState extends State{
+public class ConsumerState extends Message {
 	
 	@JsonProperty("loadInMW")
 	private float loadInMW;

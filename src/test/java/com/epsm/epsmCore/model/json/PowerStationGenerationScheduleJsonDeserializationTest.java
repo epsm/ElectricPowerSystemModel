@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.generation.GeneratorGenerationSchedule;
 import com.epsm.epsmCore.model.generation.PowerStationGenerationSchedule;
@@ -117,7 +117,7 @@ public class PowerStationGenerationScheduleJsonDeserializationTest {
 	@Test
 	public void secondGeneratorGenerationCurveCorrect(){
 		LocalTime pointer = LocalTime.MIDNIGHT;
-		LoadCurve generationCurve = secondGeneratorSchedule.getGenerationCurve();
+		PowerCurve generationCurve = secondGeneratorSchedule.getGenerationCurve();
 		
 		do{
 			float actualGenerationOnThisHour = generationCurve.getPowerOnTimeInMW(pointer); 

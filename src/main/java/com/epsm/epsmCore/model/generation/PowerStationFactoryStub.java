@@ -3,7 +3,7 @@ package com.epsm.epsmCore.model.generation;
 import java.time.LocalDateTime;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.AbstractPowerObjectFactory;
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.TimeService;
@@ -13,11 +13,11 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory{
 	private long powerObjectId;
 	private PowerStationParameters parameters;
 	private PowerStationGenerationSchedule stationSchedule;
-	private LoadCurve generationCurveGen1;
-	private LoadCurve generationCurveGen2;
-	private LoadCurve generationCurveGen3;
-	private LoadCurve generationCurveGen4;
-	private LoadCurve generationCurveGen5;
+	private PowerCurve generationCurveGen1;
+	private PowerCurve generationCurveGen2;
+	private PowerCurve generationCurveGen3;
+	private PowerCurve generationCurveGen4;
+	private PowerCurve generationCurveGen5;
 	private GeneratorGenerationSchedule genrationSchedule_1;
 	private GeneratorGenerationSchedule genrationSchedule_2;
 	private GeneratorGenerationSchedule genrationSchedule_3;
@@ -58,7 +58,7 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory{
 	private final int REGULATION_SPEED_IN_MW_1 = 3;
 	private final int REGULATION_SPEED_IN_MW_2 = 20;
 	private final int GENERATORS_QUANTUTY = 6;
-	private final LoadCurve NULL_CURVE = null;
+	private final PowerCurve NULL_CURVE = null;
 	
 	public PowerStationFactoryStub(ElectricPowerSystemSimulation simulation,
 			TimeService timeService, Dispatcher dispatcher){
@@ -112,11 +112,11 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory{
 		int generatorNumber = 1;
 		stationSchedule = new PowerStationGenerationSchedule(powerObjectId,
 				LocalDateTime.MIN, LocalDateTime.MIN, GENERATORS_QUANTUTY);
-		generationCurveGen1 = new LoadCurve(GENERATION_BY_HOURS_GEN_1_2);
-		generationCurveGen2 = new LoadCurve(GENERATION_BY_HOURS_GEN_1_2);
-		generationCurveGen3 = new LoadCurve(GENERATION_BY_HOURS_GEN_3);
-		generationCurveGen4 = new LoadCurve(GENERATION_BY_HOURS_GEN_4);
-		generationCurveGen5 = new LoadCurve(GENERATION_BY_HOURS_GEN_5);
+		generationCurveGen1 = new PowerCurve(GENERATION_BY_HOURS_GEN_1_2);
+		generationCurveGen2 = new PowerCurve(GENERATION_BY_HOURS_GEN_1_2);
+		generationCurveGen3 = new PowerCurve(GENERATION_BY_HOURS_GEN_3);
+		generationCurveGen4 = new PowerCurve(GENERATION_BY_HOURS_GEN_4);
+		generationCurveGen5 = new PowerCurve(GENERATION_BY_HOURS_GEN_5);
 		genrationSchedule_1 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, 
 				ASTATIC_REGULATION_OFF, generationCurveGen1);
 		genrationSchedule_2 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, 

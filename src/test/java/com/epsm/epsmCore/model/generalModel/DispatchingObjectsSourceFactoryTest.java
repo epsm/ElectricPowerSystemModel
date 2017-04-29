@@ -14,7 +14,6 @@ import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.consumption.ScheduledLoadConsumer;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumer;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
-import com.epsm.epsmCore.model.dispatch.DispatchingObject;
 import com.epsm.epsmCore.model.generation.PowerStation;
 
 public class DispatchingObjectsSourceFactoryTest {

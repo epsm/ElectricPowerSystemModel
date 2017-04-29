@@ -8,7 +8,6 @@ import com.epsm.epsmCore.model.consumption.ScheduledLoadConsumerCreationParamete
 import com.epsm.epsmCore.model.consumption.ScheduledLoadConsumerFactoryStub;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumerCreationParametersStub;
 import com.epsm.epsmCore.model.consumption.ShockLoadConsumerFactoryStub;
-import com.epsm.epsmCore.model.dispatch.CreationParameters;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
 import com.epsm.epsmCore.model.generation.PowerStationCreationParametersStub;
 import com.epsm.epsmCore.model.generation.PowerStationFactoryStub;

@@ -2,19 +2,18 @@ package com.epsm.epsmCore.model.consumption;
 
 import java.time.LocalTime;
 
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
-import com.epsm.epsmCore.model.consumption.LoadCurveFactory;
 import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 
-public class LoadCurveFactoryTest {
+public class PowerCurveFactoryTest {
 	private float[] originalLoadByHoursInPercent = TestsConstants.LOAD_BY_HOURS;
 	private float maxLoadWithoutRandomInMW = 100;
 	private float randomFluctuaton = 10;
-	private LoadCurve curve;
+	private PowerCurve curve;
 	private LoadCurveFactory builder = new LoadCurveFactory();
 
 	@Test
@@ -44,9 +43,9 @@ public class LoadCurveFactoryTest {
 	@Test
 	public void constructedLoadCurvesAreRandom(){
 		boolean atLeastOneLoadValueIsUnique = false;
-		LoadCurve curve_1 = builder.getRandomCurve(
+		PowerCurve curve_1 = builder.getRandomCurve(
 				originalLoadByHoursInPercent, maxLoadWithoutRandomInMW, randomFluctuaton);
-		LoadCurve curve_2 = builder.getRandomCurve(
+		PowerCurve curve_2 = builder.getRandomCurve(
 				originalLoadByHoursInPercent, maxLoadWithoutRandomInMW, randomFluctuaton);
 		
 		for(int i = 0; i < Constants.DETERMINED_HOURS_IN_DAY; i++){

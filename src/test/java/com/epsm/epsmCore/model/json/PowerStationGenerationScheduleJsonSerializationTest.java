@@ -2,11 +2,11 @@ package com.epsm.epsmCore.model.json;
 
 import java.time.LocalDateTime;
 
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.generation.GeneratorGenerationSchedule;
 import com.epsm.epsmCore.model.generation.PowerStationGenerationSchedule;
@@ -25,7 +25,7 @@ public class PowerStationGenerationScheduleJsonSerializationTest {
 	private final boolean GENERATOR_ON = true;
 	private final LocalDateTime REALTIME_STAMP = LocalDateTime.of(1, 2, 3, 4, 5, 6, 7);
 	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.of(7, 6, 5, 4, 3, 2, 1);
-	private final LoadCurve NULL_CURVE = null;
+	private final PowerCurve NULL_CURVE = null;
 
 	@Before
 	public void setUp(){
@@ -35,7 +35,7 @@ public class PowerStationGenerationScheduleJsonSerializationTest {
 		schedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID, REALTIME_STAMP, 
 				SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS);
 		
-		LoadCurve generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
+		PowerCurve generationCurve = new PowerCurve(TestsConstants.LOAD_BY_HOURS);
 		
 		GeneratorGenerationSchedule genrationSchedule_1 = new GeneratorGenerationSchedule(
 				FIRST_GENERATOR_NUMBER, GENERATOR_ON, ASTATIC_REGULATION_ON, NULL_CURVE);

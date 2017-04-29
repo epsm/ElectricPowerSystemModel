@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerObject;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
-import com.epsm.epsmCore.model.dispatch.Parameters;
 import com.epsm.epsmCore.model.generalModel.Constants;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
 import com.epsm.epsmCore.model.generalModel.TimeService;

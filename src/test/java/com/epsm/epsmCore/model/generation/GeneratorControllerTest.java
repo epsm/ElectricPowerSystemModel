@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.epsm.epsmCore.model.bothConsumptionAndGeneration.LoadCurve;
+import com.epsm.epsmCore.model.bothConsumptionAndGeneration.PowerCurve;
 import com.epsm.epsmCore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmCore.model.dispatch.Dispatcher;
 import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulation;
@@ -27,7 +27,7 @@ public class GeneratorControllerTest {
 	private GeneratorGenerationSchedule genrationSchedule_2;
 	private PowerStationParameters parameters;
 	private PowerStation station;
-	private LoadCurve generationCurve;
+	private PowerCurve generationCurve;
 	private Generator generator_1;
 	private Generator generator_2;
 	private TimeService timeService;
@@ -50,7 +50,7 @@ public class GeneratorControllerTest {
 		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID, REAL_TIMESTAMP, 
 				SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS);
 		
-		generationCurve = new LoadCurve(TestsConstants.LOAD_BY_HOURS);
+		generationCurve = new PowerCurve(TestsConstants.LOAD_BY_HOURS);
 		
 		parameters = new PowerStationParameters(POWER_OBJECT_ID, REAL_TIMESTAMP, SIMULATION_TIMESTAMP,
 				QUANTITY_OF_GENERATORS);
