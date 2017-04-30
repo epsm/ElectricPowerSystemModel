@@ -1,5 +1,6 @@
 package com.epsm.epsmcore.model.generation;
 
+import com.epsm.epsmcore.model.common.PowerObjectStateManager;
 import com.epsm.epsmcore.model.dispatch.Dispatcher;
 import com.epsm.epsmcore.model.simulation.Constants;
 import com.epsm.epsmcore.model.simulation.Simulation;
@@ -9,6 +10,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -16,7 +20,9 @@ import java.util.Collection;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PowerStationTest{
+@RunWith(MockitoJUnitRunner.class)
+public class PowerStationTest {
+
 	private Simulation simulation;
 	private PowerStationState stationState;
 	private PowerStation station;
@@ -35,21 +41,19 @@ public class PowerStationTest{
 	private final float THIRD_GENERATOR_NOMINAL_POWER = 400;
 	private final float FIRST_GENERATOR_MIN_POWER = 5;
 	private final long POWER_STATION_ID = 4458;
-	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
-	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
-	private final int QUANTITY_OF_GENERATORS = 1;
 	private final int FIRST_GENERATOR_NUMBER = 1;
 	private final int SECOND_GENERATOR_NUMBER = 2;
 	private final int THIRD_GENERATOR_NUMBER = 3;
-	
+
+	@Mock
+	private PowerObjectStateManager stateManager;
+
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
 	
 	@Before
 	public void setUp(){
-		PowerStationParameters parameters
-				= new PowerStationParameters(POWER_STATION_ID, REAL_TIMESTAMP, 
-						SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS);
+		PowerStationParameters parameters = new PowerStationParameters(POWER_STATION_ID);
 		
 		simulation = mock(Simulation.class);
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(Constants.STANDART_FREQUENCY);
@@ -60,7 +64,7 @@ public class PowerStationTest{
 		
 		dispatcher = mock(Dispatcher.class);
 		
-		station = new PowerStation(simulation, timeService, dispatcher, parameters);
+		station = new PowerStation(simulation, dispatcher, parameters, stateManager);
 	}
 	
 	void prepareAndInstallFirstGenerator(){
@@ -142,7 +146,7 @@ public class PowerStationTest{
 		prepareAndInstallSecondAndThirdGenerators();
 		turnOnSecondAndThirdGenerators();
 		calculateOneStepInSimulation();
-		getStation();
+		getStationState();
 		verifyStationState();
 	}
 
@@ -155,7 +159,7 @@ public class PowerStationTest{
 		station.calculatePowerBalance();
 	}
 	
-	private void getStation(){
+	private void getStationState(){
 		stationState = (PowerStationState) station.getState();
 	}
 	
@@ -165,8 +169,8 @@ public class PowerStationTest{
 		int thirdGeneratorNumber = 0;
 		float thirdGeneratorGeneration = 0;
 		
-		for(Integer number: stationState.getGeneratorsNumbers()){
-			GeneratorState generatorStateReport = stationState.getGeneratorState(number);
+		for(Integer number: stationState.getStates().keySet()){
+			GeneratorState generatorStateReport = stationState.getStates().get(number);
 			
 			if(generatorStateReport.getGeneratorNumber() == 2){
 				secondtGeneratorNumber = generatorStateReport.getGeneratorNumber();
@@ -177,10 +181,9 @@ public class PowerStationTest{
 			}
 		}
 		
-		Assert.assertEquals(2, stationState.getGeneratorsNumbers().size());
+		Assert.assertEquals(2, stationState.getStates().size());
 		Assert.assertEquals(POWER_STATION_ID, stationState.getPowerObjectId());
 		Assert.assertEquals(CONSTANT_TIME_IN_MOCK_SIMULATION, stationState.getSimulationTimeStamp());
-		Assert.assertEquals(CONSTANT_REAL_TIME, stationState.getRealTimeStamp());
 		Assert.assertEquals(2, secondtGeneratorNumber);
 		Assert.assertEquals(3, thirdGeneratorNumber);
 		Assert.assertEquals(SECOND_GENERATOR_RQUIRED_POWER, secondGeneratorGeneration, 0);

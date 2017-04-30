@@ -5,15 +5,21 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ToString
 @Getter
 public class PowerStationParameters extends Parameters {
 	
-	private List<GeneratorParameters> generatorParameters =  new ArrayList<>();
+	private Map<Integer, GeneratorParameters> generatorParameters =  new HashMap<>();
 	
 	public PowerStationParameters(long powerObjectId) {
 		super(powerObjectId);
+	}
+
+	public GeneratorParameters getGenerator(int generatorNumber) {
+		return generatorParameters.get(generatorNumber);
 	}
 }

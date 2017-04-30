@@ -5,19 +5,23 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @ToString
 @Getter
 public class PowerStationState extends State {
 	
-	private List<GeneratorState> states = new ArrayList<>();
+	private Map<Integer, GeneratorState> states = new HashMap<>();
 	private float frequency;
 	
 	public PowerStationState(long powerObjectId, LocalDateTime simulationTimeStamp, float frequency) {
 		super(powerObjectId, simulationTimeStamp);
 
 		this.frequency = frequency;
+	}
+
+	public GeneratorState getState(int generatorNumber) {
+		return states.get(generatorNumber);
 	}
 }

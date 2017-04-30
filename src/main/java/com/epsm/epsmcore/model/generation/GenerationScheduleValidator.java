@@ -29,15 +29,14 @@ public class GenerationScheduleValidator {
 		validateGenerationScheduleOnCorectness();
 	}
 	
-	private void saveMessagesToValidate(PowerStationGenerationSchedule schedule,
-			PowerStationParameters parameters){
+	private void saveMessagesToValidate(PowerStationGenerationSchedule schedule, PowerStationParameters parameters){
 		this.schedule = schedule;
 		this.parameters = parameters;
 	}
 	
 	private void getStationAndScheduledGeneratorNumbers(){
-		stationGeneratorsNumbers = parameters.getGeneratorParameters().stream().map(e -> e.getGeneratorNumber()).collect(Collectors.toList());
-		scheduleGeneratorsNumbers = schedule.getGeneratorSchedules().stream().map(e -> e.getGeneratorNumber()).collect(Collectors.toList());;
+		stationGeneratorsNumbers = parameters.getGeneratorParameters().keySet();
+		scheduleGeneratorsNumbers = schedule.getGeneratorSchedules().keySet();
 	}
 	
 	private void validateOnEqualsGeneratorsNumbers(){
@@ -56,7 +55,7 @@ public class GenerationScheduleValidator {
 	}
 	
 	private HashSet<Integer> suggestAllGeneratorsTurnedOn(){
-		return new HashSet<Integer>(stationGeneratorsNumbers);
+		return new HashSet<>(stationGeneratorsNumbers);
 	}
 	
 	private void verifyEveryGeneratorIfItScheduledBeTurnedOff(){

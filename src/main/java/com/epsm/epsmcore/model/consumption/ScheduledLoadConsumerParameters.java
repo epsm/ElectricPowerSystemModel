@@ -14,13 +14,12 @@ public class ScheduledLoadConsumerParameters extends ConsumerParameters {
 
 	public ScheduledLoadConsumerParameters(
 			long powerObjectId,
-			ConsumerType consumerType,
 			float degreeOnDependingOfFrequency,
 			List<Float> approximateLoadByHoursOnDayInPercent,
 			float maxLoadWithoutFluctuationsInMW,
 			float randomFluctuationsInPercent) {
 
-		super(powerObjectId, consumerType, degreeOnDependingOfFrequency);
+		super(powerObjectId, ConsumerType.SCHEDULED_LOAD, degreeOnDependingOfFrequency);
 
 		this.approximateLoadByHoursOnDayInPercent = Collections.unmodifiableList(approximateLoadByHoursOnDayInPercent);
 		this.maxLoadWithoutFluctuationsInMW = maxLoadWithoutFluctuationsInMW;

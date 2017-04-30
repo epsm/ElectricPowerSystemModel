@@ -4,7 +4,7 @@ import com.epsm.epsmcore.model.common.Parameters;
 import lombok.Getter;
 
 @Getter
-public class ConsumerParameters extends Parameters {
+public abstract class ConsumerParameters extends Parameters {
 
 	protected final ConsumerType consumerType;
 	protected final float degreeOnDependingOfFrequency;

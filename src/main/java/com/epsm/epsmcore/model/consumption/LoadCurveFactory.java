@@ -8,27 +8,30 @@ import java.util.*;
 public class LoadCurveFactory {
 
 	private Random random = new Random();
-	private List<Float> newLoadByHoursInMW = new ArrayList<>(Constants.DETERMINED_HOURS_IN_DAY);
 	private List<Float> originalLoadByHoursInPercent;
 	private float maxLoadWithoutRandomInMW;
 	private float randomFluctuatonInPercent;
 	
-	public PowerCurve getRandomCurve(List<Float> originalLoadByHoursInPercent,
-	                                 float MaxLoadWithoutRandomInMW, float randomFluctuationInPercent){
+	public PowerCurve getRandomCurve(
+			List<Float> originalLoadByHoursInPercent,
+	        float MaxLoadWithoutRandomInMW,
+			float randomFluctuationInPercent){
 		
 		this.originalLoadByHoursInPercent = originalLoadByHoursInPercent;
 		this.maxLoadWithoutRandomInMW = MaxLoadWithoutRandomInMW;
 		this.randomFluctuatonInPercent = randomFluctuationInPercent;
 		
-		fillNewLoadByHoursInMW();
-		
-		return new PowerCurve(Collections.unmodifiableList(newLoadByHoursInMW));
+		return new PowerCurve(createLoads());
 	}
 	
-	private void fillNewLoadByHoursInMW(){
+	private List<Float> createLoads(){
+		List<Float> newLoadByHoursInMW = new ArrayList<>(Constants.DETERMINED_HOURS_IN_DAY);
+
 		for(int hour = 0; hour < Constants.DETERMINED_HOURS_IN_DAY ; hour++){
 			newLoadByHoursInMW.add(calculateLoadForHourInMW(hour));
 		}
+
+		return Collections.unmodifiableList(newLoadByHoursInMW);
 	}
 	
 	private float calculateLoadForHourInMW(int hour){

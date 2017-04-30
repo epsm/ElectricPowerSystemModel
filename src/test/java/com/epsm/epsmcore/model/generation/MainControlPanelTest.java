@@ -1,19 +1,24 @@
 package com.epsm.epsmcore.model.generation;
 
 import com.epsm.epsmcore.model.common.PowerCurve;
+import com.epsm.epsmcore.model.common.PowerObjectStateManager;
 import com.epsm.epsmcore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmcore.model.dispatch.Dispatcher;
 import com.epsm.epsmcore.model.simulation.Simulation;
-import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.epsmcore.model.simulation.TimeService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class MainControlPanelTest{
+
 	private Simulation simulation;
 	private MainControlPanel controlPanel;
 	private TimeService timeService;
@@ -35,11 +40,13 @@ public class MainControlPanelTest{
 	private final boolean ASTATIC_REGULATION_ON = true;
 	private final boolean ASTATIC_REGULATION_OFF = false;
 	private final PowerCurve NULL_CURVE = null;
+
+	@Mock
+	private PowerObjectStateManager stateManager;
 	
 	@Before
 	public void setUp(){
-		PowerStationParameters stationParameters = new PowerStationParameters(
-				POWER_OBJECT_ID,REAL_TIMESTAMP, SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS_1);
+		PowerStationParameters stationParameters = new PowerStationParameters(POWER_OBJECT_ID);
 		
 		GeneratorParameters generatorParameters = new GeneratorParameters(
 				FIRST_GENERATOR_NUMBER, NOMINAL_POWER_IN_MW, MINIMAL_POWER_IN_MW);
@@ -47,23 +54,21 @@ public class MainControlPanelTest{
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
 		
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
-				TestsConstants.START_DATETIME);
+		simulation = new Simulation(TestsConstants.START_DATETIME);
 		
-		station = new PowerStation(simulation, timeService, dispatcher, stationParameters);
+		station = new PowerStation(simulation, dispatcher, stationParameters, stateManager);
 		controlPanel= new MainControlPanel(simulation, station);
 		
-		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID,
-				REAL_TIMESTAMP, SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS_1);
+		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID);
 		
-		generatorSchedule = new GeneratorGenerationSchedule(FIRST_GENERATOR_NUMBER, 
+		generatorSchedule = new GeneratorGenerationSchedule(FIRST_GENERATOR_NUMBER,
 				GENERATOR_ON, ASTATIC_REGULATION_ON, NULL_CURVE);
 		
 		generator = spy(new Generator(simulation, FIRST_GENERATOR_NUMBER));
 		
 		station.addGenerator(generator);
-		stationSchedule.addGeneratorSchedule(generatorSchedule);
-		stationParameters.addGeneratorParameters(generatorParameters);
+		stationSchedule.getGeneratorSchedules().put(1, generatorSchedule);
+		stationParameters.getGeneratorParameters().put(1, generatorParameters);
 	}
 	
 	@Test
@@ -88,13 +93,12 @@ public class MainControlPanelTest{
 	}
 	
 	private void createInvalidGenerationSchedule(){
-		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID, REAL_TIMESTAMP, 
-				SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS_2);
+		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID);
 		GeneratorGenerationSchedule schedule_1 = new GeneratorGenerationSchedule(
 				FIRST_GENERATOR_NUMBER, GENERATOR_ON, ASTATIC_REGULATION_OFF, NULL_CURVE);
 		GeneratorGenerationSchedule schedule_2 = new GeneratorGenerationSchedule(
 				SECOND_GENERATOR_NUMBER, GENERATOR_ON, ASTATIC_REGULATION_OFF, NULL_CURVE);
-		stationSchedule.addGeneratorSchedule(schedule_1);
-		stationSchedule.addGeneratorSchedule(schedule_2);
+		stationSchedule.getGeneratorSchedules().put(1, schedule_1);
+		stationSchedule.getGeneratorSchedules().put(1, schedule_2);
 	}
 }

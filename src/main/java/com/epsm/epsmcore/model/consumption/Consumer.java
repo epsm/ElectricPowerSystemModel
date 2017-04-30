@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 public abstract class Consumer <T extends ConsumerParameters, E extends ConsumerState> extends PowerObject<T, E> implements DispatchedConsumer {
 
-	protected boolean active;
+	protected boolean active = true;
 
 	public Consumer(
 			Simulation simulation,

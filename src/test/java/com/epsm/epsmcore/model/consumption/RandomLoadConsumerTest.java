@@ -3,7 +3,7 @@ package com.epsm.epsmcore.model.consumption;
 import com.epsm.epsmcore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmcore.model.dispatch.Dispatcher;
 import com.epsm.epsmcore.model.simulation.Constants;
-import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
+import com.epsm.epsmcore.model.simulation.Simulation;
 import com.epsm.epsmcore.model.simulation.TimeService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 import static org.mockito.Mockito.*;
 
 public class RandomLoadConsumerTest {
-	private ElectricPowerSystemSimulationImpl simulation;
+
+	private Simulation simulation;
 	private RandomLoadConsumer consumer;
 	float previousLoad;
 	float currentLoad;
@@ -40,22 +41,18 @@ public class RandomLoadConsumerTest {
 	
 	@Before
 	public void setUp(){
-		ConsumerParameters parameters
-			= new ConsumerParameters(CONSUMER_NUMBER, REAL_TIMESTAMP, SIMULATION_TIMESTAMP);
+		RandomLoadConsumerParameters parameters = new RandomLoadConsumerParameters(
+				CONSUMER_NUMBER, WORK_TIME, PAUSE_TIME, MAX_LOAD, DEGREE_OF_DEPENDENCY_ON_FREQUENCY);
+		ConsumerStateManager stateManager = mock(ConsumerStateManager.class);
 		timeService = mock(TimeService.class);
 		when(timeService.getCurrentDateTime()).thenReturn(LocalDateTime.of(2000, 01, 01, 00, 00));
 		dispatcher = mock(Dispatcher.class);
-		simulation = spy(new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
-				TestsConstants.START_DATETIME));
+		simulation = spy(new Simulation(TestsConstants.START_DATETIME));
 		turnOnTime = null;
 		turnOffTime = null;
-		consumer = new RandomLoadConsumer(simulation, timeService, dispatcher, parameters);
+		consumer = new RandomLoadConsumer(simulation, dispatcher, parameters, stateManager);
 		
 		when(simulation.getFrequencyInPowerSystem()).thenReturn(Constants.STANDART_FREQUENCY);
-		consumer.setMaxLoad(MAX_LOAD);
-		consumer.setMaxWorkDurationInSeconds(WORK_TIME);
-		consumer.setMaxPauseBetweenWorkInSeconds(PAUSE_TIME);
-		consumer.setDegreeOfDependingOnFrequency(DEGREE_OF_DEPENDENCY_ON_FREQUENCY);
 	}
 	
 	@Rule
@@ -88,7 +85,7 @@ public class RandomLoadConsumerTest {
 	
 	private void rememberCurrentLoadAsPreviousAndDoNextStep(){
 		previousLoad = currentLoad;
-		simulation.calculateNextStep();
+		simulation.doNextStep();
 		currentLoad = consumer.calculatePowerBalance();
 	}
 	

@@ -69,17 +69,15 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory {
 	private final PowerCurve NULL_CURVE = null;
 	
 	public PowerStationFactoryStub(Simulation simulation, Dispatcher dispatcher, TimeService timeService){
-		super(simulation, dispatcher);
+		super(simulation, dispatcher, timeService);
 		this.timeService = timeService;
 	}
 
-	public synchronized PowerStation createPowerStation(long powerObjectId,
-			PowerStationCreationParametersStub parameters){
-		
-		savePowerObjectId(powerObjectId);
+	public synchronized PowerStation createPowerStation(){
+		savePowerObjectId(getId());
 		createPowerStationParameters();
 		createDefaultGenerationSchedule();
-		createPowerStation();
+		createAndFill();
 		
 		return powerStation;
 	}
@@ -98,12 +96,12 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory {
 		GeneratorParameters parameters_5 = new GeneratorParameters(generatorNumber++, NOMINAL_POWER_IN_MW, MINIMAL_POWER_IN_MW_1);
 		GeneratorParameters parameters_6 = new GeneratorParameters(generatorNumber++, NOMINAL_POWER_IN_MW, MINIMAL_POWER_IN_MW_2);
 		
-		parameters.getGeneratorParameters().add(parameters_1);
-		parameters.getGeneratorParameters().add(parameters_2);
-		parameters.getGeneratorParameters().add(parameters_3);
-		parameters.getGeneratorParameters().add(parameters_4);
-		parameters.getGeneratorParameters().add(parameters_5);
-		parameters.getGeneratorParameters().add(parameters_6);
+		parameters.getGeneratorParameters().put(1, parameters_1);
+		parameters.getGeneratorParameters().put(2, parameters_2);
+		parameters.getGeneratorParameters().put(3, parameters_3);
+		parameters.getGeneratorParameters().put(4, parameters_4);
+		parameters.getGeneratorParameters().put(5, parameters_5);
+		parameters.getGeneratorParameters().put(6, parameters_6);
 	}
 	
 	private void createDefaultGenerationSchedule(){
@@ -126,15 +124,15 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory {
 				ASTATIC_REGULATION_OFF, generationCurveGen5);
 		genrationSchedule_6 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, 
 				ASTATIC_REGULATION_ON, NULL_CURVE);
-		stationSchedule.getGeneratorSchedules().add(genrationSchedule_1);
-		stationSchedule.getGeneratorSchedules().add(genrationSchedule_2);
-		stationSchedule.getGeneratorSchedules().add(genrationSchedule_3);
-		stationSchedule.getGeneratorSchedules().add(genrationSchedule_4);
-		stationSchedule.getGeneratorSchedules().add(genrationSchedule_5);
-		stationSchedule.getGeneratorSchedules().add(genrationSchedule_6);
+		stationSchedule.getGeneratorSchedules().put(1, genrationSchedule_1);
+		stationSchedule.getGeneratorSchedules().put(2, genrationSchedule_2);
+		stationSchedule.getGeneratorSchedules().put(3, genrationSchedule_3);
+		stationSchedule.getGeneratorSchedules().put(4, genrationSchedule_4);
+		stationSchedule.getGeneratorSchedules().put(5, genrationSchedule_5);
+		stationSchedule.getGeneratorSchedules().put(6, genrationSchedule_6);
 	}
 	
-	private void createPowerStation(){
+	private void createAndFill(){
 		int generatorNuber = 1;
 		powerStation = new PowerStation(simulation, dispatcher, parameters, createStateManager());
 		Generator generator_1 = new Generator(simulation, generatorNuber++);

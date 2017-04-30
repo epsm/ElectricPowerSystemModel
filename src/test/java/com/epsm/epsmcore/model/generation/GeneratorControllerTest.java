@@ -1,34 +1,42 @@
 package com.epsm.epsmcore.model.generation;
 
 import com.epsm.epsmcore.model.common.PowerCurve;
+import com.epsm.epsmcore.model.common.PowerCurveProcessor;
+import com.epsm.epsmcore.model.common.PowerObjectStateManager;
 import com.epsm.epsmcore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmcore.model.dispatch.Dispatcher;
 import com.epsm.epsmcore.model.simulation.Simulation;
-import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.epsmcore.model.simulation.TimeService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class GeneratorControllerTest {
+
 	private Simulation simulation;
 	private MainControlPanel controlPanel;
 	private PowerStationGenerationSchedule stationSchedule;
 	private GeneratorGenerationSchedule genrationSchedule_1;
 	private GeneratorGenerationSchedule genrationSchedule_2;
-	private PowerStationParameters parameters;
+	private PowerStationParameters stationParameters;
 	private PowerStation station;
 	private PowerCurve generationCurve;
 	private Generator generator_1;
 	private Generator generator_2;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
+	private PowerCurveProcessor curveProcessor = new PowerCurveProcessor();
 	private final long POWER_OBJECT_ID = 0;
 	private final int QUANTITY_OF_GENERATORS = 2;
 	private final int FIRST_GENERATOR_NUMBER = 1;
@@ -41,33 +49,27 @@ public class GeneratorControllerTest {
 	private final boolean GENERATOR_OFF = false;
 	private final boolean ASTATIC_REGULATION_ON = true;
 	private final boolean ASTATIC_REGULATION_OFF = false;
+
+	@Mock
+	private PowerObjectStateManager stateManager;
 	
 	@Before
 	public void setUp(){
-		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID, REAL_TIMESTAMP, 
-				SIMULATION_TIMESTAMP, QUANTITY_OF_GENERATORS);
-		
+		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID);
 		generationCurve = new PowerCurve(TestsConstants.LOAD_BY_HOURS);
+		stationParameters = new PowerStationParameters(POWER_OBJECT_ID);
+		GeneratorParameters parameter_1 = new GeneratorParameters(FIRST_GENERATOR_NUMBER, NOMINAL_POWER_IN_MW, MINIMAL_POWER_IN_MW);
+		GeneratorParameters parameter_2 = new GeneratorParameters(SECOND_GENERATOR_NUMBER, NOMINAL_POWER_IN_MW, MINIMAL_POWER_IN_MW);
 		
-		parameters = new PowerStationParameters(POWER_OBJECT_ID, REAL_TIMESTAMP, SIMULATION_TIMESTAMP,
-				QUANTITY_OF_GENERATORS);
-		
-		GeneratorParameters parameter_1 = new GeneratorParameters(FIRST_GENERATOR_NUMBER, 
-				NOMINAL_POWER_IN_MW, MINIMAL_POWER_IN_MW);
-		
-		GeneratorParameters parameter_2 = new GeneratorParameters(SECOND_GENERATOR_NUMBER, 
-				NOMINAL_POWER_IN_MW, MINIMAL_POWER_IN_MW);
-		
-		parameters.addGeneratorParameters(parameter_1);
-		parameters.addGeneratorParameters(parameter_2);
+		stationParameters.getGeneratorParameters().put(1, parameter_1);
+		stationParameters.getGeneratorParameters().put(2, parameter_2);
 		
 		timeService = new TimeService();
 		dispatcher = mock(Dispatcher.class);
 		
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
-				TestsConstants.START_DATETIME);
+		simulation = new Simulation(TestsConstants.START_DATETIME);
 		
-		station = new PowerStation(simulation, timeService, dispatcher, parameters);
+		station = new PowerStation(simulation, dispatcher, stationParameters, stateManager);
 		controlPanel = new MainControlPanel(simulation, station);
 		
 		generator_1 = Mockito.spy( new Generator(simulation, FIRST_GENERATOR_NUMBER));
@@ -101,8 +103,8 @@ public class GeneratorControllerTest {
 		genrationSchedule_2 = new GeneratorGenerationSchedule(SECOND_GENERATOR_NUMBER, GENERATOR_ON, 
 				ASTATIC_REGULATION_OFF, generationCurve);
 		
-		stationSchedule.addGeneratorSchedule(genrationSchedule_1);
-		stationSchedule.addGeneratorSchedule(genrationSchedule_2);
+		stationSchedule.getGeneratorSchedules().put(1, genrationSchedule_1);
+		stationSchedule.getGeneratorSchedules().put(2, genrationSchedule_2);
 	}
 	
 	private void turnOnfirstAndTurnOffsecondGenerators(){
@@ -127,8 +129,8 @@ public class GeneratorControllerTest {
 		genrationSchedule_2 = new GeneratorGenerationSchedule(SECOND_GENERATOR_NUMBER, GENERATOR_OFF, 
 				ASTATIC_REGULATION_OFF, generationCurve);
 		
-		stationSchedule.addGeneratorSchedule(genrationSchedule_1);
-		stationSchedule.addGeneratorSchedule(genrationSchedule_2);
+		stationSchedule.getGeneratorSchedules().put(1, genrationSchedule_1);
+		stationSchedule.getGeneratorSchedules().put(2, genrationSchedule_2);
 	}
 	
 	@Test
@@ -149,8 +151,8 @@ public class GeneratorControllerTest {
 		genrationSchedule_2 = new GeneratorGenerationSchedule(SECOND_GENERATOR_NUMBER, GENERATOR_ON, 
 				ASTATIC_REGULATION_ON, generationCurve);
 		
-		stationSchedule.addGeneratorSchedule(genrationSchedule_1);
-		stationSchedule.addGeneratorSchedule(genrationSchedule_2);
+		stationSchedule.getGeneratorSchedules().put(1, genrationSchedule_1);
+		stationSchedule.getGeneratorSchedules().put(2, genrationSchedule_2);
 	}
 	
 	private void turnOnBothGenerators(){
@@ -181,8 +183,8 @@ public class GeneratorControllerTest {
 		genrationSchedule_2 = new GeneratorGenerationSchedule(SECOND_GENERATOR_NUMBER, GENERATOR_ON, 
 				ASTATIC_REGULATION_OFF, generationCurve);
 		
-		stationSchedule.addGeneratorSchedule(genrationSchedule_1);
-		stationSchedule.addGeneratorSchedule(genrationSchedule_2);
+		stationSchedule.getGeneratorSchedules().put(1, genrationSchedule_1);
+		stationSchedule.getGeneratorSchedules().put(2, genrationSchedule_2);
 	}
 	
 	@Test
@@ -201,7 +203,7 @@ public class GeneratorControllerTest {
 	
 	private void isAdjustedGenerationsOfGeneratorsConformsScheduled(){
 		LocalTime timeInSimulation = simulation.getDateTimeInSimulation().toLocalTime(); 
-		float expectedGenerations = generationCurve.getPowerOnTimeInMW(timeInSimulation);
+		float expectedGenerations = curveProcessor.getPowerOnTimeInMW(generationCurve, timeInSimulation);
 		float firstGeneratorGeneration = generator_1.getPowerAtRequiredFrequency();
 		float secondGeneratorGeneration = generator_2.getPowerAtRequiredFrequency();
 		

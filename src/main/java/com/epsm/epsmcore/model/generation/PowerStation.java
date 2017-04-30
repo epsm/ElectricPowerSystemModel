@@ -90,7 +90,7 @@ public final class PowerStation extends PowerObject<PowerStationParameters, Powe
 	
 	private void prepareGeneratorsStates(){
 		for(Generator generator: generators.values()){
-			powerStationState.getStates().add(generator.getState());
+			powerStationState.getStates().put(generator.getGeneratorNumber(), generator.getState());
 		}
 	}
 	

@@ -2,7 +2,6 @@ package com.epsm.epsmcore.model.simulation;
 
 import com.epsm.epsmcore.model.constantsForTests.TestsConstants;
 import com.epsm.epsmcore.model.consumption.Consumer;
-import com.epsm.epsmcore.model.dispatch.Dispatcher;
 import com.epsm.epsmcore.model.generation.PowerStation;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,15 +13,12 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(PowerStation.class)
 public class SimulationImplTest {
-	private ElectricPowerSystemSimulationImpl simulation;
-	private TimeService timeService;
-	private Dispatcher dispatcher;
+	private Simulation simulation;
 	private PowerStation station;
 	private Consumer consumer;
 	private float previousFrequency;
@@ -30,17 +26,14 @@ public class SimulationImplTest {
 	
 	@Before
 	public void setUp(){
-		timeService = new TimeService();
-		dispatcher = mock(Dispatcher.class);
-		simulation = new ElectricPowerSystemSimulationImpl(timeService, dispatcher,
-				TestsConstants.START_DATETIME);
+		simulation = new Simulation(TestsConstants.START_DATETIME);
 		station = PowerMockito.mock(PowerStation.class);
 		consumer = PowerMockito.mock(Consumer.class);
 		when(station.getId()).thenReturn(1L);
 		when(consumer.getId()).thenReturn(2L);
 		
 		simulation.addPowerStation(station);
-		simulation.addPowerConsumer(consumer);
+		simulation.addConsumer(consumer);
 	}
 	
 	@Test
@@ -50,7 +43,7 @@ public class SimulationImplTest {
 		
 		for(int verifyTimes = 0; verifyTimes < 10 ;verifyTimes++){
 			previousTime = simulation.getDateTimeInSimulation();
-			simulation.calculateNextStep();
+			simulation.doNextStep();
 			nextTime = simulation.getDateTimeInSimulation();
 			
 			Assert.assertTrue(previousTime.isBefore(nextTime));
@@ -71,7 +64,7 @@ public class SimulationImplTest {
 	
 	private void rememberOldFrequencyAndDoNextStep(){
 		previousFrequency = simulation.getFrequencyInPowerSystem();
-		simulation.calculateNextStep();
+		simulation.doNextStep();
 		currentFrequency = simulation.getFrequencyInPowerSystem();
 	}
 	

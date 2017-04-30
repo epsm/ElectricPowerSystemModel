@@ -3,7 +3,6 @@ package com.epsm.epsmcore.model.generation;
 import com.epsm.epsmcore.model.dispatch.Dispatcher;
 import com.epsm.epsmcore.model.simulation.Constants;
 import com.epsm.epsmcore.model.simulation.Simulation;
-import com.epsm.epsmCore.model.generalModel.ElectricPowerSystemSimulationImpl;
 import com.epsm.epsmcore.model.simulation.TimeService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,6 +13,7 @@ import java.time.LocalDateTime;
 import static org.mockito.Mockito.*;
 
 public class AstaticRegulatorTest {
+
 	private Simulation simulation;
 	private AstaticRegulator astaticRegulator;
 	private StaticRegulator staticRegulator;
@@ -30,7 +30,7 @@ public class AstaticRegulatorTest {
 	public void setUp(){
 		TimeService timeService = new TimeService();
 		Dispatcher dispatcher = mock(Dispatcher.class);
-		simulation = spy(new ElectricPowerSystemSimulationImpl(timeService, dispatcher, startDateTime));
+		simulation = spy(new Simulation(startDateTime));
 		generator = new Generator(simulation, GENERATOR_NUMBER);
 		astaticRegulator = new AstaticRegulator(simulation, generator);
 		staticRegulator = new StaticRegulator(simulation, generator);
