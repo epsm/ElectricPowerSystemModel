@@ -6,9 +6,9 @@ import com.epsm.epsmcore.model.dispatch.Dispatcher;
 import com.epsm.epsmcore.model.simulation.Simulation;
 import com.epsm.epsmcore.model.simulation.TimeService;
 
-public class RandomLoadConsumerFactory extends AbstractPowerObjectFactory {
+public class RandomLoadConsumerFactoryStub extends AbstractPowerObjectFactory {
 
-	public RandomLoadConsumerFactory(Simulation simulation, TimeService timeService, Dispatcher dispatcher) {
+	public RandomLoadConsumerFactoryStub(Simulation simulation,Dispatcher dispatcher,  TimeService timeService) {
 		super(simulation, dispatcher, timeService);
 	}
 

@@ -36,9 +36,7 @@ public class RandomLoadConsumerTest {
 	private final long CONSUMER_NUMBER = 664;
 	private final int DEGREE_OF_DEPENDENCY_ON_FREQUENCY = 2;
 	private final float MAX_LOAD = 100;
-	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
-	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
-	
+
 	@Before
 	public void setUp(){
 		RandomLoadConsumerParameters parameters = new RandomLoadConsumerParameters(

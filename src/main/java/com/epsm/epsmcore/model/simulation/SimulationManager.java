@@ -1,6 +1,9 @@
 package com.epsm.epsmcore.model.simulation;
 
+import com.epsm.epsmcore.model.consumption.RandomLoadConsumerFactoryStub;
+import com.epsm.epsmcore.model.consumption.ScheduledLoadConsumerFactoryStub;
 import com.epsm.epsmcore.model.dispatch.Dispatcher;
+import com.epsm.epsmcore.model.generation.PowerStationFactoryStub;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,19 +35,24 @@ public class SimulationManager {
 	}
 	
 	private void fillSimulationWithObjects(){
-//		simulation.createPowerObject(new PowerStationParameters());
-//		simulation.createPowerObject(new ScheduledLoadConsumerParameters());
-//		simulation.createPowerObject(new RandomLoadConsumerParameters());
-//		simulation.createPowerObject(new ScheduledLoadConsumerParameters());
-//		simulation.createPowerObject(new ScheduledLoadConsumerParameters());
-//		simulation.createPowerObject(new RandomLoadConsumerParameters());
-//		simulation.createPowerObject(new ScheduledLoadConsumerParameters());
-//		simulation.createPowerObject(new ScheduledLoadConsumerParameters());
-//		simulation.createPowerObject(new RandomLoadConsumerParameters());
-//		simulation.createPowerObject(new ScheduledLoadConsumerParameters());
-//		simulation.createPowerObject(new ScheduledLoadConsumerParameters());
-//		simulation.createPowerObject(new RandomLoadConsumerParameters());
-//		simulation.createPowerObject(new ScheduledLoadConsumerParameters());
+		PowerStationFactoryStub powerStationFactoryStub = new PowerStationFactoryStub(simulation, dispatcher, timeService);
+		ScheduledLoadConsumerFactoryStub scheduledLoadConsumerFactoryStub = new ScheduledLoadConsumerFactoryStub(simulation, dispatcher, timeService);
+		RandomLoadConsumerFactoryStub randomLoadConsumerFactoryStub = new RandomLoadConsumerFactoryStub(simulation, dispatcher, timeService);
+
+		simulation.addPowerStation(powerStationFactoryStub.createPowerStation());
+
+		simulation.addConsumer(scheduledLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(randomLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(scheduledLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(scheduledLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(randomLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(scheduledLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(scheduledLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(randomLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(scheduledLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(scheduledLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(randomLoadConsumerFactoryStub.createConsumer());
+		simulation.addConsumer(scheduledLoadConsumerFactoryStub.createConsumer());
 	}
 	
 	private void runSimulation(){

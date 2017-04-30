@@ -17,7 +17,7 @@ public class ScheduledLoadConsumerFactoryStub extends AbstractPowerObjectFactory
 			 91f,  92f,  92f,  93f,  94f,  98f,
 			100f,  98f,  95f,  93f,  88f,  75f);
 
-	public ScheduledLoadConsumerFactoryStub(Simulation simulation, TimeService timeService, Dispatcher dispatcher) {
+	public ScheduledLoadConsumerFactoryStub(Simulation simulation, Dispatcher dispatcher, TimeService timeService) {
 		super(simulation, dispatcher, timeService);
 	}
 
