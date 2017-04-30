@@ -3,7 +3,6 @@ package com.epsm.epsmcore.model.consumption;
 import com.epsm.epsmcore.model.common.PowerCurve;
 import com.epsm.epsmcore.model.common.PowerCurveProcessor;
 import com.epsm.epsmcore.model.common.PowerObjectStateManager;
-import com.epsm.epsmcore.model.common.State;
 import com.epsm.epsmcore.model.dispatch.Dispatcher;
 import com.epsm.epsmcore.model.simulation.Simulation;
 
@@ -85,7 +84,7 @@ public final class ScheduledLoadConsumer extends Consumer<ScheduledLoadConsumerP
 	}
 	
 	private void prepareState(){
-		state = prepareState(currentDateTime, currentLoad);
+		state = prepareState(currentDateTime, currentLoad, ConsumerType.SCHEDULED_LOAD);
 	}
 
 	@Override

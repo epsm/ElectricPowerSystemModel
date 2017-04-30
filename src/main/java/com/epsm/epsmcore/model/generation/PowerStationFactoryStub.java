@@ -112,18 +112,12 @@ public class PowerStationFactoryStub extends AbstractPowerObjectFactory {
 		generationCurveGen3 = new PowerCurve(GENERATION_BY_HOURS_GEN_3);
 		generationCurveGen4 = new PowerCurve(GENERATION_BY_HOURS_GEN_4);
 		generationCurveGen5 = new PowerCurve(GENERATION_BY_HOURS_GEN_5);
-		genrationSchedule_1 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, 
-				ASTATIC_REGULATION_OFF, generationCurveGen1);
-		genrationSchedule_2 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, 
-				ASTATIC_REGULATION_OFF, generationCurveGen2);
-		genrationSchedule_3 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, 
-				ASTATIC_REGULATION_OFF, generationCurveGen3);
-		genrationSchedule_4 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, 
-				ASTATIC_REGULATION_OFF, generationCurveGen4);
-		genrationSchedule_5 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, 
-				ASTATIC_REGULATION_OFF, generationCurveGen5);
-		genrationSchedule_6 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, 
-				ASTATIC_REGULATION_ON, NULL_CURVE);
+		genrationSchedule_1 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, ASTATIC_REGULATION_OFF, generationCurveGen1);
+		genrationSchedule_2 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, ASTATIC_REGULATION_OFF, generationCurveGen2);
+		genrationSchedule_3 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, ASTATIC_REGULATION_OFF, generationCurveGen3);
+		genrationSchedule_4 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, ASTATIC_REGULATION_OFF, generationCurveGen4);
+		genrationSchedule_5 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, ASTATIC_REGULATION_OFF, generationCurveGen5);
+		genrationSchedule_6 = new GeneratorGenerationSchedule(generatorNumber++, GENERATOR_ON, ASTATIC_REGULATION_ON, NULL_CURVE);
 		stationSchedule.getGeneratorSchedules().put(1, genrationSchedule_1);
 		stationSchedule.getGeneratorSchedules().put(2, genrationSchedule_2);
 		stationSchedule.getGeneratorSchedules().put(3, genrationSchedule_3);

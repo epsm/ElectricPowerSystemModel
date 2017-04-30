@@ -1,7 +1,6 @@
 package com.epsm.epsmcore.model.consumption;
 
 import com.epsm.epsmcore.model.common.PowerObjectStateManager;
-import com.epsm.epsmcore.model.common.State;
 import com.epsm.epsmcore.model.dispatch.Dispatcher;
 import com.epsm.epsmcore.model.simulation.Simulation;
 
@@ -61,7 +60,7 @@ public class RandomLoadConsumer extends Consumer<RandomLoadConsumerParameters, C
 	}
 
 	private void prepareState(){
-		state = prepareState(currentDateTime, currentLoad);
+		state = prepareState(currentDateTime, currentLoad, ConsumerType.RANDOM_LOAD);
 	}
 	
 	private void getNecessaryParametersFromPowerSystem(){

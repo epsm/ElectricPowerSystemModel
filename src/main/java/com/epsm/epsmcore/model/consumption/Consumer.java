@@ -27,8 +27,8 @@ public abstract class Consumer <T extends ConsumerParameters, E extends Consumer
 				parameters.getDegreeOnDependingOfFrequency()) * load;
 	}
 
-	protected ConsumerState prepareState(LocalDateTime simulationTimeStamp, float load){
-		return new ConsumerState(id, simulationTimeStamp, load);
+	protected ConsumerState prepareState(LocalDateTime simulationTimeStamp, float load, ConsumerType consumerType){
+		return new ConsumerState(id, simulationTimeStamp, load, consumerType);
 	}
 
 	@Override

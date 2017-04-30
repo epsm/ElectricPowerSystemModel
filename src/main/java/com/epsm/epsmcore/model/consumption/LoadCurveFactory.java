@@ -3,7 +3,10 @@ package com.epsm.epsmcore.model.consumption;
 import com.epsm.epsmcore.model.common.PowerCurve;
 import com.epsm.epsmcore.model.simulation.Constants;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class LoadCurveFactory {
 

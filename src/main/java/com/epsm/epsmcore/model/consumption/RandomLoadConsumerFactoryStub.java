@@ -19,14 +19,14 @@ public class RandomLoadConsumerFactoryStub extends AbstractPowerObjectFactory {
 		int maxWorkDurationInSeconds = 60 * 60 * 2;
 		int maxPauseBetweenWorkInSeconds = 60 * 60 * 2;
 		int maxLoadInMW = 5;
-		int degreeOnDependingOfFrequency = 2;
+		int degreeOfDependingOnFrequency = 2;
 
 		return new RandomLoadConsumerParameters(
 				getId(),
 				maxWorkDurationInSeconds,
 				maxPauseBetweenWorkInSeconds,
 				maxLoadInMW,
-				degreeOnDependingOfFrequency);
+				degreeOfDependingOnFrequency);
 	}
 
 	private ConsumerStateManager createStateManager() {

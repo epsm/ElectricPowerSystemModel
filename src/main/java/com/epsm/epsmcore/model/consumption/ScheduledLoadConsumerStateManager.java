@@ -11,6 +11,6 @@ public class ScheduledLoadConsumerStateManager extends ConsumerStateManager<Sche
 
 	@Override
 	protected boolean doRegister(ScheduledLoadConsumerParameters parameters) {
-		return dispatcher.registerScheduledLoadConsumer(parameters);
+		return dispatcher.register(parameters);
 	}
 }

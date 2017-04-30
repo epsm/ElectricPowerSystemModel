@@ -1,7 +1,6 @@
 package com.epsm.epsmcore.model.common;
 
 import com.epsm.epsmcore.model.constantsForTests.TestsConstants;
-import com.epsm.epsmcore.model.generation.GenerationException;
 import com.epsm.epsmcore.model.simulation.Constants;
 import org.junit.Assert;
 import org.junit.Rule;

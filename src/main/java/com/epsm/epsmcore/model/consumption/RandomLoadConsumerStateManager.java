@@ -11,6 +11,6 @@ public class RandomLoadConsumerStateManager extends ConsumerStateManager<RandomL
 
 	@Override
 	protected boolean doRegister(RandomLoadConsumerParameters parameters) {
-		return dispatcher.registerRandomLoadConsumer(parameters);
+		return dispatcher.register(parameters);
 	}
 }

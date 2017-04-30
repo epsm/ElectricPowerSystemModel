@@ -9,9 +9,9 @@ import com.epsm.epsmcore.model.generation.PowerStationState;
 import java.util.List;
 
 public interface Dispatcher {
-	boolean registerRandomLoadConsumer(RandomLoadConsumerParameters parameters);
-	boolean registerScheduledLoadConsumer(ScheduledLoadConsumerParameters parameters);
-	boolean registerPowerStation(PowerStationParameters parameters);
+	boolean register(RandomLoadConsumerParameters parameters);
+	boolean register(ScheduledLoadConsumerParameters parameters);
+	boolean register(PowerStationParameters parameters);
 	boolean acceptConsumerStates(List<ConsumerState> state);
 	boolean acceptPowerStationStates(List<PowerStationState> state);
 }

@@ -23,7 +23,7 @@ public abstract class PowerObjectStateManager<T extends Parameters, E extends St
 	private LocalDateTime currentTime;
 	private boolean registeredWithDispatcher;
 
-	private static final Logger logger = LoggerFactory.getLogger(PowerObjectStateManager.class);
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public PowerObjectStateManager(TimeService timeService, Dispatcher dispatcher) {
 		this.timeService = timeService;

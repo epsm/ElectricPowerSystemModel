@@ -5,7 +5,6 @@ import com.epsm.epsmcore.model.common.PowerCurve;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
 public class GenerationScheduleValidator {
 	private PowerStationGenerationSchedule schedule;

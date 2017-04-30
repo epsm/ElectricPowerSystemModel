@@ -1,7 +1,9 @@
 package com.epsm.epsmcore.model.consumption;
 
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class RandomLoadConsumerParameters extends ConsumerParameters {
 
@@ -14,9 +16,9 @@ public class RandomLoadConsumerParameters extends ConsumerParameters {
 			int maxWorkDurationInSeconds,
 			int maxPauseBetweenWorkInSeconds,
 			float maxLoadInMW,
-			float degreeOnDependingOfFrequency) {
+			float degreeOfDependingOnFrequency) {
 
-		super(powerObjectId, ConsumerType.RANDOM_LOAD, degreeOnDependingOfFrequency);
+		super(powerObjectId, ConsumerType.RANDOM_LOAD, degreeOfDependingOnFrequency);
 
 		this.maxWorkDurationInSeconds = maxWorkDurationInSeconds;
 		this.maxPauseBetweenWorkInSeconds = maxPauseBetweenWorkInSeconds;

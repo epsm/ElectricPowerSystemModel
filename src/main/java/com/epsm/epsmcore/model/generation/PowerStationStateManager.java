@@ -19,6 +19,6 @@ public class PowerStationStateManager extends PowerObjectStateManager<PowerStati
 
 	@Override
 	protected boolean doRegister(PowerStationParameters parameters) {
-		return dispatcher.registerPowerStation(parameters);
+		return dispatcher.register(parameters);
 	}
 }

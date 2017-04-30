@@ -10,7 +10,7 @@ public abstract class AbstractPowerObjectFactory {
 	protected Simulation simulation;
 	protected Dispatcher dispatcher;
 	protected TimeService timeService;
-	private AtomicLong id = new AtomicLong();
+	private static AtomicLong id = new AtomicLong();
 
 	public AbstractPowerObjectFactory(Simulation simulation, Dispatcher dispatcher, TimeService timeService) {
 		this.simulation = simulation;

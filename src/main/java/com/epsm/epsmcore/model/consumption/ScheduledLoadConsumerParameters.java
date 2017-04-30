@@ -1,10 +1,12 @@
 package com.epsm.epsmcore.model.consumption;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Collections;
 import java.util.List;
 
+@ToString
 @Getter
 public class ScheduledLoadConsumerParameters extends ConsumerParameters {
 

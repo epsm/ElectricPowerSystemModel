@@ -1,17 +1,15 @@
 package com.epsm.epsmcore.model.simulation;
 
 import com.epsm.epsmcore.model.common.PowerObject;
-import com.epsm.epsmcore.model.common.PowerObjectStateManager;
 import com.epsm.epsmcore.model.consumption.Consumer;
 import com.epsm.epsmcore.model.generation.PowerStation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class Simulation {
 
@@ -78,16 +76,13 @@ public class Simulation {
 	}
 	
 	private void logFrequency(){
-		if(isItExactlySecond()){
-			logger.warn("sim.time: {}, unnacept. frequency: {} Hz.",
-					getDateTimeInSimulation(), frequencyInPowerSystem);
+		if(isItExactlyMinute()){
+			logger.warn("sim.time: {}, unnacept. frequency: {} Hz. {}", getDateTimeInSimulation(), frequencyInPowerSystem);
+			logger.warn("consumers: {}", consumers.values().stream().map(PowerObject::getState).collect(Collectors.toList()));
+			logger.warn("stations: {}", powerStations.values().stream().map(PowerObject::getState).collect(Collectors.toList()));
 		}
 	}
 	
-	private boolean isItExactlySecond(){
-		return currentDateTimeInSimulation.getNano() == 0;
-	}
-
 	public void sendStatesToDispatcher() {
 		for(PowerObject object: powerStations.values()){
 			object.sendStatesToDispatcher();

@@ -1,18 +1,18 @@
 package com.epsm.epsmcore.model.generation;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Getter
 @ToString
+@NoArgsConstructor
 public class PowerStationGenerationSchedule {
 
-	private final long powerStationId;
+	private long powerStationId;
 	private final Map<Integer, GeneratorGenerationSchedule> generatorSchedules = new HashMap<>();
 
 	public PowerStationGenerationSchedule(long powerStationId) {
