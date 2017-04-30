@@ -32,7 +32,7 @@
 		<appender-ref ref="Application" />
 	</logger>
 	
-	<logger name="com.epsm.epsmCore.model.bothConsumptionAndGeneration.ObjectConnectionManager" level="INFO" additivity="false">
+	<logger name="com.epsm.epsmCore.model.common.ObjectConnectionManager" level="INFO" additivity="false">
 		<appender-ref ref="System" />
 	</logger>
 
