@@ -1,7 +1,6 @@
 package com.epsm.epsmcore.model.consumption;
 
 import com.epsm.epsmcore.model.common.AbstractPowerObjectFactory;
-import com.epsm.epsmcore.model.common.PowerObjectStateManager;
 import com.epsm.epsmcore.model.dispatch.Dispatcher;
 import com.epsm.epsmcore.model.simulation.Simulation;
 import com.epsm.epsmcore.model.simulation.TimeService;
@@ -31,6 +30,6 @@ public class RandomLoadConsumerFactoryStub extends AbstractPowerObjectFactory {
 	}
 
 	private ConsumerStateManager createStateManager() {
-		return new ConsumerStateManager(timeService, dispatcher);
+		return new RandomLoadConsumerStateManager(timeService, dispatcher);
 	}
 }

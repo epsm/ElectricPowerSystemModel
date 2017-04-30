@@ -6,7 +6,7 @@ import com.epsm.epsmcore.model.simulation.TimeService;
 
 import java.util.List;
 
-public class ConsumerStateManager extends PowerObjectStateManager<ConsumerParameters, ConsumerState> {
+public abstract class ConsumerStateManager<T extends ConsumerParameters> extends PowerObjectStateManager<T, ConsumerState> {
 
 	public ConsumerStateManager(TimeService timeService, Dispatcher dispatcher) {
 		super(timeService, dispatcher);
@@ -15,10 +15,5 @@ public class ConsumerStateManager extends PowerObjectStateManager<ConsumerParame
 	@Override
 	protected boolean doSend(List<ConsumerState> states) {
 		return dispatcher.acceptConsumerStates(states);
-	}
-
-	@Override
-	protected boolean doRegister(ConsumerParameters parameters) {
-		return dispatcher.registerConsumer(parameters);
 	}
 }

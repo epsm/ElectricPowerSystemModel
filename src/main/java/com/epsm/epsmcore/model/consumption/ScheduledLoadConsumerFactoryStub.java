@@ -39,6 +39,6 @@ public class ScheduledLoadConsumerFactoryStub extends AbstractPowerObjectFactory
 	}
 
 	private ConsumerStateManager createStateManager() {
-		return new ConsumerStateManager(timeService, dispatcher);
+		return new ScheduledLoadConsumerStateManager(timeService, dispatcher);
 	}
 }
