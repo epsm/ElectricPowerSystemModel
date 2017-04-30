@@ -65,5 +65,5 @@ public abstract class PowerObject <T extends Parameters, E extends State>  {
 
 	protected abstract float calculatPowerBalance();
 
-	protected abstract E getState();
+	public abstract E getState();
 }

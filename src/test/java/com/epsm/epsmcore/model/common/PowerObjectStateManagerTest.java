@@ -24,17 +24,10 @@ public class PowerObjectStateManagerTest {
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private Simulation simulation;
-	private PowerObject powerObject;
 	private PowerObjectStateManager stateManager;
 	private Parameters parameters;
 	private State state;
 	private LocalDateTime timeInTest = LocalDateTime.of(2000, 01, 01, 00, 00);
-	private final int POWER_OBJECT_ID = 0;
-	private final int QUANTITY_OF_GENERATORS = 1;
-	private final float LOAD = 0;
-	private final float FREQUENCY = 0;
-	private final LocalDateTime SIMULATION_TIMESTAMP = LocalDateTime.MIN;
-	private final LocalDateTime REAL_TIMESTAMP = LocalDateTime.MIN;
 
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
@@ -47,7 +40,7 @@ public class PowerObjectStateManagerTest {
 		simulation = new Simulation(timeInTest);
 		parameters = mock(Parameters.class);
 		stateManager = spy(new StateManager(timeService, dispatcher));
-		powerObject = new TetsPoweObject(simulation, dispatcher, parameters, stateManager);
+		new TetsPoweObject(simulation, dispatcher, parameters, stateManager);
 		state = mock(State.class);
 	}
 
@@ -80,7 +73,7 @@ public class PowerObjectStateManagerTest {
 		}
 
 		@Override
-		protected State getState() {
+		public State getState() {
 			return state;
 		}
 	}

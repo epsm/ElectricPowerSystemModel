@@ -46,7 +46,7 @@ public class ConsumerTest {
 		}
 
 		@Override
-		protected State getState() {
+		public State getState() {
 			return null;
 		}
 	}
