@@ -1,6 +1,7 @@
 package com.epsm.epsmcore.model.simulation;
 
 public class Constants {
+
 	public static final int NANOS_IN_SECOND = 1_000_000_000;
 	public static final long NANOS_IN_HOUR = 60 * 60 * 1_000_000_000L;
 	public static final float STANDART_FREQUENCY = 50;

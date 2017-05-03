@@ -1,9 +1,11 @@
 package com.epsm.epsmcore.model.common;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public abstract class State {
 

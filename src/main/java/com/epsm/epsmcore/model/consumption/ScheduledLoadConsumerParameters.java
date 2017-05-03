@@ -1,6 +1,7 @@
 package com.epsm.epsmcore.model.consumption;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.Collections;
@@ -8,11 +9,12 @@ import java.util.List;
 
 @ToString
 @Getter
+@NoArgsConstructor
 public class ScheduledLoadConsumerParameters extends ConsumerParameters {
 
-	private final List<Float> approximateLoadByHoursOnDayInPercent;
-	private final float maxLoadWithoutFluctuationsInMW;
-	private final float randomFluctuationsInPercent;
+	private List<Float> approximateLoadByHoursOnDayInPercent;
+	private float maxLoadWithoutFluctuationsInMW;
+	private float randomFluctuationsInPercent;
 
 	public ScheduledLoadConsumerParameters(
 			long powerObjectId,

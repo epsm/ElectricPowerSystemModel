@@ -2,6 +2,7 @@ package com.epsm.epsmcore.model.generation;
 
 import com.epsm.epsmcore.model.common.Parameters;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 @ToString
 @Getter
+@NoArgsConstructor
 public class PowerStationParameters extends Parameters {
 	
 	private Map<Integer, GeneratorParameters> generatorParameters =  new HashMap<>();

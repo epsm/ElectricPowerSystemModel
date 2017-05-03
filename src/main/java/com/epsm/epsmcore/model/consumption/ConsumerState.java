@@ -2,12 +2,14 @@ package com.epsm.epsmcore.model.consumption;
 
 import com.epsm.epsmcore.model.common.State;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @ToString
 @Getter
+@NoArgsConstructor
 public class ConsumerState extends State {
 	
 	private float loadInMW;

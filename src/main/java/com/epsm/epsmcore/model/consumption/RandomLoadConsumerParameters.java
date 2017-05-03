@@ -1,15 +1,17 @@
 package com.epsm.epsmcore.model.consumption;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @Getter
+@NoArgsConstructor
 public class RandomLoadConsumerParameters extends ConsumerParameters {
 
-	private final int maxWorkDurationInSeconds;
-	private final int maxPauseBetweenWorkInSeconds;
-	private final float maxLoad;
+	private int maxWorkDurationInSeconds;
+	private int maxPauseBetweenWorkInSeconds;
+	private float maxLoad;
 
 	public RandomLoadConsumerParameters(
 			long powerObjectId,
