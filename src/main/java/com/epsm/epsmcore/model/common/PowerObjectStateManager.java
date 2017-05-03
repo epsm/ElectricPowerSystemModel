@@ -39,9 +39,11 @@ public abstract class PowerObjectStateManager<T extends Parameters, E extends St
 		logger.debug("ManageMessage(): {}, last sent time: {}, registered: {}",
 				powerObject, timeWhenSentLastMessage.toLocalTime(), registeredWithDispatcher);
 		
-		if(isItTimeToSentMessage() && statesStorage.size() != 0){
+		if(isItTimeToSentMessage()){
 			if(registeredWithDispatcher){
-				sendStatesToDispatcher();
+				if(statesStorage.size() != 0) {
+					sendStatesToDispatcher();
+				}
 			}else{
 				registerWithDispatcher();
 			}
