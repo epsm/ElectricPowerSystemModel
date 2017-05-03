@@ -38,14 +38,20 @@ public class SimulationRunner {
 			Thread.currentThread().setName("Sim. time");
 			
 			while(true){
-				simulation.doNextStep();
+				try {
+					simulation.doNextStep();
+				} catch (Exception e) {
+					logger.error("Error while executing simulation step", e);
+				}
 				
 				if(simulationTimeStepCounter++ > Constants.LOG_EVERY_SIMULATION_STEPS_DONE){
 					logger.debug("{}  simulation step performed.", Constants.LOG_EVERY_SIMULATION_STEPS_DONE);
 					resetCounter();
 				}
 
-				pause(Constants.PAUSE_BETWEEN_SIMULATION_STEPS_IN_MS);
+				if(Constants.PAUSE_BETWEEN_SIMULATION_STEPS_IN_MS != 0) {
+					pause(Constants.PAUSE_BETWEEN_SIMULATION_STEPS_IN_MS);
+				}
 			}
 		}
 		
@@ -71,7 +77,11 @@ public class SimulationRunner {
 			
 			while(true){
 				if(isModelInitialized()){
-					simulation.sendStatesToDispatcher();
+					try {
+						simulation.sendStatesToDispatcher();
+					} catch (Exception e) {
+						logger.error("Error while sending states ro dispatcher", e);
+					}
 				}
 				
 				if(realTimeStepCounter++ > Constants.LOG_EVERY_REALTIME_STEPS_DONE){
