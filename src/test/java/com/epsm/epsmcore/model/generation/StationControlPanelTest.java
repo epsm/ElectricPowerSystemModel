@@ -17,10 +17,10 @@ import java.time.LocalDateTime;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MainControlPanelTest{
+public class StationControlPanelTest {
 
 	private Simulation simulation;
-	private MainControlPanel controlPanel;
+	private StationControlPanel controlPanel;
 	private TimeService timeService;
 	private Dispatcher dispatcher;
 	private PowerStation station;
@@ -57,7 +57,7 @@ public class MainControlPanelTest{
 		simulation = new Simulation(TestsConstants.START_DATETIME);
 		
 		station = new PowerStation(simulation, dispatcher, stationParameters, stateManager);
-		controlPanel= new MainControlPanel(simulation, station);
+		controlPanel= new StationControlPanel(simulation, station);
 		
 		stationSchedule = new PowerStationGenerationSchedule(POWER_OBJECT_ID);
 		

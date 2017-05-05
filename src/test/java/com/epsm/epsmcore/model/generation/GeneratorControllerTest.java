@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 public class GeneratorControllerTest {
 
 	private Simulation simulation;
-	private MainControlPanel controlPanel;
+	private StationControlPanel controlPanel;
 	private PowerStationGenerationSchedule stationSchedule;
 	private GeneratorGenerationSchedule genrationSchedule_1;
 	private GeneratorGenerationSchedule genrationSchedule_2;
@@ -69,7 +69,7 @@ public class GeneratorControllerTest {
 		simulation = new Simulation(TestsConstants.START_DATETIME);
 		
 		station = new PowerStation(simulation, dispatcher, stationParameters, stateManager);
-		controlPanel = new MainControlPanel(simulation, station);
+		controlPanel = new StationControlPanel(simulation, station);
 		
 		generator_1 = Mockito.spy( new Generator(simulation, FIRST_GENERATOR_NUMBER));
 		generator_2 = Mockito.spy( new Generator(simulation, SECOND_GENERATOR_NUMBER));

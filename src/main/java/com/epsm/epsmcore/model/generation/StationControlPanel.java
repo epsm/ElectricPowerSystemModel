@@ -5,8 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //This implementation does not take in account that generation schedule must be on DATE, not on day. 
-public class MainControlPanel{
-	private Simulation simulation;
+public class StationControlPanel {
 	private PowerStation station;
 	private PowerStationGenerationController controller;
 	private PowerStationGenerationSchedule currentSchedule;
@@ -15,53 +14,52 @@ public class MainControlPanel{
 	private PowerStationParameters parameters;
 	private Logger logger;
 
-	public MainControlPanel(Simulation simulation, PowerStation station){
-		this.simulation = simulation;
+	public StationControlPanel(Simulation simulation, PowerStation station) {
 		this.station = station;
 		controller = new PowerStationGenerationController(simulation, station);
 		validator = new GenerationScheduleValidator();
-		logger = LoggerFactory.getLogger(MainControlPanel.class);
+		logger = LoggerFactory.getLogger(StationControlPanel.class);
 	}
-	
+
 	public void acceptGenerationSchedule(PowerStationGenerationSchedule schedule) {
 		performGenerationSchedule(schedule);
 	}
-	
-	private void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule){
+
+	private void performGenerationSchedule(PowerStationGenerationSchedule generationSchedule) {
 		receivedSchedule = generationSchedule;
 		getStationParameters();
-		
-		if(isReceivedScheduleValid()){
+
+		if (isReceivedScheduleValid()) {
 			replaceCurrentSchedule();
 		}
 	}
-	
-	private void getStationParameters(){
+
+	private void getStationParameters() {
 		parameters = (PowerStationParameters) station.getParameters();
 	}
-	
-	private boolean isReceivedScheduleValid(){
-		try{
+
+	private boolean isReceivedScheduleValid() {
+		try {
 			validator.validate(receivedSchedule, parameters);
 			return true;
-		}catch (GenerationException exception){
+		} catch (GenerationException exception) {
 			//TODO send request to dispatcher
-			logger.warn("Wrong schedule - {}",exception.getMessage());
+			logger.error("Wrong schedule - {}", exception.getMessage());
 			return false;
 		}
 	}
-	
-	private void replaceCurrentSchedule(){
+
+	private void replaceCurrentSchedule() {
 		currentSchedule = receivedSchedule;
 		logger.info("execute new schedule: {}.", currentSchedule);
 	}
-	
-	private boolean isThereValidSchedule(){
+
+	private boolean isThereValidSchedule() {
 		return currentSchedule != null;
 	}
-	
-	public void adjustGenerators(){
-		if(isThereValidSchedule()){
+
+	public void adjustGenerators() {
+		if (isThereValidSchedule()) {
 			controller.adjustGenerators(currentSchedule);
 		}
 	}

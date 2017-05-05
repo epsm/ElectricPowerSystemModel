@@ -16,7 +16,7 @@ import java.util.Map;
 
 public final class PowerStation extends PowerObject<PowerStationParameters, PowerStationState> implements DispatchedPowerStation {
 
-	private MainControlPanel controlPanel;
+	private StationControlPanel controlPanel;
 	private Map<Integer, Generator> generators = new HashMap<>();
 	private LocalDateTime currentDateTime;
 	private float currentFrequency;
@@ -33,7 +33,7 @@ public final class PowerStation extends PowerObject<PowerStationParameters, Powe
 		
 		super(simulation, dispatcher, parameters, stateManager);
 		
-		controlPanel = new MainControlPanel(simulation, this);
+		controlPanel = new StationControlPanel(simulation, this);
 	}
 	
 	@Override
